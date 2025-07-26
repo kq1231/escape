@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
-import '../molecules/article_card.dart';
-import '../molecules/video_card.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class MediaFeed extends StatelessWidget {
   final List<Widget> items;
@@ -25,23 +23,21 @@ class MediaFeed extends StatelessWidget {
         // Header
         if (title != null) ...[
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: OnboardingTheme.spacingM,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
             child: Text(
               title!,
-              style: OnboardingTheme.headlineMedium.copyWith(
+              style: AppTheme.headlineMedium.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: OnboardingTheme.spacingM),
+          SizedBox(height: AppTheme.spacingM),
         ],
         // Content
         if (isLoading) ...[
           const Center(
             child: Padding(
-              padding: EdgeInsets.all(OnboardingTheme.spacingL),
+              padding: EdgeInsets.all(AppTheme.spacingL),
               child: CircularProgressIndicator(),
             ),
           ),
@@ -60,9 +56,9 @@ class MediaFeed extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.only(
-                    left: OnboardingTheme.spacingM,
-                    right: OnboardingTheme.spacingM,
-                    bottom: OnboardingTheme.spacingM,
+                    left: AppTheme.spacingM,
+                    right: AppTheme.spacingM,
+                    bottom: AppTheme.spacingM,
                   ),
                   child: items[index],
                 );

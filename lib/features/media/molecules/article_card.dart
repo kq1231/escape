@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/article_thumbnail.dart';
 import '../atoms/media_title.dart';
 import '../atoms/media_tag.dart';
@@ -27,11 +27,11 @@ class ArticleCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+        padding: const EdgeInsets.all(AppTheme.spacingM),
         decoration: BoxDecoration(
-          color: OnboardingTheme.white,
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
-          boxShadow: OnboardingTheme.cardShadow,
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusL),
+          boxShadow: AppTheme.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,36 +43,34 @@ class ArticleCard extends StatelessWidget {
               width: double.infinity,
               fit: BoxFit.cover,
             ),
-            SizedBox(height: OnboardingTheme.spacingM),
+            SizedBox(height: AppTheme.spacingM),
             // Title
             MediaTitle(
               title: title,
-              style: OnboardingTheme.headlineSmall.copyWith(
+              style: AppTheme.headlineSmall.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             if (excerpt != null) ...[
-              SizedBox(height: OnboardingTheme.spacingXS),
+              SizedBox(height: AppTheme.spacingXS),
               Text(
                 excerpt!,
-                style: OnboardingTheme.bodyMedium.copyWith(
-                  color: OnboardingTheme.mediumGray,
-                ),
+                style: AppTheme.bodyMedium.copyWith(color: AppTheme.mediumGray),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
-            SizedBox(height: OnboardingTheme.spacingS),
+            SizedBox(height: AppTheme.spacingS),
             // Tags
             if (tags.isNotEmpty) ...[
               Wrap(
-                spacing: OnboardingTheme.spacingS,
-                runSpacing: OnboardingTheme.spacingS,
+                spacing: AppTheme.spacingS,
+                runSpacing: AppTheme.spacingS,
                 children: tags.map((tag) {
                   return MediaTag(
                     label: tag,
-                    backgroundColor: OnboardingTheme.lightGray,
-                    textColor: OnboardingTheme.darkGray,
+                    backgroundColor: AppTheme.lightGray,
+                    textColor: AppTheme.darkGray,
                     onTap: onTagTap,
                   );
                 }).toList(),

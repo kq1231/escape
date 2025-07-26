@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/media_tag.dart';
 import '../molecules/article_card.dart';
 import '../molecules/video_card.dart';
@@ -150,24 +150,6 @@ class _MediaScreenState extends State<MediaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Media', style: OnboardingTheme.headlineMedium),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Handle search
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {
-              // Handle filter
-            },
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,55 +160,55 @@ class _MediaScreenState extends State<MediaScreen> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: OnboardingTheme.spacingM,
+                  horizontal: AppTheme.spacingM,
                 ),
                 children: [
                   MediaTag(
                     label: 'All',
                     backgroundColor: _selectedCategory == 'All'
-                        ? OnboardingTheme.primaryGreen
-                        : OnboardingTheme.lightGray,
+                        ? AppTheme.primaryGreen
+                        : AppTheme.lightGray,
                     textColor: _selectedCategory == 'All'
-                        ? OnboardingTheme.white
-                        : OnboardingTheme.darkGray,
+                        ? AppTheme.white
+                        : AppTheme.darkGray,
                     onTap: () => _filterContent('All'),
                   ),
-                  SizedBox(width: OnboardingTheme.spacingS),
+                  SizedBox(width: AppTheme.spacingS),
                   MediaTag(
                     label: 'Articles',
                     backgroundColor: _selectedCategory == 'Articles'
-                        ? OnboardingTheme.primaryGreen
-                        : OnboardingTheme.lightGray,
+                        ? AppTheme.primaryGreen
+                        : AppTheme.lightGray,
                     textColor: _selectedCategory == 'Articles'
-                        ? OnboardingTheme.white
-                        : OnboardingTheme.darkGray,
+                        ? AppTheme.white
+                        : AppTheme.darkGray,
                     onTap: () => _filterContent('Articles'),
                   ),
-                  SizedBox(width: OnboardingTheme.spacingS),
+                  SizedBox(width: AppTheme.spacingS),
                   MediaTag(
                     label: 'Videos',
                     backgroundColor: _selectedCategory == 'Videos'
-                        ? OnboardingTheme.primaryGreen
-                        : OnboardingTheme.lightGray,
+                        ? AppTheme.primaryGreen
+                        : AppTheme.lightGray,
                     textColor: _selectedCategory == 'Videos'
-                        ? OnboardingTheme.white
-                        : OnboardingTheme.darkGray,
+                        ? AppTheme.white
+                        : AppTheme.darkGray,
                     onTap: () => _filterContent('Videos'),
                   ),
-                  SizedBox(width: OnboardingTheme.spacingS),
+                  SizedBox(width: AppTheme.spacingS),
                   MediaTag(
                     label: 'Podcasts',
-                    backgroundColor: OnboardingTheme.lightGray,
-                    textColor: OnboardingTheme.darkGray,
+                    backgroundColor: AppTheme.lightGray,
+                    textColor: AppTheme.darkGray,
                     onTap: () {
                       // Handle podcast filter
                     },
                   ),
-                  SizedBox(width: OnboardingTheme.spacingS),
+                  SizedBox(width: AppTheme.spacingS),
                   MediaTag(
                     label: 'Courses',
-                    backgroundColor: OnboardingTheme.lightGray,
-                    textColor: OnboardingTheme.darkGray,
+                    backgroundColor: AppTheme.lightGray,
+                    textColor: AppTheme.darkGray,
                     onTap: () {
                       // Handle courses filter
                     },
@@ -234,7 +216,7 @@ class _MediaScreenState extends State<MediaScreen> {
                 ],
               ),
             ),
-            SizedBox(height: OnboardingTheme.spacingM),
+            SizedBox(height: AppTheme.spacingM),
             // Media feed
             MediaFeed(
               title: 'Latest Content',

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class ChallengeStar extends StatelessWidget {
   final double rating;
@@ -31,15 +31,15 @@ class ChallengeStar extends StatelessWidget {
         if (rating >= starRating) {
           // Full star
           icon = Icons.star;
-          color = filledColor ?? OnboardingTheme.warningOrange;
+          color = filledColor ?? AppTheme.warningOrange;
         } else if (showHalfStars && rating > index) {
           // Half star
           icon = Icons.star_half;
-          color = filledColor ?? OnboardingTheme.warningOrange;
+          color = filledColor ?? AppTheme.warningOrange;
         } else {
           // Empty star
           icon = Icons.star_border;
-          color = unfilledColor ?? OnboardingTheme.mediumGray;
+          color = unfilledColor ?? AppTheme.mediumGray;
         }
 
         return Icon(icon, size: size, color: color);

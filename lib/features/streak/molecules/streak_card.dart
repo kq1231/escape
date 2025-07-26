@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../atoms/streak_number.dart';
 import '../atoms/streak_label.dart';
 import '../atoms/streak_icon.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import '../../../theme/app_theme.dart';
 
 class StreakCard extends StatelessWidget {
   final int streakCount;
@@ -24,11 +24,11 @@ class StreakCard extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(OnboardingTheme.spacingL),
+        padding: const EdgeInsets.all(AppTheme.spacingL),
         decoration: BoxDecoration(
-          gradient: OnboardingTheme.cardGradient,
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusXL),
-          boxShadow: OnboardingTheme.cardShadow,
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusXL),
+          boxShadow: AppTheme.cardShadow,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -37,11 +37,11 @@ class StreakCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 StreakIcon(isActive: isActive, size: 28),
-                const SizedBox(width: OnboardingTheme.spacingS),
+                const SizedBox(width: AppTheme.spacingS),
                 StreakNumber(streakCount: streakCount, fontSize: 36),
               ],
             ),
-            const SizedBox(height: OnboardingTheme.spacingS),
+            const SizedBox(height: AppTheme.spacingS),
             StreakLabel(text: labelText, fontSize: 16),
           ],
         ),

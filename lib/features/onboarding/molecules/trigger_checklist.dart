@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../atoms/checkbox_tile.dart';
 import '../constants/onboarding_constants.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class TriggerChecklist extends StatefulWidget {
   final List<String> selectedTriggers;
@@ -45,30 +45,29 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: OnboardingTheme.spacingXL,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 OnboardingConstants.triggersTitle,
-                style: OnboardingTheme.headlineMedium,
+                style: AppTheme.headlineMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32, // Increased from default headlineMedium size
+                ),
               ),
-              const SizedBox(height: OnboardingTheme.spacingS),
+              const SizedBox(height: AppTheme.spacingS),
               Text(
                 OnboardingConstants.triggersSubtitle,
-                style: OnboardingTheme.bodyLarge,
+                style: AppTheme.bodyLarge,
               ),
             ],
           ),
         ),
-        const SizedBox(height: OnboardingTheme.spacingL),
+        const SizedBox(height: AppTheme.spacingL),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(
-              horizontal: OnboardingTheme.spacingXL,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             itemCount: OnboardingConstants.triggers.length,
             itemBuilder: (context, index) {
               final trigger = OnboardingConstants.triggers[index];
@@ -83,14 +82,10 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
         ),
         if (widget.showError && _selectedTriggers.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: OnboardingTheme.spacingXL,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
-              style: OnboardingTheme.bodySmall.copyWith(
-                color: OnboardingTheme.errorRed,
-              ),
+              style: AppTheme.bodySmall.copyWith(color: AppTheme.errorRed),
             ),
           ),
       ],

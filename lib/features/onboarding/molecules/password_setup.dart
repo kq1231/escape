@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../atoms/input_field.dart';
 import '../constants/onboarding_constants.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class PasswordSetup extends StatefulWidget {
   final String password;
@@ -73,22 +73,17 @@ class _PasswordSetupState extends State<PasswordSetup> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: OnboardingTheme.spacingXL,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             OnboardingConstants.securityTitle,
-            style: OnboardingTheme.headlineMedium,
+            style: AppTheme.headlineMedium,
           ),
-          const SizedBox(height: OnboardingTheme.spacingS),
-          Text(
-            OnboardingConstants.securitySubtitle,
-            style: OnboardingTheme.bodyLarge,
-          ),
-          const SizedBox(height: OnboardingTheme.spacingL),
+          const SizedBox(height: AppTheme.spacingS),
+          Text(OnboardingConstants.securitySubtitle, style: AppTheme.bodyLarge),
+          const SizedBox(height: AppTheme.spacingL),
           InputField(
             controller: _passwordController,
             hintText: OnboardingConstants.passwordHint,
@@ -100,7 +95,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
             suffixIcon: IconButton(
               icon: Icon(
                 _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                color: OnboardingTheme.mediumGray,
+                color: AppTheme.mediumGray,
               ),
               onPressed: () {
                 setState(() {
@@ -109,7 +104,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
               },
             ),
           ),
-          const SizedBox(height: OnboardingTheme.spacingM),
+          const SizedBox(height: AppTheme.spacingM),
           InputField(
             controller: _confirmPasswordController,
             hintText: OnboardingConstants.confirmPasswordHint,
@@ -125,7 +120,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                 _obscureConfirmPassword
                     ? Icons.visibility
                     : Icons.visibility_off,
-                color: OnboardingTheme.mediumGray,
+                color: AppTheme.mediumGray,
               ),
               onPressed: () {
                 setState(() {
@@ -134,24 +129,22 @@ class _PasswordSetupState extends State<PasswordSetup> {
               },
             ),
           ),
-          const SizedBox(height: OnboardingTheme.spacingL),
+          const SizedBox(height: AppTheme.spacingL),
           _buildToggleOption(
             title: OnboardingConstants.enableBiometric,
             value: widget.biometricEnabled,
             onChanged: widget.onBiometricChanged,
           ),
-          const SizedBox(height: OnboardingTheme.spacingS),
+          const SizedBox(height: AppTheme.spacingS),
           _buildToggleOption(
             title: OnboardingConstants.enableNotifications,
             value: widget.notificationsEnabled,
             onChanged: widget.onNotificationsChanged,
           ),
-          const SizedBox(height: OnboardingTheme.spacingM),
+          const SizedBox(height: AppTheme.spacingM),
           Text(
             OnboardingConstants.privacyNote,
-            style: OnboardingTheme.bodySmall.copyWith(
-              color: OnboardingTheme.mediumGray,
-            ),
+            style: AppTheme.bodySmall.copyWith(color: AppTheme.mediumGray),
             textAlign: TextAlign.center,
           ),
         ],
@@ -166,20 +159,20 @@ class _PasswordSetupState extends State<PasswordSetup> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: OnboardingTheme.white,
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(AppTheme.radiusM),
         border: Border.all(
-          color: OnboardingTheme.mediumGray.withValues(alpha: 0.3),
+          color: AppTheme.mediumGray.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
       child: SwitchListTile(
-        title: Text(title, style: OnboardingTheme.bodyMedium),
+        title: Text(title, style: AppTheme.bodyMedium),
         value: value,
         onChanged: onChanged,
-        activeColor: OnboardingTheme.primaryGreen,
+        activeColor: AppTheme.primaryGreen,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: OnboardingTheme.spacingM,
+          horizontal: AppTheme.spacingM,
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class MediaTag extends StatelessWidget {
   final String label;
@@ -19,28 +19,28 @@ class MediaTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = backgroundColor ?? OnboardingTheme.primaryGreen;
-    final text = textColor ?? OnboardingTheme.white;
+    final bg = backgroundColor ?? AppTheme.primaryGreen;
+    final text = textColor ?? AppTheme.white;
 
     final tagChild = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
           Icon(icon, size: 16, color: text),
-          SizedBox(width: OnboardingTheme.spacingXS),
+          SizedBox(width: AppTheme.spacingXS),
         ],
-        Text(label, style: OnboardingTheme.labelMedium.copyWith(color: text)),
+        Text(label, style: AppTheme.labelMedium.copyWith(color: text)),
       ],
     );
 
     final tag = Container(
       padding: EdgeInsets.symmetric(
-        horizontal: OnboardingTheme.spacingM,
-        vertical: OnboardingTheme.spacingS,
+        horizontal: AppTheme.spacingM,
+        vertical: AppTheme.spacingS,
       ),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
       ),
       child: tagChild,
     );

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/stat_card.dart';
 import '../molecules/progress_chart.dart';
 import '../molecules/streak_graph.dart';
+import '../molecules/statistics_pie_chart.dart';
 
 class AnalyticsDashboard extends StatelessWidget {
   final List<StatCard> statCards;
   final ProgressChart progressChart;
   final StreakGraph streakGraph;
+  final StatisticsPieChart? statisticsPieChart;
   final String? title;
   final VoidCallback? onSettingsPressed;
 
@@ -16,6 +18,7 @@ class AnalyticsDashboard extends StatelessWidget {
     required this.statCards,
     required this.progressChart,
     required this.streakGraph,
+    this.statisticsPieChart,
     this.title,
     this.onSettingsPressed,
   });
@@ -33,19 +36,20 @@ class AnalyticsDashboard extends StatelessWidget {
               if (title != null)
                 Text(
                   title!,
-                  style: OnboardingTheme.headlineMedium.copyWith(
+                  style: AppTheme.headlineMedium.copyWith(
                     fontWeight: FontWeight.bold,
+                    fontSize: 32, // Increased from default headlineMedium size
                   ),
                 ),
               if (onSettingsPressed != null)
                 IconButton(
                   icon: const Icon(Icons.settings_outlined),
                   onPressed: onSettingsPressed,
-                  color: OnboardingTheme.mediumGray,
+                  color: AppTheme.mediumGray,
                 ),
             ],
           ),
-          const SizedBox(height: OnboardingTheme.spacingL),
+          const SizedBox(height: AppTheme.spacingL),
         ],
         // Stats grid
         GridView.builder(
@@ -53,8 +57,8 @@ class AnalyticsDashboard extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: OnboardingTheme.spacingM,
-            mainAxisSpacing: OnboardingTheme.spacingM,
+            crossAxisSpacing: AppTheme.spacingM,
+            mainAxisSpacing: AppTheme.spacingM,
             childAspectRatio: 1.2,
           ),
           itemCount: statCards.length,
@@ -62,12 +66,16 @@ class AnalyticsDashboard extends StatelessWidget {
             return statCards[index];
           },
         ),
-        const SizedBox(height: OnboardingTheme.spacingXL),
+        const SizedBox(height: AppTheme.spacingXL),
         // Progress chart
         progressChart,
-        const SizedBox(height: OnboardingTheme.spacingXL),
+        const SizedBox(height: AppTheme.spacingXL),
         // Streak graph
         streakGraph,
+        if (statisticsPieChart != null) ...[
+          const SizedBox(height: AppTheme.spacingXL),
+          statisticsPieChart!,
+        ],
       ],
     );
   }

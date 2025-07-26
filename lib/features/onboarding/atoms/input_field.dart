@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class InputField extends StatelessWidget {
   final String? hintText;
@@ -62,7 +62,7 @@ class InputField extends StatelessWidget {
       enabled: enabled,
       focusNode: focusNode,
       autofocus: autofocus,
-      style: OnboardingTheme.bodyLarge,
+      style: AppTheme.bodyLarge,
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,
@@ -70,53 +70,40 @@ class InputField extends StatelessWidget {
         suffixIcon: suffixIcon,
         errorText: showError ? errorText : null,
         filled: true,
-        fillColor: fillColor ?? OnboardingTheme.lightGray,
+        fillColor: fillColor ?? AppTheme.lightGray,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
+          borderRadius: BorderRadius.circular(AppTheme.radiusM),
           borderSide: BorderSide(
             color: borderColor ?? Colors.transparent,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
+          borderRadius: BorderRadius.circular(AppTheme.radiusM),
           borderSide: BorderSide(
             color: borderColor ?? Colors.transparent,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
-          borderSide: const BorderSide(
-            color: OnboardingTheme.primaryGreen,
-            width: 2,
-          ),
+          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+          borderSide: const BorderSide(color: AppTheme.primaryGreen, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
-          borderSide: const BorderSide(
-            color: OnboardingTheme.errorRed,
-            width: 1,
-          ),
+          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+          borderSide: const BorderSide(color: AppTheme.errorRed, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
-          borderSide: const BorderSide(
-            color: OnboardingTheme.errorRed,
-            width: 2,
-          ),
+          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+          borderSide: const BorderSide(color: AppTheme.errorRed, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: OnboardingTheme.spacingM,
-          vertical: OnboardingTheme.spacingM,
+          horizontal: AppTheme.spacingM,
+          vertical: AppTheme.spacingM,
         ),
-        hintStyle: OnboardingTheme.bodyMedium.copyWith(
-          color: OnboardingTheme.mediumGray,
-        ),
-        labelStyle: OnboardingTheme.bodyMedium,
-        errorStyle: OnboardingTheme.bodySmall.copyWith(
-          color: OnboardingTheme.errorRed,
-        ),
+        hintStyle: AppTheme.bodyMedium.copyWith(color: AppTheme.mediumGray),
+        labelStyle: AppTheme.bodyMedium,
+        errorStyle: AppTheme.bodySmall.copyWith(color: AppTheme.errorRed),
       ),
     );
   }

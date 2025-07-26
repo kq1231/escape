@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import '../../../theme/app_theme.dart';
 
 class StreakNumber extends StatelessWidget {
   final int streakCount;
@@ -17,10 +17,10 @@ class StreakNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '$streakCount',
-      style: OnboardingTheme.headlineLarge.copyWith(
+      style: AppTheme.headlineLarge.copyWith(
         fontSize: fontSize ?? 48,
         fontWeight: FontWeight.bold,
-        color: color ?? OnboardingTheme.primaryGreen,
+        color: color ?? AppTheme.primaryGreen,
       ),
     );
   }

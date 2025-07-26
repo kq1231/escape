@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class AppBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -16,6 +17,8 @@ class AppBottomNavigation extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
       onTap: onTap,
+      selectedItemColor: AppTheme.primaryGreen,
+      unselectedItemColor: AppTheme.mediumGray,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
@@ -41,6 +44,11 @@ class AppBottomNavigation extends StatelessWidget {
           icon: Icon(Icons.play_circle_outline),
           activeIcon: Icon(Icons.play_circle),
           label: 'Media',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings_outlined),
+          activeIcon: Icon(Icons.settings),
+          label: 'Settings',
         ),
       ],
     );

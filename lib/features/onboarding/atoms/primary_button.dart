@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -27,33 +27,33 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final buttonStyle = isOutlined
         ? OutlinedButton.styleFrom(
-            foregroundColor: OnboardingTheme.primaryGreen,
-            side: const BorderSide(color: OnboardingTheme.primaryGreen),
+            foregroundColor: AppTheme.primaryGreen,
+            side: const BorderSide(color: AppTheme.primaryGreen),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
+              borderRadius: BorderRadius.circular(AppTheme.radiusL),
             ),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
-                  horizontal: OnboardingTheme.spacingXL,
-                  vertical: OnboardingTheme.spacingM,
+                  horizontal: AppTheme.spacingXL,
+                  vertical: AppTheme.spacingM,
                 ),
-            textStyle: OnboardingTheme.labelLarge,
+            textStyle: AppTheme.labelLarge,
           )
         : ElevatedButton.styleFrom(
-            backgroundColor: OnboardingTheme.primaryGreen,
-            foregroundColor: OnboardingTheme.white,
+            backgroundColor: AppTheme.primaryGreen,
+            foregroundColor: AppTheme.white,
             elevation: 2,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
+              borderRadius: BorderRadius.circular(AppTheme.radiusL),
             ),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
-                  horizontal: OnboardingTheme.spacingXL,
-                  vertical: OnboardingTheme.spacingM,
+                  horizontal: AppTheme.spacingXL,
+                  vertical: AppTheme.spacingM,
                 ),
-            textStyle: OnboardingTheme.labelLarge,
+            textStyle: AppTheme.labelLarge,
           );
 
     final buttonChild = isLoading
@@ -71,7 +71,7 @@ class PrimaryButton extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 icon!,
-                const SizedBox(width: OnboardingTheme.spacingS),
+                const SizedBox(width: AppTheme.spacingS),
               ],
               Text(text),
             ],

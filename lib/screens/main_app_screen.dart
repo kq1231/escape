@@ -5,6 +5,7 @@ import '../features/challenges/screens/challenges_screen.dart';
 import '../features/analytics/screens/analytics_screen.dart';
 import '../features/media/screens/media_screen.dart';
 import '../screens/home_screen.dart';
+import '../features/settings/screens/settings_screen.dart';
 
 class MainAppScreen extends StatefulWidget {
   const MainAppScreen({super.key});
@@ -29,6 +30,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
       ChallengesScreen(),
       AnalyticsScreen(),
       MediaScreen(),
+      SettingsScreen(),
     ];
   }
 

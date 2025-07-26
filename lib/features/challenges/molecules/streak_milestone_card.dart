@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/challenge_badge.dart';
-import '../atoms/challenge_star.dart';
 
 class StreakMilestoneCard extends StatelessWidget {
   final int streakCount;
@@ -27,25 +26,25 @@ class StreakMilestoneCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isReached = currentStreak >= streakCount;
     final statusColor = isAchieved
-        ? OnboardingTheme.successGreen
+        ? AppTheme.successGreen
         : isReached
-        ? OnboardingTheme.warningOrange
-        : OnboardingTheme.mediumGray;
+        ? AppTheme.warningOrange
+        : AppTheme.mediumGray;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: OnboardingTheme.white,
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
-          boxShadow: OnboardingTheme.cardShadow,
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusL),
+          boxShadow: AppTheme.cardShadow,
           border: Border.all(
             color: statusColor.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+          padding: const EdgeInsets.all(AppTheme.spacingM),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -57,23 +56,24 @@ class StreakMilestoneCard extends StatelessWidget {
                     subtitle: 'Days',
                     icon: Icons.local_fire_department,
                     isCompleted: isAchieved,
-                    iconColor: isAchieved ? OnboardingTheme.white : statusColor,
+                    iconColor: isAchieved ? AppTheme.white : statusColor,
                     size: 50,
                   ),
-                  const SizedBox(width: OnboardingTheme.spacingM),
+                  const SizedBox(width: AppTheme.spacingM),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           title,
-                          style: OnboardingTheme.headlineSmall.copyWith(
+                          style: AppTheme.headlineSmall.copyWith(
                             color: isAchieved
-                                ? OnboardingTheme.successGreen
-                                : OnboardingTheme.darkGray,
+                                ? AppTheme.successGreen
+                                : AppTheme.darkGray,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: OnboardingTheme.spacingXS),
+                        const SizedBox(height: AppTheme.spacingXS),
                         // Streak progress indicator
                         Row(
                           children: [
@@ -82,11 +82,12 @@ class StreakMilestoneCard extends StatelessWidget {
                               size: 16,
                               color: statusColor,
                             ),
-                            const SizedBox(width: OnboardingTheme.spacingXS),
+                            const SizedBox(width: AppTheme.spacingXS),
                             Text(
                               '$currentStreak/$streakCount days',
-                              style: OnboardingTheme.bodySmall.copyWith(
+                              style: AppTheme.bodyMedium.copyWith(
                                 color: statusColor,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -97,47 +98,62 @@ class StreakMilestoneCard extends StatelessWidget {
                   if (isAchieved)
                     Icon(
                       Icons.check_circle,
-                      color: OnboardingTheme.successGreen,
+                      color: AppTheme.successGreen,
                       size: 24,
                     ),
                 ],
               ),
-              const SizedBox(height: OnboardingTheme.spacingM),
+              const SizedBox(height: AppTheme.spacingM),
               // Description
-              Text(description, style: OnboardingTheme.bodyMedium),
-              const SizedBox(height: OnboardingTheme.spacingM),
+              Flexible(
+                child: Text(
+                  description,
+                  style: AppTheme.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: AppTheme.spacingM),
               // Rewards section
               if (rewards != null && rewards!.isNotEmpty) ...[
-                Divider(color: OnboardingTheme.lightGray, thickness: 1),
-                const SizedBox(height: OnboardingTheme.spacingS),
+                Divider(color: AppTheme.lightGray, thickness: 1),
+                const SizedBox(height: AppTheme.spacingS),
                 Text(
                   'Rewards',
-                  style: OnboardingTheme.labelMedium.copyWith(
-                    color: OnboardingTheme.darkGray,
+                  style: AppTheme.labelMedium.copyWith(
+                    color: AppTheme.darkGray,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: OnboardingTheme.spacingXS),
+                const SizedBox(height: AppTheme.spacingXS),
                 Wrap(
-                  spacing: OnboardingTheme.spacingS,
-                  runSpacing: OnboardingTheme.spacingS,
+                  spacing: AppTheme.spacingS,
+                  runSpacing: AppTheme.spacingS,
                   children: rewards!.map((reward) {
                     return Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: OnboardingTheme.spacingS,
-                        vertical: OnboardingTheme.spacingXS,
+                        horizontal: AppTheme.spacingS,
+                        vertical: AppTheme.spacingXS,
                       ),
                       decoration: BoxDecoration(
-                        color: OnboardingTheme.lightGray,
-                        borderRadius: BorderRadius.circular(
-                          OnboardingTheme.radiusS,
-                        ),
+                        color: AppTheme.lightGray,
+                        borderRadius: BorderRadius.circular(AppTheme.radiusS),
                       ),
-                      child: Text(reward, style: OnboardingTheme.bodySmall),
+                      child: Text(
+                        reward,
+                        style: AppTheme.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     );
                   }).toList(),
                 ),
               ],
-              const SizedBox(height: OnboardingTheme.spacingM),
+              const SizedBox(height: AppTheme.spacingM),
               // Action button
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -145,50 +161,45 @@ class StreakMilestoneCard extends StatelessWidget {
                   if (isAchieved)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: OnboardingTheme.spacingM,
-                        vertical: OnboardingTheme.spacingS,
+                        horizontal: AppTheme.spacingM,
+                        vertical: AppTheme.spacingS,
                       ),
                       decoration: BoxDecoration(
-                        color: OnboardingTheme.successGreen.withValues(
-                          alpha: 0.1,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          OnboardingTheme.radiusM,
-                        ),
+                        color: AppTheme.successGreen.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
                       ),
                       child: Text(
                         'Achieved',
-                        style: OnboardingTheme.labelMedium.copyWith(
-                          color: OnboardingTheme.successGreen,
+                        style: AppTheme.labelMedium.copyWith(
+                          color: AppTheme.successGreen,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     )
                   else if (isReached)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: OnboardingTheme.spacingM,
-                        vertical: OnboardingTheme.spacingS,
+                        horizontal: AppTheme.spacingM,
+                        vertical: AppTheme.spacingS,
                       ),
                       decoration: BoxDecoration(
-                        color: OnboardingTheme.warningOrange.withValues(
-                          alpha: 0.1,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          OnboardingTheme.radiusM,
-                        ),
+                        color: AppTheme.warningOrange.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
                       ),
                       child: Text(
                         'Claim Reward',
-                        style: OnboardingTheme.labelMedium.copyWith(
-                          color: OnboardingTheme.warningOrange,
+                        style: AppTheme.labelMedium.copyWith(
+                          color: AppTheme.warningOrange,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     )
                   else
                     Text(
                       '${streakCount - currentStreak} days left',
-                      style: OnboardingTheme.bodySmall.copyWith(
-                        color: OnboardingTheme.mediumGray,
+                      style: AppTheme.bodyMedium.copyWith(
+                        color: AppTheme.mediumGray,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                 ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/article_thumbnail.dart';
 import '../atoms/media_title.dart';
 import '../atoms/media_tag.dart';
@@ -31,11 +31,11 @@ class VideoCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+        padding: const EdgeInsets.all(AppTheme.spacingM),
         decoration: BoxDecoration(
-          color: OnboardingTheme.white,
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
-          boxShadow: OnboardingTheme.cardShadow,
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusL),
+          boxShadow: AppTheme.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,14 +60,12 @@ class VideoCard extends StatelessWidget {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: OnboardingTheme.primaryGreen.withValues(
-                          alpha: 0.8,
-                        ),
+                        color: AppTheme.primaryGreen.withValues(alpha: 0.8),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.play_arrow,
-                        color: OnboardingTheme.white,
+                        color: AppTheme.white,
                         size: 30,
                       ),
                     ),
@@ -76,80 +74,78 @@ class VideoCard extends StatelessWidget {
                 // Duration badge
                 if (duration != null)
                   Positioned(
-                    right: OnboardingTheme.spacingS,
-                    bottom: OnboardingTheme.spacingS,
+                    right: AppTheme.spacingS,
+                    bottom: AppTheme.spacingS,
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: OnboardingTheme.spacingS,
-                        vertical: OnboardingTheme.spacingXS,
+                        horizontal: AppTheme.spacingS,
+                        vertical: AppTheme.spacingXS,
                       ),
                       decoration: BoxDecoration(
-                        color: OnboardingTheme.black.withValues(alpha: 0.7),
-                        borderRadius: BorderRadius.circular(
-                          OnboardingTheme.radiusS,
-                        ),
+                        color: AppTheme.black.withValues(alpha: 0.7),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusS),
                       ),
                       child: Text(
                         duration!,
-                        style: OnboardingTheme.labelMedium.copyWith(
-                          color: OnboardingTheme.white,
+                        style: AppTheme.labelMedium.copyWith(
+                          color: AppTheme.white,
                         ),
                       ),
                     ),
                   ),
               ],
             ),
-            SizedBox(height: OnboardingTheme.spacingM),
+            SizedBox(height: AppTheme.spacingM),
             // Title
             MediaTitle(
               title: title,
-              style: OnboardingTheme.headlineSmall.copyWith(
+              style: AppTheme.headlineSmall.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             // Metadata
             if (author != null || views != null) ...[
-              SizedBox(height: OnboardingTheme.spacingXS),
+              SizedBox(height: AppTheme.spacingXS),
               Row(
                 children: [
                   if (author != null) ...[
                     Text(
                       author!,
-                      style: OnboardingTheme.bodyMedium.copyWith(
-                        color: OnboardingTheme.mediumGray,
+                      style: AppTheme.bodyMedium.copyWith(
+                        color: AppTheme.mediumGray,
                       ),
                     ),
                   ],
                   if (author != null && views != null) ...[
                     Text(
                       ' • ',
-                      style: OnboardingTheme.bodyMedium.copyWith(
-                        color: OnboardingTheme.mediumGray,
+                      style: AppTheme.bodyMedium.copyWith(
+                        color: AppTheme.mediumGray,
                       ),
                     ),
                   ],
                   if (views != null) ...[
                     Text(
                       '${views!} views',
-                      style: OnboardingTheme.bodyMedium.copyWith(
-                        color: OnboardingTheme.mediumGray,
+                      style: AppTheme.bodyMedium.copyWith(
+                        color: AppTheme.mediumGray,
                       ),
                     ),
                   ],
                 ],
               ),
             ],
-            SizedBox(height: OnboardingTheme.spacingS),
+            SizedBox(height: AppTheme.spacingS),
             // Tags
             if (tags.isNotEmpty) ...[
               Wrap(
-                spacing: OnboardingTheme.spacingS,
-                runSpacing: OnboardingTheme.spacingS,
+                spacing: AppTheme.spacingS,
+                runSpacing: AppTheme.spacingS,
                 children: tags.map((tag) {
                   return MediaTag(
                     label: tag,
-                    backgroundColor: OnboardingTheme.lightGray,
-                    textColor: OnboardingTheme.darkGray,
+                    backgroundColor: AppTheme.lightGray,
+                    textColor: AppTheme.darkGray,
                     onTap: onTagTap,
                   );
                 }).toList(),

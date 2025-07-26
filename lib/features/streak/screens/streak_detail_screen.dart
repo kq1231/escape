@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../atoms/streak_number.dart';
 import '../atoms/streak_label.dart';
 import '../atoms/streak_icon.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class StreakDetailScreen extends StatelessWidget {
   final int streakCount;
@@ -20,92 +20,103 @@ class StreakDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Streak'),
+        title: Text(
+          'Your Streak',
+          style: AppTheme.headlineMedium.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 28, // Increased from default headlineMedium size
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingXL),
+        padding: const EdgeInsets.all(AppTheme.spacingXL),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Main streak display
             Container(
-              padding: const EdgeInsets.all(OnboardingTheme.spacingXXL),
+              padding: const EdgeInsets.all(AppTheme.spacingXXL),
               decoration: BoxDecoration(
-                gradient: OnboardingTheme.primaryGradient,
-                borderRadius: BorderRadius.circular(OnboardingTheme.radiusXXL),
-                boxShadow: OnboardingTheme.cardShadow,
+                gradient: AppTheme.primaryGradient,
+                borderRadius: BorderRadius.circular(AppTheme.radiusXXL),
+                boxShadow: AppTheme.cardShadow,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const StreakIcon(size: 48, color: OnboardingTheme.white),
-                  const SizedBox(height: OnboardingTheme.spacingM),
+                  const StreakIcon(size: 48, color: AppTheme.white),
+                  const SizedBox(height: AppTheme.spacingM),
                   StreakNumber(
                     streakCount: streakCount,
-                    color: OnboardingTheme.white,
+                    color: AppTheme.white,
                     fontSize: 64,
                   ),
-                  const SizedBox(height: OnboardingTheme.spacingS),
+                  const SizedBox(height: AppTheme.spacingS),
                   const StreakLabel(
                     text: 'Days Clean',
-                    color: OnboardingTheme.white,
+                    color: AppTheme.white,
                     fontSize: 20,
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(height: OnboardingTheme.spacingXL),
+            const SizedBox(height: AppTheme.spacingXL),
 
             // Streak information
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(OnboardingTheme.spacingL),
+              padding: const EdgeInsets.all(AppTheme.spacingL),
               decoration: BoxDecoration(
-                color: OnboardingTheme.white,
-                borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
-                border: Border.all(color: OnboardingTheme.lightGray),
+                color: AppTheme.white,
+                borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                border: Border.all(color: AppTheme.lightGray),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Streak Information',
-                    style: OnboardingTheme.headlineSmall,
+                    style: AppTheme.headlineSmall.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 26, // Increased from default headlineSmall size
+                    ),
                   ),
-                  const SizedBox(height: OnboardingTheme.spacingM),
+                  const SizedBox(height: AppTheme.spacingM),
                   _buildInfoRow('Current Streak', '$streakCount days'),
-                  const SizedBox(height: OnboardingTheme.spacingS),
+                  const SizedBox(height: AppTheme.spacingS),
                   _buildInfoRow(
                     'Start Date',
                     startDate != null
                         ? '${startDate!.day}/${startDate!.month}/${startDate!.year}'
                         : 'Not recorded',
                   ),
-                  const SizedBox(height: OnboardingTheme.spacingS),
+                  const SizedBox(height: AppTheme.spacingS),
                   _buildInfoRow('Longest Streak', '${streakCount + 5} days'),
                 ],
               ),
             ),
 
-            const SizedBox(height: OnboardingTheme.spacingL),
+            const SizedBox(height: AppTheme.spacingL),
 
             // Motivational message
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(OnboardingTheme.spacingL),
+              padding: const EdgeInsets.all(AppTheme.spacingL),
               decoration: BoxDecoration(
-                color: OnboardingTheme.lightGray,
-                borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
+                color: AppTheme.lightGray,
+                borderRadius: BorderRadius.circular(AppTheme.radiusL),
               ),
               child: Text(
                 _getMotivationalMessage(streakCount),
-                style: OnboardingTheme.bodyLarge.copyWith(
+                style: AppTheme.bodyLarge.copyWith(
                   fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20, // Increased from default bodyLarge size
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -122,14 +133,17 @@ class StreakDetailScreen extends StatelessWidget {
       children: [
         Text(
           label,
-          style: OnboardingTheme.bodyMedium.copyWith(
-            color: OnboardingTheme.darkGray,
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppTheme.darkGray,
+            fontWeight: FontWeight.w500,
+            fontSize: 18, // Increased from default bodyMedium size
           ),
         ),
         Text(
           value,
-          style: OnboardingTheme.bodyMedium.copyWith(
-            fontWeight: FontWeight.w500,
+          style: AppTheme.bodyMedium.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 18, // Increased from default bodyMedium size
           ),
         ),
       ],

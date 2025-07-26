@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import '../../../theme/app_theme.dart';
 
 class StreakLabel extends StatelessWidget {
   final String text;
@@ -20,9 +20,9 @@ class StreakLabel extends StatelessWidget {
     return Text(
       text,
       textAlign: textAlign,
-      style: OnboardingTheme.headlineSmall.copyWith(
+      style: AppTheme.headlineSmall.copyWith(
         fontSize: fontSize ?? 20,
-        color: color ?? OnboardingTheme.darkGray,
+        color: color ?? AppTheme.darkGray,
         fontWeight: FontWeight.w500,
       ),
     );

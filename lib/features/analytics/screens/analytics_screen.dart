@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/stat_card.dart';
 import '../molecules/progress_chart.dart';
 import '../molecules/streak_graph.dart';
+import '../molecules/statistics_pie_chart.dart';
 import '../templates/analytics_dashboard.dart';
 import '../../../services/local_storage_service.dart';
-import '../../../models/app_data.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
@@ -17,6 +17,7 @@ class AnalyticsScreen extends StatefulWidget {
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   List<ProgressData> _progressData = [];
   List<StreakData> _streakData = [];
+  List<StatisticData> _statisticsData = [];
   int _currentStreak = 0;
   int _longestStreak = 0;
   int _totalPoints = 0;
@@ -51,9 +52,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
   // Method to refresh data
-  void _refreshData() {
-    _loadAnalyticsData();
-  }
+  // void _refreshData() {
+  //   _loadAnalyticsData();
+  // }
 
   void _generateAnalyticsData() {
     setState(() {
@@ -116,6 +117,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           streakCount: (_currentStreak - 1).clamp(0, _currentStreak),
         ),
         StreakData(date: DateTime.now(), streakCount: _currentStreak),
+      ];
+
+      // Generate statistics data
+      _statisticsData = [
+        StatisticData(label: 'Prayer', value: _challengesCompleted * 0.3),
+        StatisticData(label: 'Challenges', value: _challengesCompleted * 0.4),
+        StatisticData(label: 'Media', value: _challengesCompleted * 0.2),
+        StatisticData(label: 'Other', value: _challengesCompleted * 0.1),
       ];
     });
   }
@@ -180,6 +189,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         ),
         StreakData(date: DateTime.now(), streakCount: _currentStreak),
       ];
+
+      // Generate sample statistics data
+      _statisticsData = [
+        StatisticData(label: 'Prayer', value: 30),
+        StatisticData(label: 'Challenges', value: 40),
+        StatisticData(label: 'Media', value: 20),
+        StatisticData(label: 'Other', value: 10),
+      ];
     });
   }
 
@@ -191,46 +208,34 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         value: '$_currentStreak days',
         subtitle: 'Keep going!',
         icon: Icons.local_fire_department,
-        iconColor: OnboardingTheme.warningOrange,
+        iconColor: AppTheme.warningOrange,
       ),
       StatCard(
         title: 'Longest Streak',
         value: '$_longestStreak days',
         subtitle: 'Personal best',
         icon: Icons.emoji_events,
-        iconColor: OnboardingTheme.successGreen,
+        iconColor: AppTheme.successGreen,
       ),
       StatCard(
         title: 'Total Points',
         value: '$_totalPoints',
         subtitle: '+${(_totalPoints * 0.2).round()} this week',
         icon: Icons.stars,
-        iconColor: OnboardingTheme.primaryGreen,
+        iconColor: AppTheme.primaryGreen,
       ),
       StatCard(
         title: 'Challenges',
         value: '$_challengesCompleted',
         subtitle: 'Completed',
         icon: Icons.check_circle,
-        iconColor: OnboardingTheme.accentGreen,
+        iconColor: AppTheme.accentGreen,
       ),
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Analytics', style: OnboardingTheme.headlineMedium),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // Handle notifications
-            },
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+        padding: const EdgeInsets.all(AppTheme.spacingM),
         child: AnalyticsDashboard(
           title: 'Your Progress',
           statCards: statCards,
@@ -243,6 +248,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             data: _streakData,
             title: 'Streak History',
             subtitle: 'Last 7 days',
+          ),
+          statisticsPieChart: StatisticsPieChart(
+            data: _statisticsData,
+            title: 'Activity Distribution',
+            subtitle: 'Time spent on different activities',
           ),
           onSettingsPressed: () {
             // Handle settings

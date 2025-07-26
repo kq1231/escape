@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class MediaTitle extends StatelessWidget {
   final String title;
@@ -26,7 +26,7 @@ class MediaTitle extends StatelessWidget {
       maxLines: maxLines,
       overflow: overflow,
       textAlign: textAlign,
-      style: style ?? OnboardingTheme.headlineSmall,
+      style: style ?? AppTheme.headlineSmall,
     );
 
     if (onTap != null) {

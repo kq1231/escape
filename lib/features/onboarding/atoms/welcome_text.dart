@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class WelcomeText extends StatelessWidget {
   final String title;
@@ -25,26 +25,25 @@ class WelcomeText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          padding ??
-          const EdgeInsets.symmetric(horizontal: OnboardingTheme.spacingXL),
+          padding ?? const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             title,
-            style: titleStyle ?? OnboardingTheme.headlineLarge,
+            style: titleStyle ?? AppTheme.headlineLarge,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: OnboardingTheme.spacingS),
+          const SizedBox(height: AppTheme.spacingS),
           Text(
             subtitle,
-            style: subtitleStyle ?? OnboardingTheme.headlineSmall,
+            style: subtitleStyle ?? AppTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: OnboardingTheme.spacingL),
+          const SizedBox(height: AppTheme.spacingL),
           Text(
             description,
-            style: descriptionStyle ?? OnboardingTheme.bodyLarge,
+            style: descriptionStyle ?? AppTheme.bodyLarge,
             textAlign: TextAlign.center,
           ),
         ],

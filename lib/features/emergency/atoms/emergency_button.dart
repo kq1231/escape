@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class EmergencyButton extends StatelessWidget {
   final String text;
@@ -31,19 +32,28 @@ class EmergencyButton extends StatelessWidget {
       backgroundColor: buttonColor,
       foregroundColor: textColor,
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+      ),
       padding:
-          padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding ??
+          const EdgeInsets.symmetric(
+            horizontal: AppTheme.spacingXL,
+            vertical: AppTheme.spacingM,
+          ),
     );
 
     final buttonChild = Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (icon != null) ...[Icon(icon, size: 20), const SizedBox(width: 8)],
+        if (icon != null) ...[
+          Icon(icon, size: 24), // Increased from 20 to 24
+          const SizedBox(width: AppTheme.spacingS),
+        ],
         Text(
           text,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: AppTheme.labelLarge.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
     );

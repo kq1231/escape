@@ -4,7 +4,7 @@ import '../features/emergency/atoms/emergency_button.dart';
 import '../features/emergency/screens/emergency_screen.dart';
 import '../features/prayer/molecules/prayer_row.dart';
 import '../features/analytics/atoms/stat_card.dart';
-import '../features/onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../services/local_storage_service.dart';
 import '../models/app_data.dart';
 
@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // State variables for the home screen
   int _streakCount = 0;
-  bool _isEmergencyButtonEnabled = true;
+  final bool _isEmergencyButtonEnabled = true;
 
   // Prayer tracking state
   Map<String, bool> _prayerStatus = {
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Analytics data
   int _totalSessions = 0;
   int _longestStreak = 0;
-  int _currentMood = 7; // Scale of 1-10
+  final int _currentMood = 7; // Scale of 1-10
 
   @override
   void initState() {
@@ -192,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingL),
+        padding: const EdgeInsets.all(AppTheme.spacingL),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -204,36 +204,33 @@ class _HomeScreenState extends State<HomeScreen> {
               isActive: true,
             ),
 
-            const SizedBox(height: OnboardingTheme.spacingXL),
+            const SizedBox(height: AppTheme.spacingXL),
 
             // Quick Prayer Status Summary
             Text(
               'Today\'s Prayers',
-              style: OnboardingTheme.headlineMedium.copyWith(
+              style: AppTheme.headlineMedium.copyWith(
                 fontWeight: FontWeight.bold,
+                fontSize: 32, // Increased from default headlineMedium size
               ),
             ),
 
-            const SizedBox(height: OnboardingTheme.spacingM),
+            const SizedBox(height: AppTheme.spacingM),
 
             // Prayer rows
-            ..._prayerStatus.entries
-                .map(
-                  (entry) => Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: OnboardingTheme.spacingS,
-                    ),
-                    child: PrayerRow(
-                      prayerName: entry.key,
-                      isChecked: entry.value,
-                      onCheckedChanged: (isChecked) =>
-                          _updatePrayerStatus(entry.key, isChecked),
-                    ),
-                  ),
-                )
-                .toList(),
+            ..._prayerStatus.entries.map(
+              (entry) => Padding(
+                padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
+                child: PrayerRow(
+                  prayerName: entry.key,
+                  isChecked: entry.value,
+                  onCheckedChanged: (isChecked) =>
+                      _updatePrayerStatus(entry.key, isChecked),
+                ),
+              ),
+            ),
 
-            const SizedBox(height: OnboardingTheme.spacingXL),
+            const SizedBox(height: AppTheme.spacingXL),
 
             // Emergency Button
             Center(
@@ -246,17 +243,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            const SizedBox(height: OnboardingTheme.spacingXL),
+            const SizedBox(height: AppTheme.spacingXL),
 
             // Quick Stats Mini Analytics Preview
             Text(
               'Quick Stats',
-              style: OnboardingTheme.headlineMedium.copyWith(
+              style: AppTheme.headlineMedium.copyWith(
                 fontWeight: FontWeight.bold,
+                fontSize: 32, // Increased from default headlineMedium size
               ),
             ),
 
-            const SizedBox(height: OnboardingTheme.spacingM),
+            const SizedBox(height: AppTheme.spacingM),
 
             // Stats grid
             Row(
@@ -270,21 +268,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => _onStatCardTap('Sessions'),
                   ),
                 ),
-                const SizedBox(width: OnboardingTheme.spacingM),
+                const SizedBox(width: AppTheme.spacingM),
                 Expanded(
                   child: StatCard(
                     title: 'Best Streak',
                     value: '$_longestStreak',
                     subtitle: 'All time',
                     icon: Icons.local_fire_department,
-                    iconColor: OnboardingTheme.primaryGreen,
+                    iconColor: AppTheme.primaryGreen,
                     onTap: () => _onStatCardTap('Streak'),
                   ),
                 ),
               ],
             ),
 
-            const SizedBox(height: OnboardingTheme.spacingM),
+            const SizedBox(height: AppTheme.spacingM),
 
             Row(
               children: [
@@ -298,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => _onStatCardTap('Mood'),
                   ),
                 ),
-                const SizedBox(width: OnboardingTheme.spacingM),
+                const SizedBox(width: AppTheme.spacingM),
                 Expanded(
                   child: StatCard(
                     title: 'Progress',

@@ -3,6 +3,7 @@ import '../atoms/emergency_button.dart';
 import '../atoms/tip_card.dart';
 import '../molecules/contact_selector.dart';
 import '../molecules/tips_carousel.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class EmergencyScreen extends StatelessWidget {
   const EmergencyScreen({super.key});
@@ -56,7 +57,13 @@ class EmergencyScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Emergency Help'),
+        title: Text(
+          'Emergency Help',
+          style: AppTheme.headlineMedium.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 28, // Increased from default headlineMedium size
+          ),
+        ),
         backgroundColor: Colors.redAccent,
         foregroundColor: Colors.white,
       ),
@@ -65,14 +72,21 @@ class EmergencyScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'In a moment of weakness?',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: AppTheme.headlineSmall.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 26, // Increased from default headlineSmall size
+              ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'You\'re not alone. Reach out for support or try these techniques.',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppTheme.mediumGray,
+                fontWeight: FontWeight.w500,
+                fontSize: 18, // Increased from default bodyMedium size
+              ),
             ),
             const SizedBox(height: 24),
             Center(
@@ -113,9 +127,12 @@ class EmergencyScreen extends StatelessWidget {
             const SizedBox(height: 32),
             TipsCarousel(tips: tips, title: 'Coping Strategies'),
             const SizedBox(height: 32),
-            const Text(
+            Text(
               'Remember',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: AppTheme.headlineSmall.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 26, // Increased from default headlineSmall size
+              ),
             ),
             const SizedBox(height: 16),
             const TipCard(

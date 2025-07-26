@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class ProgressIndicator extends StatelessWidget {
   final int currentStep;
@@ -28,10 +28,10 @@ class ProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final active = activeColor == Colors.transparent
-        ? OnboardingTheme.primaryGreen
+        ? AppTheme.primaryGreen
         : activeColor;
     final inactive = inactiveColor == Colors.transparent
-        ? OnboardingTheme.mediumGray
+        ? AppTheme.mediumGray
         : inactiveColor;
 
     return Column(
@@ -39,9 +39,7 @@ class ProgressIndicator extends StatelessWidget {
       children: [
         if (showBar)
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: OnboardingTheme.spacingXL,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(2),
               child: LinearProgressIndicator(
@@ -52,8 +50,7 @@ class ProgressIndicator extends StatelessWidget {
               ),
             ),
           ),
-        if (showDots && showBar)
-          const SizedBox(height: OnboardingTheme.spacingM),
+        if (showDots && showBar) const SizedBox(height: AppTheme.spacingM),
         if (showDots)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -98,10 +95,10 @@ class CustomCircularProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final active = progressColor == Colors.transparent
-        ? OnboardingTheme.primaryGreen
+        ? AppTheme.primaryGreen
         : progressColor;
     final inactive = backgroundColor == Colors.transparent
-        ? OnboardingTheme.mediumGray.withValues(alpha: 0.3)
+        ? AppTheme.mediumGray.withValues(alpha: 0.3)
         : backgroundColor;
 
     return SizedBox(

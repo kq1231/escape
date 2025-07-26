@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/relapse_button.dart';
 import '../molecules/history_timeline.dart';
 import '../molecules/relapse_confirmation.dart';
@@ -23,21 +23,21 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
       date: 'Yesterday, 2:30 PM',
       description: 'Spent 30 minutes scrolling through social media',
       icon: Icons.phone_android,
-      iconColor: OnboardingTheme.warningOrange,
+      iconColor: AppTheme.warningOrange,
     ),
     RelapseRecord(
       title: 'Inappropriate Content',
       date: '3 days ago, 11:15 AM',
       description: 'Watched inappropriate content online',
       icon: Icons.tv,
-      iconColor: OnboardingTheme.errorRed,
+      iconColor: AppTheme.errorRed,
     ),
     RelapseRecord(
       title: 'Negative Thoughts',
       date: '1 week ago, 8:45 PM',
       description: 'Struggled with negative thoughts',
       icon: Icons.psychology,
-      iconColor: OnboardingTheme.mediumGray,
+      iconColor: AppTheme.mediumGray,
     ),
   ];
 
@@ -98,24 +98,29 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
       appBar: AppBar(
         title: Text(
           'Relapse History',
-          style: OnboardingTheme.headlineMedium.copyWith(
-            color: OnboardingTheme.darkGreen,
+          style: AppTheme.headlineMedium.copyWith(
+            color: AppTheme.darkGreen,
+            fontWeight: FontWeight.bold,
+            fontSize: 28, // Increased from default headlineMedium size
           ),
         ),
-        backgroundColor: OnboardingTheme.white,
-        foregroundColor: OnboardingTheme.darkGreen,
+        backgroundColor: AppTheme.white,
+        foregroundColor: AppTheme.darkGreen,
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(OnboardingTheme.spacingM),
+        padding: EdgeInsets.all(AppTheme.spacingM),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Honest tracking of setbacks helps in understanding patterns and building stronger resistance for the future.',
-              style: OnboardingTheme.bodyMedium,
+              style: AppTheme.bodyMedium.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 18, // Increased from default bodyMedium size
+              ),
             ),
-            SizedBox(height: OnboardingTheme.spacingXL),
+            SizedBox(height: AppTheme.spacingXL),
             HistoryTimeline(
               records: relapseRecords,
               title: 'Your Relapse History',
@@ -123,7 +128,7 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
                 // Handle record tap
               },
             ),
-            SizedBox(height: OnboardingTheme.spacingXL),
+            SizedBox(height: AppTheme.spacingXL),
             Center(
               child: RelapseButton(
                 text: 'Record New Relapse',

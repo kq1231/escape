@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../molecules/daily_prayer_grid.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../../../services/local_storage_service.dart';
 import '../../../models/app_data.dart';
 
@@ -114,27 +114,37 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Prayer Tracker'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+        title: Text(
+          'Prayer Tracker',
+          style: AppTheme.headlineMedium.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 28, // Increased from default headlineMedium size
+          ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingXL),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(AppTheme.spacingXL),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header with title and subtitle
-            Text('Daily Prayers', style: OnboardingTheme.headlineMedium),
-            const SizedBox(height: OnboardingTheme.spacingS),
             Text(
-              'Track your salah completion throughout the day',
-              style: OnboardingTheme.bodyMedium.copyWith(
-                color: OnboardingTheme.mediumGray,
+              'Daily Prayers',
+              style: AppTheme.headlineMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 32, // Increased from default headlineMedium size
               ),
             ),
-            const SizedBox(height: OnboardingTheme.spacingXL),
+            const SizedBox(height: AppTheme.spacingS),
+            Text(
+              'Track your salah completion throughout the day',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppTheme.mediumGray,
+                fontWeight: FontWeight.w500,
+                fontSize: 18, // Increased from default bodyMedium size
+              ),
+            ),
+            const SizedBox(height: AppTheme.spacingXL),
 
             // Prayer grid
             DailyPrayerGrid(
@@ -142,24 +152,29 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
               onPrayerStatusChanged: _onPrayerStatusChanged,
             ),
 
-            const SizedBox(height: OnboardingTheme.spacingXL),
+            const SizedBox(height: AppTheme.spacingXL),
 
             // Motivational message
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(OnboardingTheme.spacingL),
+              padding: const EdgeInsets.all(AppTheme.spacingL),
               decoration: BoxDecoration(
-                color: OnboardingTheme.lightGray,
-                borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
+                color: AppTheme.lightGray,
+                borderRadius: BorderRadius.circular(AppTheme.radiusL),
               ),
               child: Text(
                 'Establishing regular prayer (salah) strengthens your connection with Allah and provides spiritual protection throughout your day.',
-                style: OnboardingTheme.bodyMedium.copyWith(
+                style: AppTheme.bodyMedium.copyWith(
                   fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18, // Increased from default bodyMedium size
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
+            const SizedBox(
+              height: AppTheme.spacingXL,
+            ), // Add extra spacing at bottom
           ],
         ),
       ),

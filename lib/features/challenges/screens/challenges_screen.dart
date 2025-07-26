@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/challenge_badge.dart';
 import '../molecules/challenge_card.dart';
 import '../molecules/streak_milestone_card.dart';
@@ -43,9 +43,9 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   }
 
   // Method to refresh data
-  void _refreshData() {
-    _loadChallengeData();
-  }
+  // void _refreshData() {
+  //   _loadChallengeData();
+  // }
 
   // Check if prayer challenge is completed
   Future<bool> _isPrayerChallengeCompleted() async {
@@ -84,26 +84,14 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Challenges', style: OnboardingTheme.headlineMedium),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // Handle notifications
-            },
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+        padding: const EdgeInsets.all(AppTheme.spacingM),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header section with user stats
             _buildHeaderSection(),
-            const SizedBox(height: OnboardingTheme.spacingL),
+            const SizedBox(height: AppTheme.spacingL),
             // Daily challenges section
             FutureBuilder<bool>(
               future: _isPrayerChallengeCompleted(),
@@ -159,7 +147,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                 );
               },
             ),
-            const SizedBox(height: OnboardingTheme.spacingL),
+            const SizedBox(height: AppTheme.spacingL),
             // Streak milestones section
             ChallengesGrid(
               title: 'Streak Milestones',
@@ -204,7 +192,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: OnboardingTheme.spacingL),
+            const SizedBox(height: AppTheme.spacingL),
             // Achievement badges section
             _buildAchievementsSection(),
           ],
@@ -216,12 +204,12 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   Widget _buildHeaderSection() {
     return Container(
       decoration: BoxDecoration(
-        gradient: OnboardingTheme.primaryGradient,
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
-        boxShadow: OnboardingTheme.cardShadow,
+        gradient: AppTheme.primaryGradient,
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        boxShadow: AppTheme.cardShadow,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+        padding: const EdgeInsets.all(AppTheme.spacingM),
         child: Column(
           children: [
             Row(
@@ -232,34 +220,35 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                   children: [
                     Text(
                       'Welcome back,',
-                      style: OnboardingTheme.bodyLarge.copyWith(
-                        color: OnboardingTheme.white.withValues(alpha: 0.8),
+                      style: AppTheme.bodyLarge.copyWith(
+                        color: AppTheme.white.withValues(alpha: 0.8),
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: OnboardingTheme.spacingXS),
+                    const SizedBox(height: AppTheme.spacingXS),
                     Text(
                       'Ahmad!',
-                      style: OnboardingTheme.headlineMedium.copyWith(
-                        color: OnboardingTheme.white,
+                      style: AppTheme.headlineMedium.copyWith(
+                        color: AppTheme.white,
                       ),
                     ),
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.all(OnboardingTheme.spacingS),
+                  padding: const EdgeInsets.all(AppTheme.spacingS),
                   decoration: BoxDecoration(
-                    color: OnboardingTheme.white.withValues(alpha: 0.2),
+                    color: AppTheme.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.account_circle,
-                    color: OnboardingTheme.white,
+                    color: AppTheme.white,
                     size: 40,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: OnboardingTheme.spacingM),
+            const SizedBox(height: AppTheme.spacingM),
             // Stats row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -280,16 +269,16 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
       children: [
         Text(
           value,
-          style: OnboardingTheme.headlineSmall.copyWith(
-            color: OnboardingTheme.white,
+          style: AppTheme.headlineSmall.copyWith(
+            color: AppTheme.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: OnboardingTheme.spacingXS),
+        const SizedBox(height: AppTheme.spacingXS),
         Text(
           label,
-          style: OnboardingTheme.bodySmall.copyWith(
-            color: OnboardingTheme.white.withValues(alpha: 0.8),
+          style: AppTheme.bodySmall.copyWith(
+            color: AppTheme.white.withValues(alpha: 0.8),
           ),
         ),
       ],
@@ -300,11 +289,17 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Achievements', style: OnboardingTheme.headlineMedium),
-        const SizedBox(height: OnboardingTheme.spacingM),
+        Text(
+          'Achievements',
+          style: AppTheme.headlineMedium.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 28, // Increased from default headlineMedium size
+          ),
+        ),
+        const SizedBox(height: AppTheme.spacingM),
         Wrap(
-          spacing: OnboardingTheme.spacingM,
-          runSpacing: OnboardingTheme.spacingM,
+          spacing: AppTheme.spacingM,
+          runSpacing: AppTheme.spacingM,
           children: [
             ChallengeBadge(
               title: 'A',

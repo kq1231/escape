@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class HistoryItem extends StatelessWidget {
   final String title;
@@ -24,49 +24,49 @@ class HistoryItem extends StatelessWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
+        borderRadius: BorderRadius.circular(AppTheme.radiusM),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
+        borderRadius: BorderRadius.circular(AppTheme.radiusM),
         child: Padding(
-          padding: EdgeInsets.all(OnboardingTheme.spacingM),
+          padding: EdgeInsets.all(AppTheme.spacingM),
           child: Row(
             children: [
               if (icon != null) ...[
                 Container(
-                  padding: EdgeInsets.all(OnboardingTheme.spacingS),
+                  padding: EdgeInsets.all(AppTheme.spacingS),
                   decoration: BoxDecoration(
                     color:
                         iconColor?.withValues(alpha: 0.1) ??
-                        OnboardingTheme.errorRed.withValues(alpha: 0.1),
+                        AppTheme.errorRed.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     icon,
-                    color: iconColor ?? OnboardingTheme.errorRed,
+                    color: iconColor ?? AppTheme.errorRed,
                     size: 24,
                   ),
                 ),
-                SizedBox(width: OnboardingTheme.spacingM),
+                SizedBox(width: AppTheme.spacingM),
               ],
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: OnboardingTheme.headlineSmall),
-                    SizedBox(height: OnboardingTheme.spacingXS),
+                    Text(title, style: AppTheme.headlineSmall),
+                    SizedBox(height: AppTheme.spacingXS),
                     Text(
                       date,
-                      style: OnboardingTheme.bodySmall.copyWith(
-                        color: OnboardingTheme.mediumGray,
+                      style: AppTheme.bodySmall.copyWith(
+                        color: AppTheme.mediumGray,
                       ),
                     ),
                     if (description != null) ...[
-                      SizedBox(height: OnboardingTheme.spacingS),
+                      SizedBox(height: AppTheme.spacingS),
                       Text(
                         description!,
-                        style: OnboardingTheme.bodyMedium,
+                        style: AppTheme.bodyMedium,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

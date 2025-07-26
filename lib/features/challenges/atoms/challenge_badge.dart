@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class ChallengeBadge extends StatelessWidget {
   final String title;
@@ -26,12 +26,10 @@ class ChallengeBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final badgeColor = isCompleted
-        ? backgroundColor ?? OnboardingTheme.successGreen
-        : backgroundColor ?? OnboardingTheme.lightGray;
+        ? backgroundColor ?? AppTheme.successGreen
+        : backgroundColor ?? AppTheme.lightGray;
 
-    final textColor = isCompleted
-        ? OnboardingTheme.white
-        : OnboardingTheme.darkGray;
+    final textColor = isCompleted ? AppTheme.white : AppTheme.darkGray;
 
     return GestureDetector(
       onTap: onTap,
@@ -41,7 +39,7 @@ class ChallengeBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: badgeColor,
           shape: BoxShape.circle,
-          boxShadow: OnboardingTheme.cardShadow,
+          boxShadow: AppTheme.cardShadow,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,12 +47,12 @@ class ChallengeBadge extends StatelessWidget {
             if (icon != null)
               Icon(icon, color: iconColor ?? textColor, size: size * 0.4),
             if (icon != null && subtitle != null)
-              const SizedBox(height: OnboardingTheme.spacingXS),
+              const SizedBox(height: AppTheme.spacingXS),
             Text(
               title,
-              style: OnboardingTheme.labelMedium.copyWith(
+              style: AppTheme.labelMedium.copyWith(
                 color: textColor,
-                fontWeight: isCompleted ? FontWeight.bold : FontWeight.normal,
+                fontWeight: isCompleted ? FontWeight.bold : FontWeight.w500,
               ),
               textAlign: TextAlign.center,
               maxLines: 2,

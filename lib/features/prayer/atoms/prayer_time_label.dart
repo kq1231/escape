@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class PrayerTimeLabel extends StatelessWidget {
   final String prayerName;
@@ -20,10 +20,10 @@ class PrayerTimeLabel extends StatelessWidget {
     return Text(
       prayerName,
       textAlign: textAlign,
-      style: OnboardingTheme.headlineSmall.copyWith(
-        fontSize: fontSize ?? 18,
-        color: color ?? OnboardingTheme.darkGray,
-        fontWeight: FontWeight.w500,
+      style: AppTheme.headlineSmall.copyWith(
+        fontSize: fontSize ?? 20, // Increased from 18 to 20
+        color: color ?? AppTheme.darkGray,
+        fontWeight: FontWeight.bold, // Changed from w500 to bold
       ),
     );
   }

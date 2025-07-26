@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class RelapseButton extends StatelessWidget {
   final String text;
@@ -25,21 +25,21 @@ class RelapseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonColor = backgroundColor ?? OnboardingTheme.errorRed;
-    final textColor = foregroundColor ?? OnboardingTheme.white;
+    final buttonColor = backgroundColor ?? AppTheme.errorRed;
+    final textColor = foregroundColor ?? AppTheme.white;
 
     final buttonStyle = ElevatedButton.styleFrom(
       backgroundColor: buttonColor,
       foregroundColor: textColor,
       elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
       ),
       padding:
           padding ??
           EdgeInsets.symmetric(
-            horizontal: OnboardingTheme.spacingXL,
-            vertical: OnboardingTheme.spacingM,
+            horizontal: AppTheme.spacingXL,
+            vertical: AppTheme.spacingM,
           ),
     );
 
@@ -49,9 +49,9 @@ class RelapseButton extends StatelessWidget {
       children: [
         if (icon != null) ...[
           Icon(icon, size: 20),
-          SizedBox(width: OnboardingTheme.spacingS),
+          SizedBox(width: AppTheme.spacingS),
         ],
-        Text(text, style: OnboardingTheme.labelLarge),
+        Text(text, style: AppTheme.labelLarge),
       ],
     );
 

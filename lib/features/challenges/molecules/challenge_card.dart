@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/challenge_badge.dart';
 import '../atoms/challenge_star.dart';
 import '../atoms/progress_bar.dart';
@@ -33,18 +33,18 @@ class ChallengeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusColor = isCompleted
-        ? OnboardingTheme.successGreen
+        ? AppTheme.successGreen
         : progress > 0
-        ? OnboardingTheme.warningOrange
-        : OnboardingTheme.mediumGray;
+        ? AppTheme.warningOrange
+        : AppTheme.mediumGray;
 
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: OnboardingTheme.white,
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusL),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.1),
@@ -58,7 +58,7 @@ class ChallengeCard extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+          padding: const EdgeInsets.all(AppTheme.spacingM),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -67,101 +67,100 @@ class ChallengeCard extends StatelessWidget {
                 children: [
                   if (leadingWidget != null) ...[
                     leadingWidget!,
-                    const SizedBox(width: OnboardingTheme.spacingS),
+                    const SizedBox(width: AppTheme.spacingS),
                   ] else
                     ChallengeBadge(
                       title: title.substring(0, 1),
                       isCompleted: isCompleted,
                       size: 40,
                     ),
-                  const SizedBox(width: OnboardingTheme.spacingS),
+                  const SizedBox(width: AppTheme.spacingS),
                   Expanded(
                     child: Text(
                       title,
-                      style: OnboardingTheme.headlineSmall.copyWith(
+                      style: AppTheme.headlineSmall.copyWith(
                         color: isCompleted
-                            ? OnboardingTheme.successGreen
-                            : OnboardingTheme.darkGray,
+                            ? AppTheme.successGreen
+                            : AppTheme.darkGray,
+                        fontWeight: FontWeight.bold,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   if (trailingWidgets != null) ...[
-                    const SizedBox(width: OnboardingTheme.spacingS),
+                    const SizedBox(width: AppTheme.spacingS),
                     ...trailingWidgets!,
                   ] else if (difficulty != null) ...[
-                    const SizedBox(width: OnboardingTheme.spacingS),
+                    const SizedBox(width: AppTheme.spacingS),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: OnboardingTheme.spacingS,
-                        vertical: OnboardingTheme.spacingXS,
+                        horizontal: AppTheme.spacingS,
+                        vertical: AppTheme.spacingXS,
                       ),
                       decoration: BoxDecoration(
                         color: statusColor.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(
-                          OnboardingTheme.radiusS,
-                        ),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusS),
                       ),
                       child: Text(
                         difficulty!,
-                        style: OnboardingTheme.labelMedium.copyWith(
+                        style: AppTheme.labelMedium.copyWith(
                           color: statusColor,
-                          fontSize: 10,
                         ),
                       ),
                     ),
                   ],
                 ],
               ),
-              const SizedBox(height: OnboardingTheme.spacingS),
+              const SizedBox(height: AppTheme.spacingS),
               // Description
-              Text(
-                description,
-                style: OnboardingTheme.bodyMedium,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              Flexible(
+                child: Text(
+                  description,
+                  style: AppTheme.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              const SizedBox(height: OnboardingTheme.spacingM),
+              const SizedBox(height: AppTheme.spacingM),
               // Progress bar
               ChallengeProgressBar(
                 progress: progress,
                 leadingText: 'Progress',
                 trailingText: '${(progress * 100).round()}%',
               ),
-              const SizedBox(height: OnboardingTheme.spacingM),
-              // Rating and action row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              const SizedBox(height: AppTheme.spacingM),
+              // Rating and badges section
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ChallengeStar(rating: rating, maxRating: maxRating, size: 18),
+                  const SizedBox(height: AppTheme.spacingS),
                   if (isCompleted)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: OnboardingTheme.spacingM,
-                        vertical: OnboardingTheme.spacingS,
+                        horizontal: AppTheme.spacingM,
+                        vertical: AppTheme.spacingS,
                       ),
                       decoration: BoxDecoration(
-                        color: OnboardingTheme.successGreen.withValues(
-                          alpha: 0.1,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          OnboardingTheme.radiusM,
-                        ),
+                        color: AppTheme.successGreen.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
                       ),
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             Icons.check_circle,
-                            color: OnboardingTheme.successGreen,
+                            color: AppTheme.successGreen,
                             size: 16,
                           ),
-                          const SizedBox(width: OnboardingTheme.spacingXS),
+                          const SizedBox(width: AppTheme.spacingXS),
                           Text(
                             'Completed',
-                            style: OnboardingTheme.labelMedium.copyWith(
-                              color: OnboardingTheme.successGreen,
-                              fontSize: 12,
+                            style: AppTheme.labelMedium.copyWith(
+                              color: AppTheme.successGreen,
                             ),
                           ),
                         ],

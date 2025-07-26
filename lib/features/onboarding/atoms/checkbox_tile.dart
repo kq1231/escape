@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class CheckboxTile extends StatelessWidget {
   final String title;
@@ -30,50 +30,43 @@ class CheckboxTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = value
-        ? (selectedColor ?? OnboardingTheme.primaryGreen.withValues(alpha: 0.1))
-        : (unselectedColor ?? OnboardingTheme.white);
+        ? (selectedColor ?? AppTheme.primaryGreen.withValues(alpha: 0.1))
+        : (unselectedColor ?? AppTheme.white);
 
     final borderColor = value
-        ? (selectedColor ?? OnboardingTheme.primaryGreen)
-        : (showBorder ? OnboardingTheme.mediumGray : Colors.transparent);
+        ? (selectedColor ?? AppTheme.primaryGreen)
+        : (showBorder ? AppTheme.mediumGray : Colors.transparent);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: OnboardingTheme.spacingS),
+      margin: const EdgeInsets.only(bottom: AppTheme.spacingS),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(
-          borderRadius ?? OnboardingTheme.radiusM,
-        ),
+        borderRadius: BorderRadius.circular(borderRadius ?? AppTheme.radiusM),
         border: Border.all(color: borderColor, width: 1),
-        boxShadow: showBorder ? OnboardingTheme.cardShadow : null,
+        boxShadow: showBorder ? AppTheme.cardShadow : null,
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(
-          borderRadius ?? OnboardingTheme.radiusM,
-        ),
+        borderRadius: BorderRadius.circular(borderRadius ?? AppTheme.radiusM),
         onTap: () => onChanged?.call(!value),
         child: Padding(
           padding:
               padding ??
               const EdgeInsets.symmetric(
-                horizontal: OnboardingTheme.spacingM,
-                vertical: OnboardingTheme.spacingM,
+                horizontal: AppTheme.spacingM,
+                vertical: AppTheme.spacingM,
               ),
           child: Row(
             children: [
               Checkbox(
                 value: value,
                 onChanged: onChanged,
-                activeColor: OnboardingTheme.primaryGreen,
-                checkColor: OnboardingTheme.white,
+                activeColor: AppTheme.primaryGreen,
+                checkColor: AppTheme.white,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              const SizedBox(width: OnboardingTheme.spacingS),
+              const SizedBox(width: AppTheme.spacingS),
               Expanded(
-                child: Text(
-                  title,
-                  style: titleStyle ?? OnboardingTheme.bodyLarge,
-                ),
+                child: Text(title, style: titleStyle ?? AppTheme.bodyLarge),
               ),
             ],
           ),

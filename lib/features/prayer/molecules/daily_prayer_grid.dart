@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../molecules/prayer_row.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class DailyPrayerGrid extends StatelessWidget {
   final Map<String, bool> prayerStatus;
@@ -18,12 +18,12 @@ class DailyPrayerGrid extends StatelessWidget {
     final List<String> prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 
     return Container(
-      padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+      padding: const EdgeInsets.all(AppTheme.spacingM),
       decoration: BoxDecoration(
-        color: OnboardingTheme.white,
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
-        border: Border.all(color: OnboardingTheme.lightGray),
-        boxShadow: OnboardingTheme.cardShadow,
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        border: Border.all(color: AppTheme.lightGray),
+        boxShadow: AppTheme.cardShadow,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -34,20 +34,20 @@ class DailyPrayerGrid extends StatelessWidget {
             children: [
               Text(
                 'Today\'s Prayers',
-                style: OnboardingTheme.headlineSmall.copyWith(
+                style: AppTheme.headlineSmall.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 '${_getCompletedCount()}/${prayers.length}',
-                style: OnboardingTheme.bodyMedium.copyWith(
-                  color: OnboardingTheme.primaryGreen,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppTheme.primaryGreen,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: OnboardingTheme.spacingM),
+          const SizedBox(height: AppTheme.spacingM),
           // Prayer rows
           ...prayers.map((prayerName) {
             return Column(
@@ -62,7 +62,7 @@ class DailyPrayerGrid extends StatelessWidget {
                   },
                 ),
                 if (prayerName != prayers.last)
-                  const SizedBox(height: OnboardingTheme.spacingS),
+                  const SizedBox(height: AppTheme.spacingS),
               ],
             );
           }),

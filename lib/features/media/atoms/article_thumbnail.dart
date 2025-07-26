@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class ArticleThumbnail extends StatelessWidget {
   final String? imageUrl;
@@ -23,18 +23,14 @@ class ArticleThumbnail extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: OnboardingTheme.lightGray,
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusM),
+        color: AppTheme.lightGray,
+        borderRadius: BorderRadius.circular(AppTheme.radiusM),
         image: imageUrl != null
             ? DecorationImage(image: NetworkImage(imageUrl!), fit: fit)
             : null,
       ),
       child: imageUrl == null
-          ? Icon(
-              Icons.image_outlined,
-              color: OnboardingTheme.mediumGray,
-              size: 40,
-            )
+          ? Icon(Icons.image_outlined, color: AppTheme.mediumGray, size: 40)
           : null,
     );
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class ChallengeProgressBar extends StatelessWidget {
   final double progress; // Value between 0.0 and 1.0
@@ -37,23 +37,26 @@ class ChallengeProgressBar extends StatelessWidget {
               if (leadingText != null)
                 Text(
                   leadingText!,
-                  style: textStyle ?? OnboardingTheme.bodySmall,
+                  style: textStyle ?? AppTheme.bodySmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               if (trailingText != null)
                 Text(
                   trailingText!,
-                  style: textStyle ?? OnboardingTheme.bodySmall,
+                  style: textStyle ?? AppTheme.bodySmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
             ],
           ),
         if (leadingText != null || trailingText != null)
-          const SizedBox(height: OnboardingTheme.spacingXS),
+          const SizedBox(height: AppTheme.spacingXS),
         ClipRRect(
-          borderRadius:
-              borderRadius ?? BorderRadius.circular(OnboardingTheme.radiusM),
+          borderRadius: borderRadius ?? BorderRadius.circular(AppTheme.radiusM),
           child: Container(
             height: height,
-            color: backgroundColor ?? OnboardingTheme.lightGray,
+            color: backgroundColor ?? AppTheme.lightGray,
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return Stack(
@@ -61,7 +64,7 @@ class ChallengeProgressBar extends StatelessWidget {
                     // Progress fill
                     Container(
                       width: constraints.maxWidth * clampedProgress,
-                      color: progressColor ?? OnboardingTheme.primaryGreen,
+                      color: progressColor ?? AppTheme.primaryGreen,
                     ),
                     // Animated progress (optional visual enhancement)
                     if (clampedProgress > 0)
@@ -73,9 +76,9 @@ class ChallengeProgressBar extends StatelessWidget {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                (progressColor ?? OnboardingTheme.primaryGreen)
+                                (progressColor ?? AppTheme.primaryGreen)
                                     .withValues(alpha: 0.3),
-                                (progressColor ?? OnboardingTheme.primaryGreen)
+                                (progressColor ?? AppTheme.primaryGreen)
                                     .withValues(alpha: 0.1),
                               ],
                               begin: Alignment.centerLeft,

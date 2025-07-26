@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class StreakIcon extends StatelessWidget {
   final Color? color;
@@ -12,11 +12,7 @@ class StreakIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       Icons.local_fire_department,
-      color:
-          color ??
-          (isActive
-              ? OnboardingTheme.primaryGreen
-              : OnboardingTheme.mediumGray),
+      color: color ?? (isActive ? AppTheme.primaryGreen : AppTheme.mediumGray),
       size: size ?? 32,
     );
   }

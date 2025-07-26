@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../atoms/chart_container.dart';
 
 class ProgressChart extends StatelessWidget {
@@ -19,14 +20,128 @@ class ProgressChart extends StatelessWidget {
     return ChartContainer(
       title: title,
       subtitle: subtitle,
-      child: SizedBox(
-        height: 200,
-        child: CustomPaint(
-          painter: _ProgressChartPainter(data),
-          size: const Size(double.infinity, 200),
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SizedBox(
+            height: 200,
+            width: constraints.maxWidth,
+            child: LineChart(
+              LineChartData(
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: _generateSpots(),
+                    isCurved: true,
+                    color: AppTheme.primaryGreen,
+                    barWidth: 3,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(
+                      show: true,
+                      getDotPainter: (spot, percent, barData, index) {
+                        return FlDotCirclePainter(
+                          radius: 5,
+                          color: AppTheme.primaryGreen,
+                        );
+                      },
+                    ),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: AppTheme.primaryGreen.withValues(alpha: 0.1),
+                    ),
+                  ),
+                ],
+                titlesData: FlTitlesData(
+                  show: true,
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        if (value.toInt() < data.length && value.toInt() >= 0) {
+                          final date = data[value.toInt()].date;
+                          return Text(
+                            '${date.day}/${date.month}',
+                            style: AppTheme.bodyMedium.copyWith(
+                              color: AppTheme.mediumGray,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          );
+                        }
+                        return const Text('');
+                      },
+                      reservedSize: 30,
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toInt().toString(),
+                          style: AppTheme.bodyMedium.copyWith(
+                            color: AppTheme.mediumGray,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                      },
+                      reservedSize: 30,
+                    ),
+                  ),
+                ),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  horizontalInterval: 1,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(color: AppTheme.lightGray, strokeWidth: 1);
+                  },
+                ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border.all(color: AppTheme.lightGray),
+                ),
+                minX: 0,
+                maxX: data.length > 1 ? (data.length - 1).toDouble() : 1,
+                minY: _getMinValue(),
+                maxY: _getMaxValue(),
+              ),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  List<FlSpot> _generateSpots() {
+    List<FlSpot> spots = [];
+    for (int i = 0; i < data.length; i++) {
+      spots.add(FlSpot(i.toDouble(), data[i].value));
+    }
+    return spots;
+  }
+
+  double _getMinValue() {
+    if (data.isEmpty) return 0;
+    double min = data[0].value;
+    for (var item in data) {
+      if (item.value < min) min = item.value;
+    }
+    // Add some padding
+    return min > 1 ? min - 1 : 0;
+  }
+
+  double _getMaxValue() {
+    if (data.isEmpty) return 5;
+    double max = data[0].value;
+    for (var item in data) {
+      if (item.value > max) max = item.value;
+    }
+    // Add some padding
+    return max + 1;
   }
 }
 
@@ -36,145 +151,4 @@ class ProgressData {
   final Color? color;
 
   ProgressData({required this.date, required this.value, this.color});
-}
-
-class _ProgressChartPainter extends CustomPainter {
-  final List<ProgressData> data;
-  final Color lineColor;
-  final Color fillColor;
-
-  _ProgressChartPainter(this.data)
-    : lineColor = OnboardingTheme.primaryGreen,
-      fillColor = OnboardingTheme.primaryGreen.withValues(alpha: 0.1);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (data.isEmpty) return;
-
-    final paint = Paint()
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke;
-
-    final fillPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = fillColor;
-
-    // Calculate points
-    final points = <Offset>[];
-    final maxX = size.width;
-    final maxY = size.height - 20; // Leave space for labels
-    final minX = 20.0; // Leave space for Y-axis labels
-    final minY = 10.0; // Leave space at top
-
-    // Find min and max values for scaling
-    double maxValue = data.map((d) => d.value).reduce((a, b) => a > b ? a : b);
-    double minValue = data.map((d) => d.value).reduce((a, b) => a < b ? a : b);
-
-    // Ensure we have some range
-    if (maxValue == minValue) {
-      maxValue += 1;
-      minValue = minValue > 0 ? minValue - 1 : 0;
-    }
-
-    // Convert data to points
-    for (int i = 0; i < data.length; i++) {
-      final x = minX + (i / (data.length - 1)) * (maxX - minX - 20);
-      final normalizedValue =
-          (data[i].value - minValue) / (maxValue - minValue);
-      final y = maxY - (normalizedValue * (maxY - minY));
-      points.add(Offset(x, y));
-    }
-
-    // Draw filled area under line
-    if (points.length > 1) {
-      final path = Path();
-      path.moveTo(points[0].dx, maxY); // Start at bottom
-      for (int i = 0; i < points.length; i++) {
-        path.lineTo(points[i].dx, points[i].dy);
-      }
-      path.lineTo(points[points.length - 1].dx, maxY); // End at bottom
-      path.close();
-      canvas.drawPath(path, fillPaint);
-    }
-
-    // Draw line
-    if (points.length > 1) {
-      final path = Path();
-      path.moveTo(points[0].dx, points[0].dy);
-      for (int i = 1; i < points.length; i++) {
-        path.lineTo(points[i].dx, points[i].dy);
-      }
-      paint.color = lineColor;
-      canvas.drawPath(path, paint);
-    }
-
-    // Draw points
-    paint.style = PaintingStyle.fill;
-    for (int i = 0; i < points.length; i++) {
-      paint.color = data[i].color ?? lineColor;
-      canvas.drawCircle(points[i], 5, paint);
-    }
-
-    // Draw Y-axis labels
-    final textPainter = TextPainter(
-      textAlign: TextAlign.right,
-      textDirection: TextDirection.ltr,
-    );
-
-    // Max value
-    textPainter.text = TextSpan(
-      text: maxValue.toStringAsFixed(0),
-      style: OnboardingTheme.bodySmall.copyWith(
-        color: OnboardingTheme.mediumGray,
-      ),
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(0, minY - 8));
-
-    // Min value
-    textPainter.text = TextSpan(
-      text: minValue.toStringAsFixed(0),
-      style: OnboardingTheme.bodySmall.copyWith(
-        color: OnboardingTheme.mediumGray,
-      ),
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(0, maxY - 8));
-
-    // Draw X-axis labels (dates)
-    if (data.isNotEmpty) {
-      final dateFormat = TextPainter(
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
-      );
-
-      // First date
-      dateFormat.text = TextSpan(
-        text: '${data[0].date.day}/${data[0].date.month}',
-        style: OnboardingTheme.bodySmall.copyWith(
-          color: OnboardingTheme.mediumGray,
-        ),
-      );
-      dateFormat.layout();
-      dateFormat.paint(canvas, Offset(minX, maxY + 5));
-
-      // Last date
-      if (data.length > 1) {
-        dateFormat.text = TextSpan(
-          text: '${data.last.date.day}/${data.last.date.month}',
-          style: OnboardingTheme.bodySmall.copyWith(
-            color: OnboardingTheme.mediumGray,
-          ),
-        );
-        dateFormat.layout();
-        dateFormat.paint(
-          canvas,
-          Offset(maxX - 20 - dateFormat.width / 2, maxY + 5),
-        );
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

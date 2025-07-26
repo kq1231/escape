@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../atoms/progress_indicator.dart' as custom;
 import '../atoms/primary_button.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class OnboardingPageTemplate extends StatelessWidget {
   final String title;
@@ -37,14 +38,14 @@ class OnboardingPageTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: AppTheme.white,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: AppTheme.white,
         elevation: 0,
         leading: showBackButton && onBack != null
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                color: Theme.of(context).colorScheme.onSurface,
+                color: AppTheme.darkGray,
                 onPressed: onBack,
               )
             : null,
@@ -72,21 +73,23 @@ class OnboardingPageTemplate extends StatelessWidget {
                     if (title.isNotEmpty) ...[
                       Text(
                         title,
-                        style: Theme.of(context).textTheme.headlineMedium
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
+                        style: AppTheme.headlineMedium.copyWith(
+                          color: AppTheme.darkGray,
+                          fontWeight: FontWeight.bold,
+                          fontSize:
+                              32, // Increased from default headlineMedium size
+                        ),
                       ),
                       if (subtitle != null) ...[
                         const SizedBox(height: 8),
                         Text(
                           subtitle!,
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.8),
-                              ),
+                          style: AppTheme.bodyLarge.copyWith(
+                            color: AppTheme.darkGray.withValues(alpha: 0.8),
+                            fontWeight: FontWeight.w500,
+                            fontSize:
+                                20, // Increased from default bodyLarge size
+                          ),
                         ),
                       ],
                       const SizedBox(height: 24),
@@ -112,12 +115,10 @@ class OnboardingPageTemplate extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 16),
                         child: Text(
                           'Your data is encrypted and never shared',
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.6),
-                              ),
+                          style: AppTheme.bodySmall.copyWith(
+                            color: AppTheme.darkGray.withValues(alpha: 0.6),
+                            fontWeight: FontWeight.w500,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),

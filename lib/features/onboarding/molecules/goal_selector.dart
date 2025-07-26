@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../atoms/checkbox_tile.dart';
 import '../constants/onboarding_constants.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class GoalSelector extends StatefulWidget {
   final List<String> selectedGoals;
@@ -45,30 +45,32 @@ class _GoalSelectorState extends State<GoalSelector> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: OnboardingTheme.spacingXL,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 OnboardingConstants.goalsTitle,
-                style: OnboardingTheme.headlineMedium,
+                style: AppTheme.headlineMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32, // Increased from default headlineMedium size
+                ),
               ),
-              const SizedBox(height: OnboardingTheme.spacingS),
+              const SizedBox(height: AppTheme.spacingS),
               Text(
                 OnboardingConstants.goalsSubtitle,
-                style: OnboardingTheme.bodyLarge,
+                style: AppTheme.bodyLarge.copyWith(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20, // Increased from default bodyLarge size
+                ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: OnboardingTheme.spacingL),
+        const SizedBox(height: AppTheme.spacingL),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(
-              horizontal: OnboardingTheme.spacingXL,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             itemCount: OnboardingConstants.goals.length,
             itemBuilder: (context, index) {
               final goal = OnboardingConstants.goals[index];
@@ -83,13 +85,12 @@ class _GoalSelectorState extends State<GoalSelector> {
         ),
         if (widget.showError && _selectedGoals.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: OnboardingTheme.spacingXL,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
-              style: OnboardingTheme.bodySmall.copyWith(
-                color: OnboardingTheme.errorRed,
+              style: AppTheme.bodySmall.copyWith(
+                color: AppTheme.errorRed,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),

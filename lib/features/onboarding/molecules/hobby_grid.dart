@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/onboarding_constants.dart';
-import '../constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class HobbyGrid extends StatefulWidget {
   final List<String> selectedHobbies;
@@ -44,34 +44,36 @@ class _HobbyGridState extends State<HobbyGrid> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: OnboardingTheme.spacingXL,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 OnboardingConstants.hobbiesTitle,
-                style: OnboardingTheme.headlineMedium,
+                style: AppTheme.headlineMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32, // Increased from default headlineMedium size
+                ),
               ),
-              const SizedBox(height: OnboardingTheme.spacingS),
+              const SizedBox(height: AppTheme.spacingS),
               Text(
                 OnboardingConstants.hobbiesSubtitle,
-                style: OnboardingTheme.bodyLarge,
+                style: AppTheme.bodyLarge.copyWith(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20, // Increased from default bodyLarge size
+                ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: OnboardingTheme.spacingL),
+        const SizedBox(height: AppTheme.spacingL),
         Expanded(
           child: GridView.builder(
-            padding: const EdgeInsets.symmetric(
-              horizontal: OnboardingTheme.spacingXL,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: OnboardingTheme.spacingM,
-              mainAxisSpacing: OnboardingTheme.spacingM,
+              crossAxisSpacing: AppTheme.spacingM,
+              mainAxisSpacing: AppTheme.spacingM,
               childAspectRatio: 2.5,
             ),
             itemCount: OnboardingConstants.hobbies.length,
@@ -84,31 +86,31 @@ class _HobbyGridState extends State<HobbyGrid> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? OnboardingTheme.primaryGreen.withValues(alpha: 0.1)
-                        : OnboardingTheme.white,
-                    borderRadius: BorderRadius.circular(
-                      OnboardingTheme.radiusL,
-                    ),
+                        ? AppTheme.primaryGreen.withValues(alpha: 0.1)
+                        : AppTheme.white,
+                    borderRadius: BorderRadius.circular(AppTheme.radiusL),
                     border: Border.all(
                       color: isSelected
-                          ? OnboardingTheme.primaryGreen
-                          : OnboardingTheme.mediumGray,
+                          ? AppTheme.primaryGreen
+                          : AppTheme.mediumGray,
                       width: 1,
                     ),
-                    boxShadow: OnboardingTheme.cardShadow,
+                    boxShadow: AppTheme.cardShadow,
                   ),
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(OnboardingTheme.spacingS),
+                      padding: const EdgeInsets.all(AppTheme.spacingS),
                       child: Text(
                         hobby,
-                        style: OnboardingTheme.bodyMedium.copyWith(
+                        style: AppTheme.bodyMedium.copyWith(
                           color: isSelected
-                              ? OnboardingTheme.primaryGreen
-                              : OnboardingTheme.darkGray,
+                              ? AppTheme.primaryGreen
+                              : AppTheme.darkGray,
                           fontWeight: isSelected
-                              ? FontWeight.w600
+                              ? FontWeight.bold
                               : FontWeight.normal,
+                          fontSize:
+                              18, // Increased from default bodyMedium size
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -121,13 +123,12 @@ class _HobbyGridState extends State<HobbyGrid> {
         ),
         if (widget.showError && _selectedHobbies.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: OnboardingTheme.spacingXL,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
-              style: OnboardingTheme.bodySmall.copyWith(
-                color: OnboardingTheme.errorRed,
+              style: AppTheme.bodySmall.copyWith(
+                color: AppTheme.errorRed,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),

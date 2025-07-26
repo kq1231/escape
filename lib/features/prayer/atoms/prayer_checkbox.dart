@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class PrayerCheckbox extends StatelessWidget {
   final bool isChecked;
@@ -22,19 +22,15 @@ class PrayerCheckbox extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: isChecked
-              ? OnboardingTheme.primaryGreen
-              : OnboardingTheme.white,
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusS),
+          color: isChecked ? AppTheme.primaryGreen : AppTheme.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusS),
           border: Border.all(
-            color: isChecked
-                ? OnboardingTheme.primaryGreen
-                : OnboardingTheme.mediumGray,
+            color: isChecked ? AppTheme.primaryGreen : AppTheme.mediumGray,
             width: 2.0,
           ),
         ),
         child: isChecked
-            ? Icon(Icons.check, size: size * 0.7, color: OnboardingTheme.white)
+            ? Icon(Icons.check, size: size * 0.7, color: AppTheme.white)
             : null,
       ),
     );

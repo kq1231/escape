@@ -1,5 +1,5 @@
+import 'package:escape/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
 
 class ChartContainer extends StatelessWidget {
   final Widget child;
@@ -22,11 +22,11 @@ class ChartContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(OnboardingTheme.spacingM),
+        padding: const EdgeInsets.all(AppTheme.spacingM),
         decoration: BoxDecoration(
-          color: OnboardingTheme.white,
-          borderRadius: BorderRadius.circular(OnboardingTheme.radiusL),
-          boxShadow: OnboardingTheme.cardShadow,
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusL),
+          boxShadow: AppTheme.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,22 +34,24 @@ class ChartContainer extends StatelessWidget {
             if (title != null) ...[
               Text(
                 title!,
-                style: OnboardingTheme.headlineSmall.copyWith(
+                style: AppTheme.headlineSmall.copyWith(
                   fontWeight: FontWeight.bold,
+                  fontSize: 26, // Increased from default headlineSmall size
                 ),
               ),
-              const SizedBox(height: OnboardingTheme.spacingXS),
+              const SizedBox(height: AppTheme.spacingXS),
             ],
             if (subtitle != null) ...[
               Text(
                 subtitle!,
-                style: OnboardingTheme.bodySmall.copyWith(
-                  color: OnboardingTheme.mediumGray,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppTheme.mediumGray,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: OnboardingTheme.spacingM),
+              const SizedBox(height: AppTheme.spacingM),
             ] else if (title != null) ...[
-              const SizedBox(height: OnboardingTheme.spacingM),
+              const SizedBox(height: AppTheme.spacingM),
             ],
             Padding(padding: padding ?? EdgeInsets.zero, child: child),
           ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
+import 'package:escape/theme/app_theme.dart';
 import '../atoms/relapse_button.dart';
 
 class RelapseConfirmation extends StatelessWidget {
@@ -26,16 +26,14 @@ class RelapseConfirmation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title, style: OnboardingTheme.headlineSmall),
-      content: Text(message, style: OnboardingTheme.bodyMedium),
+      title: Text(title, style: AppTheme.headlineSmall),
+      content: Text(message, style: AppTheme.bodyMedium),
       actions: [
         TextButton(
           onPressed: onCancel ?? () => Navigator.of(context).pop(),
           child: Text(
             cancelText,
-            style: OnboardingTheme.labelMedium.copyWith(
-              color: OnboardingTheme.primaryGreen,
-            ),
+            style: AppTheme.labelMedium.copyWith(color: AppTheme.primaryGreen),
           ),
         ),
         RelapseButton(
@@ -54,8 +52,8 @@ class RelapseConfirmation extends StatelessWidget {
             // Close the dialog
             Navigator.of(context).pop();
           },
-          backgroundColor: OnboardingTheme.errorRed,
-          foregroundColor: OnboardingTheme.white,
+          backgroundColor: AppTheme.errorRed,
+          foregroundColor: AppTheme.white,
         ),
       ],
     );

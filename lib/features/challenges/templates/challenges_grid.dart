@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../onboarding/constants/onboarding_theme.dart';
-import '../molecules/challenge_card.dart';
-import '../molecules/streak_milestone_card.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class ChallengesGrid extends StatelessWidget {
   final List<Widget> challengeItems;
@@ -32,45 +30,48 @@ class ChallengesGrid extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (title != null)
-                Expanded(
-                  child: Text(title!, style: OnboardingTheme.headlineMedium),
-                ),
+                Expanded(child: Text(title!, style: AppTheme.headlineMedium)),
               if (showViewAllButton)
                 TextButton(
                   onPressed: onViewAllPressed,
                   child: Text(
                     'View All',
-                    style: OnboardingTheme.labelMedium.copyWith(
-                      color: OnboardingTheme.primaryGreen,
+                    style: AppTheme.labelMedium.copyWith(
+                      color: AppTheme.primaryGreen,
                     ),
                   ),
                 ),
             ],
           ),
           if (subtitle != null) ...[
-            const SizedBox(height: OnboardingTheme.spacingXS),
+            const SizedBox(height: AppTheme.spacingXS),
             Text(
               subtitle!,
-              style: OnboardingTheme.bodyMedium.copyWith(
-                color: OnboardingTheme.mediumGray,
-              ),
+              style: AppTheme.bodyMedium.copyWith(color: AppTheme.mediumGray),
             ),
           ],
-          const SizedBox(height: OnboardingTheme.spacingM),
+          const SizedBox(height: AppTheme.spacingM),
         ],
         // Grid of challenge items
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: OnboardingTheme.spacingM,
-            mainAxisSpacing: OnboardingTheme.spacingM,
-            childAspectRatio: 0.85,
-          ),
-          itemCount: challengeItems.length,
-          itemBuilder: (context, index) {
-            return challengeItems[index];
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final cardWidth = (constraints.maxWidth - AppTheme.spacingM) / 2;
+            final cardHeight = cardWidth * 1.2; // Adjust aspect ratio as needed
+
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: AppTheme.spacingM,
+                mainAxisSpacing: AppTheme.spacingM,
+                childAspectRatio: cardWidth / cardHeight,
+              ),
+              itemCount: challengeItems.length,
+              itemBuilder: (context, index) {
+                return challengeItems[index];
+              },
+            );
           },
         ),
       ],
