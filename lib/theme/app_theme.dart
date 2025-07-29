@@ -21,7 +21,7 @@ class AppTheme {
   static const Color successGreen = Color(0xFF388E3C);
 
   // Enhanced Text Styles with Google Fonts - Larger and Bolder
-  static TextStyle get headlineLarge => GoogleFonts.grandifloraOne(
+  static TextStyle get headlineLarge => GoogleFonts.pacifico(
     fontSize: 40, // Increased from 32
     fontWeight: FontWeight.bold,
     color: darkGreen,
@@ -59,26 +59,87 @@ class AppTheme {
   static TextStyle get bodySmall => GoogleFonts.robotoMono(
     fontSize: 14, // Increased from 12
     fontWeight: FontWeight.normal,
-    color: mediumGray,
+    color: primaryGreen,
     height: 1.4,
   );
 
   static TextStyle get labelLarge => GoogleFonts.robotoMono(
     fontSize: 16, // Increased from 14
     fontWeight: FontWeight.bold, // Changed from w500 to bold
-    color: white,
+    color: primaryGreen,
   );
 
   static TextStyle get labelMedium => GoogleFonts.robotoMono(
     fontSize: 14, // Increased from 12
     fontWeight: FontWeight.w600, // Changed from w500 to w600
-    color: darkGray,
+    color: primaryGreen,
   );
 
   static TextStyle get labelSmall => GoogleFonts.robotoMono(
     fontSize: 12,
     fontWeight: FontWeight.w600,
-    color: mediumGray,
+    color: primaryGreen,
+  );
+
+  // Dark mode text styles
+  static TextStyle get darkHeadlineLarge => GoogleFonts.pacifico(
+    fontSize: 40,
+    fontWeight: FontWeight.bold,
+    color: white,
+    height: 1.2,
+  );
+
+  static TextStyle get darkHeadlineMedium => GoogleFonts.grandifloraOne(
+    fontSize: 28,
+    fontWeight: FontWeight.bold,
+    color: white,
+    height: 1.3,
+  );
+
+  static TextStyle get darkHeadlineSmall => GoogleFonts.grandifloraOne(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: white,
+    height: 1.4,
+  );
+
+  static TextStyle get darkBodyLarge => GoogleFonts.robotoMono(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: Colors.white70,
+    height: 1.5,
+  );
+
+  static TextStyle get darkBodyMedium => GoogleFonts.robotoMono(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: Colors.white70,
+    height: 1.5,
+  );
+
+  static TextStyle get darkBodySmall => GoogleFonts.robotoMono(
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
+    color: Colors.white60,
+    height: 1.4,
+  );
+
+  static TextStyle get darkLabelLarge => GoogleFonts.robotoMono(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: white,
+  );
+
+  static TextStyle get darkLabelMedium => GoogleFonts.robotoMono(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.white70,
+  );
+
+  static TextStyle get darkLabelSmall => GoogleFonts.robotoMono(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: Colors.white60,
   );
 
   // Islamic Text Style - Using Amiri for Arabic text (keeping Amiri for Arabic support)
@@ -262,18 +323,18 @@ class AppTheme {
         onError: white,
       ),
       textTheme: TextTheme(
-        displayLarge: headlineLarge.copyWith(color: Colors.white),
-        displayMedium: headlineMedium.copyWith(color: Colors.white),
-        displaySmall: headlineSmall.copyWith(color: Colors.white70),
-        headlineLarge: headlineLarge.copyWith(color: Colors.white),
-        headlineMedium: headlineMedium.copyWith(color: Colors.white),
-        headlineSmall: headlineSmall.copyWith(color: Colors.white70),
-        bodyLarge: bodyLarge.copyWith(color: Colors.white70),
-        bodyMedium: bodyMedium.copyWith(color: Colors.white70),
-        bodySmall: bodySmall.copyWith(color: Colors.white60),
-        labelLarge: labelLarge,
-        labelMedium: labelMedium.copyWith(color: Colors.white70),
-        labelSmall: labelSmall.copyWith(color: Colors.white60),
+        displayLarge: darkHeadlineLarge,
+        displayMedium: darkHeadlineMedium,
+        displaySmall: darkHeadlineSmall,
+        headlineLarge: darkHeadlineLarge,
+        headlineMedium: darkHeadlineMedium,
+        headlineSmall: darkHeadlineSmall,
+        bodyLarge: darkBodyLarge,
+        bodyMedium: darkBodyMedium,
+        bodySmall: darkBodySmall,
+        labelLarge: darkLabelLarge,
+        labelMedium: darkLabelMedium,
+        labelSmall: darkLabelSmall,
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xFF1E1E1E),

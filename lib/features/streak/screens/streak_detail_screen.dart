@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../atoms/streak_number.dart';
-import '../atoms/streak_label.dart';
-import '../atoms/streak_icon.dart';
+import '../organisms/streak_organism.dart';
 import 'package:escape/theme/app_theme.dart';
 
 class StreakDetailScreen extends StatelessWidget {
@@ -22,7 +20,7 @@ class StreakDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Your Streak',
-          style: AppTheme.headlineMedium.copyWith(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 28, // Increased from default headlineMedium size
           ),
@@ -48,18 +46,9 @@ class StreakDetailScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const StreakIcon(size: 48, color: AppTheme.white),
-                  const SizedBox(height: AppTheme.spacingM),
-                  StreakNumber(
+                  StreakOrganism(
                     streakCount: streakCount,
-                    color: AppTheme.white,
-                    fontSize: 64,
-                  ),
-                  const SizedBox(height: AppTheme.spacingS),
-                  const StreakLabel(
-                    text: 'Days Clean',
-                    color: AppTheme.white,
-                    fontSize: 20,
+                    labelText: 'Days Clean',
                   ),
                 ],
               ),
@@ -81,22 +70,27 @@ class StreakDetailScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Streak Information',
-                    style: AppTheme.headlineSmall.copyWith(
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       fontSize: 26, // Increased from default headlineSmall size
                     ),
                   ),
                   const SizedBox(height: AppTheme.spacingM),
-                  _buildInfoRow('Current Streak', '$streakCount days'),
+                  _buildInfoRow('Current Streak', '$streakCount days', context),
                   const SizedBox(height: AppTheme.spacingS),
                   _buildInfoRow(
                     'Start Date',
                     startDate != null
                         ? '${startDate!.day}/${startDate!.month}/${startDate!.year}'
                         : 'Not recorded',
+                    context,
                   ),
                   const SizedBox(height: AppTheme.spacingS),
-                  _buildInfoRow('Longest Streak', '${streakCount + 5} days'),
+                  _buildInfoRow(
+                    'Longest Streak',
+                    '${streakCount + 5} days',
+                    context,
+                  ),
                 ],
               ),
             ),
@@ -113,7 +107,7 @@ class StreakDetailScreen extends StatelessWidget {
               ),
               child: Text(
                 _getMotivationalMessage(streakCount),
-                style: AppTheme.bodyLarge.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w500,
                   fontSize: 20, // Increased from default bodyLarge size
@@ -127,13 +121,13 @@ class StreakDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget _buildInfoRow(String label, String value, BuildContext ctx) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: AppTheme.bodyMedium.copyWith(
+          style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
             color: AppTheme.darkGray,
             fontWeight: FontWeight.w500,
             fontSize: 18, // Increased from default bodyMedium size
@@ -141,7 +135,7 @@ class StreakDetailScreen extends StatelessWidget {
         ),
         Text(
           value,
-          style: AppTheme.bodyMedium.copyWith(
+          style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 18, // Increased from default bodyMedium size
           ),

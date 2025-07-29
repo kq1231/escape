@@ -51,7 +51,7 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
             children: [
               Text(
                 OnboardingConstants.triggersTitle,
-                style: AppTheme.headlineMedium.copyWith(
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 32, // Increased from default headlineMedium size
                 ),
@@ -59,7 +59,7 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
               const SizedBox(height: AppTheme.spacingS),
               Text(
                 OnboardingConstants.triggersSubtitle,
-                style: AppTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           ),
@@ -85,7 +85,9 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
             padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
-              style: AppTheme.bodySmall.copyWith(color: AppTheme.errorRed),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppTheme.errorRed),
             ),
           ),
       ],

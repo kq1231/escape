@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../atoms/emergency_button.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class ContactSelector extends StatelessWidget {
   final List<ContactOption> contacts;
@@ -22,12 +23,18 @@ class ContactSelector extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           subtitle,
-          style: const TextStyle(fontSize: 14, color: Colors.grey),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            fontSize: 14,
+            color: AppTheme.mediumGray,
+          ),
         ),
         const SizedBox(height: 16),
         ListView.separated(
@@ -40,8 +47,6 @@ class ContactSelector extends StatelessWidget {
             return EmergencyButton(
               text: contact.name,
               icon: contact.icon,
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.redAccent,
               onPressed: () => onContactSelected?.call(contact),
               width: double.infinity,
             );

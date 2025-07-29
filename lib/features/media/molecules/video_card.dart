@@ -87,9 +87,8 @@ class VideoCard extends StatelessWidget {
                       ),
                       child: Text(
                         duration!,
-                        style: AppTheme.labelMedium.copyWith(
-                          color: AppTheme.white,
-                        ),
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(color: AppTheme.white),
                       ),
                     ),
                   ),
@@ -99,9 +98,9 @@ class VideoCard extends StatelessWidget {
             // Title
             MediaTitle(
               title: title,
-              style: AppTheme.headlineSmall.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             // Metadata
             if (author != null || views != null) ...[
@@ -111,7 +110,7 @@ class VideoCard extends StatelessWidget {
                   if (author != null) ...[
                     Text(
                       author!,
-                      style: AppTheme.bodyMedium.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.mediumGray,
                       ),
                     ),
@@ -119,7 +118,7 @@ class VideoCard extends StatelessWidget {
                   if (author != null && views != null) ...[
                     Text(
                       ' • ',
-                      style: AppTheme.bodyMedium.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.mediumGray,
                       ),
                     ),
@@ -127,7 +126,7 @@ class VideoCard extends StatelessWidget {
                   if (views != null) ...[
                     Text(
                       '${views!} views',
-                      style: AppTheme.bodyMedium.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.mediumGray,
                       ),
                     ),

@@ -38,7 +38,7 @@ class PrimaryButton extends StatelessWidget {
                   horizontal: AppTheme.spacingXL,
                   vertical: AppTheme.spacingM,
                 ),
-            textStyle: AppTheme.labelLarge,
+            textStyle: Theme.of(context).textTheme.labelLarge,
           )
         : ElevatedButton.styleFrom(
             backgroundColor: AppTheme.primaryGreen,
@@ -53,7 +53,7 @@ class PrimaryButton extends StatelessWidget {
                   horizontal: AppTheme.spacingXL,
                   vertical: AppTheme.spacingM,
                 ),
-            textStyle: AppTheme.labelLarge,
+            textStyle: Theme.of(context).textTheme.labelLarge,
           );
 
     final buttonChild = isLoading

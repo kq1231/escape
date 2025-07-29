@@ -23,8 +23,14 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = backgroundColor ?? AppTheme.white;
-    final textColor = AppTheme.darkGray;
+    final cardColor =
+        backgroundColor ??
+        (Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF1E1E1E)
+            : AppTheme.white);
+    final textColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white70
+        : AppTheme.darkGray;
     final iconColorValue = iconColor ?? AppTheme.primaryGreen;
 
     return GestureDetector(
@@ -45,7 +51,7 @@ class StatCard extends StatelessWidget {
             ],
             Text(
               title,
-              style: AppTheme.bodyMedium.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: textColor.withValues(alpha: 0.8),
                 fontWeight: FontWeight
                     .w500, // Added medium weight for better readability
@@ -55,7 +61,7 @@ class StatCard extends StatelessWidget {
             const SizedBox(height: AppTheme.spacingXS),
             Text(
               value,
-              style: AppTheme.headlineSmall.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: textColor,
                 fontSize: 26, // Increased from default headlineSmall size
@@ -65,7 +71,7 @@ class StatCard extends StatelessWidget {
               const SizedBox(height: AppTheme.spacingXS),
               Text(
                 subtitle!,
-                style: AppTheme.bodySmall.copyWith(
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: textColor.withValues(alpha: 0.6),
                   fontWeight: FontWeight
                       .w500, // Added medium weight for better readability

@@ -59,13 +59,13 @@ class EmergencyScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Emergency Help',
-          style: AppTheme.headlineMedium.copyWith(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 28, // Increased from default headlineMedium size
           ),
         ),
-        backgroundColor: Colors.redAccent,
-        foregroundColor: Colors.white,
+        // backgroundColor: AppTheme.primaryGreen,
+        foregroundColor: AppTheme.white,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -74,7 +74,7 @@ class EmergencyScreen extends StatelessWidget {
           children: [
             Text(
               'In a moment of weakness?',
-              style: AppTheme.headlineSmall.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 26, // Increased from default headlineSmall size
               ),
@@ -82,8 +82,7 @@ class EmergencyScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'You\'re not alone. Reach out for support or try these techniques.',
-              style: AppTheme.bodyMedium.copyWith(
-                color: AppTheme.mediumGray,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 18, // Increased from default bodyMedium size
               ),
@@ -100,7 +99,7 @@ class EmergencyScreen extends StatelessWidget {
                       content: Text(
                         'Emergency help activated! Calling emergency services...',
                       ),
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppTheme.errorRed,
                     ),
                   );
                 },
@@ -119,7 +118,7 @@ class EmergencyScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(contactInfo),
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppTheme.primaryGreen,
                   ),
                 );
               },
@@ -129,7 +128,7 @@ class EmergencyScreen extends StatelessWidget {
             const SizedBox(height: 32),
             Text(
               'Remember',
-              style: AppTheme.headlineSmall.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 26, // Increased from default headlineSmall size
               ),

@@ -62,7 +62,7 @@ class InputField extends StatelessWidget {
       enabled: enabled,
       focusNode: focusNode,
       autofocus: autofocus,
-      style: AppTheme.bodyLarge,
+      style: Theme.of(context).textTheme.bodyLarge,
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,
@@ -101,9 +101,13 @@ class InputField extends StatelessWidget {
           horizontal: AppTheme.spacingM,
           vertical: AppTheme.spacingM,
         ),
-        hintStyle: AppTheme.bodyMedium.copyWith(color: AppTheme.mediumGray),
-        labelStyle: AppTheme.bodyMedium,
-        errorStyle: AppTheme.bodySmall.copyWith(color: AppTheme.errorRed),
+        hintStyle: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+        labelStyle: Theme.of(context).textTheme.bodyMedium,
+        errorStyle: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: AppTheme.errorRed),
       ),
     );
   }

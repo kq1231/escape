@@ -24,7 +24,7 @@ class StatisticsPieChart extends StatelessWidget {
         height: 200,
         child: PieChart(
           PieChartData(
-            sections: _generateSections(),
+            sections: _generateSections(context),
             centerSpaceRadius: 40,
             sectionsSpace: 2,
             pieTouchData: PieTouchData(
@@ -38,7 +38,7 @@ class StatisticsPieChart extends StatelessWidget {
     );
   }
 
-  List<PieChartSectionData> _generateSections() {
+  List<PieChartSectionData> _generateSections(BuildContext ctx) {
     List<PieChartSectionData> sections = [];
     double total = data.fold(0, (sum, item) => sum + item.value);
 
@@ -50,7 +50,7 @@ class StatisticsPieChart extends StatelessWidget {
           value: data[i].value,
           title: '${percentage.toStringAsFixed(1)}%',
           radius: 50,
-          titleStyle: AppTheme.bodyMedium.copyWith(
+          titleStyle: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
             color: AppTheme.white,
             fontWeight: FontWeight.bold,
             fontSize: 12,

@@ -51,7 +51,7 @@ class _GoalSelectorState extends State<GoalSelector> {
             children: [
               Text(
                 OnboardingConstants.goalsTitle,
-                style: AppTheme.headlineMedium.copyWith(
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 32, // Increased from default headlineMedium size
                 ),
@@ -59,7 +59,7 @@ class _GoalSelectorState extends State<GoalSelector> {
               const SizedBox(height: AppTheme.spacingS),
               Text(
                 OnboardingConstants.goalsSubtitle,
-                style: AppTheme.bodyLarge.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 20, // Increased from default bodyLarge size
                 ),
@@ -88,7 +88,7 @@ class _GoalSelectorState extends State<GoalSelector> {
             padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
-              style: AppTheme.bodySmall.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppTheme.errorRed,
                 fontWeight: FontWeight.w500,
               ),

@@ -98,7 +98,7 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
       appBar: AppBar(
         title: Text(
           'Relapse History',
-          style: AppTheme.headlineMedium.copyWith(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: AppTheme.darkGreen,
             fontWeight: FontWeight.bold,
             fontSize: 28, // Increased from default headlineMedium size
@@ -115,7 +115,7 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
           children: [
             Text(
               'Honest tracking of setbacks helps in understanding patterns and building stronger resistance for the future.',
-              style: AppTheme.bodyMedium.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 18, // Increased from default bodyMedium size
               ),

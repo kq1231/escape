@@ -79,10 +79,13 @@ class _PasswordSetupState extends State<PasswordSetup> {
         children: [
           Text(
             OnboardingConstants.securityTitle,
-            style: AppTheme.headlineMedium,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: AppTheme.spacingS),
-          Text(OnboardingConstants.securitySubtitle, style: AppTheme.bodyLarge),
+          Text(
+            OnboardingConstants.securitySubtitle,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
           const SizedBox(height: AppTheme.spacingL),
           InputField(
             controller: _passwordController,
@@ -144,7 +147,9 @@ class _PasswordSetupState extends State<PasswordSetup> {
           const SizedBox(height: AppTheme.spacingM),
           Text(
             OnboardingConstants.privacyNote,
-            style: AppTheme.bodySmall.copyWith(color: AppTheme.mediumGray),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
             textAlign: TextAlign.center,
           ),
         ],
@@ -167,7 +172,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
         ),
       ),
       child: SwitchListTile(
-        title: Text(title, style: AppTheme.bodyMedium),
+        title: Text(title, style: Theme.of(context).textTheme.bodyMedium),
         value: value,
         onChanged: onChanged,
         activeColor: AppTheme.primaryGreen,

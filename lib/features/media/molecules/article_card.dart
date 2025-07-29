@@ -47,15 +47,17 @@ class ArticleCard extends StatelessWidget {
             // Title
             MediaTitle(
               title: title,
-              style: AppTheme.headlineSmall.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             if (excerpt != null) ...[
               SizedBox(height: AppTheme.spacingXS),
               Text(
                 excerpt!,
-                style: AppTheme.bodyMedium.copyWith(color: AppTheme.mediumGray),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

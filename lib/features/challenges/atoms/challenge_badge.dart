@@ -50,7 +50,7 @@ class ChallengeBadge extends StatelessWidget {
               const SizedBox(height: AppTheme.spacingXS),
             Text(
               title,
-              style: AppTheme.labelMedium.copyWith(
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: textColor,
                 fontWeight: isCompleted ? FontWeight.bold : FontWeight.w500,
               ),

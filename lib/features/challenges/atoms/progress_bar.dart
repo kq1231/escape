@@ -37,14 +37,14 @@ class ChallengeProgressBar extends StatelessWidget {
               if (leadingText != null)
                 Text(
                   leadingText!,
-                  style: textStyle ?? AppTheme.bodySmall,
+                  style: textStyle ?? Theme.of(context).textTheme.bodySmall,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               if (trailingText != null)
                 Text(
                   trailingText!,
-                  style: textStyle ?? AppTheme.bodySmall,
+                  style: textStyle ?? Theme.of(context).textTheme.bodySmall,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

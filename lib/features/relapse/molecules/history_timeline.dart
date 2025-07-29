@@ -21,7 +21,7 @@ class HistoryTimeline extends StatelessWidget {
       children: [
         Text(
           title,
-          style: AppTheme.headlineMedium.copyWith(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 28, // Increased from default headlineMedium size
           ),
@@ -39,7 +39,7 @@ class HistoryTimeline extends StatelessWidget {
                 SizedBox(height: AppTheme.spacingM),
                 Text(
                   'No relapse records yet',
-                  style: AppTheme.bodyMedium.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppTheme.mediumGray,
                     fontWeight: FontWeight.w500,
                     fontSize: 18, // Increased from default bodyMedium size
@@ -48,7 +48,7 @@ class HistoryTimeline extends StatelessWidget {
                 SizedBox(height: AppTheme.spacingM),
                 Text(
                   'Keep up the great work!',
-                  style: AppTheme.bodyLarge.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 20, // Increased from default bodyLarge size
                   ),

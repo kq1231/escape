@@ -29,7 +29,10 @@ class MediaTag extends StatelessWidget {
           Icon(icon, size: 16, color: text),
           SizedBox(width: AppTheme.spacingXS),
         ],
-        Text(label, style: AppTheme.labelMedium.copyWith(color: text)),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: text),
+        ),
       ],
     );
 

@@ -8,26 +8,41 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeProvider);
+    final themeModeAsync = ref.watch(themeModeNotifierProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings', style: AppTheme.headlineMedium),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Appearance', style: AppTheme.headlineSmall),
-            const SizedBox(height: 16),
-            _buildThemeSelector(context, ref, themeMode),
-            const SizedBox(height: 32),
-            Text('Other Settings', style: AppTheme.headlineSmall),
-            const SizedBox(height: 16),
-            _buildDummySettings(),
-          ],
+    return themeModeAsync.when(
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, stack) =>
+          Scaffold(body: Center(child: Text('Error loading theme: $error'))),
+      data: (themeMode) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Settings',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Appearance',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 16),
+              _buildThemeSelector(context, ref, themeMode),
+              const SizedBox(height: 32),
+              Text(
+                'Other Settings',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 16),
+              _buildDummySettings(context),
+            ],
+          ),
         ),
       ),
     );
@@ -48,57 +63,72 @@ class SettingsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Theme', style: AppTheme.bodyLarge),
+            Text('Theme', style: Theme.of(context).textTheme.bodyLarge),
             const SizedBox(height: 16),
             ListTile(
-              title: Text('Light', style: AppTheme.bodyMedium),
+              title: Text(
+                'Light',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.light,
                 groupValue: themeMode,
                 onChanged: (value) {
                   if (value != null) {
-                    ref.read(themeProvider.notifier).state = value;
-                    ThemeService.saveTheme(value);
+                    ref
+                        .read(themeModeNotifierProvider.notifier)
+                        .saveThemeMode(value);
                   }
                 },
               ),
               onTap: () {
-                ref.read(themeProvider.notifier).state = ThemeMode.light;
-                ThemeService.saveTheme(ThemeMode.light);
+                ref
+                    .read(themeModeNotifierProvider.notifier)
+                    .saveThemeMode(ThemeMode.light);
               },
             ),
             ListTile(
-              title: Text('Dark', style: AppTheme.bodyMedium),
+              title: Text(
+                'Dark',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.dark,
                 groupValue: themeMode,
                 onChanged: (value) {
                   if (value != null) {
-                    ref.read(themeProvider.notifier).state = value;
-                    ThemeService.saveTheme(value);
+                    ref
+                        .read(themeModeNotifierProvider.notifier)
+                        .saveThemeMode(value);
                   }
                 },
               ),
               onTap: () {
-                ref.read(themeProvider.notifier).state = ThemeMode.dark;
-                ThemeService.saveTheme(ThemeMode.dark);
+                ref
+                    .read(themeModeNotifierProvider.notifier)
+                    .saveThemeMode(ThemeMode.dark);
               },
             ),
             ListTile(
-              title: Text('System Default', style: AppTheme.bodyMedium),
+              title: Text(
+                'System Default',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.system,
                 groupValue: themeMode,
                 onChanged: (value) {
                   if (value != null) {
-                    ref.read(themeProvider.notifier).state = value;
-                    ThemeService.saveTheme(value);
+                    ref
+                        .read(themeModeNotifierProvider.notifier)
+                        .saveThemeMode(value);
                   }
                 },
               ),
               onTap: () {
-                ref.read(themeProvider.notifier).state = ThemeMode.system;
-                ThemeService.saveTheme(ThemeMode.system);
+                ref
+                    .read(themeModeNotifierProvider.notifier)
+                    .saveThemeMode(ThemeMode.system);
               },
             ),
           ],
@@ -107,7 +137,7 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDummySettings() {
+  Widget _buildDummySettings(BuildContext ctx) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -119,20 +149,29 @@ class SettingsScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SwitchListTile(
-              title: Text('Notifications', style: AppTheme.bodyMedium),
+              title: Text(
+                'Notifications',
+                style: Theme.of(ctx).textTheme.bodyMedium,
+              ),
               value: true,
               onChanged: (value) {},
             ),
-            const Divider(),
+            Divider(thickness: 0.1, color: Theme.of(ctx).colorScheme.outline),
             SwitchListTile(
-              title: Text('Sound', style: AppTheme.bodyMedium),
+              title: Text('Sound', style: Theme.of(ctx).textTheme.bodyMedium),
               value: true,
               onChanged: (value) {},
             ),
-            const Divider(),
+            Divider(thickness: 0.1, color: Theme.of(ctx).colorScheme.outline),
             ListTile(
-              title: Text('Language', style: AppTheme.bodyMedium),
-              trailing: Text('English', style: AppTheme.bodyMedium),
+              title: Text(
+                'Language',
+                style: Theme.of(ctx).textTheme.bodyMedium,
+              ),
+              trailing: Text(
+                'English',
+                style: Theme.of(ctx).textTheme.bodyMedium,
+              ),
               onTap: () {},
             ),
           ],

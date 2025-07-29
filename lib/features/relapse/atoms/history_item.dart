@@ -54,11 +54,14 @@ class HistoryItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: AppTheme.headlineSmall),
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                     SizedBox(height: AppTheme.spacingXS),
                     Text(
                       date,
-                      style: AppTheme.bodySmall.copyWith(
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppTheme.mediumGray,
                       ),
                     ),
@@ -66,7 +69,7 @@ class HistoryItem extends StatelessWidget {
                       SizedBox(height: AppTheme.spacingS),
                       Text(
                         description!,
-                        style: AppTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

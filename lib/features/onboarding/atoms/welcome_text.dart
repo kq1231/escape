@@ -31,19 +31,19 @@ class WelcomeText extends StatelessWidget {
         children: [
           Text(
             title,
-            style: titleStyle ?? AppTheme.headlineLarge,
+            style: titleStyle ?? Theme.of(context).textTheme.displayLarge,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppTheme.spacingS),
           Text(
             subtitle,
-            style: subtitleStyle ?? AppTheme.headlineSmall,
+            style: subtitleStyle ?? Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppTheme.spacingL),
           Text(
             description,
-            style: descriptionStyle ?? AppTheme.bodyLarge,
+            style: descriptionStyle ?? Theme.of(context).textTheme.bodyLarge,
             textAlign: TextAlign.center,
           ),
         ],

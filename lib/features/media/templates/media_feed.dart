@@ -26,9 +26,9 @@ class MediaFeed extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
             child: Text(
               title!,
-              style: AppTheme.headlineMedium.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(height: AppTheme.spacingM),

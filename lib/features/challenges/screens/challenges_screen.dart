@@ -220,7 +220,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                   children: [
                     Text(
                       'Welcome back,',
-                      style: AppTheme.bodyLarge.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: AppTheme.white.withValues(alpha: 0.8),
                         fontWeight: FontWeight.w500,
                       ),
@@ -228,9 +228,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                     const SizedBox(height: AppTheme.spacingXS),
                     Text(
                       'Ahmad!',
-                      style: AppTheme.headlineMedium.copyWith(
-                        color: AppTheme.white,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(color: AppTheme.white),
                     ),
                   ],
                 ),
@@ -269,7 +268,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
       children: [
         Text(
           value,
-          style: AppTheme.headlineSmall.copyWith(
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(
             color: AppTheme.white,
             fontWeight: FontWeight.bold,
           ),
@@ -277,7 +276,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
         const SizedBox(height: AppTheme.spacingXS),
         Text(
           label,
-          style: AppTheme.bodySmall.copyWith(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: AppTheme.white.withValues(alpha: 0.8),
           ),
         ),
@@ -291,7 +290,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
       children: [
         Text(
           'Achievements',
-          style: AppTheme.headlineMedium.copyWith(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 28, // Increased from default headlineMedium size
           ),

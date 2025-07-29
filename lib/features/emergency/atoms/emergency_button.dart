@@ -25,12 +25,13 @@ class EmergencyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonColor = backgroundColor ?? Colors.redAccent;
-    final textColor = foregroundColor ?? Colors.white;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    final buttonStyle = ElevatedButton.styleFrom(
-      backgroundColor: buttonColor,
-      foregroundColor: textColor,
+    final buttonStyle = OutlinedButton.styleFrom(
+      side: BorderSide(
+        color: isDarkMode ? AppTheme.white : AppTheme.darkGreen,
+        width: 2,
+      ),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppTheme.radiusL),
@@ -53,21 +54,24 @@ class EmergencyButton extends StatelessWidget {
         ],
         Text(
           text,
-          style: AppTheme.labelLarge.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(
+            context,
+          ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
     );
 
-    final button = ElevatedButton(
+    final button = OutlinedButton(
       onPressed: onPressed,
       style: buttonStyle,
       child: buttonChild,
     );
 
     if (width != null || height != null) {
-      return SizedBox(width: width, height: height, child: button);
+      return SizedBox(width: width, height: height ?? 60, child: button);
     }
 
-    return button;
+    // If no height or width supplied, set default of 60.
+    return SizedBox(height: 60, child: button);
   }
 }

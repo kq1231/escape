@@ -1,122 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../molecules/daily_prayer_grid.dart';
 import 'package:escape/theme/app_theme.dart';
-import '../../../services/local_storage_service.dart';
-import '../../../models/app_data.dart';
+import '../../../providers/prayer_provider.dart';
+import '../../../repositories/prayer_repository.dart';
+import '../../../models/prayer_model.dart';
+import '../atoms/triple_state_checkbox.dart';
 
-class PrayerTrackerScreen extends StatefulWidget {
+class PrayerTrackerScreen extends ConsumerWidget {
   const PrayerTrackerScreen({super.key});
 
   @override
-  State<PrayerTrackerScreen> createState() => _PrayerTrackerScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todaysPrayersAsync = ref.watch(todaysPrayersProvider());
 
-class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
-  Map<String, bool> _prayerStatus = {
-    'Fajr': false,
-    'Dhuhr': false,
-    'Asr': false,
-    'Maghrib': false,
-    'Isha': false,
-  };
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPrayerData();
-  }
-
-  Future<void> _loadPrayerData() async {
-    try {
-      final appData = await LocalStorageService.loadAppData();
-      if (appData != null) {
-        // For now, we'll use a simple approach to track prayer status
-        // In a real app, you might want to store this in a more structured way
-        final today = DateTime.now();
-        final dateString = '${today.year}-${today.month}-${today.day}';
-
-        // Load prayer status from preferences
-        final prayerPrefs =
-            appData.preferences['prayerStatus'] as Map<String, dynamic>? ?? {};
-        final todayPrayerStatus =
-            prayerPrefs[dateString] as Map<String, dynamic>? ?? {};
-
-        setState(() {
-          _prayerStatus = {
-            'Fajr': todayPrayerStatus['Fajr'] as bool? ?? false,
-            'Dhuhr': todayPrayerStatus['Dhuhr'] as bool? ?? false,
-            'Asr': todayPrayerStatus['Asr'] as bool? ?? false,
-            'Maghrib': todayPrayerStatus['Maghrib'] as bool? ?? false,
-            'Isha': todayPrayerStatus['Isha'] as bool? ?? false,
-          };
-        });
-      }
-    } catch (e) {
-      // Handle error silently
-      debugPrint('Error loading prayer data: $e');
-    }
-  }
-
-  Future<void> _savePrayerData() async {
-    try {
-      final appData = await LocalStorageService.loadAppData() ?? AppData();
-      final today = DateTime.now();
-      final dateString = '${today.year}-${today.month}-${today.day}';
-
-      // Update prayer status in preferences
-      final prayerPrefs =
-          appData.preferences['prayerStatus'] as Map<String, dynamic>? ?? {};
-      prayerPrefs[dateString] = _prayerStatus;
-      appData.preferences['prayerStatus'] = prayerPrefs;
-
-      await LocalStorageService.saveAppData(appData);
-    } catch (e) {
-      // Handle error silently
-      debugPrint('Error saving prayer data: $e');
-    }
-  }
-
-  void _onPrayerStatusChanged(String prayerName, bool isChecked) {
-    setState(() {
-      _prayerStatus[prayerName] = isChecked;
-    });
-    _savePrayerData();
-    _updatePrayerChallengeProgress();
-  }
-
-  Future<void> _updatePrayerChallengeProgress() async {
-    try {
-      // Load current app data
-      final appData = await LocalStorageService.loadAppData() ?? AppData();
-
-      // Check if all prayers are completed for today
-      final allPrayersCompleted = _prayerStatus.values.every(
-        (status) => status,
-      );
-
-      // Update prayer completion status and total days in app data
-      final updatedAppData = appData.copyWith(
-        isPrayerCompleted: allPrayersCompleted,
-        totalDays: allPrayersCompleted && !appData.isPrayerCompleted
-            ? appData.totalDays + 1
-            : appData.totalDays,
-      );
-
-      // Save updated app data
-      await LocalStorageService.saveAppData(updatedAppData);
-    } catch (e) {
-      // Handle error silently
-      debugPrint('Error updating prayer challenge progress: $e');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Prayer Tracker',
-          style: AppTheme.headlineMedium.copyWith(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 28, // Increased from default headlineMedium size
           ),
@@ -130,7 +32,7 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
             // Header with title and subtitle
             Text(
               'Daily Prayers',
-              style: AppTheme.headlineMedium.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 32, // Increased from default headlineMedium size
               ),
@@ -138,7 +40,7 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
             const SizedBox(height: AppTheme.spacingS),
             Text(
               'Track your salah completion throughout the day',
-              style: AppTheme.bodyMedium.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppTheme.mediumGray,
                 fontWeight: FontWeight.w500,
                 fontSize: 18, // Increased from default bodyMedium size
@@ -147,9 +49,71 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
             const SizedBox(height: AppTheme.spacingXL),
 
             // Prayer grid
-            DailyPrayerGrid(
-              prayerStatus: _prayerStatus,
-              onPrayerStatusChanged: _onPrayerStatusChanged,
+            todaysPrayersAsync.when(
+              data: (prayers) {
+                return DailyPrayerGrid(
+                  prayers: prayers,
+                  onPrayerStateChanged: (prayer, state) {
+                    // Handle prayer state changes
+                    switch (state) {
+                      case CheckboxState.checked:
+                        // Create or update prayer as completed
+                        if (prayer.id == 0) {
+                          // Create new prayer
+                          final newPrayer = Prayer(
+                            name: prayer.name,
+                            isCompleted: true,
+                            date: DateTime.now(),
+                          );
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .createPrayer(newPrayer);
+                        } else {
+                          // Update existing prayer
+                          final updatedPrayer = prayer.copyWith(
+                            isCompleted: true,
+                          );
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .updatePrayer(updatedPrayer);
+                        }
+                        break;
+                      case CheckboxState.unchecked:
+                        // Create or update prayer as not completed
+                        if (prayer.id == 0) {
+                          // Create new prayer
+                          final newPrayer = Prayer(
+                            name: prayer.name,
+                            isCompleted: false,
+                            date: DateTime.now(),
+                          );
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .createPrayer(newPrayer);
+                        } else {
+                          // Update existing prayer
+                          final updatedPrayer = prayer.copyWith(
+                            isCompleted: false,
+                          );
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .updatePrayer(updatedPrayer);
+                        }
+                        break;
+                      case CheckboxState.empty:
+                        // Delete prayer if it exists
+                        if (prayer.id != 0) {
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .deletePrayer(prayer.id);
+                        }
+                        break;
+                    }
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Text('Error: $error'),
             ),
 
             const SizedBox(height: AppTheme.spacingXL),
@@ -164,8 +128,7 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
               ),
               child: Text(
                 'Establishing regular prayer (salah) strengthens your connection with Allah and provides spiritual protection throughout your day.',
-                style: AppTheme.bodyMedium.copyWith(
-                  fontStyle: FontStyle.italic,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 18, // Increased from default bodyMedium size
                 ),

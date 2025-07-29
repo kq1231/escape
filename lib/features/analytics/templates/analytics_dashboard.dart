@@ -36,7 +36,7 @@ class AnalyticsDashboard extends StatelessWidget {
               if (title != null)
                 Text(
                   title!,
-                  style: AppTheme.headlineMedium.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 32, // Increased from default headlineMedium size
                   ),

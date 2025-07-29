@@ -65,10 +65,11 @@ class ProgressChart extends StatelessWidget {
                           final date = data[value.toInt()].date;
                           return Text(
                             '${date.day}/${date.month}',
-                            style: AppTheme.bodyMedium.copyWith(
-                              color: AppTheme.mediumGray,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: AppTheme.mediumGray,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           );
                         }
                         return const Text('');
@@ -82,10 +83,11 @@ class ProgressChart extends StatelessWidget {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           value.toInt().toString(),
-                          style: AppTheme.bodyMedium.copyWith(
-                            color: AppTheme.mediumGray,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppTheme.mediumGray,
+                                fontWeight: FontWeight.w500,
+                              ),
                         );
                       },
                       reservedSize: 30,

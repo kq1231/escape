@@ -50,7 +50,7 @@ class _HobbyGridState extends State<HobbyGrid> {
             children: [
               Text(
                 OnboardingConstants.hobbiesTitle,
-                style: AppTheme.headlineMedium.copyWith(
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 32, // Increased from default headlineMedium size
                 ),
@@ -58,7 +58,7 @@ class _HobbyGridState extends State<HobbyGrid> {
               const SizedBox(height: AppTheme.spacingS),
               Text(
                 OnboardingConstants.hobbiesSubtitle,
-                style: AppTheme.bodyLarge.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 20, // Increased from default bodyLarge size
                 ),
@@ -102,7 +102,7 @@ class _HobbyGridState extends State<HobbyGrid> {
                       padding: const EdgeInsets.all(AppTheme.spacingS),
                       child: Text(
                         hobby,
-                        style: AppTheme.bodyMedium.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: isSelected
                               ? AppTheme.primaryGreen
                               : AppTheme.darkGray,
@@ -126,7 +126,7 @@ class _HobbyGridState extends State<HobbyGrid> {
             padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
-              style: AppTheme.bodySmall.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppTheme.errorRed,
                 fontWeight: FontWeight.w500,
               ),

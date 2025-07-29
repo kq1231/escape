@@ -86,7 +86,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
             children: [
               Text(
                 widget.title,
-                style: AppTheme.headlineMedium.copyWith(
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: AppTheme.primaryGreen,
                   fontWeight: FontWeight.bold,
                   fontSize: 32, // Increased from default headlineMedium size
@@ -95,7 +95,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
               const SizedBox(height: 8),
               Text(
                 widget.subtitle,
-                style: AppTheme.bodyLarge.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppTheme.darkGray.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w500,
                   fontSize: 20, // Increased from default bodyLarge size
@@ -116,7 +116,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
                 // Predefined items section
                 Text(
                   'Choose from common options:',
-                  style: AppTheme.bodyMedium.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 18, // Increased from default bodyMedium size
                   ),
@@ -134,7 +134,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
                 // Custom items section
                 Text(
                   'Add your own:',
-                  style: AppTheme.bodyMedium.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 18, // Increased from default bodyMedium size
                   ),
@@ -169,7 +169,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
                 if (_customItems.isNotEmpty) ...[
                   Text(
                     'Your custom items:',
-                    style: AppTheme.bodySmall.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.w500,
                       fontSize: 16, // Increased from default bodySmall size
                     ),
@@ -194,7 +194,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
             padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
             child: Text(
               'Please select at least one option or add your own',
-              style: AppTheme.bodySmall.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppTheme.errorRed,
                 fontWeight: FontWeight.w500,
               ),
@@ -237,7 +237,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
               Expanded(
                 child: Text(
                   item,
-                  style: AppTheme.bodyMedium.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: isSelected
                         ? AppTheme.primaryGreen
                         : AppTheme.darkGray,
@@ -272,7 +272,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
             Expanded(
               child: Text(
                 item,
-                style: AppTheme.bodyMedium.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.primaryGreen,
                   fontWeight: FontWeight.bold,
                   fontSize: 18, // Increased from default bodyMedium size

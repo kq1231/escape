@@ -73,23 +73,25 @@ class OnboardingPageTemplate extends StatelessWidget {
                     if (title.isNotEmpty) ...[
                       Text(
                         title,
-                        style: AppTheme.headlineMedium.copyWith(
-                          color: AppTheme.darkGray,
-                          fontWeight: FontWeight.bold,
-                          fontSize:
-                              32, // Increased from default headlineMedium size
-                        ),
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
+                              color: AppTheme.darkGray,
+                              fontWeight: FontWeight.bold,
+                              fontSize:
+                                  32, // Increased from default headlineMedium size
+                            ),
                       ),
                       if (subtitle != null) ...[
                         const SizedBox(height: 8),
                         Text(
                           subtitle!,
-                          style: AppTheme.bodyLarge.copyWith(
-                            color: AppTheme.darkGray.withValues(alpha: 0.8),
-                            fontWeight: FontWeight.w500,
-                            fontSize:
-                                20, // Increased from default bodyLarge size
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: AppTheme.darkGray.withValues(alpha: 0.8),
+                                fontWeight: FontWeight.w500,
+                                fontSize:
+                                    20, // Increased from default bodyLarge size
+                              ),
                         ),
                       ],
                       const SizedBox(height: 24),
@@ -115,10 +117,11 @@ class OnboardingPageTemplate extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 16),
                         child: Text(
                           'Your data is encrypted and never shared',
-                          style: AppTheme.bodySmall.copyWith(
-                            color: AppTheme.darkGray.withValues(alpha: 0.6),
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: AppTheme.darkGray.withValues(alpha: 0.6),
+                                fontWeight: FontWeight.w500,
+                              ),
                           textAlign: TextAlign.center,
                         ),
                       ),

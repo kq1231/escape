@@ -1,14 +1,40 @@
-import 'package:escape/widgets/theme_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'features/onboarding/onboarding_flow.dart';
 import 'features/onboarding/services/storage_service.dart';
 import 'screens/main_app_screen.dart';
 import 'theme/app_theme.dart';
+import 'providers/app_startup_provider.dart';
+import 'widgets/app_startup_state_widgets.dart';
 import 'theme/theme_provider.dart';
 
-void main() {
-  runApp(const ProviderScope(child: MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(ProviderScope(child: AppStartupWidget()));
+}
+
+class AppStartupWidget extends ConsumerWidget {
+  const AppStartupWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appStartupState = ref.watch(appStartupProvider);
+
+    return appStartupState.when(
+      // Loading state
+      loading: () => const AppStartupLoadingWidget(),
+
+      // Error state
+      error: (error, stackTrace) => AppStartupErrorWidget(
+        message: error.toString(),
+        onRetry: () => ref.read(appStartupProvider.notifier).retry(),
+      ),
+
+      // Success state
+      data: (_) => const AppStartupSuccessWidget(child: MyApp()),
+    );
+  }
 }
 
 class MyApp extends ConsumerWidget {
@@ -16,50 +42,47 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
-      title: 'Escape - Your Journey to Purity',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ref.watch(themeProvider),
-      home: const ThemeLoader(child: SplashScreen()),
-      debugShowCheckedModeBanner: false,
+    // Watch the theme mode from our new provider
+    final themeModeAsync = ref.watch(themeModeNotifierProvider);
+
+    return themeModeAsync.when(
+      loading: () => MaterialApp(
+        title: 'Escape - Your Journey to Purity',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home: const Scaffold(body: Center(child: CircularProgressIndicator())),
+        debugShowCheckedModeBanner: false,
+      ),
+      error: (error, stack) => MaterialApp(
+        title: 'Escape - Your Journey to Purity',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home: Scaffold(
+          body: Center(child: Text('Error loading theme: $error')),
+        ),
+        debugShowCheckedModeBanner: false,
+      ),
+      data: (themeMode) => MaterialApp(
+        title: 'Escape - Your Journey to Purity',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeMode,
+        home: const ThemeLoader(child: SplashScreen()),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
 
-class ThemeLoaderWidget extends ConsumerStatefulWidget {
-  const ThemeLoaderWidget({super.key});
+class ThemeLoader extends ConsumerWidget {
+  final Widget child;
+
+  const ThemeLoader({super.key, required this.child});
 
   @override
-  ConsumerState<ThemeLoaderWidget> createState() => _ThemeLoaderWidgetState();
-}
-
-class _ThemeLoaderWidgetState extends ConsumerState<ThemeLoaderWidget> {
-  bool _themeLoaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedTheme();
-  }
-
-  Future<void> _loadSavedTheme() async {
-    final savedTheme = await ThemeService.loadTheme();
-    if (mounted) {
-      ref.read(themeProvider.notifier).state = savedTheme;
-      setState(() {
-        _themeLoaded = true;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_themeLoaded) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
-    return const SplashScreen();
+  Widget build(BuildContext context, WidgetRef ref) {
+    // The theme is now loaded through our provider, so we can just return the child
+    return child;
   }
 }
 
@@ -112,12 +135,14 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 20),
             Text(
               'Escape',
-              style: AppTheme.headlineLarge.copyWith(color: Colors.white),
+              style: Theme.of(
+                context,
+              ).textTheme.displayLarge?.copyWith(color: Colors.white),
             ),
             const SizedBox(height: 10),
             Text(
               'Your Journey to Purity',
-              style: AppTheme.bodyLarge.copyWith(
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Colors.white.withValues(alpha: 0.8),
               ),
             ),
@@ -128,11 +153,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return const MainAppScreen();
   }
 }

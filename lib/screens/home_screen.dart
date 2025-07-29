@@ -1,178 +1,36 @@
 import 'package:flutter/material.dart';
-import '../features/streak/molecules/streak_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../features/streak/organisms/streak_organism.dart';
 import '../features/emergency/atoms/emergency_button.dart';
 import '../features/emergency/screens/emergency_screen.dart';
-import '../features/prayer/molecules/prayer_row.dart';
+import '../features/prayer/molecules/daily_prayer_grid.dart';
 import '../features/analytics/atoms/stat_card.dart';
 import 'package:escape/theme/app_theme.dart';
-import '../services/local_storage_service.dart';
-import '../models/app_data.dart';
+import '../providers/prayer_provider.dart';
+import '../features/prayer/atoms/triple_state_checkbox.dart';
+import '../models/prayer_model.dart';
+import '../repositories/prayer_repository.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   // State variables for the home screen
-  int _streakCount = 0;
   final bool _isEmergencyButtonEnabled = true;
 
-  // Prayer tracking state
-  Map<String, bool> _prayerStatus = {
-    'Fajr': false,
-    'Dhuhr': false,
-    'Asr': false,
-    'Maghrib': false,
-    'Isha': false,
-  };
-
   // Analytics data
-  int _totalSessions = 0;
-  int _longestStreak = 0;
+  final int _totalSessions = 0;
+  final int _longestStreak = 0;
   final int _currentMood = 7; // Scale of 1-10
+  final int _streakCount = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadData();
-  }
-
-  Future<void> _loadData() async {
-    try {
-      final appData = await LocalStorageService.loadAppData();
-      if (appData != null) {
-        setState(() {
-          _streakCount = appData.streak;
-          _totalSessions = appData.totalDays;
-          _longestStreak = appData.streak; // For now, we'll use the same value
-        });
-      }
-
-      // Load prayer data
-      await _loadPrayerData();
-    } catch (e) {
-      // Handle error silently
-      debugPrint('Error loading home screen data: $e');
-    }
-  }
-
-  Future<void> _loadPrayerData() async {
-    try {
-      final appData = await LocalStorageService.loadAppData();
-      if (appData != null) {
-        // For now, we'll use a simple approach to track prayer status
-        // In a real app, you might want to store this in a more structured way
-        final today = DateTime.now();
-        final dateString = '${today.year}-${today.month}-${today.day}';
-
-        // Load prayer status from preferences
-        final prayerPrefs =
-            appData.preferences['prayerStatus'] as Map<String, dynamic>? ?? {};
-        final todayPrayerStatus =
-            prayerPrefs[dateString] as Map<String, dynamic>? ?? {};
-
-        setState(() {
-          _prayerStatus = {
-            'Fajr': todayPrayerStatus['Fajr'] as bool? ?? false,
-            'Dhuhr': todayPrayerStatus['Dhuhr'] as bool? ?? false,
-            'Asr': todayPrayerStatus['Asr'] as bool? ?? false,
-            'Maghrib': todayPrayerStatus['Maghrib'] as bool? ?? false,
-            'Isha': todayPrayerStatus['Isha'] as bool? ?? false,
-          };
-        });
-
-        // Check if all prayers are completed and update streak if needed
-        await _checkAndUpdateStreak(appData, todayPrayerStatus);
-      }
-    } catch (e) {
-      // Handle error silently
-      debugPrint('Error loading prayer data: $e');
-    }
-  }
-
-  Future<void> _checkAndUpdateStreak(
-    AppData appData,
-    Map<String, dynamic> todayPrayerStatus,
-  ) async {
-    try {
-      // Check if all prayers are completed for today
-      final allPrayersCompleted = [
-        'Fajr',
-        'Dhuhr',
-        'Asr',
-        'Maghrib',
-        'Isha',
-      ].every((prayer) => todayPrayerStatus[prayer] as bool? ?? false);
-
-      // Check if it's a new day since last prayer
-      final now = DateTime.now();
-      final lastPrayerDate = appData.lastPrayerTime != null
-          ? DateTime(
-              appData.lastPrayerTime!.year,
-              appData.lastPrayerTime!.month,
-              appData.lastPrayerTime!.day,
-            )
-          : null;
-      final today = DateTime(now.year, now.month, now.day);
-
-      // If all prayers are completed and it's a new day, increment streak
-      if (allPrayersCompleted &&
-          (lastPrayerDate == null || lastPrayerDate.isBefore(today))) {
-        final updatedAppData = appData.copyWith(
-          streak: appData.streak + 1,
-          lastPrayerTime: now,
-        );
-
-        await LocalStorageService.saveAppData(updatedAppData);
-
-        // Update UI
-        setState(() {
-          _streakCount = updatedAppData.streak;
-        });
-      }
-    } catch (e) {
-      // Handle error silently
-      debugPrint('Error checking and updating streak: $e');
-    }
-  }
-
-  Future<void> _savePrayerData() async {
-    try {
-      final appData = await LocalStorageService.loadAppData() ?? AppData();
-      final today = DateTime.now();
-      final dateString = '${today.year}-${today.month}-${today.day}';
-
-      // Update prayer status in preferences
-      final prayerPrefs =
-          appData.preferences['prayerStatus'] as Map<String, dynamic>? ?? {};
-      prayerPrefs[dateString] = _prayerStatus;
-      appData.preferences['prayerStatus'] = prayerPrefs;
-
-      await LocalStorageService.saveAppData(appData);
-    } catch (e) {
-      // Handle error silently
-      debugPrint('Error saving prayer data: $e');
-    }
-  }
-
-  void _updatePrayerStatus(String prayerName, bool isChecked) {
-    setState(() {
-      _prayerStatus[prayerName] = isChecked;
-    });
-    _savePrayerData();
-  }
-
-  void _onStreakCardTap() {
+  void _onStreakCardTap(BuildContext context) {
     // Navigate to streak details screen
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('Navigate to Streak Details')));
   }
 
-  void _onEmergencyButtonPressed() {
+  void _onEmergencyButtonPressed(BuildContext context) {
     if (_isEmergencyButtonEnabled) {
       // Navigate to emergency screen
       Navigator.push(
@@ -182,14 +40,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _onStatCardTap(String statType) {
+  void _onStatCardTap(BuildContext context, String statType) {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text('Navigate to $statType details')));
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todaysPrayersAsync = ref.watch(todaysPrayersProvider());
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppTheme.spacingL),
@@ -197,10 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Streak Counter at the top
-            StreakCard(
-              streakCount: _streakCount,
+            StreakOrganism(
+              streakCount: 40,
               labelText: 'Days Clean',
-              onTap: _onStreakCardTap,
+              onTap: () => _onStreakCardTap(context),
               isActive: true,
             ),
 
@@ -209,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // Quick Prayer Status Summary
             Text(
               'Today\'s Prayers',
-              style: AppTheme.headlineMedium.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 32, // Increased from default headlineMedium size
               ),
@@ -217,17 +77,72 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: AppTheme.spacingM),
 
-            // Prayer rows
-            ..._prayerStatus.entries.map(
-              (entry) => Padding(
-                padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
-                child: PrayerRow(
-                  prayerName: entry.key,
-                  isChecked: entry.value,
-                  onCheckedChanged: (isChecked) =>
-                      _updatePrayerStatus(entry.key, isChecked),
-                ),
-              ),
+            // Prayer grid
+            todaysPrayersAsync.when(
+              data: (prayers) {
+                return DailyPrayerGrid(
+                  prayers: prayers,
+                  onPrayerStateChanged: (prayer, state) {
+                    // Handle prayer state changes
+                    switch (state) {
+                      case CheckboxState.checked:
+                        // Create or update prayer as completed
+                        if (prayer.id == 0) {
+                          // Create new prayer
+                          final newPrayer = Prayer(
+                            name: prayer.name,
+                            isCompleted: true,
+                            date: DateTime.now(),
+                          );
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .createPrayer(newPrayer);
+                        } else {
+                          // Update existing prayer
+                          final updatedPrayer = prayer.copyWith(
+                            isCompleted: true,
+                          );
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .updatePrayer(updatedPrayer);
+                        }
+                        break;
+                      case CheckboxState.unchecked:
+                        // Create or update prayer as not completed
+                        if (prayer.id == 0) {
+                          // Create new prayer
+                          final newPrayer = Prayer(
+                            name: prayer.name,
+                            isCompleted: false,
+                            date: DateTime.now(),
+                          );
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .createPrayer(newPrayer);
+                        } else {
+                          // Update existing prayer
+                          final updatedPrayer = prayer.copyWith(
+                            isCompleted: false,
+                          );
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .updatePrayer(updatedPrayer);
+                        }
+                        break;
+                      case CheckboxState.empty:
+                        // Delete prayer if it exists
+                        if (prayer.id != 0) {
+                          ref
+                              .read(prayerRepositoryProvider.notifier)
+                              .deletePrayer(prayer.id);
+                        }
+                        break;
+                    }
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Text('Error: $error'),
             ),
 
             const SizedBox(height: AppTheme.spacingXL),
@@ -236,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(
               child: EmergencyButton(
                 text: 'Emergency Help',
-                onPressed: _onEmergencyButtonPressed,
+                onPressed: () => _onEmergencyButtonPressed(context),
                 icon: Icons.emergency,
                 width: double.infinity,
                 height: 60,
@@ -248,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // Quick Stats Mini Analytics Preview
             Text(
               'Quick Stats',
-              style: AppTheme.headlineMedium.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 32, // Increased from default headlineMedium size
               ),
@@ -265,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     value: '$_totalSessions',
                     subtitle: 'This week',
                     icon: Icons.calendar_today,
-                    onTap: () => _onStatCardTap('Sessions'),
+                    onTap: () => _onStatCardTap(context, 'Sessions'),
                   ),
                 ),
                 const SizedBox(width: AppTheme.spacingM),
@@ -276,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: 'All time',
                     icon: Icons.local_fire_department,
                     iconColor: AppTheme.primaryGreen,
-                    onTap: () => _onStatCardTap('Streak'),
+                    onTap: () => _onStatCardTap(context, 'Streak'),
                   ),
                 ),
               ],
@@ -293,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: 'Today',
                     icon: Icons.mood,
                     iconColor: Colors.orange,
-                    onTap: () => _onStatCardTap('Mood'),
+                    onTap: () => _onStatCardTap(context, 'Mood'),
                   ),
                 ),
                 const SizedBox(width: AppTheme.spacingM),
@@ -305,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: 'To goal',
                     icon: Icons.trending_up,
                     iconColor: Colors.blue,
-                    onTap: () => _onStatCardTap('Progress'),
+                    onTap: () => _onStatCardTap(context, 'Progress'),
                   ),
                 ),
               ],

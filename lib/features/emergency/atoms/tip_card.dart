@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:escape/theme/app_theme.dart';
 
 class TipCard extends StatelessWidget {
   final String title;
@@ -21,8 +22,11 @@ class TipCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardColor =
-        backgroundColor ?? Colors.blueAccent.withValues(alpha: 0.1);
-    final color = iconColor ?? Colors.blueAccent;
+        backgroundColor ??
+        (Theme.of(context).brightness == Brightness.dark
+            ? AppTheme.darkGreen
+            : AppTheme.primaryGreen);
+    final color = iconColor ?? AppTheme.white;
 
     return Card(
       color: cardColor,
@@ -42,13 +46,20 @@ class TipCard extends StatelessWidget {
               ],
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 18,
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: AppTheme.white,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(content, style: const TextStyle(fontSize: 14)),
+              Text(
+                content,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 14,
+                  color: AppTheme.white,
+                ),
+              ),
             ],
           ),
         ),

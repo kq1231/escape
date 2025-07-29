@@ -66,12 +66,13 @@ class StreakMilestoneCard extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: AppTheme.headlineSmall.copyWith(
-                            color: isAchieved
-                                ? AppTheme.successGreen
-                                : AppTheme.darkGray,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.displaySmall
+                              ?.copyWith(
+                                color: isAchieved
+                                    ? AppTheme.successGreen
+                                    : AppTheme.darkGray,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                         const SizedBox(height: AppTheme.spacingXS),
                         // Streak progress indicator
@@ -85,10 +86,11 @@ class StreakMilestoneCard extends StatelessWidget {
                             const SizedBox(width: AppTheme.spacingXS),
                             Text(
                               '$currentStreak/$streakCount days',
-                              style: AppTheme.bodyMedium.copyWith(
-                                color: statusColor,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: statusColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                             ),
                           ],
                         ),
@@ -108,9 +110,9 @@ class StreakMilestoneCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   description,
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -122,7 +124,7 @@ class StreakMilestoneCard extends StatelessWidget {
                 const SizedBox(height: AppTheme.spacingS),
                 Text(
                   'Rewards',
-                  style: AppTheme.labelMedium.copyWith(
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: AppTheme.darkGray,
                     fontWeight: FontWeight.bold,
                   ),
@@ -143,7 +145,7 @@ class StreakMilestoneCard extends StatelessWidget {
                       ),
                       child: Text(
                         reward,
-                        style: AppTheme.bodyMedium.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
                         maxLines: 1,
@@ -170,10 +172,11 @@ class StreakMilestoneCard extends StatelessWidget {
                       ),
                       child: Text(
                         'Achieved',
-                        style: AppTheme.labelMedium.copyWith(
-                          color: AppTheme.successGreen,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: AppTheme.successGreen,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     )
                   else if (isReached)
@@ -188,16 +191,17 @@ class StreakMilestoneCard extends StatelessWidget {
                       ),
                       child: Text(
                         'Claim Reward',
-                        style: AppTheme.labelMedium.copyWith(
-                          color: AppTheme.warningOrange,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: AppTheme.warningOrange,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     )
                   else
                     Text(
                       '${streakCount - currentStreak} days left',
-                      style: AppTheme.bodyMedium.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.mediumGray,
                         fontWeight: FontWeight.w500,
                       ),

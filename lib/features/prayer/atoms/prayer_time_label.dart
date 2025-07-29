@@ -20,9 +20,13 @@ class PrayerTimeLabel extends StatelessWidget {
     return Text(
       prayerName,
       textAlign: textAlign,
-      style: AppTheme.headlineSmall.copyWith(
+      style: Theme.of(context).textTheme.displaySmall?.copyWith(
         fontSize: fontSize ?? 20, // Increased from 18 to 20
-        color: color ?? AppTheme.darkGray,
+        color:
+            color ??
+            (Theme.of(context).brightness == Brightness.dark
+                ? Colors.white70
+                : AppTheme.darkGray),
         fontWeight: FontWeight.bold, // Changed from w500 to bold
       ),
     );

@@ -34,7 +34,7 @@ class ChartContainer extends StatelessWidget {
             if (title != null) ...[
               Text(
                 title!,
-                style: AppTheme.headlineSmall.copyWith(
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 26, // Increased from default headlineSmall size
                 ),
@@ -44,7 +44,7 @@ class ChartContainer extends StatelessWidget {
             if (subtitle != null) ...[
               Text(
                 subtitle!,
-                style: AppTheme.bodyMedium.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.mediumGray,
                   fontWeight: FontWeight.w500,
                 ),

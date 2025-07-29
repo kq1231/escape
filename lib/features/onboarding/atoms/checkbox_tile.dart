@@ -66,7 +66,10 @@ class CheckboxTile extends StatelessWidget {
               ),
               const SizedBox(width: AppTheme.spacingS),
               Expanded(
-                child: Text(title, style: titleStyle ?? AppTheme.bodyLarge),
+                child: Text(
+                  title,
+                  style: titleStyle ?? Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
             ],
           ),

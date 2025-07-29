@@ -51,7 +51,7 @@ class RelapseButton extends StatelessWidget {
           Icon(icon, size: 20),
           SizedBox(width: AppTheme.spacingS),
         ],
-        Text(text, style: AppTheme.labelLarge),
+        Text(text, style: Theme.of(context).textTheme.labelLarge),
       ],
     );
 

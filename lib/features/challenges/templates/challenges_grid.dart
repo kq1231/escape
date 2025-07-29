@@ -30,13 +30,18 @@ class ChallengesGrid extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (title != null)
-                Expanded(child: Text(title!, style: AppTheme.headlineMedium)),
+                Expanded(
+                  child: Text(
+                    title!,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ),
               if (showViewAllButton)
                 TextButton(
                   onPressed: onViewAllPressed,
                   child: Text(
                     'View All',
-                    style: AppTheme.labelMedium.copyWith(
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: AppTheme.primaryGreen,
                     ),
                   ),
@@ -47,7 +52,9 @@ class ChallengesGrid extends StatelessWidget {
             const SizedBox(height: AppTheme.spacingXS),
             Text(
               subtitle!,
-              style: AppTheme.bodyMedium.copyWith(color: AppTheme.mediumGray),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
             ),
           ],
           const SizedBox(height: AppTheme.spacingM),

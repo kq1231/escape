@@ -39,7 +39,7 @@ class StreakGraph extends StatelessWidget {
                       final date = data[value.toInt()].date;
                       return Text(
                         '${date.day}',
-                        style: AppTheme.bodyMedium.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.mediumGray,
                           fontWeight: FontWeight.w500,
                         ),
@@ -56,7 +56,7 @@ class StreakGraph extends StatelessWidget {
                   getTitlesWidget: (value, meta) {
                     return Text(
                       value.toInt().toString(),
-                      style: AppTheme.bodyMedium.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.mediumGray,
                         fontWeight: FontWeight.w500,
                       ),
@@ -84,7 +84,7 @@ class StreakGraph extends StatelessWidget {
                 getTooltipItem: (group, groupIndex, rod, rodIndex) {
                   return BarTooltipItem(
                     '${data[groupIndex].streakCount}',
-                    AppTheme.bodyMedium.copyWith(
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: AppTheme.darkGray,
                       fontWeight: FontWeight.bold,
                     ),

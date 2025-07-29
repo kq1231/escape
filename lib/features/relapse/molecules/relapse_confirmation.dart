@@ -26,14 +26,16 @@ class RelapseConfirmation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title, style: AppTheme.headlineSmall),
-      content: Text(message, style: AppTheme.bodyMedium),
+      title: Text(title, style: Theme.of(context).textTheme.headlineSmall),
+      content: Text(message, style: Theme.of(context).textTheme.bodyMedium),
       actions: [
         TextButton(
           onPressed: onCancel ?? () => Navigator.of(context).pop(),
           child: Text(
             cancelText,
-            style: AppTheme.labelMedium.copyWith(color: AppTheme.primaryGreen),
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(color: AppTheme.primaryGreen),
           ),
         ),
         RelapseButton(

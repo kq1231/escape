@@ -78,7 +78,7 @@ class ChallengeCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: AppTheme.headlineSmall.copyWith(
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
                         color: isCompleted
                             ? AppTheme.successGreen
                             : AppTheme.darkGray,
@@ -104,9 +104,9 @@ class ChallengeCard extends StatelessWidget {
                       ),
                       child: Text(
                         difficulty!,
-                        style: AppTheme.labelMedium.copyWith(
-                          color: statusColor,
-                        ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelMedium?.copyWith(color: statusColor),
                       ),
                     ),
                   ],
@@ -117,9 +117,9 @@ class ChallengeCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   description,
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -159,9 +159,8 @@ class ChallengeCard extends StatelessWidget {
                           const SizedBox(width: AppTheme.spacingXS),
                           Text(
                             'Completed',
-                            style: AppTheme.labelMedium.copyWith(
-                              color: AppTheme.successGreen,
-                            ),
+                            style: Theme.of(context).textTheme.labelMedium
+                                ?.copyWith(color: AppTheme.successGreen),
                           ),
                         ],
                       ),
