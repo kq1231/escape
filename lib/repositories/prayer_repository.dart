@@ -6,9 +6,9 @@ import '../models/prayer_model.dart';
 
 part 'prayer_repository.g.dart';
 
-@Riverpod()
+@Riverpod(keepAlive: true)
 class PrayerRepository extends _$PrayerRepository {
-  late final Box<Prayer> _prayerBox;
+  late Box<Prayer> _prayerBox;
 
   @override
   FutureOr<void> build() async {
@@ -104,9 +104,15 @@ class PrayerRepository extends _$PrayerRepository {
 
   // Listen to changes in prayer data
   Stream<List<Prayer>> watchPrayers() {
+    DateTime now = DateTime.now();
     // Build and watch the query, set triggerImmediately to emit the query immediately on listen.
     return _prayerBox
-        .query()
+        .query(
+          Prayer_.date.betweenDate(
+            DateTime(now.year, now.month, now.day, 0, 0),
+            DateTime(now.year, now.month, now.day, 23, 59, 59),
+          ),
+        )
         .watch(triggerImmediately: true)
         // Map it to a list of objects to be used by a StreamBuilder.
         .map((query) => query.find());

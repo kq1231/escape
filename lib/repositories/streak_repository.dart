@@ -6,9 +6,9 @@ import '../models/streak_model.dart';
 
 part 'streak_repository.g.dart';
 
-@Riverpod()
+@Riverpod(keepAlive: true)
 class StreakRepository extends _$StreakRepository {
-  late final Box<Streak> _streakBox;
+  late Box<Streak> _streakBox;
 
   @override
   FutureOr<void> build() async {

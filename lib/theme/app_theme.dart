@@ -42,21 +42,21 @@ class AppTheme {
     height: 1.4,
   );
 
-  static TextStyle get bodyLarge => GoogleFonts.robotoMono(
+  static TextStyle get bodyLarge => GoogleFonts.aBeeZee(
     fontSize: 18, // Increased from 16
     fontWeight: FontWeight.w500, // Changed from normal to w500
     color: darkGray,
     height: 1.5,
   );
 
-  static TextStyle get bodyMedium => GoogleFonts.robotoMono(
+  static TextStyle get bodyMedium => GoogleFonts.aBeeZee(
     fontSize: 16, // Increased from 14
     fontWeight: FontWeight.w500, // Changed from normal to w500
     color: darkGray,
     height: 1.5,
   );
 
-  static TextStyle get bodySmall => GoogleFonts.robotoMono(
+  static TextStyle get bodySmall => GoogleFonts.aBeeZee(
     fontSize: 14, // Increased from 12
     fontWeight: FontWeight.normal,
     color: primaryGreen,
@@ -103,21 +103,21 @@ class AppTheme {
     height: 1.4,
   );
 
-  static TextStyle get darkBodyLarge => GoogleFonts.robotoMono(
+  static TextStyle get darkBodyLarge => GoogleFonts.aBeeZee(
     fontSize: 18,
     fontWeight: FontWeight.w500,
     color: Colors.white70,
     height: 1.5,
   );
 
-  static TextStyle get darkBodyMedium => GoogleFonts.robotoMono(
+  static TextStyle get darkBodyMedium => GoogleFonts.aBeeZee(
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: Colors.white70,
     height: 1.5,
   );
 
-  static TextStyle get darkBodySmall => GoogleFonts.robotoMono(
+  static TextStyle get darkBodySmall => GoogleFonts.aBeeZee(
     fontSize: 14,
     fontWeight: FontWeight.normal,
     color: Colors.white60,

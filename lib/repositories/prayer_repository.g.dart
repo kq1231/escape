@@ -17,7 +17,7 @@ final class PrayerRepositoryProvider
         argument: null,
         retry: null,
         name: r'prayerRepositoryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -30,7 +30,7 @@ final class PrayerRepositoryProvider
   PrayerRepository create() => PrayerRepository();
 }
 
-String _$prayerRepositoryHash() => r'0c592ce4490d1f260f1546684c413fb0931a711f';
+String _$prayerRepositoryHash() => r'8f0fd4e98f2ed1e3160dd587a6540cc922817bd9';
 
 abstract class _$PrayerRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

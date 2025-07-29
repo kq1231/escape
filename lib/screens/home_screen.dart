@@ -66,17 +66,6 @@ class HomeScreen extends ConsumerWidget {
 
             const SizedBox(height: AppTheme.spacingXL),
 
-            // Quick Prayer Status Summary
-            Text(
-              'Today\'s Prayers',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 32, // Increased from default headlineMedium size
-              ),
-            ),
-
-            const SizedBox(height: AppTheme.spacingM),
-
             // Prayer grid
             todaysPrayersAsync.when(
               data: (prayers) {
@@ -92,7 +81,11 @@ class HomeScreen extends ConsumerWidget {
                           final newPrayer = Prayer(
                             name: prayer.name,
                             isCompleted: true,
-                            date: DateTime.now(),
+                            date: DateTime(
+                              DateTime.now().year,
+                              DateTime.now().month,
+                              DateTime.now().day,
+                            ),
                           );
                           ref
                               .read(prayerRepositoryProvider.notifier)
@@ -114,7 +107,11 @@ class HomeScreen extends ConsumerWidget {
                           final newPrayer = Prayer(
                             name: prayer.name,
                             isCompleted: false,
-                            date: DateTime.now(),
+                            date: DateTime(
+                              DateTime.now().year,
+                              DateTime.now().month,
+                              DateTime.now().day,
+                            ),
                           );
                           ref
                               .read(prayerRepositoryProvider.notifier)

@@ -40,7 +40,9 @@ class DailyPrayerGrid extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppTheme.spacingM),
       decoration: BoxDecoration(
-        color: AppTheme.white,
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Theme.of(context).colorScheme.surface
+            : AppTheme.white,
         borderRadius: BorderRadius.circular(AppTheme.radiusL),
         border: Border.all(color: AppTheme.lightGray),
         boxShadow: AppTheme.cardShadow,
@@ -74,10 +76,15 @@ class DailyPrayerGrid extends StatelessWidget {
             return Column(
               children: [
                 PrayerRow(
+                  prayerName: prayerName,
                   prayer: prayer,
                   onStateChanged: onPrayerStateChanged != null
                       ? (state) => onPrayerStateChanged!(
-                          prayer ?? Prayer(name: prayerName),
+                          prayer ??
+                              Prayer(
+                                name: prayerName,
+                                isCompleted: state == CheckboxState.checked,
+                              ),
                           state,
                         )
                       : null,

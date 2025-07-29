@@ -63,7 +63,11 @@ class PrayerTrackerScreen extends ConsumerWidget {
                           final newPrayer = Prayer(
                             name: prayer.name,
                             isCompleted: true,
-                            date: DateTime.now(),
+                            date: DateTime(
+                              DateTime.now().year,
+                              DateTime.now().month,
+                              DateTime.now().day,
+                            ),
                           );
                           ref
                               .read(prayerRepositoryProvider.notifier)
@@ -85,7 +89,11 @@ class PrayerTrackerScreen extends ConsumerWidget {
                           final newPrayer = Prayer(
                             name: prayer.name,
                             isCompleted: false,
-                            date: DateTime.now(),
+                            date: DateTime(
+                              DateTime.now().year,
+                              DateTime.now().month,
+                              DateTime.now().day,
+                            ),
                           );
                           ref
                               .read(prayerRepositoryProvider.notifier)
@@ -123,7 +131,7 @@ class PrayerTrackerScreen extends ConsumerWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(AppTheme.spacingL),
               decoration: BoxDecoration(
-                color: AppTheme.lightGray,
+                color: AppTheme.lightGreen,
                 borderRadius: BorderRadius.circular(AppTheme.radiusL),
               ),
               child: Text(
@@ -131,8 +139,9 @@ class PrayerTrackerScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 18, // Increased from default bodyMedium size
+                  color: AppTheme.white,
                 ),
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
               ),
             ),
             const SizedBox(

@@ -5,11 +5,18 @@ import 'package:escape/theme/app_theme.dart';
 import 'package:escape/models/prayer_model.dart';
 
 class PrayerRow extends StatelessWidget {
+  final String? prayerName;
   final Prayer? prayer;
   final ValueChanged<CheckboxState>? onStateChanged;
   final VoidCallback? onTap;
 
-  const PrayerRow({super.key, this.prayer, this.onStateChanged, this.onTap});
+  const PrayerRow({
+    super.key,
+    this.prayerName,
+    this.prayer,
+    this.onStateChanged,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +25,34 @@ class PrayerRow extends StatelessWidget {
     if (prayer == null) {
       checkboxState = CheckboxState.empty;
     } else {
-      checkboxState = prayer!.isCompleted
-          ? CheckboxState.checked
-          : CheckboxState.unchecked;
+      switch (prayer?.isCompleted) {
+        case true:
+          checkboxState = CheckboxState.checked;
+          break;
+        case false:
+          checkboxState = CheckboxState.unchecked;
+          break;
+        case null:
+          checkboxState = CheckboxState.empty;
+          break;
+      }
     }
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        onTap?.call();
+        switch (checkboxState) {
+          case CheckboxState.empty:
+            onStateChanged?.call(CheckboxState.checked);
+            break;
+          case CheckboxState.checked:
+            onStateChanged?.call(CheckboxState.unchecked);
+            break;
+          case CheckboxState.unchecked:
+            onStateChanged?.call(CheckboxState.empty);
+            break;
+        }
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppTheme.spacingM,
@@ -44,7 +72,7 @@ class PrayerRow extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            PrayerTimeLabel(prayerName: prayer?.name ?? ''),
+            PrayerTimeLabel(prayerName: prayer?.name ?? prayerName ?? ''),
             TripleStateCheckbox(
               state: checkboxState,
               onChanged: onStateChanged,
