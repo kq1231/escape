@@ -34,7 +34,7 @@
     },
     {
       "id": "2:706345959104340872",
-      "lastPropertyId": "5:7916892743323186033",
+      "lastPropertyId": "10:6392053059665417157",
       "name": "Streak",
       "properties": [
         {
@@ -54,14 +54,34 @@
           "type": 6
         },
         {
-          "id": "4:6437257444821216180",
-          "name": "mood",
-          "type": 6
-        },
-        {
           "id": "5:7916892743323186033",
           "name": "date",
           "type": 10
+        },
+        {
+          "id": "6:85010084430651590",
+          "name": "emotion",
+          "type": 9
+        },
+        {
+          "id": "7:4931378688834158035",
+          "name": "moodIntensity",
+          "type": 6
+        },
+        {
+          "id": "8:1720440084525908862",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "9:2608692504366397466",
+          "name": "lastUpdated",
+          "type": 10
+        },
+        {
+          "id": "10:6392053059665417157",
+          "name": "isSuccess",
+          "type": 1
         }
       ],
       "relations": []
@@ -75,7 +95,9 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    6437257444821216180
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

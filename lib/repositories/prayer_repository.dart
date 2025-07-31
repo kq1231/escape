@@ -34,12 +34,7 @@ class PrayerRepository extends _$PrayerRepository {
     final endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
     final query = _prayerBox
-        .query(
-          Prayer_.date.between(
-            startOfDay.millisecondsSinceEpoch ~/ 1000,
-            endOfDay.millisecondsSinceEpoch ~/ 1000,
-          ),
-        )
+        .query(Prayer_.date.betweenDate(startOfDay, endOfDay))
         .build();
     final result = query.find();
     query.close();

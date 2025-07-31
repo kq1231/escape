@@ -41,7 +41,7 @@ class DailyPrayerGrid extends StatelessWidget {
       padding: const EdgeInsets.all(AppTheme.spacingM),
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark
-            ? Theme.of(context).colorScheme.surface
+            ? AppTheme.black
             : AppTheme.white,
         borderRadius: BorderRadius.circular(AppTheme.radiusL),
         border: Border.all(color: AppTheme.lightGray),

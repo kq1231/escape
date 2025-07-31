@@ -137,11 +137,10 @@ class PrayerTrackerScreen extends ConsumerWidget {
               child: Text(
                 'Establishing regular prayer (salah) strengthens your connection with Allah and provides spiritual protection throughout your day.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
                   fontSize: 18, // Increased from default bodyMedium size
                   color: AppTheme.white,
                 ),
-                textAlign: TextAlign.left,
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(

@@ -1,15 +1,16 @@
+import 'package:escape/models/streak_model.dart';
 import 'package:flutter/material.dart';
 import '../../../theme/app_theme.dart';
 
 class StreakOrganism extends StatelessWidget {
-  final int streakCount;
+  final Streak streak;
   final String labelText;
   final VoidCallback? onTap;
   final bool isActive;
 
   const StreakOrganism({
     super.key,
-    required this.streakCount,
+    required this.streak,
     this.labelText = 'Days Clean',
     this.onTap,
     this.isActive = true,
@@ -65,10 +66,10 @@ class StreakOrganism extends StatelessWidget {
                       children: [
                         // Streak count with larger, more prominent text
                         Text(
-                          '$streakCount',
+                          '${streak.count}',
                           style: Theme.of(context).textTheme.displayLarge
                               ?.copyWith(
-                                fontSize: 48,
+                                fontSize: 60,
                                 fontWeight: FontWeight.bold,
                                 color: AppTheme.white,
                                 shadows: [
@@ -118,9 +119,9 @@ class StreakOrganism extends StatelessWidget {
                   const SizedBox(height: AppTheme.spacingS),
                   // Streak count with larger, more prominent text
                   Text(
-                    '$streakCount',
+                    '${streak.count}',
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      fontSize: 48,
+                      fontSize: 70,
                       color: AppTheme.white,
                       shadows: [
                         Shadow(

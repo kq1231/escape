@@ -8,33 +8,67 @@ class Streak {
   // Total streak count
   int count;
 
-  // Streak goal
+  // Streak goal (default: 1 day for new users)
   int goal;
 
-  // Mood tracking (1-10 scale)
-  int mood;
+  // Mood tracking - emotion type (happy, sad, anxious, grateful, angry, neutral)
+  String emotion;
+
+  // Mood intensity (1-10 scale)
+  int moodIntensity;
 
   // Date of the streak record
   @Property(type: PropertyType.date)
   DateTime date;
 
+  // Creation timestamp
+  @Property(type: PropertyType.date)
+  DateTime createdAt;
+
+  // Last updated timestamp
+  @Property(type: PropertyType.date)
+  DateTime lastUpdated;
+
+  // Success flag - true means success, false means relapse
+  bool isSuccess;
+
   // Constructor
   Streak({
     this.id = 0,
     this.count = 0,
-    this.goal = 30, // Default goal of 30 days
-    this.mood = 5, // Default neutral mood
+    this.goal = 1, // Default goal of 1 day for new users
+    this.emotion = 'neutral', // Default emotion
+    this.moodIntensity = 5, // Default neutral intensity
+    this.isSuccess = true, // Default to success
     DateTime? date,
-  }) : date = date ?? DateTime.now();
+    DateTime? createdAt,
+    DateTime? lastUpdated,
+  }) : date = date ?? DateTime.now(),
+       createdAt = createdAt ?? DateTime.now(),
+       lastUpdated = lastUpdated ?? DateTime.now();
 
   // Copy with method for immutability
-  Streak copyWith({int? id, int? count, int? goal, int? mood, DateTime? date}) {
+  Streak copyWith({
+    int? id,
+    int? count,
+    int? goal,
+    String? emotion,
+    int? moodIntensity,
+    bool? isSuccess,
+    DateTime? date,
+    DateTime? createdAt,
+    DateTime? lastUpdated,
+  }) {
     return Streak(
       id: id ?? this.id,
       count: count ?? this.count,
       goal: goal ?? this.goal,
-      mood: mood ?? this.mood,
+      emotion: emotion ?? this.emotion,
+      moodIntensity: moodIntensity ?? this.moodIntensity,
+      isSuccess: isSuccess ?? this.isSuccess,
       date: date ?? this.date,
+      createdAt: createdAt ?? this.createdAt,
+      lastUpdated: lastUpdated ?? DateTime.now(),
     );
   }
 
@@ -46,6 +80,6 @@ class Streak {
 
   @override
   String toString() {
-    return 'Streak(id: $id, count: $count, goal: $goal, mood: $mood, date: $date)';
+    return 'Streak(id: $id, count: $count, goal: $goal, emotion: $emotion, moodIntensity: $moodIntensity, isSuccess: $isSuccess, date: $date, createdAt: $createdAt, lastUpdated: $lastUpdated)';
   }
 }

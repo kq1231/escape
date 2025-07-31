@@ -1,3 +1,4 @@
+import 'package:escape/models/streak_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/streak/organisms/streak_organism.dart';
@@ -7,9 +8,11 @@ import '../features/prayer/molecules/daily_prayer_grid.dart';
 import '../features/analytics/atoms/stat_card.dart';
 import 'package:escape/theme/app_theme.dart';
 import '../providers/prayer_provider.dart';
+import '../providers/streak_provider.dart';
 import '../features/prayer/atoms/triple_state_checkbox.dart';
 import '../models/prayer_model.dart';
 import '../repositories/prayer_repository.dart';
+import '../features/streak/widgets/streak_modal.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -21,13 +24,19 @@ class HomeScreen extends ConsumerWidget {
   final int _totalSessions = 0;
   final int _longestStreak = 0;
   final int _currentMood = 7; // Scale of 1-10
-  final int _streakCount = 0;
 
-  void _onStreakCardTap(BuildContext context) {
-    // Navigate to streak details screen
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Navigate to Streak Details')));
+  void _onStreakCardTap(BuildContext context, Streak? streak) {
+    // Show streak modal
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (BuildContext context) {
+        return StreakModal(streak: streak);
+      },
+    );
   }
 
   void _onEmergencyButtonPressed(BuildContext context) {
@@ -49,6 +58,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todaysPrayersAsync = ref.watch(todaysPrayersProvider());
+    final todaysStreakAsync = ref.watch(todaysStreakProvider);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -57,11 +67,17 @@ class HomeScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Streak Counter at the top
-            StreakOrganism(
-              streakCount: 40,
-              labelText: 'Days Clean',
-              onTap: () => _onStreakCardTap(context),
-              isActive: true,
+            todaysStreakAsync.when(
+              data: (streak) {
+                return StreakOrganism(
+                  streak: streak ?? Streak(count: 0),
+                  labelText: 'Days Clean',
+                  onTap: () => _onStreakCardTap(context, streak),
+                  isActive: true,
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Text('Error: $error'),
             ),
 
             const SizedBox(height: AppTheme.spacingXL),
@@ -210,14 +226,25 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(width: AppTheme.spacingM),
                 Expanded(
-                  child: StatCard(
-                    title: 'Progress',
-                    value:
-                        '${(_streakCount > 0 ? (_streakCount / 30 * 100).round() : 0)}%',
-                    subtitle: 'To goal',
-                    icon: Icons.trending_up,
-                    iconColor: Colors.blue,
-                    onTap: () => _onStatCardTap(context, 'Progress'),
+                  child: todaysStreakAsync.when(
+                    data: (streak) {
+                      // Get the current streak count from the repository
+                      final currentStreak = ref
+                          .read(todaysStreakProvider.notifier)
+                          .getCurrentStreak();
+                      return StatCard(
+                        title: 'Progress',
+                        value:
+                            '${(currentStreak > 0 ? (currentStreak / 30 * 100).round() : 0)}%',
+                        subtitle: 'To goal',
+                        icon: Icons.trending_up,
+                        iconColor: Colors.blue,
+                        onTap: () => _onStatCardTap(context, 'Progress'),
+                      );
+                    },
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                    error: (error, stack) => Text('Error: $error'),
                   ),
                 ),
               ],
