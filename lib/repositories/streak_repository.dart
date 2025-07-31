@@ -243,7 +243,6 @@ class StreakRepository extends _$StreakRepository {
         // Map it to a single streak object or null
         .map((query) {
           final result = query.find();
-          print("$result ${result.length}");
           return result.isEmpty ? null : result.first;
         });
   }

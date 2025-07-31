@@ -63,12 +63,12 @@ class SettingsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Theme', style: Theme.of(context).textTheme.bodyLarge),
+            Text('Theme', style: Theme.of(context).textTheme.labelLarge),
             const SizedBox(height: 16),
             ListTile(
               title: Text(
                 'Light',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.labelMedium,
               ),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.light,
@@ -90,7 +90,7 @@ class SettingsScreen extends ConsumerWidget {
             ListTile(
               title: Text(
                 'Dark',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.labelMedium,
               ),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.dark,
@@ -112,7 +112,7 @@ class SettingsScreen extends ConsumerWidget {
             ListTile(
               title: Text(
                 'System Default',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.labelMedium,
               ),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.system,
@@ -151,14 +151,14 @@ class SettingsScreen extends ConsumerWidget {
             SwitchListTile(
               title: Text(
                 'Notifications',
-                style: Theme.of(ctx).textTheme.bodyMedium,
+                style: Theme.of(ctx).textTheme.labelMedium,
               ),
               value: true,
               onChanged: (value) {},
             ),
             Divider(thickness: 0.1, color: Theme.of(ctx).colorScheme.outline),
             SwitchListTile(
-              title: Text('Sound', style: Theme.of(ctx).textTheme.bodyMedium),
+              title: Text('Sound', style: Theme.of(ctx).textTheme.labelMedium),
               value: true,
               onChanged: (value) {},
             ),
@@ -166,11 +166,11 @@ class SettingsScreen extends ConsumerWidget {
             ListTile(
               title: Text(
                 'Language',
-                style: Theme.of(ctx).textTheme.bodyMedium,
+                style: Theme.of(ctx).textTheme.labelMedium,
               ),
               trailing: Text(
                 'English',
-                style: Theme.of(ctx).textTheme.bodyMedium,
+                style: Theme.of(ctx).textTheme.labelMedium,
               ),
               onTap: () {},
             ),

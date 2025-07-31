@@ -56,6 +56,17 @@ class TodaysStreak extends _$TodaysStreak {
         .markRelapse(emotion: emotion, moodIntensity: moodIntensity);
   }
 
+  /// Update streak goal
+  Future<int> updateGoal(Streak streak, int newGoal) async {
+    final updatedStreak = streak.copyWith(
+      goal: newGoal,
+      lastUpdated: DateTime.now(),
+    );
+    return await ref
+        .read(streakRepositoryProvider.notifier)
+        .updateStreak(updatedStreak);
+  }
+
   /// Get today's streak
   Streak? getTodaysStreak() {
     return ref.read(streakRepositoryProvider.notifier).getTodayStreak();

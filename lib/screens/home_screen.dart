@@ -21,7 +21,7 @@ class HomeScreen extends ConsumerWidget {
   final bool _isEmergencyButtonEnabled = true;
 
   // Analytics data
-  final int _totalSessions = 0;
+  final int _totalPrayers = 0;
   final int _longestStreak = 0;
   final int _currentMood = 7; // Scale of 1-10
 
@@ -189,10 +189,10 @@ class HomeScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: StatCard(
-                    title: 'Sessions',
-                    value: '$_totalSessions',
-                    subtitle: 'This week',
-                    icon: Icons.calendar_today,
+                    title: 'Prayers',
+                    value: '$_totalPrayers',
+                    subtitle: 'All time',
+                    icon: Icons.mosque,
                     onTap: () => _onStatCardTap(context, 'Sessions'),
                   ),
                 ),

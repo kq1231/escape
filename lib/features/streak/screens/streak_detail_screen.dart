@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../organisms/streak_organism.dart';
 import 'package:escape/theme/app_theme.dart';
+import 'package:escape/models/streak_model.dart';
 
 class StreakDetailScreen extends StatelessWidget {
   final int streakCount;
@@ -47,7 +48,7 @@ class StreakDetailScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   StreakOrganism(
-                    streakCount: streakCount,
+                    streak: Streak(count: streakCount),
                     labelText: 'Days Clean',
                   ),
                 ],
