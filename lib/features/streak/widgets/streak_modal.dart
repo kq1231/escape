@@ -304,7 +304,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                 ? Colors.transparent
                 : Theme.of(context).brightness == Brightness.dark
                 ? AppTheme.white
-                : Colors.black,
+                : AppTheme.darkGreen,
             width: 2,
           ),
         ),
