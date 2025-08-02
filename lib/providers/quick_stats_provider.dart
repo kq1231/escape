@@ -85,7 +85,6 @@ class QuickStats extends _$QuickStats {
       for (final subscription in subscriptions) {
         subscription.cancel();
       }
-      print("DISPOSED");
     });
   }
 }
