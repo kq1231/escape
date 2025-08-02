@@ -14,3 +14,11 @@
 4. Create goal provider
 5. Whenever creating Streak object in database, the goal will always come from goal provider, inShaaAllah
 6. Quick stats can listen to goal provider, current streak watcher can be removed, inShaaAllah
+
+---
+
+1. Design the emergency screen with full dedication and love 
+2. Ask the user thoughtful questions 
+3. Remind the user of Allah, punishment and Jannah, and what would happen if they relapse vs. if they stay firm
+4. Remind them that Allah does not burden a soul more than it can bear
+5. Show them breathing exercises, etc. 
