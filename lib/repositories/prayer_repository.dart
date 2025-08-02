@@ -76,6 +76,27 @@ class PrayerRepository extends _$PrayerRepository {
     return _prayerBox.count();
   }
 
+  // Get completed prayer count
+  int getCompletedPrayerCount() {
+    final query = _prayerBox.query(Prayer_.isCompleted.equals(true)).build();
+    final count = query.count();
+    query.close();
+    return count;
+  }
+
+  // Watch completed prayer count
+  Stream<int> watchCompletedPrayerCount() {
+    // Build and watch the query for completed prayers
+    return _prayerBox
+        .query(Prayer_.isCompleted.equals(true))
+        .watch(triggerImmediately: true)
+        // Map it to a count
+        .map((query) {
+          final count = query.count();
+          return count;
+        });
+  }
+
   // Get completed prayer count for today
   int getTodayCompletedPrayerCount() {
     final todayPrayers = getTodayPrayers();

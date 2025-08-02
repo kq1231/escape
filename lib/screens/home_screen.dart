@@ -5,7 +5,7 @@ import '../features/streak/organisms/streak_organism.dart';
 import '../features/emergency/atoms/emergency_button.dart';
 import '../features/emergency/screens/emergency_screen.dart';
 import '../features/prayer/molecules/daily_prayer_grid.dart';
-import '../features/analytics/atoms/stat_card.dart';
+import '../features/analytics/organisms/quick_stats_organism.dart';
 import 'package:escape/theme/app_theme.dart';
 import '../providers/prayer_provider.dart';
 import '../providers/streak_provider.dart';
@@ -19,11 +19,6 @@ class HomeScreen extends ConsumerWidget {
 
   // State variables for the home screen
   final bool _isEmergencyButtonEnabled = true;
-
-  // Analytics data
-  final int _totalPrayers = 0;
-  final int _longestStreak = 0;
-  final int _currentMood = 7; // Scale of 1-10
 
   void _onStreakCardTap(BuildContext context, Streak? streak) {
     // Show streak modal
@@ -174,80 +169,11 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: AppTheme.spacingXL),
 
             // Quick Stats Mini Analytics Preview
-            Text(
-              'Quick Stats',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 32, // Increased from default headlineMedium size
-              ),
-            ),
-
-            const SizedBox(height: AppTheme.spacingM),
-
-            // Stats grid
-            Row(
-              children: [
-                Expanded(
-                  child: StatCard(
-                    title: 'Prayers',
-                    value: '$_totalPrayers',
-                    subtitle: 'All time',
-                    icon: Icons.mosque,
-                    onTap: () => _onStatCardTap(context, 'Sessions'),
-                  ),
-                ),
-                const SizedBox(width: AppTheme.spacingM),
-                Expanded(
-                  child: StatCard(
-                    title: 'Best Streak',
-                    value: '$_longestStreak',
-                    subtitle: 'All time',
-                    icon: Icons.local_fire_department,
-                    iconColor: AppTheme.primaryGreen,
-                    onTap: () => _onStatCardTap(context, 'Streak'),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: AppTheme.spacingM),
-
-            Row(
-              children: [
-                Expanded(
-                  child: StatCard(
-                    title: 'Mood',
-                    value: '$_currentMood/10',
-                    subtitle: 'Today',
-                    icon: Icons.mood,
-                    iconColor: Colors.orange,
-                    onTap: () => _onStatCardTap(context, 'Mood'),
-                  ),
-                ),
-                const SizedBox(width: AppTheme.spacingM),
-                Expanded(
-                  child: todaysStreakAsync.when(
-                    data: (streak) {
-                      // Get the current streak count from the repository
-                      final currentStreak = ref
-                          .read(todaysStreakProvider.notifier)
-                          .getCurrentStreak();
-                      return StatCard(
-                        title: 'Progress',
-                        value:
-                            '${(currentStreak > 0 ? (currentStreak / 30 * 100).round() : 0)}%',
-                        subtitle: 'To goal',
-                        icon: Icons.trending_up,
-                        iconColor: Colors.blue,
-                        onTap: () => _onStatCardTap(context, 'Progress'),
-                      );
-                    },
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (error, stack) => Text('Error: $error'),
-                  ),
-                ),
-              ],
+            QuickStatsOrganism(
+              onPrayersTap: () => _onStatCardTap(context, 'Prayers'),
+              onBestStreakTap: () => _onStatCardTap(context, 'Best Streak'),
+              onMoodTap: () => _onStatCardTap(context, 'Mood'),
+              onProgressTap: () => _onStatCardTap(context, 'Progress'),
             ),
           ],
         ),

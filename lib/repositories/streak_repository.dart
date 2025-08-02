@@ -100,6 +100,36 @@ class StreakRepository extends _$StreakRepository {
     return currentStreak;
   }
 
+  // Get best streak (highest count with latest date)
+  Streak? getBestStreak() {
+    // Get all streaks sorted by count descending, then by date descending
+    final query = _streakBox
+        .query()
+        .order(Streak_.count, flags: Order.descending)
+        .order(Streak_.date, flags: Order.descending)
+        .build();
+    final result = query.find();
+    query.close();
+
+    // Return the first result (highest count, latest date) or null if empty
+    return result.isEmpty ? null : result.first;
+  }
+
+  // Watch best streak (highest count with latest date)
+  Stream<Streak?> watchBestStreak() {
+    // Build and watch the query for best streak
+    return _streakBox
+        .query()
+        .order(Streak_.count, flags: Order.descending)
+        .order(Streak_.date, flags: Order.descending)
+        .watch(triggerImmediately: true)
+        // Map it to a single streak object or null
+        .asyncMap((query) async {
+          final result = await query.findFirstAsync();
+          return result;
+        });
+  }
+
   // Mark success - increment streak count
   Future<int> markSuccess({
     required String emotion,
@@ -230,20 +260,17 @@ class StreakRepository extends _$StreakRepository {
         .map((query) => query.find());
   }
 
-  // Watch today's streak
-  Stream<Streak?> watchTodaysStreak() {
-    final today = DateTime.now();
-    final startOfDay = DateTime(today.year, today.month, today.day);
-    final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
-
+  // Watch current streak
+  Stream<Streak?> watchCurrentStreak() {
     // Build and watch the query for today's streak
     return _streakBox
-        .query(Streak_.date.betweenDate(startOfDay, endOfDay))
+        .query()
+        .order(Streak_.date, flags: Order.descending)
         .watch(triggerImmediately: true)
         // Map it to a single streak object or null
-        .map((query) {
-          final result = query.find();
-          return result.isEmpty ? null : result.first;
+        .asyncMap((query) async {
+          final result = await query.findFirstAsync();
+          return result;
         });
   }
 }

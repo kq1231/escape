@@ -13,7 +13,7 @@ class TodaysStreak extends _$TodaysStreak {
     // Watch the streak in DB for today's streak changes
     Stream<Streak?> stream = ref
         .read(streakRepositoryProvider.notifier)
-        .watchTodaysStreak();
+        .watchCurrentStreak();
     yield* stream;
   }
 
