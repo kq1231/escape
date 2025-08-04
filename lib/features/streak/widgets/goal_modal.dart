@@ -1,15 +1,12 @@
-import 'package:escape/models/streak_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/theme/app_theme.dart';
-import 'package:escape/providers/streak_provider.dart';
+import 'package:escape/providers/goal_provider.dart';
 import 'package:escape/widgets/custom_button.dart';
 import 'package:escape/widgets/choice_chip_group.dart';
 
 class GoalModal extends ConsumerStatefulWidget {
-  final Streak streak;
-
-  const GoalModal({super.key, required this.streak});
+  const GoalModal({super.key});
 
   @override
   ConsumerState<GoalModal> createState() => _GoalModalState();
@@ -22,18 +19,21 @@ class _GoalModalState extends ConsumerState<GoalModal> {
   @override
   void initState() {
     super.initState();
+    // Get the goal from the goal provider
+    final goal = ref.read(goalProvider);
+
     // Convert goal to appropriate unit
-    if (widget.streak.goal % 365 == 0) {
-      _value = widget.streak.goal ~/ 365;
+    if (goal % 365 == 0) {
+      _value = goal ~/ 365;
       _unit = 'years';
-    } else if (widget.streak.goal % 30 == 0) {
-      _value = widget.streak.goal ~/ 30;
+    } else if (goal % 30 == 0) {
+      _value = goal ~/ 30;
       _unit = 'months';
-    } else if (widget.streak.goal % 7 == 0) {
-      _value = widget.streak.goal ~/ 7;
+    } else if (goal % 7 == 0) {
+      _value = goal ~/ 7;
       _unit = 'weeks';
     } else {
-      _value = widget.streak.goal;
+      _value = goal;
       _unit = 'days';
     }
   }
@@ -161,10 +161,8 @@ class _GoalModalState extends ConsumerState<GoalModal> {
                 text: 'Save Goal',
                 onPressed: () async {
                   final goalInDays = _calculateGoalInDays();
-                  // Update the goal
-                  await ref
-                      .read(todaysStreakProvider.notifier)
-                      .updateGoal(widget.streak, goalInDays);
+                  // Update the goal using the goal provider
+                  await ref.read(goalProvider.notifier).updateGoal(goalInDays);
 
                   // Close the modal
                   if (context.mounted) {

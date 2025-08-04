@@ -9,11 +9,14 @@
 ---
 
 1. Quick stats ✅
-2. Create UserProfile, store onboarding information inside UserProfile
-3. Store goal information inside UserProfile
-4. Create goal provider
-5. Whenever creating Streak object in database, the goal will always come from goal provider, inShaaAllah
-6. Quick stats can listen to goal provider, current streak watcher can be removed, inShaaAllah
+
+---
+
+1. Create UserProfile, store onboarding information inside UserProfile ✅
+2. Store goal information inside UserProfile ✅
+3. Create goal provider ✅
+4. Whenever creating Streak object in database, the goal will always come from goal provider, inShaaAllah ✅
+5. Quick stats can listen to goal provider ✅
 
 ---
 

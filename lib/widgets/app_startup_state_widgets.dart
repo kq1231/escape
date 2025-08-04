@@ -1,5 +1,11 @@
+import 'package:escape/models/user_profile_model.dart' as user_profile;
+import 'package:escape/providers/user_profile_provider.dart';
+import 'package:escape/screens/main_app_screen.dart';
+import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../features/onboarding/onboarding_flow.dart';
 
 /// A widget that displays a loading state with a MaterialApp
 class AppStartupLoadingWidget extends StatelessWidget {
@@ -8,21 +14,10 @@ class AppStartupLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircularProgressIndicator(),
-              const SizedBox(height: 16),
-              Text(
-                'Initializing app...',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
-          ),
-        ),
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+
+      home: SplashScreen(),
     );
   }
 }
@@ -74,13 +69,87 @@ class AppStartupErrorWidget extends ConsumerWidget {
 }
 
 /// A widget that displays the success state with a MaterialApp
-class AppStartupSuccessWidget extends StatelessWidget {
-  final Widget child;
-
-  const AppStartupSuccessWidget({super.key, required this.child});
+class AppStartupSuccessWidget extends ConsumerWidget {
+  const AppStartupSuccessWidget({super.key});
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the user profile provider to determine which screen to show
+    user_profile.UserProfile? userProfile = ref
+        .read(userProfileProvider)
+        .requireValue;
+
+    final themeModeAsync = ref.watch(themeModeNotifierProvider);
+
+    // If user profile exists, show main app, otherwise show onboarding
+    return userProfile != null
+        ? themeModeAsync.when(
+            data: (data) {
+              return MaterialApp(
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: data,
+
+                home: MainAppScreen(),
+              );
+            },
+            loading: () => const MaterialApp(
+              home: Scaffold(body: Center(child: CircularProgressIndicator())),
+            ),
+            error: (error, stack) => MaterialApp(
+              home: Scaffold(
+                body: Center(child: Text('Error loading theme: $error')),
+              ),
+            ),
+          )
+        : MaterialApp(
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: ThemeMode.light,
+
+            home: OnboardingFlow(
+              onComplete: (ctx) => Navigator.of(ctx).pushReplacement(
+                MaterialPageRoute(builder: (context) => MainAppScreen()),
+              ),
+            ),
+          );
+  }
+}
+
+class SplashScreen extends ConsumerStatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: child);
+    return Scaffold(
+      backgroundColor: AppTheme.primaryGreen,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.mosque, size: 80, color: Colors.white),
+            const SizedBox(height: 20),
+            Text(
+              'Escape',
+              style: Theme.of(
+                context,
+              ).textTheme.displayLarge?.copyWith(color: Colors.white),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Your Journey to Purity',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Colors.white.withValues(alpha: 0.8),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

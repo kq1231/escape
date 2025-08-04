@@ -12,7 +12,7 @@ const appStartupProvider = AppStartupProvider._();
 
 /// A provider that handles app initialization and manages the app startup state
 final class AppStartupProvider
-    extends $AsyncNotifierProvider<AppStartup, void> {
+    extends $AsyncNotifierProvider<AppStartup, bool> {
   /// A provider that handles app initialization and manages the app startup state
   const AppStartupProvider._()
     : super(
@@ -33,24 +33,24 @@ final class AppStartupProvider
   AppStartup create() => AppStartup();
 }
 
-String _$appStartupHash() => r'ab602241403395d2f74f28e71e585d9ec0f2f20b';
+String _$appStartupHash() => r'3475311b2576c8d11c5c3af73884ffc849d8aaa5';
 
-abstract class _$AppStartup extends $AsyncNotifier<void> {
-  FutureOr<void> build();
+abstract class _$AppStartup extends $AsyncNotifier<bool> {
+  FutureOr<bool> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
-    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<bool>, bool>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<void>, void>,
-              AsyncValue<void>,
+              AnyNotifier<AsyncValue<bool>, bool>,
+              AsyncValue<bool>,
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleValue(ref, created);
   }
 }
 

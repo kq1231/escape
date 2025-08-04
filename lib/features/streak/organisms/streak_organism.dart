@@ -1,9 +1,11 @@
 import 'package:escape/models/streak_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../theme/app_theme.dart';
 import '../widgets/goal_modal.dart';
+import '../../../providers/goal_provider.dart';
 
-class StreakOrganism extends StatelessWidget {
+class StreakOrganism extends ConsumerWidget {
   final Streak streak;
   final String labelText;
   final VoidCallback? onTap;
@@ -29,7 +31,10 @@ class StreakOrganism extends StatelessWidget {
     }
   }
 
-  Widget _buildGoalButton(BuildContext context) {
+  Widget _buildGoalButton(BuildContext context, WidgetRef ref) {
+    // Get the goal from the goal provider
+    final goal = ref.watch(goalProvider);
+
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -38,7 +43,7 @@ class StreakOrganism extends StatelessWidget {
       ),
       child: IconButton(
         icon: Text(
-          _getGoalDisplay(streak.goal),
+          _getGoalDisplay(goal),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: AppTheme.white,
             fontWeight: FontWeight.bold,
@@ -52,7 +57,7 @@ class StreakOrganism extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             ),
             builder: (BuildContext context) {
-              return GoalModal(streak: streak);
+              return const GoalModal();
             },
           );
         },
@@ -61,7 +66,7 @@ class StreakOrganism extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -85,7 +90,7 @@ class StreakOrganism extends StatelessWidget {
         child: Stack(
           children: [
             // Goal setting button at top right
-            Positioned(top: 0, right: 0, child: _buildGoalButton(context)),
+            Positioned(top: 0, right: 0, child: _buildGoalButton(context, ref)),
             SizedBox(
               width: double.infinity,
               child: LayoutBuilder(

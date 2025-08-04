@@ -4,18 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/onboarding_data.dart';
 
 class StorageService {
-  static const String _onboardingCompleteKey = 'onboarding_complete';
   static const String _onboardingDataKey = 'onboarding_data';
-
-  static Future<bool> isFirstTimeUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    return !(prefs.getBool(_onboardingCompleteKey) ?? true);
-  }
-
-  static Future<void> setOnboardingComplete() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_onboardingCompleteKey, true);
-  }
 
   static Future<OnboardingData?> getOnboardingData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -41,7 +30,6 @@ class StorageService {
   static Future<void> clearOnboardingData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_onboardingDataKey);
-    await prefs.setBool(_onboardingCompleteKey, false);
   }
 
   static String _simpleHash(String input) {

@@ -16,6 +16,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'models/prayer_model.dart';
 import 'models/streak_model.dart';
+import 'models/user_profile_model.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -118,6 +119,82 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(3, 8512291693082550534),
+    name: 'UserProfile',
+    lastPropertyId: const obx_int.IdUid(11, 2007209796577511304),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 7626070384926860621),
+        name: 'id',
+        type: 6,
+        flags: 129,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 4919641217540815294),
+        name: 'name',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 671748751485565877),
+        name: 'goals',
+        type: 30,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 7411803757707392293),
+        name: 'hobbies',
+        type: 30,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 6796478754985101917),
+        name: 'triggers',
+        type: 30,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 3751846143681267266),
+        name: 'streakGoal',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 7587397390803279660),
+        name: 'passwordHash',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 1708789767381654030),
+        name: 'biometricEnabled',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 3497005368154987552),
+        name: 'notificationsEnabled',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 7007787891191731417),
+        name: 'createdAt',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 2007209796577511304),
+        name: 'lastUpdated',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -158,7 +235,7 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(2, 706345959104340872),
+    lastEntityId: const obx_int.IdUid(3, 8512291693082550534),
     lastIndexId: const obx_int.IdUid(0, 0),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
@@ -304,6 +381,109 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    UserProfile: obx_int.EntityDefinition<UserProfile>(
+      model: _entities[2],
+      toOneRelations: (UserProfile object) => [],
+      toManyRelations: (UserProfile object) => {},
+      getId: (UserProfile object) => object.id,
+      setId: (UserProfile object, int id) {
+        object.id = id;
+      },
+      objectToFB: (UserProfile object, fb.Builder fbb) {
+        final nameOffset = fbb.writeString(object.name);
+        final goalsOffset = fbb.writeList(
+          object.goals.map(fbb.writeString).toList(growable: false),
+        );
+        final hobbiesOffset = fbb.writeList(
+          object.hobbies.map(fbb.writeString).toList(growable: false),
+        );
+        final triggersOffset = fbb.writeList(
+          object.triggers.map(fbb.writeString).toList(growable: false),
+        );
+        final passwordHashOffset = fbb.writeString(object.passwordHash);
+        fbb.startTable(12);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, nameOffset);
+        fbb.addOffset(2, goalsOffset);
+        fbb.addOffset(3, hobbiesOffset);
+        fbb.addOffset(4, triggersOffset);
+        fbb.addInt64(5, object.streakGoal);
+        fbb.addOffset(6, passwordHashOffset);
+        fbb.addBool(7, object.biometricEnabled);
+        fbb.addBool(8, object.notificationsEnabled);
+        fbb.addInt64(9, object.createdAt.millisecondsSinceEpoch);
+        fbb.addInt64(10, object.lastUpdated.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final nameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final goalsParam = const fb.ListReader<String>(
+          fb.StringReader(asciiOptimization: true),
+          lazy: false,
+        ).vTableGet(buffer, rootOffset, 8, []);
+        final hobbiesParam = const fb.ListReader<String>(
+          fb.StringReader(asciiOptimization: true),
+          lazy: false,
+        ).vTableGet(buffer, rootOffset, 10, []);
+        final triggersParam = const fb.ListReader<String>(
+          fb.StringReader(asciiOptimization: true),
+          lazy: false,
+        ).vTableGet(buffer, rootOffset, 12, []);
+        final streakGoalParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          14,
+          0,
+        );
+        final passwordHashParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 16, '');
+        final biometricEnabledParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          18,
+          false,
+        );
+        final notificationsEnabledParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          20,
+          false,
+        );
+        final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0),
+        );
+        final lastUpdatedParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0),
+        );
+        final object = UserProfile(
+          id: idParam,
+          name: nameParam,
+          goals: goalsParam,
+          hobbies: hobbiesParam,
+          triggers: triggersParam,
+          streakGoal: streakGoalParam,
+          passwordHash: passwordHashParam,
+          biometricEnabled: biometricEnabledParam,
+          notificationsEnabled: notificationsEnabledParam,
+          createdAt: createdAtParam,
+          lastUpdated: lastUpdatedParam,
+        );
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -373,5 +553,63 @@ class Streak_ {
   /// See [Streak.isSuccess].
   static final isSuccess = obx.QueryBooleanProperty<Streak>(
     _entities[1].properties[8],
+  );
+}
+
+/// [UserProfile] entity fields to define ObjectBox queries.
+class UserProfile_ {
+  /// See [UserProfile.id].
+  static final id = obx.QueryIntegerProperty<UserProfile>(
+    _entities[2].properties[0],
+  );
+
+  /// See [UserProfile.name].
+  static final name = obx.QueryStringProperty<UserProfile>(
+    _entities[2].properties[1],
+  );
+
+  /// See [UserProfile.goals].
+  static final goals = obx.QueryStringVectorProperty<UserProfile>(
+    _entities[2].properties[2],
+  );
+
+  /// See [UserProfile.hobbies].
+  static final hobbies = obx.QueryStringVectorProperty<UserProfile>(
+    _entities[2].properties[3],
+  );
+
+  /// See [UserProfile.triggers].
+  static final triggers = obx.QueryStringVectorProperty<UserProfile>(
+    _entities[2].properties[4],
+  );
+
+  /// See [UserProfile.streakGoal].
+  static final streakGoal = obx.QueryIntegerProperty<UserProfile>(
+    _entities[2].properties[5],
+  );
+
+  /// See [UserProfile.passwordHash].
+  static final passwordHash = obx.QueryStringProperty<UserProfile>(
+    _entities[2].properties[6],
+  );
+
+  /// See [UserProfile.biometricEnabled].
+  static final biometricEnabled = obx.QueryBooleanProperty<UserProfile>(
+    _entities[2].properties[7],
+  );
+
+  /// See [UserProfile.notificationsEnabled].
+  static final notificationsEnabled = obx.QueryBooleanProperty<UserProfile>(
+    _entities[2].properties[8],
+  );
+
+  /// See [UserProfile.createdAt].
+  static final createdAt = obx.QueryDateProperty<UserProfile>(
+    _entities[2].properties[9],
+  );
+
+  /// See [UserProfile.lastUpdated].
+  static final lastUpdated = obx.QueryDateProperty<UserProfile>(
+    _entities[2].properties[10],
   );
 }

@@ -1,23 +1,27 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'models/onboarding_data.dart';
 import 'screens/goals_screen.dart';
 import 'screens/hobbies_screen.dart';
 import 'screens/security_screen.dart';
 import 'screens/triggers_screen.dart';
 import 'screens/welcome_screen.dart';
-import 'services/storage_service.dart';
+import 'screens/name_screen.dart';
+import '../../providers/user_profile_provider.dart';
+import '../../models/user_profile_model.dart' as user_profile;
 
-class OnboardingFlow extends StatefulWidget {
-  final VoidCallback onComplete;
+class OnboardingFlow extends ConsumerStatefulWidget {
+  final Function(BuildContext context)? onComplete;
   final OnboardingData? initialData;
 
-  const OnboardingFlow({super.key, required this.onComplete, this.initialData});
+  const OnboardingFlow({super.key, this.onComplete, this.initialData});
 
   @override
-  State<OnboardingFlow> createState() => _OnboardingFlowState();
+  ConsumerState<OnboardingFlow> createState() => _OnboardingFlowState();
 }
 
-class _OnboardingFlowState extends State<OnboardingFlow> {
+class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   late PageController _pageController;
   late OnboardingData _data;
   int _currentPage = 0;
@@ -35,19 +39,46 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     super.dispose();
   }
 
-  void _handleNext() {
-    if (_currentPage < 4) {
+  void _handleNext() async {
+    if (_currentPage < 5) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
-      // Save the hashed password before completing onboarding
-      if (_data.password.isNotEmpty) {
-        StorageService.savePassword(_data.password);
-      }
-      widget.onComplete();
+      // Save the user profile instead of using shared preferences
+      await _saveUserProfile();
+
+      if (!mounted) return;
+      widget.onComplete?.call(context);
     }
+  }
+
+  Future<void> _saveUserProfile() async {
+    // Create a user profile from the onboarding data
+    final profile = user_profile.UserProfile(
+      name: _data.name,
+      goals: _data.allGoals,
+      hobbies: _data.allHobbies,
+      triggers: _data.allTriggers,
+      streakGoal: 1, // Default streak goal
+      passwordHash: _hashPassword(_data.password), // Hash the password
+      biometricEnabled: _data.biometricEnabled,
+      notificationsEnabled: _data.notificationsEnabled,
+    );
+
+    // Save the user profile
+    await ref.read(userProfileProvider.notifier).saveProfile(profile);
+  }
+
+  String _hashPassword(String password) {
+    // Simple hash function for demonstration purposes only
+    // In a real application, you would use a proper cryptographic hash function
+    final salt = 'escape_app_salt';
+    final combined = '$password$salt';
+    final bytes = utf8.encode(combined);
+    final hash = bytes.fold<int>(0, (prev, element) => prev + element);
+    return hash.toString();
   }
 
   void _handleBack() {
@@ -66,6 +97,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   OnboardingData _updateData({
+    String? name,
     List<String>? selectedGoals,
     List<String>? customGoals,
     List<String>? selectedHobbies,
@@ -77,15 +109,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     bool? notificationsEnabled,
   }) {
     _data = _data.copyWith(
-      selectedGoals: selectedGoals,
-      customGoals: customGoals,
-      selectedHobbies: selectedHobbies,
-      customHobbies: customHobbies,
-      selectedTriggers: selectedTriggers,
-      customTriggers: customTriggers,
-      password: password,
-      biometricEnabled: biometricEnabled,
-      notificationsEnabled: notificationsEnabled,
+      name: name ?? _data.name,
+      selectedGoals: selectedGoals ?? _data.selectedGoals,
+      customGoals: customGoals ?? _data.customGoals,
+      selectedHobbies: selectedHobbies ?? _data.selectedHobbies,
+      customHobbies: customHobbies ?? _data.customHobbies,
+      selectedTriggers: selectedTriggers ?? _data.selectedTriggers,
+      customTriggers: customTriggers ?? _data.customTriggers,
+      password: password ?? _data.password,
+      biometricEnabled: biometricEnabled ?? _data.biometricEnabled,
+      notificationsEnabled: notificationsEnabled ?? _data.notificationsEnabled,
     );
     return _data;
   }
@@ -100,6 +133,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           WelcomeScreen(onNext: _handleNext),
+          NameScreen(
+            data: _data,
+            onNext: (updatedData) {
+              setState(() {
+                _data = updatedData;
+              });
+              _handleNext();
+            },
+            onBack: _handleBack,
+          ),
           GoalsScreen(
             data: _data,
             onNext: () {

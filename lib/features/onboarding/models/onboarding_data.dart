@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class OnboardingData {
+  final String name;
   final List<String> selectedGoals;
   final List<String> customGoals;
   final List<String> selectedHobbies;
@@ -12,6 +13,7 @@ class OnboardingData {
   final bool notificationsEnabled;
 
   const OnboardingData({
+    this.name = '',
     this.selectedGoals = const [],
     this.customGoals = const [],
     this.selectedHobbies = const [],
@@ -24,6 +26,7 @@ class OnboardingData {
   });
 
   OnboardingData copyWith({
+    String? name,
     List<String>? selectedGoals,
     List<String>? customGoals,
     List<String>? selectedHobbies,
@@ -35,6 +38,7 @@ class OnboardingData {
     bool? notificationsEnabled,
   }) {
     return OnboardingData(
+      name: name ?? this.name,
       selectedGoals: selectedGoals ?? this.selectedGoals,
       customGoals: customGoals ?? this.customGoals,
       selectedHobbies: selectedHobbies ?? this.selectedHobbies,
@@ -49,6 +53,7 @@ class OnboardingData {
 
   Map<String, dynamic> toJson() {
     return {
+      'name': name,
       'selectedGoals': selectedGoals,
       'customGoals': customGoals,
       'selectedHobbies': selectedHobbies,
@@ -63,6 +68,7 @@ class OnboardingData {
 
   factory OnboardingData.fromJson(Map<String, dynamic> json) {
     return OnboardingData(
+      name: json['name'] ?? '',
       selectedGoals: List<String>.from(json['selectedGoals'] ?? []),
       customGoals: List<String>.from(json['customGoals'] ?? []),
       selectedHobbies: List<String>.from(json['selectedHobbies'] ?? []),
@@ -79,6 +85,7 @@ class OnboardingData {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is OnboardingData &&
+        other.name == name &&
         listEquals(other.selectedGoals, selectedGoals) &&
         listEquals(other.customGoals, customGoals) &&
         listEquals(other.selectedHobbies, selectedHobbies) &&
@@ -93,6 +100,7 @@ class OnboardingData {
   @override
   int get hashCode {
     return Object.hash(
+      name,
       selectedGoals,
       customGoals,
       selectedHobbies,
@@ -106,7 +114,8 @@ class OnboardingData {
   }
 
   bool get isComplete {
-    return (selectedGoals.isNotEmpty || customGoals.isNotEmpty) &&
+    return name.isNotEmpty &&
+        (selectedGoals.isNotEmpty || customGoals.isNotEmpty) &&
         (selectedHobbies.isNotEmpty || customHobbies.isNotEmpty) &&
         (selectedTriggers.isNotEmpty || customTriggers.isNotEmpty) &&
         password.isNotEmpty;

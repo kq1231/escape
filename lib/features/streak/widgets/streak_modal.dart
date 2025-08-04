@@ -170,23 +170,42 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                         // Do nothing if success/relapse is not selected
                       }
                     : () {
-                        // Handle submission based on success/relapse
+                        // Update already existing streak
                         if (widget.streak != null) {
-                          // Update existing streak
-                          // For updating, we need to preserve the count logic
-                          if (isSuccess!) {
+                          // If changed to success from relapse, increment count
+                          if (widget.streak!.isSuccess == false && isSuccess!) {
                             ref
                                 .read(todaysStreakProvider.notifier)
                                 .markSuccess(
-                                  emotion: selectedEmotion,
-                                  moodIntensity: moodIntensity,
+                                  widget.streak!.copyWith(
+                                    emotion: selectedEmotion,
+                                    moodIntensity: moodIntensity,
+                                    isSuccess: isSuccess,
+                                  ),
                                 );
-                          } else {
+                          }
+                          // If changed to relapse from success, reset count
+                          else if (widget.streak!.isSuccess == true &&
+                              isSuccess == false) {
                             ref
                                 .read(todaysStreakProvider.notifier)
                                 .markRelapse(
-                                  emotion: selectedEmotion,
-                                  moodIntensity: moodIntensity,
+                                  widget.streak!.copyWith(
+                                    emotion: selectedEmotion,
+                                    moodIntensity: moodIntensity,
+                                    isSuccess: isSuccess,
+                                  ),
+                                );
+                          } else {
+                            // If success did not change, just update the streak
+                            ref
+                                .read(todaysStreakProvider.notifier)
+                                .updateStreak(
+                                  widget.streak!.copyWith(
+                                    emotion: selectedEmotion,
+                                    moodIntensity: moodIntensity,
+                                    isSuccess: isSuccess,
+                                  ),
                                 );
                           }
                         } else {
@@ -195,15 +214,19 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                             ref
                                 .read(todaysStreakProvider.notifier)
                                 .markSuccess(
-                                  emotion: selectedEmotion,
-                                  moodIntensity: moodIntensity,
+                                  Streak(
+                                    emotion: selectedEmotion,
+                                    moodIntensity: moodIntensity,
+                                  ),
                                 );
                           } else {
                             ref
                                 .read(todaysStreakProvider.notifier)
                                 .markRelapse(
-                                  emotion: selectedEmotion,
-                                  moodIntensity: moodIntensity,
+                                  Streak(
+                                    emotion: selectedEmotion,
+                                    moodIntensity: moodIntensity,
+                                  ),
                                 );
                           }
                         }

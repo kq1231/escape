@@ -131,120 +131,16 @@ class StreakRepository extends _$StreakRepository {
   }
 
   // Mark success - increment streak count
-  Future<int> markSuccess({
-    required String emotion,
-    required int moodIntensity,
-  }) async {
-    final DateTime now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final startOfDay = DateTime(today.year, today.month, today.day);
-    final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
-
-    // Check if there's already a streak record for today
-    final query = _streakBox
-        .query(Streak_.date.betweenDate(startOfDay, endOfDay))
-        .build();
-    final result = query.find();
-    query.close();
-
-    Streak streak;
-    if (result.isEmpty) {
-      // No streak record for today, create a new one
-      // Get yesterday's streak to determine today's starting count
-      final yesterday = DateTime(today.year, today.month, today.day - 1);
-      final yesterdayStart = DateTime(
-        yesterday.year,
-        yesterday.month,
-        yesterday.day,
-      );
-      final yesterdayEnd = DateTime(
-        yesterday.year,
-        yesterday.month,
-        yesterday.day,
-        23,
-        59,
-        59,
-      );
-
-      final yesterdayQuery = _streakBox
-          .query(Streak_.date.betweenDate(yesterdayStart, yesterdayEnd))
-          .build();
-      final yesterdayResult = yesterdayQuery.find();
-      yesterdayQuery.close();
-
-      final yesterdayStreakCount = yesterdayResult.isEmpty
-          ? 0
-          : yesterdayResult.first.count;
-
-      // Create new streak with incremented count
-      streak = Streak(
-        count: yesterdayStreakCount + 1,
-        goal: 1, // Default goal
-        emotion: emotion,
-        moodIntensity: moodIntensity,
-        isSuccess: true, // Mark as success
-        date: today,
-      );
-    } else {
-      // Update existing streak record for today
-      final existingStreak = result.first;
-      streak = existingStreak.copyWith(
-        count: existingStreak.isSuccess
-            ? existingStreak.count
-            : existingStreak.count + 1, // Only increment if it was a relapse
-        emotion: emotion,
-        moodIntensity: moodIntensity,
-        isSuccess: true, // Mark as success
-        lastUpdated: DateTime.now(),
-      );
-    }
-
-    final id = _streakBox.put(streak);
+  Future<int> markSuccess({required Streak streak}) async {
+    final id = _streakBox.put(streak..count = streak.count + 1);
     // Refresh the state
     ref.invalidateSelf();
     return id;
   }
 
   // Mark relapse - reset streak to 0
-  Future<int> markRelapse({
-    required String emotion,
-    required int moodIntensity,
-  }) async {
-    final today = DateTime.now();
-    final startOfDay = DateTime(today.year, today.month, today.day);
-    final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
-
-    // Check if there's already a streak record for today
-    final query = _streakBox
-        .query(Streak_.date.betweenDate(startOfDay, endOfDay))
-        .build();
-    final result = query.find();
-    query.close();
-
-    Streak streak;
-    if (result.isEmpty) {
-      // No streak record for today, create a new one with count 0
-      streak = Streak(
-        count: 0,
-        goal: 1, // Default goal
-        emotion: emotion,
-        moodIntensity: moodIntensity,
-        isSuccess: false, // Mark as relapse
-        date: today,
-      );
-    } else {
-      // Update existing streak record for today
-      final existingStreak = result.first;
-      streak = existingStreak.copyWith(
-        count: 0,
-        emotion: emotion,
-        moodIntensity: moodIntensity,
-        isSuccess: false, // Mark as relapse
-        lastUpdated: DateTime.now(),
-      );
-    }
-
-    final id = _streakBox.put(streak);
+  Future<int> markRelapse({required Streak streak}) async {
+    final id = _streakBox.put(streak..count = 0);
     // Refresh the state
     ref.invalidateSelf();
     return id;

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:escape/providers/goal_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:escape/models/quick_stats_model.dart' as quick_stats;
 import 'package:escape/repositories/prayer_repository.dart';
@@ -24,6 +25,7 @@ class QuickStats extends _$QuickStats {
     final prayerCountStream = prayerRepository.watchCompletedPrayerCount();
     final bestStreakStream = streakRepository.watchBestStreak();
     final currentStreakStream = streakRepository.watchCurrentStreak();
+    final streakGoal = ref.watch(goalProvider);
 
     // Get initial values
     int? latestPrayerCount;
@@ -41,11 +43,8 @@ class QuickStats extends _$QuickStats {
             bestStreak: latestBestStreak?.count ?? 0,
             currentMood: latestCurrentStreak?.moodIntensity ?? 5,
             progressToGoal: latestCurrentStreak != null
-                ? (latestCurrentStreak!.goal > 0
-                      ? (latestCurrentStreak!.count /
-                                latestCurrentStreak!.goal *
-                                100)
-                            .round()
+                ? (streakGoal > 0
+                      ? (latestCurrentStreak!.count / streakGoal * 100).round()
                       : 0)
                 : 0,
           ),

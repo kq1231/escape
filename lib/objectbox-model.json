@@ -85,9 +85,73 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:8512291693082550534",
+      "lastPropertyId": "11:2007209796577511304",
+      "name": "UserProfile",
+      "properties": [
+        {
+          "id": "1:7626070384926860621",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:4919641217540815294",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:671748751485565877",
+          "name": "goals",
+          "type": 30
+        },
+        {
+          "id": "4:7411803757707392293",
+          "name": "hobbies",
+          "type": 30
+        },
+        {
+          "id": "5:6796478754985101917",
+          "name": "triggers",
+          "type": 30
+        },
+        {
+          "id": "6:3751846143681267266",
+          "name": "streakGoal",
+          "type": 6
+        },
+        {
+          "id": "7:7587397390803279660",
+          "name": "passwordHash",
+          "type": 9
+        },
+        {
+          "id": "8:1708789767381654030",
+          "name": "biometricEnabled",
+          "type": 1
+        },
+        {
+          "id": "9:3497005368154987552",
+          "name": "notificationsEnabled",
+          "type": 1
+        },
+        {
+          "id": "10:7007787891191731417",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "11:2007209796577511304",
+          "name": "lastUpdated",
+          "type": 10
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:706345959104340872",
+  "lastEntityId": "3:8512291693082550534",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
