@@ -12,26 +12,41 @@ part 'user_profile_provider.g.dart';
 class UserProfile extends _$UserProfile {
   @override
   Future<user_profile.UserProfile?> build() async {
-    // Watch the user profile repository for changes
     final repository = ref.read(userProfileRepositoryProvider.notifier);
-    Stream stream = repository.watchUserProfile();
 
-    // First await the first event
-    user_profile.UserProfile? profile = await stream.first;
+    // Create stream only once
+    final stream = repository.watchUserProfile();
 
-    // Then listen to future events
-    stream = repository.watchUserProfile(); // Because stream.first
-    //consumes the stream (i.e. cancels it)
+    // Use a Completer to handle the first value
+    final completer = Completer<user_profile.UserProfile?>();
+    bool isFirst = true;
 
-    StreamSubscription listener = stream.listen((profile) {
-      state = AsyncValue.data(profile);
-    });
+    StreamSubscription subscription = stream.listen(
+      (profile) {
+        if (isFirst) {
+          // Complete initialization with first value
+          completer.complete(profile);
+          isFirst = false;
+        } else {
+          // Handle subsequent updates
+          state = AsyncValue.data(profile);
+        }
+      },
+      onError: (error, stackTrace) {
+        if (isFirst) {
+          completer.completeError(error, stackTrace);
+        } else {
+          state = AsyncValue.error(error, stackTrace);
+        }
+      },
+    );
 
     ref.onDispose(() {
-      listener.cancel();
+      subscription.cancel();
     });
 
-    return profile;
+    // Wait for first emission
+    return await completer.future;
   }
 
   /// Save the user profile
