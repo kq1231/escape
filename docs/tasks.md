@@ -20,8 +20,35 @@
 
 ---
 
+1. Create the profile screen
+2. User should also be able to upload their avatar / picture
+3. Password encryption: 
+    - Encryption Service
+    - Password Screen that should be shown at start (bind with the success screen `MainAppScreen`)
+4. Use a stack for maintaining the state of the pages in the onboarding flow
+
+---
+
 1. Design the emergency screen with full dedication and love 
 2. Ask the user thoughtful questions 
 3. Remind the user of Allah, punishment and Jannah, and what would happen if they relapse vs. if they stay firm
 4. Remind them that Allah does not burden a soul more than it can bear
 5. Show them breathing exercises, etc. 
+
+---
+
+1. Show history of streaks
+2. Show history of relapses 
+3. Show history of prayers!
+
+---
+
+1. Show prayer times
+    - Incorporate the aladhaan API
+    - Add notifications for each prayer
+2. Add reminder notifs for recording streak
+
+---
+
+1. A beautiful component for showing daily Du'a
+2. A beautiful screen for showing Du'as, daily Adkhaar, etc.
