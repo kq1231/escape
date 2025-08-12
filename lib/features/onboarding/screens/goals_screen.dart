@@ -60,8 +60,8 @@ class _GoalsScreenState extends State<GoalsScreen> {
   Widget build(BuildContext context) {
     return OnboardingPageTemplate(
       title: '',
-      currentStep: 2,
-      totalSteps: 5,
+      currentStep: 3,
+      totalSteps: 7,
       onBack: widget.onBack,
       onNext: _handleNext,
       nextButtonText: 'Continue',

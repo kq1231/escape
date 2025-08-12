@@ -8,6 +8,7 @@ import 'screens/security_screen.dart';
 import 'screens/triggers_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/name_screen.dart';
+import 'screens/profile_image_screen.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../models/user_profile_model.dart' as user_profile;
 
@@ -40,7 +41,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   }
 
   void _handleNext() async {
-    if (_currentPage < 5) {
+    if (_currentPage < 6) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -65,6 +66,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
       passwordHash: _hashPassword(_data.password), // Hash the password
       biometricEnabled: _data.biometricEnabled,
       notificationsEnabled: _data.notificationsEnabled,
+      profilePicture: _data.profilePicture,
     );
 
     // Save the user profile
@@ -107,6 +109,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
     String? password,
     bool? biometricEnabled,
     bool? notificationsEnabled,
+    String? profilePicture,
   }) {
     _data = _data.copyWith(
       name: name ?? _data.name,
@@ -119,6 +122,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
       password: password ?? _data.password,
       biometricEnabled: biometricEnabled ?? _data.biometricEnabled,
       notificationsEnabled: notificationsEnabled ?? _data.notificationsEnabled,
+      profilePicture: profilePicture ?? _data.profilePicture,
     );
     return _data;
   }
@@ -134,6 +138,16 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
         children: [
           WelcomeScreen(onNext: _handleNext),
           NameScreen(
+            data: _data,
+            onNext: (updatedData) {
+              setState(() {
+                _data = updatedData;
+              });
+              _handleNext();
+            },
+            onBack: _handleBack,
+          ),
+          ProfileImageScreen(
             data: _data,
             onNext: (updatedData) {
               setState(() {

@@ -81,8 +81,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
   Widget build(BuildContext context) {
     return OnboardingPageTemplate(
       title: '',
-      currentStep: 5,
-      totalSteps: 5,
+      currentStep: 6,
+      totalSteps: 7,
       onBack: widget.onBack,
       onNext: _handleNext,
       nextButtonText: 'Complete Setup',

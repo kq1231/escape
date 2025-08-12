@@ -11,6 +11,7 @@ class OnboardingData {
   final String password;
   final bool biometricEnabled;
   final bool notificationsEnabled;
+  final String profilePicture;
 
   const OnboardingData({
     this.name = '',
@@ -23,6 +24,7 @@ class OnboardingData {
     this.password = '',
     this.biometricEnabled = false,
     this.notificationsEnabled = true,
+    this.profilePicture = '',
   });
 
   OnboardingData copyWith({
@@ -36,6 +38,7 @@ class OnboardingData {
     String? password,
     bool? biometricEnabled,
     bool? notificationsEnabled,
+    String? profilePicture,
   }) {
     return OnboardingData(
       name: name ?? this.name,
@@ -48,6 +51,7 @@ class OnboardingData {
       password: password ?? this.password,
       biometricEnabled: biometricEnabled ?? this.biometricEnabled,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      profilePicture: profilePicture ?? this.profilePicture,
     );
   }
 
@@ -63,6 +67,7 @@ class OnboardingData {
       'password': password,
       'biometricEnabled': biometricEnabled,
       'notificationsEnabled': notificationsEnabled,
+      'profilePicture': profilePicture,
     };
   }
 
@@ -78,6 +83,7 @@ class OnboardingData {
       password: json['password'] ?? '',
       biometricEnabled: json['biometricEnabled'] ?? false,
       notificationsEnabled: json['notificationsEnabled'] ?? true,
+      profilePicture: json['profilePicture'] ?? '',
     );
   }
 
@@ -94,7 +100,8 @@ class OnboardingData {
         listEquals(other.customTriggers, customTriggers) &&
         other.password == password &&
         other.biometricEnabled == biometricEnabled &&
-        other.notificationsEnabled == notificationsEnabled;
+        other.notificationsEnabled == notificationsEnabled &&
+        other.profilePicture == profilePicture;
   }
 
   @override
@@ -110,6 +117,7 @@ class OnboardingData {
       password,
       biometricEnabled,
       notificationsEnabled,
+      profilePicture,
     );
   }
 

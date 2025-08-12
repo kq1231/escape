@@ -88,7 +88,7 @@
     },
     {
       "id": "3:8512291693082550534",
-      "lastPropertyId": "11:2007209796577511304",
+      "lastPropertyId": "12:4431811609107151357",
       "name": "UserProfile",
       "properties": [
         {
@@ -146,6 +146,11 @@
           "id": "11:2007209796577511304",
           "name": "lastUpdated",
           "type": 10
+        },
+        {
+          "id": "12:4431811609107151357",
+          "name": "profilePicture",
+          "type": 9
         }
       ],
       "relations": []

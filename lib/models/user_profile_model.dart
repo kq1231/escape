@@ -29,6 +29,17 @@ class UserProfile {
   // Notifications enabled
   bool notificationsEnabled;
 
+  // Profile picture path/URL (relative path)
+  String profilePicture;
+
+  // Getter to get the full path of the profile picture
+  String get fullProfilePicturePath {
+    if (profilePicture.isEmpty) return '';
+    // This getter should be used in async context to get the full path
+    // For now, we'll return the relative path and let the UI handle the full path resolution
+    return profilePicture;
+  }
+
   // Creation timestamp
   @Property(type: PropertyType.date)
   DateTime createdAt;
@@ -48,6 +59,7 @@ class UserProfile {
     this.passwordHash = '',
     this.biometricEnabled = false,
     this.notificationsEnabled = true,
+    this.profilePicture = '',
     DateTime? createdAt,
     DateTime? lastUpdated,
   }) : goals = goals ?? [],
@@ -67,6 +79,7 @@ class UserProfile {
     String? passwordHash,
     bool? biometricEnabled,
     bool? notificationsEnabled,
+    String? profilePicture,
     DateTime? createdAt,
     DateTime? lastUpdated,
   }) {
@@ -80,6 +93,7 @@ class UserProfile {
       passwordHash: passwordHash ?? this.passwordHash,
       biometricEnabled: biometricEnabled ?? this.biometricEnabled,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      profilePicture: profilePicture ?? this.profilePicture,
       createdAt: createdAt ?? this.createdAt,
       lastUpdated: lastUpdated ?? DateTime.now(),
     );
@@ -96,6 +110,6 @@ class UserProfile {
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, name: $name, goals: $goals, hobbies: $hobbies, triggers: $triggers, streakGoal: $streakGoal, passwordHash: $passwordHash, biometricEnabled: $biometricEnabled, notificationsEnabled: $notificationsEnabled, createdAt: $createdAt, lastUpdated: $lastUpdated)';
+    return 'UserProfile(id: $id, name: $name, goals: $goals, hobbies: $hobbies, triggers: $triggers, streakGoal: $streakGoal, passwordHash: $passwordHash, biometricEnabled: $biometricEnabled, notificationsEnabled: $notificationsEnabled, profilePicture: $profilePicture, createdAt: $createdAt, lastUpdated: $lastUpdated)';
   }
 }

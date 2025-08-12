@@ -4,6 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../theme/app_theme.dart';
 import '../widgets/goal_modal.dart';
 import '../../../providers/goal_provider.dart';
+import '../../../providers/user_profile_provider.dart';
+import '../../profile/screens/profile_screen.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class StreakOrganism extends ConsumerWidget {
   final Streak streak;
@@ -65,6 +70,153 @@ class StreakOrganism extends ConsumerWidget {
     );
   }
 
+  Widget _buildProfileButton(BuildContext context, WidgetRef ref) {
+    // Get the user profile from the provider
+    final userProfileAsync = ref.watch(userProfileProvider);
+
+    return userProfileAsync.when(
+      data: (userProfile) {
+        if (userProfile == null) {
+          // If no profile, show default user icon
+          return Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: AppTheme.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.person, color: AppTheme.white, size: 24),
+              onPressed: () {
+                // Navigate to profile screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+
+        // Check if user has a profile picture
+        if (userProfile.profilePicture.isNotEmpty) {
+          // Try to load the profile image
+          return FutureBuilder<String>(
+            future: _getFullImagePath(userProfile.profilePicture),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data != null) {
+                return Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: AppTheme.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      // Navigate to profile screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProfileScreen(),
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundImage: FileImage(File(snapshot.data!)),
+                      backgroundColor: AppTheme.white.withValues(alpha: 0.2),
+                    ),
+                  ),
+                );
+              } else {
+                // Fallback to default user icon if image loading fails
+                return Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: AppTheme.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.person,
+                      color: AppTheme.white,
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      // Navigate to profile screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProfileScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          );
+        } else {
+          // If no profile picture, show default user icon
+          return Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: AppTheme.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.person, color: AppTheme.white, size: 24),
+              onPressed: () {
+                // Navigate to profile screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
+      loading: () => Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppTheme.white.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        ),
+        child: const IconButton(
+          icon: Icon(Icons.person, color: AppTheme.white, size: 24),
+          onPressed: null,
+        ),
+      ),
+      error: (error, stack) => Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppTheme.white.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        ),
+        child: IconButton(
+          icon: const Icon(Icons.person, color: AppTheme.white, size: 24),
+          onPressed: () {
+            // Navigate to profile screen even if there's an error
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// Gets the full path for a relative image path
+  Future<String> _getFullImagePath(String relativePath) async {
+    final appDir = await getApplicationDocumentsDirectory();
+    return path.join(appDir.path, relativePath);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
@@ -89,6 +241,12 @@ class StreakOrganism extends ConsumerWidget {
         ),
         child: Stack(
           children: [
+            // Profile button at top left
+            Positioned(
+              top: 0,
+              left: 0,
+              child: _buildProfileButton(context, ref),
+            ),
             // Goal setting button at top right
             Positioned(top: 0, right: 0, child: _buildGoalButton(context, ref)),
             SizedBox(

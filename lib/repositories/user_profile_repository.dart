@@ -6,7 +6,7 @@ import '../models/user_profile_model.dart';
 
 part 'user_profile_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 class UserProfileRepository extends _$UserProfileRepository {
   late Box<UserProfile> _userProfileBox;
 

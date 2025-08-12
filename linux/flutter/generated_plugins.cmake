@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   dynamic_color
+  file_selector_linux
   gtk
   objectbox_flutter_libs
   url_launcher_linux

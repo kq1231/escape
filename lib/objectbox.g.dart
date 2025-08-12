@@ -122,7 +122,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(3, 8512291693082550534),
     name: 'UserProfile',
-    lastPropertyId: const obx_int.IdUid(11, 2007209796577511304),
+    lastPropertyId: const obx_int.IdUid(12, 4431811609107151357),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -189,6 +189,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(11, 2007209796577511304),
         name: 'lastUpdated',
         type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(12, 4431811609107151357),
+        name: 'profilePicture',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -401,7 +407,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.triggers.map(fbb.writeString).toList(growable: false),
         );
         final passwordHashOffset = fbb.writeString(object.passwordHash);
-        fbb.startTable(12);
+        final profilePictureOffset = fbb.writeString(object.profilePicture);
+        fbb.startTable(13);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, nameOffset);
         fbb.addOffset(2, goalsOffset);
@@ -413,6 +420,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addBool(8, object.notificationsEnabled);
         fbb.addInt64(9, object.createdAt.millisecondsSinceEpoch);
         fbb.addInt64(10, object.lastUpdated.millisecondsSinceEpoch);
+        fbb.addOffset(11, profilePictureOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -461,6 +469,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           20,
           false,
         );
+        final profilePictureParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 26, '');
         final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
           const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0),
         );
@@ -477,6 +488,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           passwordHash: passwordHashParam,
           biometricEnabled: biometricEnabledParam,
           notificationsEnabled: notificationsEnabledParam,
+          profilePicture: profilePictureParam,
           createdAt: createdAtParam,
           lastUpdated: lastUpdatedParam,
         );
@@ -611,5 +623,10 @@ class UserProfile_ {
   /// See [UserProfile.lastUpdated].
   static final lastUpdated = obx.QueryDateProperty<UserProfile>(
     _entities[2].properties[10],
+  );
+
+  /// See [UserProfile.profilePicture].
+  static final profilePicture = obx.QueryStringProperty<UserProfile>(
+    _entities[2].properties[11],
   );
 }

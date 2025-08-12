@@ -60,8 +60,8 @@ class _HobbiesScreenState extends State<HobbiesScreen> {
   Widget build(BuildContext context) {
     return OnboardingPageTemplate(
       title: '',
-      currentStep: 3,
-      totalSteps: 5,
+      currentStep: 4,
+      totalSteps: 7,
       onBack: widget.onBack,
       onNext: _handleNext,
       nextButtonText: 'Continue',

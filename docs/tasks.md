@@ -20,12 +20,21 @@
 
 ---
 
-1. Create the profile screen
-2. User should also be able to upload their avatar / picture
-3. Password encryption: 
+1. Create the profile screen ✅
+2. User should also be able to upload their avatar / picture ✅
+
+---
+
+1. Make onboarding screen final; correct small and large details, remove bekaar stuff, fix bug where goals and other things are not being persisted in db. Could it be that the onboarding flow is not returning the objects?
+
+2. Make profile screen final; beautify it. It looks horrible.
+
+3. ImageService should be a RiverPod provider. An AsyncNotifier class.
+
+4. Password encryption: 
     - Encryption Service
     - Password Screen that should be shown at start (bind with the success screen `MainAppScreen`)
-4. Use a stack for maintaining the state of the pages in the onboarding flow
+5. Use a stack for maintaining the state of the pages in the onboarding flow
 
 ---
 

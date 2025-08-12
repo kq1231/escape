@@ -60,8 +60,8 @@ class _TriggersScreenState extends State<TriggersScreen> {
   Widget build(BuildContext context) {
     return OnboardingPageTemplate(
       title: '',
-      currentStep: 4,
-      totalSteps: 5,
+      currentStep: 5,
+      totalSteps: 7,
       onBack: widget.onBack,
       onNext: _handleNext,
       nextButtonText: 'Continue',

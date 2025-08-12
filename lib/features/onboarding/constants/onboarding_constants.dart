@@ -76,11 +76,20 @@ class OnboardingConstants {
   // Progress indicators
   static const String step1 = 'Welcome';
   static const String step2 = 'Name';
-  static const String step3 = 'Goals';
-  static const String step4 = 'Hobbies';
-  static const String step5 = 'Triggers';
-  static const String step6 = 'Security';
-  static const List<String> steps = [step1, step2, step3, step4, step5, step6];
+  static const String step3 = 'Profile';
+  static const String step4 = 'Goals';
+  static const String step5 = 'Hobbies';
+  static const String step6 = 'Triggers';
+  static const String step7 = 'Security';
+  static const List<String> steps = [
+    step1,
+    step2,
+    step3,
+    step4,
+    step5,
+    step6,
+    step7,
+  ];
 
   // Validation messages
   static const String passwordRequired = 'Password is required';

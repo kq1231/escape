@@ -55,7 +55,7 @@ class _NameScreenState extends State<NameScreen> {
     return OnboardingPageTemplate(
       title: 'What Should We Call You?',
       currentStep: 2,
-      totalSteps: 6,
+      totalSteps: 7,
       onBack: widget.onBack,
       onNext: _handleNext,
       nextButtonText: 'Continue',
