@@ -7,9 +7,8 @@ class OnboardingConstants {
   static const String welcomeSubtitle =
       'May Allah guide you towards purity and righteousness';
   static const String welcomeDescription =
-      'You\'ve taken the first step towards overcoming harmful habits. '
-      'This app will help you build a stronger connection with Allah while '
-      'providing practical tools for your recovery.';
+      'You\'ve taken the best step towards destroying harmful habits! '
+      'Get ready to transform your life!';
   static const String letsGoButton = 'Let\'s Begin This Journey';
 
   // Goals Screen
@@ -17,8 +16,7 @@ class OnboardingConstants {
   static const String goalsSubtitle =
       'Help us understand what you want to achieve';
   static const List<String> goals = [
-    'Overcome pornography addiction',
-    'Reduce masturbation frequency',
+    'Get rid of pornography',
     'Build stronger willpower',
     'Strengthen my faith',
     'Improve mental health',
@@ -39,7 +37,7 @@ class OnboardingConstants {
     'Nature walks',
     'Meditation & Prayer',
     'Social activities',
-    'Music (halal)',
+    'Listenting to Nasheeds',
     'Cooking',
     'Writing',
     'Photography',

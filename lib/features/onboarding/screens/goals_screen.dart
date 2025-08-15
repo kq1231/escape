@@ -6,7 +6,7 @@ import '../constants/onboarding_constants.dart';
 
 class GoalsScreen extends StatefulWidget {
   final OnboardingData data;
-  final VoidCallback onNext;
+  final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
   const GoalsScreen({
@@ -53,7 +53,13 @@ class _GoalsScreenState extends State<GoalsScreen> {
       });
       return;
     }
-    widget.onNext();
+
+    // Update the parent with the selected goals
+    final updatedData = widget.data.copyWith(
+      selectedGoals: _selectedGoals,
+      customGoals: _customGoals,
+    );
+    widget.onNext(updatedData);
   }
 
   @override

@@ -6,7 +6,7 @@ import '../constants/onboarding_constants.dart';
 
 class HobbiesScreen extends StatefulWidget {
   final OnboardingData data;
-  final VoidCallback onNext;
+  final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
   const HobbiesScreen({
@@ -53,7 +53,13 @@ class _HobbiesScreenState extends State<HobbiesScreen> {
       });
       return;
     }
-    widget.onNext();
+
+    // Update the parent with the selected hobbies
+    final updatedData = widget.data.copyWith(
+      selectedHobbies: _selectedHobbies,
+      customHobbies: _customHobbies,
+    );
+    widget.onNext(updatedData);
   }
 
   @override

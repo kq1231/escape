@@ -5,7 +5,7 @@ import '../templates/onboarding_page_template.dart';
 
 class SecurityScreen extends StatefulWidget {
   final OnboardingData data;
-  final VoidCallback onNext;
+  final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
   const SecurityScreen({
@@ -61,10 +61,34 @@ class _SecurityScreenState extends State<SecurityScreen> {
     });
   }
 
+  String? _getPasswordError() {
+    if (_password.isEmpty) {
+      return 'Password is required';
+    }
+    if (_password.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    if (!_password.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!_password.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
+    return null;
+  }
+
+  String? _getConfirmPasswordError() {
+    if (_confirmPassword.isEmpty) {
+      return 'Please confirm your password';
+    }
+    if (_password != _confirmPassword) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
   bool _isValid() {
-    return _password.isNotEmpty &&
-        _password.length >= 6 &&
-        _password == _confirmPassword;
+    return _getPasswordError() == null && _getConfirmPasswordError() == null;
   }
 
   void _handleNext() {
@@ -74,7 +98,14 @@ class _SecurityScreenState extends State<SecurityScreen> {
       });
       return;
     }
-    widget.onNext();
+
+    // Update the parent with the security data
+    final updatedData = widget.data.copyWith(
+      password: _password,
+      biometricEnabled: _biometricEnabled,
+      notificationsEnabled: _notificationsEnabled,
+    );
+    widget.onNext(updatedData);
   }
 
   @override

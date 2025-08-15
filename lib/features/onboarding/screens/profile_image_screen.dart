@@ -68,17 +68,15 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
           File(pickedFile.path),
         );
 
-        // Delete the old image if there was one
-        if (_profileImagePath.isNotEmpty) {
-          await _imageService.deleteImage(_profileImagePath);
-        }
+        // Clean up old images to ensure only the current one exists
+        await _imageService.cleanupOldImages(relativePath);
 
         // Update state with the new image
         final fullPath = await _imageService.getFullImagePath(relativePath);
         if (mounted) {
           setState(() {
             _profileImage = File(fullPath);
-            _profileImagePath = relativePath;
+            _profileImagePath = fullPath;
             _isLoading = false;
           });
         }

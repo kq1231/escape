@@ -6,7 +6,7 @@ import '../constants/onboarding_constants.dart';
 
 class TriggersScreen extends StatefulWidget {
   final OnboardingData data;
-  final VoidCallback onNext;
+  final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
   const TriggersScreen({
@@ -53,7 +53,13 @@ class _TriggersScreenState extends State<TriggersScreen> {
       });
       return;
     }
-    widget.onNext();
+
+    // Update the parent with the selected triggers
+    final updatedData = widget.data.copyWith(
+      selectedTriggers: _selectedTriggers,
+      customTriggers: _customTriggers,
+    );
+    widget.onNext(updatedData);
   }
 
   @override

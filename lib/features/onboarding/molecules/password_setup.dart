@@ -60,99 +60,121 @@ class _PasswordSetupState extends State<PasswordSetup> {
     if (value.length < 6) {
       return OnboardingConstants.passwordTooShort;
     }
+    if (!value.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!value.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
     return null;
   }
 
   String? _validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password';
+    }
     if (value != _passwordController.text) {
       return OnboardingConstants.passwordsDoNotMatch;
     }
     return null;
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            OnboardingConstants.securityTitle,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: AppTheme.spacingS),
-          Text(
-            OnboardingConstants.securitySubtitle,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          const SizedBox(height: AppTheme.spacingL),
-          InputField(
-            controller: _passwordController,
-            hintText: OnboardingConstants.passwordHint,
-            obscureText: _obscurePassword,
-            onChanged: widget.onPasswordChanged,
-            validator: _validatePassword,
-            showError: widget.showErrors,
-            errorText: _validatePassword(_passwordController.text),
-            suffixIcon: IconButton(
-              icon: Icon(
-                _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                color: AppTheme.mediumGray,
-              ),
-              onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              OnboardingConstants.securityTitle,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: AppTheme.spacingS),
+            Text(
+              OnboardingConstants.securitySubtitle,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            const SizedBox(height: AppTheme.spacingL),
+            InputField(
+              controller: _passwordController,
+              hintText: OnboardingConstants.passwordHint,
+              obscureText: _obscurePassword,
+              onChanged: (String str) {
+                _formKey.currentState!.validate();
+                widget.onPasswordChanged(str);
               },
-            ),
-          ),
-          const SizedBox(height: AppTheme.spacingM),
-          InputField(
-            controller: _confirmPasswordController,
-            hintText: OnboardingConstants.confirmPasswordHint,
-            obscureText: _obscureConfirmPassword,
-            onChanged: widget.onConfirmPasswordChanged,
-            validator: _validateConfirmPassword,
-            showError: widget.showErrors,
-            errorText: _validateConfirmPassword(
-              _confirmPasswordController.text,
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(
-                _obscureConfirmPassword
-                    ? Icons.visibility
-                    : Icons.visibility_off,
-                color: AppTheme.mediumGray,
+              validator: _validatePassword,
+              showError: widget.showErrors,
+              errorText: widget.showErrors
+                  ? _validatePassword(_passwordController.text)
+                  : null,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  color: AppTheme.mediumGray,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
               ),
-              onPressed: () {
-                setState(() {
-                  _obscureConfirmPassword = !_obscureConfirmPassword;
-                });
-              },
             ),
-          ),
-          const SizedBox(height: AppTheme.spacingL),
-          _buildToggleOption(
-            title: OnboardingConstants.enableBiometric,
-            value: widget.biometricEnabled,
-            onChanged: widget.onBiometricChanged,
-          ),
-          const SizedBox(height: AppTheme.spacingS),
-          _buildToggleOption(
-            title: OnboardingConstants.enableNotifications,
-            value: widget.notificationsEnabled,
-            onChanged: widget.onNotificationsChanged,
-          ),
-          const SizedBox(height: AppTheme.spacingM),
-          Text(
-            OnboardingConstants.privacyNote,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: AppTheme.spacingM),
+            InputField(
+              controller: _confirmPasswordController,
+              hintText: OnboardingConstants.confirmPasswordHint,
+              obscureText: _obscureConfirmPassword,
+              onChanged: (String str) {
+                _formKey.currentState!.validate();
+                widget.onConfirmPasswordChanged(str);
+              },
+              validator: _validateConfirmPassword,
+              showError: widget.showErrors,
+              errorText: widget.showErrors
+                  ? _validateConfirmPassword(_confirmPasswordController.text)
+                  : null,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscureConfirmPassword
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: AppTheme.mediumGray,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureConfirmPassword = !_obscureConfirmPassword;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(height: AppTheme.spacingL),
+            _buildToggleOption(
+              title: OnboardingConstants.enableBiometric,
+              value: widget.biometricEnabled,
+              onChanged: widget.onBiometricChanged,
+            ),
+            const SizedBox(height: AppTheme.spacingS),
+            _buildToggleOption(
+              title: OnboardingConstants.enableNotifications,
+              value: widget.notificationsEnabled,
+              onChanged: widget.onNotificationsChanged,
+            ),
+            const SizedBox(height: AppTheme.spacingM),
+            Text(
+              OnboardingConstants.privacyNote,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,39 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_profile_repository.dart';
+part of 'image_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(UserProfileRepository)
-const userProfileRepositoryProvider = UserProfileRepositoryProvider._();
+@ProviderFor(ImageRepository)
+const imageRepositoryProvider = ImageRepositoryProvider._();
 
-final class UserProfileRepositoryProvider
-    extends $AsyncNotifierProvider<UserProfileRepository, void> {
-  const UserProfileRepositoryProvider._()
+final class ImageRepositoryProvider
+    extends $AsyncNotifierProvider<ImageRepository, void> {
+  const ImageRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'userProfileRepositoryProvider',
+        name: r'imageRepositoryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$userProfileRepositoryHash();
+  String debugGetCreateSourceHash() => _$imageRepositoryHash();
 
   @$internal
   @override
-  UserProfileRepository create() => UserProfileRepository();
+  ImageRepository create() => ImageRepository();
 }
 
-String _$userProfileRepositoryHash() =>
-    r'512a931ef9c49786581f1e76fcdbea7049d93a43';
+String _$imageRepositoryHash() => r'3be520706a6542ad9a527e28ee170c18d1e2aa47';
 
-abstract class _$UserProfileRepository extends $AsyncNotifier<void> {
+abstract class _$ImageRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

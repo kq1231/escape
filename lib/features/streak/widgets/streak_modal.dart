@@ -96,7 +96,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                 Expanded(
                   child: CustomButton.success(
                     isSelected: isSuccess == true,
-                    text: 'Yes, I succeeded',
+                    text: 'Yes, I\nsucceeded',
                     onPressed: () {
                       setState(() {
                         isSuccess = true;
@@ -108,7 +108,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                 Expanded(
                   child: CustomButton.error(
                     isSelected: isSuccess == false,
-                    text: 'No, I relapsed',
+                    text: 'No, I\nrelapsed',
                     onPressed: () {
                       setState(() {
                         isSuccess = false;

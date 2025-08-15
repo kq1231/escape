@@ -41,7 +41,7 @@ class QuickStats extends _$QuickStats {
           quick_stats.QuickStats(
             totalPrayers: latestPrayerCount!,
             bestStreak: latestBestStreak?.count ?? 0,
-            currentMood: latestCurrentStreak?.moodIntensity ?? 5,
+            currentMood: latestCurrentStreak?.moodIntensity ?? 0,
             progressToGoal: latestCurrentStreak != null
                 ? (streakGoal > 0
                       ? (latestCurrentStreak!.count / streakGoal * 100).round()

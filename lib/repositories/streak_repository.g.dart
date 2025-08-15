@@ -17,7 +17,7 @@ final class StreakRepositoryProvider
         argument: null,
         retry: null,
         name: r'streakRepositoryProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -30,7 +30,7 @@ final class StreakRepositoryProvider
   StreakRepository create() => StreakRepository();
 }
 
-String _$streakRepositoryHash() => r'f921be13e8ce24ea15a2708421c4435661f0aac9';
+String _$streakRepositoryHash() => r'0a1816cadede3684765c2d427397d98721847791';
 
 abstract class _$StreakRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

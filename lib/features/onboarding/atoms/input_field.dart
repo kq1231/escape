@@ -69,6 +69,7 @@ class InputField extends StatelessWidget {
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         errorText: showError ? errorText : null,
+        errorMaxLines: 5,
         filled: true,
         fillColor: fillColor ?? AppTheme.lightGray,
         border: OutlineInputBorder(

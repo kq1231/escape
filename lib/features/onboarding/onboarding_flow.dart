@@ -23,29 +23,20 @@ class OnboardingFlow extends ConsumerStatefulWidget {
 }
 
 class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
-  late PageController _pageController;
   late OnboardingData _data;
   int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     _data = widget.initialData ?? const OnboardingData();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
   }
 
   void _handleNext() async {
     if (_currentPage < 6) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+      setState(() {
+        _currentPage++;
+      });
     } else {
       // Save the user profile instead of using shared preferences
       await _saveUserProfile();
@@ -85,56 +76,18 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
 
   void _handleBack() {
     if (_currentPage > 0) {
-      _pageController.previousPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+      setState(() {
+        _currentPage--;
+      });
     }
-  }
-
-  void _handlePageChanged(int page) {
-    setState(() {
-      _currentPage = page;
-    });
-  }
-
-  OnboardingData _updateData({
-    String? name,
-    List<String>? selectedGoals,
-    List<String>? customGoals,
-    List<String>? selectedHobbies,
-    List<String>? customHobbies,
-    List<String>? selectedTriggers,
-    List<String>? customTriggers,
-    String? password,
-    bool? biometricEnabled,
-    bool? notificationsEnabled,
-    String? profilePicture,
-  }) {
-    _data = _data.copyWith(
-      name: name ?? _data.name,
-      selectedGoals: selectedGoals ?? _data.selectedGoals,
-      customGoals: customGoals ?? _data.customGoals,
-      selectedHobbies: selectedHobbies ?? _data.selectedHobbies,
-      customHobbies: customHobbies ?? _data.customHobbies,
-      selectedTriggers: selectedTriggers ?? _data.selectedTriggers,
-      customTriggers: customTriggers ?? _data.customTriggers,
-      password: password ?? _data.password,
-      biometricEnabled: biometricEnabled ?? _data.biometricEnabled,
-      notificationsEnabled: notificationsEnabled ?? _data.notificationsEnabled,
-      profilePicture: profilePicture ?? _data.profilePicture,
-    );
-    return _data;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: _handlePageChanged,
-        physics: const NeverScrollableScrollPhysics(),
+      body: IndexedStack(
+        index: _currentPage,
         children: [
           WelcomeScreen(onNext: _handleNext),
           NameScreen(
@@ -159,40 +112,40 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
           ),
           GoalsScreen(
             data: _data,
-            onNext: () {
-              _updateData(
-                selectedGoals: _data.selectedGoals,
-                customGoals: _data.customGoals,
-              );
+            onNext: (updatedData) {
+              setState(() {
+                _data = updatedData;
+              });
               _handleNext();
             },
             onBack: _handleBack,
           ),
           HobbiesScreen(
             data: _data,
-            onNext: () {
-              _updateData(
-                selectedHobbies: _data.selectedHobbies,
-                customHobbies: _data.customHobbies,
-              );
+            onNext: (updatedData) {
+              setState(() {
+                _data = updatedData;
+              });
               _handleNext();
             },
             onBack: _handleBack,
           ),
           TriggersScreen(
             data: _data,
-            onNext: () {
-              _updateData(
-                selectedTriggers: _data.selectedTriggers,
-                customTriggers: _data.customTriggers,
-              );
+            onNext: (updatedData) {
+              setState(() {
+                _data = updatedData;
+              });
               _handleNext();
             },
             onBack: _handleBack,
           ),
           SecurityScreen(
             data: _data,
-            onNext: () {
+            onNext: (updatedData) {
+              setState(() {
+                _data = updatedData;
+              });
               _handleNext();
             },
             onBack: _handleBack,
