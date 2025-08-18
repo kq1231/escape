@@ -1,3 +1,4 @@
+import 'package:escape/features/temptation/services/temptation_storage_service.dart';
 import 'package:escape/providers/user_profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter/foundation.dart';
@@ -26,6 +27,9 @@ class AppStartup extends _$AppStartup {
 
       // Initialize theme provider
       await ref.read(themeModeNotifierProvider.future);
+
+      // Initialize temptation shared pref service
+      await TemptationStorageService().initialize();
 
       // Add any other initialization code here
       // For example:

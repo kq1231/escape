@@ -30,8 +30,6 @@ class ProfileScreen extends ConsumerWidget {
             return const Center(child: Text('No profile found'));
           }
 
-          print(profile.profilePicture);
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(

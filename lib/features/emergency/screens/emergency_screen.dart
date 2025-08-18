@@ -3,6 +3,7 @@ import '../atoms/emergency_button.dart';
 import '../atoms/tip_card.dart';
 import '../molecules/contact_selector.dart';
 import '../molecules/tips_carousel.dart';
+import '../../temptation/screens/temptation_flow_screen.dart';
 import 'package:escape/theme/app_theme.dart';
 
 class EmergencyScreen extends StatelessWidget {
@@ -90,16 +91,14 @@ class EmergencyScreen extends StatelessWidget {
             const SizedBox(height: 24),
             Center(
               child: EmergencyButton(
-                text: 'I Need Immediate Help',
-                icon: Icons.emergency,
+                text: 'I Need Help',
+                icon: Icons.favorite,
                 onPressed: () {
-                  // Show emergency help dialog or navigate to emergency services
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Emergency help activated! Calling emergency services...',
-                      ),
-                      backgroundColor: AppTheme.errorRed,
+                  // Navigate to temptation flow screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TemptationFlowScreen(),
                     ),
                   );
                 },

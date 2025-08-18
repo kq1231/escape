@@ -169,4 +169,21 @@ class StreakRepository extends _$StreakRepository {
           return result;
         });
   }
+
+  // Upsert operation - update if exists, create if doesn't
+  Future<int> upsertStreak(Streak streak) async {
+    // Check if streak exists for this date
+    final existing = getStreakByDate(streak.date);
+
+    if (existing != null) {
+      // Update existing
+      existing.count = streak.count;
+      existing.isSuccess = streak.isSuccess;
+      existing.lastUpdated = DateTime.now();
+      return await updateStreak(existing);
+    } else {
+      // Create new
+      return await createStreak(streak);
+    }
+  }
 }

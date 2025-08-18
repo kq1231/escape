@@ -70,4 +70,22 @@ class TodaysStreak extends _$TodaysStreak {
   int getCurrentStreak() {
     return ref.read(streakRepositoryProvider.notifier).getCurrentStreak();
   }
+
+  /// Reset streak due to relapse - creates/updates today's streak with count = 0
+  Future<void> resetStreakDueToRelapse() async {
+    final today = DateTime.now();
+    final todayStreak = Streak(
+      date: DateTime(today.year, today.month, today.day),
+      count: 0, // Reset to zero
+      isSuccess: false, // Mark as not clean
+      emotion: 'neutral',
+      moodIntensity: 5,
+    );
+
+    // Upsert operation - update if exists, create if doesn't
+    await ref.read(streakRepositoryProvider.notifier).upsertStreak(todayStreak);
+
+    // Invalidate current state to refresh UI
+    ref.invalidateSelf();
+  }
 }
