@@ -79,7 +79,7 @@ class TodaysStreak extends _$TodaysStreak {
       count: 0, // Reset to zero
       isSuccess: false, // Mark as not clean
       emotion: 'neutral',
-      moodIntensity: 5,
+      moodIntensity: 0,
     );
 
     // Upsert operation - update if exists, create if doesn't

@@ -21,7 +21,7 @@ class ActivityButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: onPressed,
@@ -34,12 +34,17 @@ class ActivityButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? (selectedColor ?? AppTheme.primaryGreen)
-              : (backgroundColor ?? AppTheme.lightGreen.withValues(alpha: 0.3)),
+              : (backgroundColor ??
+                    (isDarkMode
+                        ? AppTheme.primaryGreen.withValues(alpha: 0.1)
+                        : AppTheme.lightGreen.withValues(alpha: 0.3))),
           borderRadius: BorderRadius.circular(AppTheme.radiusL),
           border: Border.all(
             color: isSelected
                 ? (selectedColor ?? AppTheme.primaryGreen)
-                : AppTheme.mediumGray.withValues(alpha: 0.5),
+                : (isDarkMode
+                      ? Colors.white.withValues(alpha: 0.3)
+                      : AppTheme.mediumGray.withValues(alpha: 0.5)),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
@@ -59,7 +64,9 @@ class ActivityButton extends StatelessWidget {
               Icon(
                 icon,
                 size: 24,
-                color: isSelected ? AppTheme.white : AppTheme.darkGreen,
+                color: isSelected
+                    ? AppTheme.white
+                    : (isDarkMode ? Colors.white70 : AppTheme.darkGreen),
               ),
               const SizedBox(width: AppTheme.spacingS),
             ],
@@ -67,7 +74,9 @@ class ActivityButton extends StatelessWidget {
               activity,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                color: isSelected ? AppTheme.white : AppTheme.darkGreen,
+                color: isSelected
+                    ? AppTheme.white
+                    : (isDarkMode ? Colors.white70 : AppTheme.darkGreen),
                 fontSize: 16,
               ),
             ),

@@ -13,19 +13,13 @@ import '../features/prayer/atoms/triple_state_checkbox.dart';
 import '../models/prayer_model.dart';
 import '../repositories/prayer_repository.dart';
 import '../features/streak/widgets/streak_modal.dart';
-import '../features/temptation/services/temptation_storage_service.dart';
+import '../providers/has_active_temptation_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   // State variables for the home screen
   final bool _isEmergencyButtonEnabled = true;
-
-  // Add method to check for active temptation
-  bool _hasActiveTemptation() {
-    final temptationStorageService = TemptationStorageService();
-    return temptationStorageService.hasActiveTemptation();
-  }
 
   void _onStreakCardTap(BuildContext context, Streak? streak) {
     // Show streak modal
@@ -61,6 +55,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final todaysPrayersAsync = ref.watch(todaysPrayersProvider());
     final todaysStreakAsync = ref.watch(todaysStreakProvider);
+    final hasActiveTemptation = ref.watch(hasActiveTemptationProvider);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -69,7 +64,7 @@ class HomeScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Show active temptation warning if exists
-            if (_hasActiveTemptation()) ...[
+            if (hasActiveTemptation) ...[
               Container(
                 padding: const EdgeInsets.all(AppTheme.spacingL),
                 margin: const EdgeInsets.symmetric(
@@ -109,7 +104,9 @@ class HomeScreen extends ConsumerWidget {
                       'You have an ongoing temptation session. '
                       'Tap below to continue your journey.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.darkGray,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? AppTheme.darkGray
+                            : AppTheme.white,
                       ),
                     ),
                     const SizedBox(height: AppTheme.spacingL),

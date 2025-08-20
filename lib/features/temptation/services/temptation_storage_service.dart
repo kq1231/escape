@@ -9,6 +9,11 @@ class TemptationStorageService {
   static const String triggers = 'triggers';
   static const String createdAt = 'created_at';
 
+  // Timer tracking constants
+  static const String timerStartTime = 'timer_start_time';
+  static const String timerDuration = 'timer_duration_minutes';
+  static const String timerIsActive = 'timer_is_active';
+
   static final TemptationStorageService _instance =
       TemptationStorageService._internal();
   factory TemptationStorageService() => _instance;
@@ -183,7 +188,95 @@ class TemptationStorageService {
     };
   }
 
-  // Clear all temptation-related data
+  // Timer tracking methods
+
+  /// Start the timer with specified duration
+  Future<void> startTimer({int durationMinutes = 30}) async {
+    await _prefsInitialized.future;
+
+    await Future.wait([
+      _prefs.setString(timerStartTime, DateTime.now().toIso8601String()),
+      _prefs.setInt(timerDuration, durationMinutes),
+      _prefs.setBool(timerIsActive, true),
+    ]);
+  }
+
+  /// Stop the timer
+  Future<void> stopTimer() async {
+    await _prefsInitialized.future;
+    await _prefs.remove(timerStartTime);
+    await _prefs.remove(timerDuration);
+    await _prefs.remove(timerIsActive);
+  }
+
+  /// Check if timer is active
+  bool isTimerActive() {
+    return _prefs.getBool(timerIsActive) ?? false;
+  }
+
+  /// Get timer start time
+  DateTime? getTimerStartTime() {
+    final timeString = _prefs.getString(timerStartTime);
+    return timeString != null ? DateTime.parse(timeString) : null;
+  }
+
+  /// Get timer duration in minutes
+  int getTimerDuration() {
+    return _prefs.getInt(timerDuration) ?? 30;
+  }
+
+  /// Get elapsed time
+  Duration getElapsedTime() {
+    final startTime = getTimerStartTime();
+    if (startTime == null) return Duration.zero;
+    return DateTime.now().difference(startTime);
+  }
+
+  /// Get remaining time
+  Duration getRemainingTime() {
+    final startTime = getTimerStartTime();
+    final duration = getTimerDuration();
+    if (startTime == null) return Duration.zero;
+
+    final elapsed = DateTime.now().difference(startTime);
+    final totalDuration = Duration(minutes: duration);
+    final remaining = totalDuration - elapsed;
+
+    return remaining.isNegative ? Duration.zero : remaining;
+  }
+
+  /// Get formatted remaining time
+  String getFormattedRemainingTime() {
+    final remaining = getRemainingTime();
+    final minutes = remaining.inMinutes;
+    final seconds = remaining.inSeconds % 60;
+
+    if (minutes > 0) {
+      return '${minutes}m ${seconds}s';
+    } else {
+      return '${seconds}s';
+    }
+  }
+
+  /// Get formatted elapsed time
+  String getFormattedElapsedTime() {
+    final elapsed = getElapsedTime();
+    final minutes = elapsed.inMinutes;
+    final seconds = elapsed.inSeconds % 60;
+
+    if (minutes > 0) {
+      return '${minutes}m ${seconds}s';
+    } else {
+      return '${seconds}s';
+    }
+  }
+
+  /// Check if timer has completed
+  bool isTimerCompleted() {
+    return getRemainingTime() == Duration.zero && isTimerActive();
+  }
+
+  /// Clear all temptation-related data
   Future<void> clearAllTemptationData() async {
     await _prefsInitialized.future;
 
@@ -194,6 +287,9 @@ class TemptationStorageService {
       intensityBefore,
       triggers,
       createdAt,
+      timerStartTime,
+      timerDuration,
+      timerIsActive,
     ];
 
     for (final key in keys) {

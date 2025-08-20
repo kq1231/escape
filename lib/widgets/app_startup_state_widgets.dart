@@ -6,8 +6,6 @@ import 'package:escape/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/onboarding/onboarding_flow.dart';
-import '../features/temptation/services/temptation_storage_service.dart';
-import '../widgets/active_temptation_widget.dart';
 
 /// A widget that displays a loading state with a MaterialApp
 class AppStartupLoadingWidget extends StatelessWidget {
@@ -83,10 +81,6 @@ class AppStartupSuccessWidget extends ConsumerWidget {
 
     final themeModeAsync = ref.watch(themeModeNotifierProvider);
 
-    // Check for active temptation
-    final temptationStorageService = TemptationStorageService();
-    final hasActiveTemptation = temptationStorageService.hasActiveTemptation();
-
     // If user profile exists, show main app, otherwise show onboarding
     return userProfile != null
         ? themeModeAsync.when(
@@ -96,16 +90,7 @@ class AppStartupSuccessWidget extends ConsumerWidget {
                 darkTheme: AppTheme.darkTheme,
                 themeMode: data,
 
-                home: hasActiveTemptation
-                    ? Scaffold(
-                        body: Column(
-                          children: [
-                            Expanded(child: MainAppScreen()),
-                            const ActiveTemptationWidget(),
-                          ],
-                        ),
-                      )
-                    : const MainAppScreen(),
+                home: const MainAppScreen(),
               );
             },
             loading: () => const MaterialApp(

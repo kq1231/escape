@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:escape/theme/app_theme.dart';
 
 class CountdownTimer extends StatefulWidget {
-  final int minutes;
+  final int remainingSeconds;
   final VoidCallback? onComplete;
   final Color? primaryColor;
   final Color? backgroundColor;
 
   const CountdownTimer({
     super.key,
-    required this.minutes,
+    required this.remainingSeconds,
     this.onComplete,
     this.primaryColor,
     this.backgroundColor,
@@ -27,14 +27,14 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   // Helper method to get appropriate text color for dark mode
   Color _getTextColor(Color defaultColor) {
-    final brightness = MediaQuery.platformBrightnessOf(context);
+    final brightness = Theme.of(context).brightness;
     return brightness == Brightness.dark ? Colors.white : defaultColor;
   }
 
   @override
   void initState() {
     super.initState();
-    _totalSeconds = widget.minutes * 60;
+    _totalSeconds = widget.remainingSeconds;
     _remainingSeconds = _totalSeconds;
     _startTimer();
   }
@@ -115,7 +115,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
                 Text(
                   'remaining',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: _getTextColor(AppTheme.mediumGray),
+                    color: _getTextColor(AppTheme.black),
                     fontSize: 16,
                   ),
                 ),
@@ -133,22 +133,6 @@ class _CountdownTimerState extends State<CountdownTimer> {
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: AppTheme.spacingM),
-        // Breathing animation hint
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.air, color: AppTheme.primaryGreen, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              'Take deep breaths when feeling overwhelmed',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: _getTextColor(AppTheme.mediumGray),
-                fontSize: 14,
-              ),
-            ),
-          ],
         ),
       ],
     );

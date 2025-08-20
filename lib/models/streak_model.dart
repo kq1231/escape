@@ -38,7 +38,7 @@ class Streak {
     this.count = 0,
     this.goal = 1, // Default goal of 1 day for new users
     this.emotion = 'neutral', // Default emotion
-    this.moodIntensity = 5, // Default neutral intensity
+    this.moodIntensity = 0, // Default zero intensity
     this.isSuccess = true, // Default to success
     DateTime? date,
     DateTime? createdAt,

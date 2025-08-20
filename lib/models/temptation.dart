@@ -30,6 +30,9 @@ class Temptation {
     this.intensityBefore,
     this.intensityAfter,
     this.resolutionNotes,
+    this.selectedActivity,
+    this.triggers = const [],
+    this.helpfulActivities = const [],
   });
 
   // Copy with method for immutability

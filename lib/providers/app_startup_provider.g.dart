@@ -33,7 +33,7 @@ final class AppStartupProvider
   AppStartup create() => AppStartup();
 }
 
-String _$appStartupHash() => r'3475311b2576c8d11c5c3af73884ffc849d8aaa5';
+String _$appStartupHash() => r'489ef9f3f8c020468e4c4bd19cab52a0f4b6c206';
 
 abstract class _$AppStartup extends $AsyncNotifier<bool> {
   FutureOr<bool> build();

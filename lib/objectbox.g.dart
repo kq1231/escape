@@ -632,6 +632,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final resolutionNotesParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 18);
+        final selectedActivityParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 14);
+        final triggersParam = const fb.ListReader<String>(
+          fb.StringReader(asciiOptimization: true),
+          lazy: false,
+        ).vTableGet(buffer, rootOffset, 10, []);
+        final helpfulActivitiesParam = const fb.ListReader<String>(
+          fb.StringReader(asciiOptimization: true),
+          lazy: false,
+        ).vTableGet(buffer, rootOffset, 12, []);
         final object =
             Temptation(
                 createdAt: createdAtParam,
@@ -639,22 +650,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 intensityBefore: intensityBeforeParam,
                 intensityAfter: intensityAfterParam,
                 resolutionNotes: resolutionNotesParam,
+                selectedActivity: selectedActivityParam,
+                triggers: triggersParam,
+                helpfulActivities: helpfulActivitiesParam,
               )
               ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
               ..resolvedAt = resolvedAtValue == null
                   ? null
-                  : DateTime.fromMillisecondsSinceEpoch(resolvedAtValue)
-              ..triggers = const fb.ListReader<String>(
-                fb.StringReader(asciiOptimization: true),
-                lazy: false,
-              ).vTableGet(buffer, rootOffset, 10, [])
-              ..helpfulActivities = const fb.ListReader<String>(
-                fb.StringReader(asciiOptimization: true),
-                lazy: false,
-              ).vTableGet(buffer, rootOffset, 12, [])
-              ..selectedActivity = const fb.StringReader(
-                asciiOptimization: true,
-              ).vTableGetNullable(buffer, rootOffset, 14);
+                  : DateTime.fromMillisecondsSinceEpoch(resolvedAtValue);
 
         return object;
       },

@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'package:escape/models/temptation.dart';
-import 'package:escape/providers/temptation_provider.dart';
+import 'package:escape/providers/current_active_temptation_provider.dart';
+import 'package:escape/providers/user_profile_provider.dart';
+import 'package:escape/repositories/temptation_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/theme/app_theme.dart';
@@ -9,7 +12,6 @@ import '../atoms/countdown_timer.dart';
 import '../molecules/motivation_card.dart';
 import '../molecules/lust_cycle_diagram.dart';
 import '../molecules/activity_selector.dart';
-import 'package:escape/providers/streak_provider.dart';
 
 class TemptationFlowScreen extends ConsumerStatefulWidget {
   const TemptationFlowScreen({super.key});
@@ -22,16 +24,17 @@ class TemptationFlowScreen extends ConsumerStatefulWidget {
 class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   late PageController _pageController;
   int _currentPage = 0;
-  Temptation? _currentTemptation;
   String? _selectedActivity;
-  List<String> _selectedTriggers = [];
-  List<String> _helpfulActivities = [];
+  final List<String> _selectedTriggers = [];
+  final List<String> _helpfulActivities = [];
   final TemptationStorageService _storageService = TemptationStorageService();
+  Timer? _timerRefresh;
 
-  // Helper method to get appropriate text color for dark mode
+  // Helper method to get appropriate text color for theme
   Color _getTextColor(Color defaultColor) {
-    final brightness = Theme.of(context).brightness;
-    return brightness == Brightness.dark ? Colors.white : defaultColor;
+    return Theme.of(context).brightness == Brightness.dark
+        ? Colors.white70
+        : defaultColor;
   }
 
   @override
@@ -44,6 +47,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   @override
   void dispose() {
     _pageController.dispose();
+    _timerRefresh?.cancel();
     super.dispose();
   }
 
@@ -51,21 +55,54 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     await _storageService.initialize();
 
     if (_storageService.hasActiveTemptation()) {
-      // Resume existing temptation
+      // Resume existing temptation - the provider will handle this
       setState(() {
         _selectedActivity = _storageService.getSelectedActivity();
       });
+
+      // Check if timer is active and navigate directly to timer screen (page 4)
+      if (_storageService.isTimerActive()) {
+        // Jump to timer screen (page 4)
+        _pageController.jumpToPage(4);
+        setState(() {
+          _currentPage = 4;
+        });
+        // Start timer refresh to update UI in real-time
+        _startTimerRefresh();
+      }
     } else {
-      // Create new temptation
-      final currentTemptation = await ref.read(createTemptationProvider.future);
+      // Create new temptation using the repository
+      final newTemptation = Temptation(createdAt: DateTime.now());
+      final id = await ref
+          .read(temptationRepositoryProvider.notifier)
+          .createTemptation(newTemptation);
 
       // Store in SharedPreferences
       await _storageService.storeActiveTemptation(
-        temptationId: currentTemptation.id,
-        startTime: currentTemptation.createdAt,
+        temptationId: id,
+        startTime: newTemptation.createdAt,
         intensityBefore: 5, // Default intensity
       );
     }
+  }
+
+  void _startTimerRefresh() {
+    // Cancel existing timer if any
+    _timerRefresh?.cancel();
+
+    // Start new timer to refresh UI every second
+    _timerRefresh = Timer.periodic(const Duration(seconds: 1), (timer) {
+      // Check if timer is still active
+      if (_storageService.isTimerActive()) {
+        // Trigger UI update
+        if (mounted) {
+          setState(() {});
+        }
+      } else {
+        // Timer completed, stop refresh
+        _timerRefresh?.cancel();
+      }
+    });
   }
 
   void _onPageChanged(int index) {
@@ -84,32 +121,22 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   }
 
   void _onSuccess() async {
-    if (_currentTemptation != null) {
-      // Resolve the temptation
-      await ref
-          .read(activeTemptationsProvider.notifier)
-          .resolveTemptation(
-            _currentTemptation!.id,
+    // Stop timer first
+    await _storageService.stopTimer();
+
+    // Use the currentActiveTemptation provider to complete temptation successfully
+    await ref
+        .read(currentActiveTemptationProvider.notifier)
+        .completeTemptation(
+          temptation: Temptation(
+            createdAt: DateTime.now(),
             wasSuccessful: true,
-            notes:
+            resolutionNotes:
                 'Successfully overcame temptation through activity: $_selectedActivity',
-          );
-
-      // Add triggers and helpful activities if any were selected
-      for (final trigger in _selectedTriggers) {
-        await ref
-            .read(activeTemptationsProvider.notifier)
-            .addTrigger(_currentTemptation!.id, trigger);
-      }
-
-      for (final activity in _helpfulActivities) {
-        await ref
-            .read(activeTemptationsProvider.notifier)
-            .addHelpfulActivity(_currentTemptation!.id, activity);
-      }
-    }
-
-    await _storageService.clearActiveTemptation();
+            triggers: _selectedTriggers,
+            helpfulActivities: _helpfulActivities,
+          ),
+        );
 
     if (mounted) {
       showDialog(
@@ -157,27 +184,28 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   }
 
   void _onRelapse() async {
-    // Reset streak immediately
-    await ref.read(todaysStreakProvider.notifier).resetStreakDueToRelapse();
+    // Stop timer first
+    await _storageService.stopTimer();
 
-    if (_currentTemptation != null) {
-      await ref
-          .read(activeTemptationsProvider.notifier)
-          .resolveTemptation(
-            _currentTemptation!.id,
+    // Use the currentActiveTemptation provider to complete temptation with relapse
+    await ref
+        .read(currentActiveTemptationProvider.notifier)
+        .completeTemptation(
+          temptation: Temptation(
+            createdAt: DateTime.now(),
             wasSuccessful: false,
-            notes: 'Relapsed but made tawbah',
-          );
-    }
-
-    await _storageService.clearActiveTemptation();
+            resolutionNotes: 'Relapsed but made tawbah',
+            triggers: _selectedTriggers,
+            helpfulActivities: _helpfulActivities,
+          ),
+        );
 
     if (mounted) {
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: const Text('La hawla wa la quwwata illa billah 🌙'),
+          title: const Text('Don\'t worry, Allah will always forgive you! 🌙'),
           content: const Text(
             'Allah is At-Tawwab, The Accepter of Repentance. '
             'Make tawbah and move forward, don\'t dwell on it. '
@@ -197,19 +225,57 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     }
   }
 
+  void _onCancelSession() async {
+    // Show confirmation dialog
+    final shouldCancel = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Cancel Session?'),
+        content: const Text(
+          'Are you sure you want to cancel this temptation session? '
+          'This will remove all progress and you\'ll need to start over.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No, Continue'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.errorRed),
+            child: const Text('Yes, Cancel'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldCancel == true) {
+      // Stop timer first
+      await _storageService.stopTimer();
+
+      // Use the currentActiveTemptation provider to cancel temptation
+      await ref
+          .read(currentActiveTemptationProvider.notifier)
+          .cancelTemptation();
+
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _currentPage == 0 ? 'I Need Help' : 'Temptation Support',
+          _currentPage == 0 ? 'I Need Help' : 'Temptation Protocols',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
         ),
-        backgroundColor: AppTheme.primaryGreen,
-        foregroundColor: AppTheme.white,
         automaticallyImplyLeading: false,
       ),
       body: Column(
@@ -342,6 +408,14 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         children: [
           ActivitySelector(
             predefinedActivities: PredefinedActivities.activityNames,
+            onActivitySelected: (activity) {
+              setState(() {
+                _selectedActivity = activity;
+              });
+
+              // Start timer when activity is selected
+              _storageService.startTimer(durationMinutes: 30);
+            },
           ),
           if (_selectedActivity != null) ...[
             const SizedBox(height: AppTheme.spacingXL),
@@ -351,6 +425,14 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                 fontWeight: FontWeight.bold,
                 color: _getTextColor(AppTheme.primaryGreen),
                 fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppTheme.spacingM),
+            Text(
+              'Timer started for 30 minutes',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: _getTextColor(AppTheme.mediumGray),
               ),
               textAlign: TextAlign.center,
             ),
@@ -368,7 +450,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         children: [
           Text(
             _selectedActivity != null
-                ? 'Go do $_selectedActivity for 30 minutes'
+                ? 'Go $_selectedActivity for 30 minutes'
                 : 'Select an activity above for 30 minutes',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
@@ -378,15 +460,90 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppTheme.spacingXL),
+
+          // Show timer status
+          if (_storageService.isTimerActive()) ...[
+            Container(
+              padding: const EdgeInsets.all(AppTheme.spacingM),
+              decoration: BoxDecoration(
+                color: AppTheme.lightGreen.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                border: Border.all(color: AppTheme.primaryGreen),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Timer Active',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primaryGreen,
+                    ),
+                  ),
+                  const SizedBox(height: AppTheme.spacingS),
+                  Text(
+                    'Time remaining: ${_storageService.getFormattedRemainingTime()}',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: _getTextColor(AppTheme.darkGreen),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: AppTheme.spacingS),
+                  Text(
+                    'Time elapsed: ${_storageService.getFormattedElapsedTime()}',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: _getTextColor(AppTheme.mediumGray),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppTheme.spacingXL),
+          ] else ...[
+            Text(
+              'Start timer by selecting an activity',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: AppTheme.errorRed,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppTheme.spacingXL),
+          ],
+
           CountdownTimer(
-            minutes: 30,
+            remainingSeconds: _storageService.isTimerActive()
+                ? _storageService.getRemainingTime().inSeconds
+                : 30 * 60, // Default 30 minutes if no active timer
             onComplete: _onCountdownComplete,
             primaryColor: AppTheme.primaryGreen,
             backgroundColor: AppTheme.lightGreen,
           ),
           const SizedBox(height: AppTheme.spacingXL),
+
+          // Cancel Session Button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _onCancelSession,
+              icon: const Icon(Icons.cancel, color: AppTheme.white),
+              label: const Text(
+                'Cancel Session',
+                style: TextStyle(color: AppTheme.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.errorRed,
+                foregroundColor: AppTheme.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppTheme.spacingL,
+                  vertical: AppTheme.spacingXL,
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: AppTheme.spacingXL),
           Text(
-            'Come back when you\'re done or time is up',
+            'Come back when you\'re done! You can close the app.',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: _getTextColor(AppTheme.mediumGray),
               fontSize: 16,
@@ -437,9 +594,9 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
               ),
               ElevatedButton.icon(
                 onPressed: _onRelapse,
-                icon: const Icon(Icons.refresh, color: AppTheme.white),
+                icon: const Icon(Icons.cancel, color: AppTheme.white),
                 label: const Text(
-                  'I need to\ntry again',
+                  'Relapsed',
                   style: TextStyle(color: AppTheme.white),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -459,7 +616,9 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           Container(
             padding: const EdgeInsets.all(AppTheme.spacingL),
             decoration: BoxDecoration(
-              color: AppTheme.lightGreen.withValues(alpha: 0.2),
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppTheme.primaryGreen.withValues(alpha: 0.1)
+                  : AppTheme.lightGreen.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(AppTheme.radiusL),
             ),
             child: Column(
@@ -468,7 +627,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   'Optional: Help us understand better',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: _getTextColor(AppTheme.darkGreen),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -481,7 +639,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                     Text(
                       'What were the triggers? (select all that apply)',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: _getTextColor(AppTheme.darkGreen),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -490,13 +647,27 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                       spacing: AppTheme.spacingS,
                       runSpacing: AppTheme.spacingS,
                       children: [
-                        _buildTriggerChip('Boredom'),
-                        _buildTriggerChip('Stress'),
-                        _buildTriggerChip('Loneliness'),
-                        _buildTriggerChip('Anger'),
-                        _buildTriggerChip('Anxiety'),
-                        _buildTriggerChip('Social Media'),
-                        _buildTriggerChip('Other'),
+                        // User's personal triggers from profile
+                        ...?ref
+                            .read(userProfileProvider)
+                            .requireValue
+                            ?.triggers
+                            .map((trigger) => _buildTriggerChip(trigger)),
+                        // Common triggers as fallback
+                        if ((ref
+                                    .read(userProfileProvider)
+                                    .requireValue
+                                    ?.triggers ??
+                                [])
+                            .isEmpty) ...[
+                          _buildTriggerChip('Boredom'),
+                          _buildTriggerChip('Stress'),
+                          _buildTriggerChip('Loneliness'),
+                          _buildTriggerChip('Anger'),
+                          _buildTriggerChip('Anxiety'),
+                          _buildTriggerChip('Social Media'),
+                          _buildTriggerChip('Other'),
+                        ],
                       ],
                     ),
                   ],
@@ -511,7 +682,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                     Text(
                       'What helped you the most? (select all that apply)',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: _getTextColor(AppTheme.darkGreen),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -551,17 +721,23 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildTriggerChip(String trigger) {
     final isSelected = _selectedTriggers.contains(trigger);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return FilterChip(
       label: Text(trigger),
       selected: isSelected,
       onSelected: (selected) {
         _onTriggerSelected(trigger);
       },
-      backgroundColor: AppTheme.lightGreen.withValues(alpha: 0.3),
-      selectedColor: AppTheme.primaryGreen.withValues(alpha: 0.5),
+      backgroundColor: isDarkMode
+          ? AppTheme.primaryGreen.withValues(alpha: 0.2)
+          : AppTheme.lightGreen.withValues(alpha: 0.3),
+      selectedColor: AppTheme.primaryGreen.withValues(alpha: 0.6),
       checkmarkColor: AppTheme.white,
       labelStyle: TextStyle(
-        color: isSelected ? AppTheme.white : _getTextColor(AppTheme.darkGreen),
+        color: isSelected
+            ? AppTheme.white
+            : _getTextColor(AppTheme.primaryGreen),
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),
     );
@@ -569,17 +745,23 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildHelpfulActivityChip(String activity) {
     final isSelected = _helpfulActivities.contains(activity);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return FilterChip(
       label: Text(activity),
       selected: isSelected,
       onSelected: (selected) {
         _onHelpfulActivitySelected(activity);
       },
-      backgroundColor: AppTheme.lightGreen.withValues(alpha: 0.3),
-      selectedColor: AppTheme.primaryGreen.withValues(alpha: 0.5),
+      backgroundColor: isDarkMode
+          ? AppTheme.primaryGreen.withValues(alpha: 0.2)
+          : AppTheme.lightGreen.withValues(alpha: 0.3),
+      selectedColor: AppTheme.primaryGreen.withValues(alpha: 0.6),
       checkmarkColor: AppTheme.white,
       labelStyle: TextStyle(
-        color: isSelected ? AppTheme.white : _getTextColor(AppTheme.darkGreen),
+        color: isSelected
+            ? AppTheme.white
+            : _getTextColor(AppTheme.primaryGreen),
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),
     );
@@ -589,7 +771,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     return Container(
       padding: const EdgeInsets.all(AppTheme.spacingL),
       decoration: BoxDecoration(
-        color: AppTheme.white,
+        color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -609,6 +791,9 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   curve: Curves.easeInOut,
                 );
               },
+              style: TextButton.styleFrom(
+                foregroundColor: AppTheme.primaryGreen,
+              ),
               child: const Text('Back'),
             )
           else
@@ -621,6 +806,10 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   curve: Curves.easeInOut,
                 );
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.primaryGreen,
+                foregroundColor: AppTheme.white,
+              ),
               child: const Text('Next'),
             )
           else

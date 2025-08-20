@@ -19,8 +19,16 @@ class MotivationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = backgroundColor ?? AppTheme.lightGreen;
-    final textColorValue = textColor ?? AppTheme.darkGreen;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Use theme-aware colors for dark mode
+    final cardColor =
+        backgroundColor ??
+        (isDarkMode
+            ? AppTheme.primaryGreen.withValues(alpha: 0.2)
+            : AppTheme.lightGreen);
+    final textColorValue =
+        textColor ?? (isDarkMode ? Colors.white70 : AppTheme.white);
 
     return Container(
       width: double.infinity,
@@ -30,7 +38,7 @@ class MotivationCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppTheme.radiusXL),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withValues(alpha: isDarkMode ? 0.3 : 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -61,8 +69,6 @@ class MotivationCard extends StatelessWidget {
               height: 1.5,
             ),
             textAlign: TextAlign.center,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -99,8 +105,7 @@ class IslamicMotivationCards {
     },
     {
       'title': 'Temporary Feeling',
-      'content':
-          'This feeling will pass InshaAllah. Lust cycles typically last only 30 minutes.',
+      'content': 'This feeling will pass InshaAllah. You are strong',
       'icon': Icons.hourglass_bottom,
       'backgroundColor': AppTheme.lightGreen.withValues(alpha: 0.4),
       'textColor': AppTheme.darkGreen,
@@ -129,8 +134,9 @@ class IslamicMotivationCards {
       title: cardData['title'],
       content: cardData['content'],
       icon: cardData['icon'],
-      backgroundColor: cardData['backgroundColor'],
-      textColor: cardData['textColor'],
+      // Don't pass hardcoded colors to allow theme adaptation
+      // backgroundColor: cardData['backgroundColor'],
+      // textColor: cardData['textColor'],
     );
   }
 }

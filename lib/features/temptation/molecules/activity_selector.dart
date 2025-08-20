@@ -24,8 +24,9 @@ class _ActivitySelectorState extends ConsumerState<ActivitySelector> {
 
   // Helper method to get appropriate text color for dark mode
   Color _getTextColor(Color defaultColor) {
-    final brightness = MediaQuery.platformBrightnessOf(context);
-    return brightness == Brightness.dark ? Colors.white : defaultColor;
+    return Theme.of(context).brightness == Brightness.dark
+        ? Colors.white70
+        : defaultColor;
   }
 
   @override
@@ -177,7 +178,7 @@ class PredefinedActivities {
       'description': 'Talk to someone supportive',
     },
     {
-      'name': 'Go for Walk',
+      'name': 'Do a Walk',
       'icon': Icons.directions_walk,
       'description': 'Clear your mind and get fresh air',
     },

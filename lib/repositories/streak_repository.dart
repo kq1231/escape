@@ -31,11 +31,12 @@ class StreakRepository extends _$StreakRepository {
   // Get streak by date
   Streak? getStreakByDate(DateTime date) {
     final query = _streakBox
-        .query(Streak_.date.equals(date.millisecondsSinceEpoch ~/ 1000))
+        .query(Streak_.date.equalsDate(date))
+        .order(Streak_.date, flags: Order.descending)
         .build();
-    final result = query.find();
+    final result = query.findFirst();
     query.close();
-    return result.isEmpty ? null : result.first;
+    return result;
   }
 
   // Get today's streak
@@ -166,6 +167,7 @@ class StreakRepository extends _$StreakRepository {
         // Map it to a single streak object or null
         .asyncMap((query) async {
           final result = await query.findFirstAsync();
+          print(result);
           return result;
         });
   }
@@ -175,11 +177,14 @@ class StreakRepository extends _$StreakRepository {
     // Check if streak exists for this date
     final existing = getStreakByDate(streak.date);
 
+    print(existing);
+
     if (existing != null) {
       // Update existing
       existing.count = streak.count;
       existing.isSuccess = streak.isSuccess;
       existing.lastUpdated = DateTime.now();
+
       return await updateStreak(existing);
     } else {
       // Create new
