@@ -7,7 +7,7 @@
 
 ## A Revolutionary Journey Towards Purity
 
-**Escape** is more than just an app - it's a *blessed companion* on your journey to break free from the chains of pornography, masturbation, and all forms of spiritual darkness. Designed with Islamic principles at its core, this app serves Muslims worldwide and anyone seeking to reclaim their spiritual purity and mental clarity.
+**Escape** is more than just an app - it's a *blessed companion* on your journey to break free from the chains of sins and all forms of spiritual darkness. Designed with Islamic principles at its core, this app serves Muslims worldwide and anyone seeking to reclaim their spiritual purity and mental clarity.
 
 ## 🕋 Islamic Foundation
 
