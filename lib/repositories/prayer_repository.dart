@@ -18,8 +18,6 @@ class PrayerRepository extends _$PrayerRepository {
   // Create a new prayer record
   Future<int> createPrayer(Prayer prayer) async {
     final id = _prayerBox.put(prayer);
-    // Refresh the state
-    ref.invalidateSelf();
     return id;
   }
 
@@ -50,24 +48,18 @@ class PrayerRepository extends _$PrayerRepository {
   // Update prayer
   Future<int> updatePrayer(Prayer prayer) async {
     final id = _prayerBox.put(prayer);
-    // Refresh the state
-    ref.invalidateSelf();
     return id;
   }
 
   // Delete prayer
   Future<bool> deletePrayer(int id) async {
     final result = _prayerBox.remove(id);
-    // Refresh the state
-    ref.invalidateSelf();
     return result;
   }
 
   // Delete all prayers
   Future<int> deleteAllPrayers() async {
     final count = _prayerBox.removeAll();
-    // Refresh the state
-    ref.invalidateSelf();
     return count;
   }
 

@@ -1,4 +1,3 @@
-import 'package:escape/models/streak_model.dart';
 import 'package:escape/models/temptation.dart';
 import 'package:escape/features/temptation/services/temptation_storage_service.dart';
 import 'package:escape/repositories/temptation_repository.dart';
@@ -46,8 +45,8 @@ class CurrentActiveTemptation extends _$CurrentActiveTemptation {
 
       // Handle streak upsert
       if (temptation.wasSuccessful) {
-        // Successful completion - increment streak
-        await _upsertStreakForSuccess();
+        // Do nothing to streak, user will have to manually increment
+        // it at the end of the day
       } else {
         // Relapse - reset streak to zero
         await _upsertStreakForRelapse();
@@ -57,7 +56,7 @@ class CurrentActiveTemptation extends _$CurrentActiveTemptation {
       await _storageService.clearActiveTemptation();
 
       // Refresh state and invalidate hasActiveTemptation provider
-      ref.invalidateSelf();
+      ;
       ref.invalidate(hasActiveTemptationProvider);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
@@ -71,36 +70,10 @@ class CurrentActiveTemptation extends _$CurrentActiveTemptation {
       await _storageService.clearActiveTemptation();
 
       // Refresh state and invalidate hasActiveTemptation provider
-      ref.invalidateSelf();
+      ;
       ref.invalidate(hasActiveTemptationProvider);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
-    }
-  }
-
-  /// Upsert streak for successful temptation completion
-  Future<void> _upsertStreakForSuccess() async {
-    final streakNotifier = ref.read(todaysStreakProvider.notifier);
-    final todayStreak = streakNotifier.getTodaysStreak();
-
-    if (todayStreak == null) {
-      // Create new streak for today
-      final newStreak = Streak(
-        date: DateTime.now(),
-        count: 1,
-        isSuccess: true,
-        emotion: 'positive',
-        moodIntensity: 7,
-      );
-
-      await streakNotifier.createStreak(newStreak);
-    } else {
-      // Update existing streak
-      final updatedStreak = todayStreak.copyWith(
-        count: todayStreak.count + 1,
-        isSuccess: true,
-      );
-      await streakNotifier.updateStreak(updatedStreak);
     }
   }
 
@@ -136,7 +109,7 @@ class CurrentActiveTemptation extends _$CurrentActiveTemptation {
       );
 
       // Refresh state
-      ref.invalidateSelf();
+      ;
 
       return newTemptation;
     } catch (e, st) {
@@ -148,6 +121,6 @@ class CurrentActiveTemptation extends _$CurrentActiveTemptation {
   /// Refresh the provider state
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    ref.invalidateSelf();
+    ;
   }
 }

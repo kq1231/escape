@@ -22,6 +22,6 @@ class HasActiveTemptation extends _$HasActiveTemptation {
 
   /// Method to refresh the provider state
   void refresh() {
-    ref.invalidateSelf();
+    ;
   }
 }

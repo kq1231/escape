@@ -17,9 +17,16 @@ class StreakRepository extends _$StreakRepository {
 
   // Create a new streak record
   Future<int> createStreak(Streak streak) async {
-    final id = _streakBox.put(streak);
-    // Refresh the state
-    ref.invalidateSelf();
+    // Make sure the date only contains year, month and day
+    DateTime date = DateTime(
+      streak.date.year,
+      streak.date.month,
+      streak.date.day,
+    );
+
+    streak.date = date;
+
+    final id = await _streakBox.putAsync(streak);
     return id;
   }
 
@@ -30,24 +37,18 @@ class StreakRepository extends _$StreakRepository {
 
   // Get streak by date
   Streak? getStreakByDate(DateTime date) {
-    final query = _streakBox
-        .query(Streak_.date.equalsDate(date))
-        .order(Streak_.date, flags: Order.descending)
-        .build();
+    final query = _streakBox.query(Streak_.date.equalsDate(date)).build();
     final result = query.findFirst();
     query.close();
     return result;
   }
 
   // Get today's streak
-  Streak? getTodayStreak() {
-    final today = DateTime.now();
-    final startOfDay = DateTime(today.year, today.month, today.day);
-    final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
+  Streak? getTodaysStreak() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
 
-    final query = _streakBox
-        .query(Streak_.date.betweenDate(startOfDay, endOfDay))
-        .build();
+    final query = _streakBox.query(Streak_.date.equalsDate(today)).build();
     final result = query.find();
     query.close();
     return result.isEmpty ? null : result.first;
@@ -55,25 +56,28 @@ class StreakRepository extends _$StreakRepository {
 
   // Update streak
   Future<int> updateStreak(Streak streak) async {
-    final id = _streakBox.put(streak);
-    // Refresh the state
-    ref.invalidateSelf();
+    // Make sure the date only contains year, month and day
+    DateTime date = DateTime(
+      streak.date.year,
+      streak.date.month,
+      streak.date.day,
+    );
+
+    streak.date = date;
+
+    final id = await _streakBox.putAsync(streak);
     return id;
   }
 
   // Delete streak
   Future<bool> deleteStreak(int id) async {
     final result = _streakBox.remove(id);
-    // Refresh the state
-    ref.invalidateSelf();
     return result;
   }
 
   // Delete all streaks
   Future<int> deleteAllStreaks() async {
     final count = _streakBox.removeAll();
-    // Refresh the state
-    ref.invalidateSelf();
     return count;
   }
 
@@ -83,22 +87,13 @@ class StreakRepository extends _$StreakRepository {
   }
 
   // Get current streak (highest consecutive count)
-  int getCurrentStreak() {
-    // Get all streaks sorted by date descending
-    final streaks = _streakBox.getAll()
-      ..sort((a, b) => b.date.compareTo(a.date));
+  Streak? getCurrentStreak() {
+    final query = _streakBox
+        .query()
+        .order(Streak_.date, flags: Order.descending)
+        .build();
 
-    // Find the latest consecutive successful streak
-    int currentStreak = 0;
-    for (final streak in streaks) {
-      if (streak.isSuccess) {
-        currentStreak++;
-      } else {
-        // Break the streak on relapse
-        break;
-      }
-    }
-    return currentStreak;
+    return query.findFirst();
   }
 
   // Get best streak (highest count with latest date)
@@ -133,17 +128,39 @@ class StreakRepository extends _$StreakRepository {
 
   // Mark success - increment streak count
   Future<int> markSuccess({required Streak streak}) async {
-    final id = _streakBox.put(streak..count = streak.count + 1);
-    // Refresh the state
-    ref.invalidateSelf();
+    // Make sure the date only contains year, month and day
+    DateTime date = DateTime(
+      streak.date.year,
+      streak.date.month,
+      streak.date.day,
+    );
+
+    streak.date = date;
+
+    final id = _streakBox.put(
+      streak
+        ..count = streak.count + 1
+        ..isSuccess = true,
+    );
     return id;
   }
 
   // Mark relapse - reset streak to 0
   Future<int> markRelapse({required Streak streak}) async {
-    final id = _streakBox.put(streak..count = 0);
-    // Refresh the state
-    ref.invalidateSelf();
+    // Make sure the date only contains year, month and day
+    DateTime date = DateTime(
+      streak.date.year,
+      streak.date.month,
+      streak.date.day,
+    );
+
+    streak.date = date;
+
+    final id = _streakBox.put(
+      streak
+        ..count = 0
+        ..isSuccess = false,
+    );
     return id;
   }
 
@@ -159,7 +176,7 @@ class StreakRepository extends _$StreakRepository {
 
   // Watch current streak
   Stream<Streak?> watchCurrentStreak() {
-    // Build and watch the query for today's streak
+    // Build and watch the query for the LATEST/LAST streak
     return _streakBox
         .query()
         .order(Streak_.date, flags: Order.descending)
@@ -167,17 +184,15 @@ class StreakRepository extends _$StreakRepository {
         // Map it to a single streak object or null
         .asyncMap((query) async {
           final result = await query.findFirstAsync();
-          print(result);
+          print("RESULT OF LAST STREAK: $result");
           return result;
         });
   }
 
   // Upsert operation - update if exists, create if doesn't
-  Future<int> upsertStreak(Streak streak) async {
+  Future<int> upsertStreakCountAndSuccess(Streak streak) async {
     // Check if streak exists for this date
     final existing = getStreakByDate(streak.date);
-
-    print(existing);
 
     if (existing != null) {
       // Update existing

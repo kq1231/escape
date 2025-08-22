@@ -22,8 +22,6 @@ class TemptationRepository extends _$TemptationRepository {
   // Create a new temptation record
   Future<int> createTemptation(Temptation temptation) async {
     final id = _temptationBox.put(temptation);
-    // Refresh the state
-    ref.invalidateSelf();
     return id;
   }
 
@@ -70,24 +68,18 @@ class TemptationRepository extends _$TemptationRepository {
   // Update temptation
   Future<int> updateTemptation(Temptation temptation) async {
     final id = _temptationBox.put(temptation);
-    // Refresh the state
-    ref.invalidateSelf();
     return id;
   }
 
   // Delete temptation
   Future<bool> deleteTemptation(int id) async {
     final result = _temptationBox.remove(id);
-    // Refresh the state
-    ref.invalidateSelf();
     return result;
   }
 
   // Delete all temptations
   Future<int> deleteAllTemptations() async {
     final count = _temptationBox.removeAll();
-    // Refresh the state
-    ref.invalidateSelf();
     return count;
   }
 

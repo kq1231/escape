@@ -173,7 +173,7 @@ class PredefinedActivities {
       'description': 'Release endorphins and build discipline',
     },
     {
-      'name': 'Call Friend',
+      'name': 'Talk with a friend',
       'icon': Icons.phone,
       'description': 'Talk to someone supportive',
     },

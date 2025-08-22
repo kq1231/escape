@@ -67,8 +67,6 @@ class OnboardingConstants {
       'Keep your progress private and secure';
   static const String passwordHint = 'Create a secure password';
   static const String confirmPasswordHint = 'Confirm your password';
-  static const String enableBiometric = 'Enable biometric authentication';
-  static const String enableNotifications = 'Enable daily reminders';
   static const String privacyNote = 'Your data is encrypted and never shared';
 
   // Progress indicators

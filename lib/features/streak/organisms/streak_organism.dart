@@ -74,7 +74,7 @@ class StreakOrganism extends ConsumerWidget {
 
     return userProfileAsync.when(
       data: (userProfile) {
-        // If no profile, show default user icon
+        // If no picture, show default user icon
         if (userProfile!.profilePicture.isEmpty) {
           return Container(
             padding: const EdgeInsets.all(4),

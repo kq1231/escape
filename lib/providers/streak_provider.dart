@@ -58,7 +58,7 @@ class TodaysStreak extends _$TodaysStreak {
 
   /// Get today's streak
   Streak? getTodaysStreak() {
-    return ref.read(streakRepositoryProvider.notifier).getTodayStreak();
+    return ref.read(streakRepositoryProvider.notifier).getTodaysStreak();
   }
 
   /// Get streak by ID
@@ -66,26 +66,18 @@ class TodaysStreak extends _$TodaysStreak {
     return ref.read(streakRepositoryProvider.notifier).getStreakById(id);
   }
 
-  /// Get current streak count
-  int getCurrentStreak() {
-    return ref.read(streakRepositoryProvider.notifier).getCurrentStreak();
-  }
-
-  /// Reset streak due to relapse - creates/updates today's streak with count = 0
+  /// Reset streak due to relapse
   Future<void> resetStreakDueToRelapse() async {
     final today = DateTime.now();
-    final todayStreak = Streak(
+    final streak = Streak(
       date: DateTime(today.year, today.month, today.day),
-      count: 0, // Reset to zero
-      isSuccess: false, // Mark as not clean
-      emotion: 'neutral',
-      moodIntensity: 0,
+      count: 0, // Reset it to zero
+      isSuccess: false,
     );
 
-    // Upsert operation - update if exists, create if doesn't
-    await ref.read(streakRepositoryProvider.notifier).upsertStreak(todayStreak);
-
-    // Invalidate current state to refresh UI
-    ref.invalidateSelf();
+    // Update the count field to zero
+    await ref
+        .read(streakRepositoryProvider.notifier)
+        .upsertStreakCountAndSuccess(streak);
   }
 }

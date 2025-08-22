@@ -153,18 +153,6 @@ class _PasswordSetupState extends State<PasswordSetup> {
                 },
               ),
             ),
-            const SizedBox(height: AppTheme.spacingL),
-            _buildToggleOption(
-              title: OnboardingConstants.enableBiometric,
-              value: widget.biometricEnabled,
-              onChanged: widget.onBiometricChanged,
-            ),
-            const SizedBox(height: AppTheme.spacingS),
-            _buildToggleOption(
-              title: OnboardingConstants.enableNotifications,
-              value: widget.notificationsEnabled,
-              onChanged: widget.onNotificationsChanged,
-            ),
             const SizedBox(height: AppTheme.spacingM),
             Text(
               OnboardingConstants.privacyNote,
@@ -174,32 +162,6 @@ class _PasswordSetupState extends State<PasswordSetup> {
               textAlign: TextAlign.center,
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildToggleOption({
-    required String title,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.white,
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
-        border: Border.all(
-          color: AppTheme.mediumGray.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: SwitchListTile(
-        title: Text(title, style: Theme.of(context).textTheme.bodyMedium),
-        value: value,
-        onChanged: onChanged,
-        activeColor: AppTheme.primaryGreen,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppTheme.spacingM,
         ),
       ),
     );

@@ -183,7 +183,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     });
   }
 
-  void _onRelapse() async {
+  Future<void> _onRelapse() async {
     // Stop timer first
     await _storageService.stopTimer();
 
@@ -450,7 +450,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         children: [
           Text(
             _selectedActivity != null
-                ? 'Go $_selectedActivity for 30 minutes'
+                ? 'Go ${_selectedActivity?.toLowerCase()} for 30 minutes'
                 : 'Select an activity above for 30 minutes',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
@@ -561,57 +561,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'How did it go?',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: _getTextColor(AppTheme.darkGreen),
-              fontSize: 24,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppTheme.spacingXL),
-          Wrap(
-            spacing: AppTheme.spacingM,
-            runSpacing: AppTheme.spacingM,
-            alignment: WrapAlignment.center,
-            children: [
-              ElevatedButton.icon(
-                onPressed: _onSuccess,
-                icon: const Icon(Icons.check_circle, color: AppTheme.white),
-                label: const Text(
-                  'Alhamdulillah,\nI overcame it!',
-                  style: TextStyle(color: AppTheme.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryGreen,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.spacingL,
-                    vertical: AppTheme.spacingXL,
-                  ),
-                  minimumSize: const Size(150, 80),
-                ),
-              ),
-              ElevatedButton.icon(
-                onPressed: _onRelapse,
-                icon: const Icon(Icons.cancel, color: AppTheme.white),
-                label: const Text(
-                  'Relapsed',
-                  style: TextStyle(color: AppTheme.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.errorRed,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.spacingL,
-                    vertical: AppTheme.spacingXL,
-                  ),
-                  minimumSize: const Size(150, 80),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppTheme.spacingXL),
-
           // Optional questions section
           Container(
             padding: const EdgeInsets.all(AppTheme.spacingL),
@@ -706,13 +655,55 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           ),
 
           const SizedBox(height: AppTheme.spacingXL),
+
           Text(
-            'Your response will help us understand what works best for you.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: _getTextColor(AppTheme.mediumGray),
-              fontSize: 14,
+            'How did it go?',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: _getTextColor(AppTheme.darkGreen),
+              fontSize: 24,
             ),
             textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppTheme.spacingXL),
+          Wrap(
+            spacing: AppTheme.spacingM,
+            runSpacing: AppTheme.spacingM,
+            alignment: WrapAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                onPressed: _onSuccess,
+                icon: const Icon(Icons.check_circle, color: AppTheme.white),
+                label: const Text(
+                  'Alhamdulillah,\nI destroyed it!',
+                  style: TextStyle(color: AppTheme.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryGreen,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppTheme.spacingL,
+                    vertical: AppTheme.spacingXL,
+                  ),
+                  minimumSize: const Size(150, 80),
+                ),
+              ),
+              ElevatedButton.icon(
+                onPressed: _onRelapse,
+                icon: const Icon(Icons.cancel, color: AppTheme.white),
+                label: const Text(
+                  'Relapsed',
+                  style: TextStyle(color: AppTheme.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.errorRed,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppTheme.spacingL,
+                    vertical: AppTheme.spacingXL,
+                  ),
+                  minimumSize: const Size(150, 80),
+                ),
+              ),
+            ],
           ),
         ],
       ),

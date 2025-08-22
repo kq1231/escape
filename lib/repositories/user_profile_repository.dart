@@ -28,9 +28,8 @@ class UserProfileRepository extends _$UserProfileRepository {
   Future<int> saveUserProfile(UserProfile profile) async {
     // Ensure the ID is always 1 for the single user profile
     final profileWithId = profile.copyWith(id: 1);
-    final id = _userProfileBox.put(profileWithId);
-    // Refresh the state
-    ref.invalidateSelf();
+    final id = await _userProfileBox.putAsync(profileWithId);
+
     return id;
   }
 
@@ -43,8 +42,6 @@ class UserProfileRepository extends _$UserProfileRepository {
   // Delete the user profile
   Future<bool> deleteUserProfile() async {
     final result = _userProfileBox.remove(1);
-    // Refresh the state
-    ref.invalidateSelf();
     return result;
   }
 
