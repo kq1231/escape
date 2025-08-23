@@ -136,7 +136,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
               'Successfully overcame temptation through activity: ${currentTemptation.selectedActivity}',
           triggers: _selectedTriggers,
           helpfulActivities: _helpfulActivities,
-          resolvedAt: DateTime.now(),
         );
 
         await ref
@@ -218,7 +217,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           resolutionNotes: 'Relapsed but made tawbah',
           triggers: _selectedTriggers,
           helpfulActivities: _helpfulActivities,
-          resolvedAt: DateTime.now(),
         );
 
         await ref
