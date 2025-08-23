@@ -114,19 +114,6 @@ class _ActivitySelectorState extends ConsumerState<ActivitySelector> {
             );
           }).toList(),
         ),
-        const SizedBox(height: AppTheme.spacingL),
-        // Something else option
-        ActivityButton(
-          activity: 'Something else...',
-          icon: Icons.add,
-          isSelected: _selectedActivity == 'Something else...',
-          onPressed: () {
-            setState(() {
-              _selectedActivity = 'Something else...';
-            });
-            widget.onActivitySelected?.call('Something else...');
-          },
-        ),
       ],
     );
   }

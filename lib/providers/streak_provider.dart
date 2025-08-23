@@ -19,7 +19,8 @@ class TodaysStreak extends _$TodaysStreak {
     // Watch the streak in DB for today's streak changes
     Stream<Streak?> stream = ref
         .read(streakRepositoryProvider.notifier)
-        .watchCurrentStreak();
+        .watchTodaysStreak();
+
     yield* stream;
   }
 
@@ -80,4 +81,14 @@ class TodaysStreak extends _$TodaysStreak {
         .read(streakRepositoryProvider.notifier)
         .upsertStreakCountAndSuccess(streak);
   }
+}
+
+/// A provider that exclusively watches the latest streak
+@Riverpod()
+Stream<Streak?> latestStreak(Ref ref) async* {
+  Stream<Streak?> stream = ref
+      .read(streakRepositoryProvider.notifier)
+      .watchLatestStreak();
+
+  yield* stream;
 }

@@ -118,7 +118,7 @@ class LustCycleDiagram extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  '🌟 The Power of Practice 🌟',
+                  'The Power of Practice',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: _getTextColor(context, AppTheme.primaryGreen),
                     fontWeight: FontWeight.bold,

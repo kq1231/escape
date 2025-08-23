@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:escape/models/temptation.dart';
 import 'package:escape/providers/current_active_temptation_provider.dart';
+import 'package:escape/providers/streak_provider.dart';
 import 'package:escape/providers/user_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +30,12 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   Timer? _timerRefresh;
   bool _isInitialized = false;
 
+  // Activity selection state
+  String? _selectedActivity;
+  final TextEditingController _customActivityController =
+      TextEditingController();
+  bool _showCustomActivityField = false;
+
   // Helper method to get appropriate text color for theme
   Color _getTextColor(Color defaultColor) {
     return Theme.of(context).brightness == Brightness.dark
@@ -46,6 +53,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   @override
   void dispose() {
     _pageController.dispose();
+    _customActivityController.dispose();
     _timerRefresh?.cancel();
     super.dispose();
   }
@@ -218,6 +226,9 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             .completeTemptation(temptation: updatedTemptation);
       }
 
+      // Invalidate the latestStreakProvider
+      ref.invalidate(latestStreakProvider);
+
       // Check again if widget is still mounted before showing dialog
       if (mounted) {
         showDialog(
@@ -310,13 +321,33 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     }
   }
 
-  Future<void> _onActivitySelected(String activity) async {
+  void _onActivitySelected(String activity) {
+    setState(() {
+      _selectedActivity = activity;
+      _showCustomActivityField = activity == 'Something Else';
+
+      // Clear custom activity controller when not "Something Else"
+      if (!_showCustomActivityField) {
+        _customActivityController.clear();
+      }
+    });
+  }
+
+  Future<void> _startTimerAndProceed() async {
     try {
+      String finalActivity;
+
+      if (_selectedActivity == 'Something Else') {
+        finalActivity = _customActivityController.text.trim();
+      } else {
+        finalActivity = _selectedActivity!;
+      }
+
       // Get current temptation from provider and update it with selected activity
       final currentTemptation = ref.read(currentActiveTemptationProvider).value;
       if (currentTemptation != null) {
         final updatedTemptation = currentTemptation.copyWith(
-          selectedActivity: activity,
+          selectedActivity: finalActivity,
         );
 
         // Update the temptation using the provider's updateTemptation method
@@ -324,20 +355,39 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             .read(currentActiveTemptationProvider.notifier)
             .updateTemptation(updatedTemptation);
 
-        // Start timer when activity is selected
+        // Start timer when moving to next page
         _storageService.startTimer(durationMinutes: 30);
+
+        // Start timer refresh to update UI in real-time
+        _startTimerRefresh();
+
+        // Navigate to timer page
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
       }
     } catch (e) {
-      // print('Error in _onActivitySelected: $e');
+      // print('Error in _startTimerAndProceed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('An error occurred while selecting activity.'),
+            content: Text('An error occurred while starting timer.'),
             backgroundColor: AppTheme.errorRed,
           ),
         );
       }
     }
+  }
+
+  bool _canProceedFromActivityPage() {
+    if (_selectedActivity == null) return false;
+
+    if (_selectedActivity == 'Something Else') {
+      return _customActivityController.text.trim().isNotEmpty;
+    }
+
+    return true;
   }
 
   @override
@@ -374,6 +424,11 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
       ),
       data: (currentTemptation) => Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: _onCancelSession,
+            tooltip: 'Cancel Session',
+          ),
           title: Text(
             _currentPage == 0 ? 'I Need Help' : 'Temptation Protocols',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -512,29 +567,76 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(
+            'Choose an activity to distract yourself',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: _getTextColor(AppTheme.darkGreen),
+              fontSize: 22,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppTheme.spacingXL),
+
           ActivitySelector(
-            predefinedActivities: PredefinedActivities.activityNames,
-            selectedActivity: currentTemptation?.selectedActivity,
+            predefinedActivities: [
+              ...PredefinedActivities.activityNames,
+              'Something Else',
+            ],
+            selectedActivity: _selectedActivity,
             onActivitySelected: _onActivitySelected,
           ),
-          if (currentTemptation?.selectedActivity != null) ...[
-            const SizedBox(height: AppTheme.spacingXL),
-            Text(
-              'Selected: ${currentTemptation!.selectedActivity}',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: _getTextColor(AppTheme.primaryGreen),
-                fontSize: 20,
+
+          if (_showCustomActivityField) ...[
+            const SizedBox(height: AppTheme.spacingL),
+            TextField(
+              controller: _customActivityController,
+              decoration: InputDecoration(
+                labelText: 'Enter your custom activity',
+                hintText: 'e.g., Call a friend, Read a book...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                ),
+                prefixIcon: const Icon(Icons.edit),
               ),
-              textAlign: TextAlign.center,
+              textCapitalization: TextCapitalization.sentences,
+              onChanged: (value) {
+                setState(() {}); // Trigger rebuild to update button state
+              },
             ),
-            const SizedBox(height: AppTheme.spacingM),
-            Text(
-              'Timer started for 30 minutes',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: _getTextColor(AppTheme.mediumGray),
+          ],
+
+          if (_selectedActivity != null) ...[
+            const SizedBox(height: AppTheme.spacingL),
+            Container(
+              padding: const EdgeInsets.all(AppTheme.spacingM),
+              decoration: BoxDecoration(
+                color: AppTheme.lightGreen.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                border: Border.all(color: AppTheme.primaryGreen),
               ),
-              textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    'Selected Activity:',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primaryGreen,
+                    ),
+                  ),
+                  const SizedBox(height: AppTheme.spacingS),
+                  Text(
+                    _selectedActivity == 'Something Else'
+                        ? _customActivityController.text.trim()
+                        : _selectedActivity!,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: _getTextColor(AppTheme.darkGreen),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ],
         ],
@@ -551,7 +653,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           Text(
             currentTemptation?.selectedActivity != null
                 ? 'Go ${currentTemptation!.selectedActivity!.toLowerCase()} for 30 minutes'
-                : 'Select an activity above for 30 minutes',
+                : 'Select an activity to start timer',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: _getTextColor(AppTheme.darkGreen),
@@ -600,7 +702,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             const SizedBox(height: AppTheme.spacingXL),
           ] else ...[
             Text(
-              'Start timer by selecting an activity',
+              'Timer will start once you proceed from activity selection',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: AppTheme.errorRed,
                 fontWeight: FontWeight.w500,
@@ -815,6 +917,8 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return FilterChip(
+      side: BorderSide.none,
+
       label: Text(trigger),
       selected: isSelected,
       onSelected: (selected) {
@@ -839,6 +943,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return FilterChip(
+      side: BorderSide.none,
       label: Text(activity),
       selected: isSelected,
       onSelected: (selected) {
@@ -891,17 +996,23 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             const SizedBox(width: 80),
           if (_currentPage < 5)
             ElevatedButton(
-              onPressed: () {
-                _pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
+              onPressed: _currentPage == 3 && !_canProceedFromActivityPage()
+                  ? null // Disable button if can't proceed from activity page
+                  : _currentPage == 3
+                  ? _startTimerAndProceed // Special handler for activity page
+                  : () {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primaryGreen,
                 foregroundColor: AppTheme.white,
+                disabledBackgroundColor: AppTheme.mediumGray,
+                disabledForegroundColor: AppTheme.white.withValues(alpha: 0.6),
               ),
-              child: const Text('Next'),
+              child: Text(_currentPage == 3 ? 'Start Timer' : 'Next'),
             )
           else
             const SizedBox(width: 80),

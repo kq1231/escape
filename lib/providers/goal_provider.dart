@@ -13,7 +13,7 @@ class Goal extends _$Goal {
     final userProfile = ref.watch(userProfileProvider);
 
     // Return the streak goal from the user profile, or 1 as default
-    return userProfile.value?.streakGoal ?? 1;
+    return userProfile.requireValue!.streakGoal;
   }
 
   /// Update the streak goal in the user profile

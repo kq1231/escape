@@ -174,8 +174,8 @@ class StreakRepository extends _$StreakRepository {
         .map((query) => query.find());
   }
 
-  // Watch current streak
-  Stream<Streak?> watchCurrentStreak() {
+  // Watch latest streak
+  Stream<Streak?> watchLatestStreak() {
     // Build and watch the query for the LATEST/LAST streak
     return _streakBox
         .query()
@@ -184,6 +184,24 @@ class StreakRepository extends _$StreakRepository {
         // Map it to a single streak object or null
         .asyncMap((query) async {
           final result = await query.findFirstAsync();
+          print("RESULT FROM watchLatestStreak: $result");
+          return result;
+        });
+  }
+
+  // Watch today's streak
+  Stream<Streak?> watchTodaysStreak() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    // Build and watch the query for the LATEST/LAST streak
+    return _streakBox
+        .query(Streak_.date.equalsDate(today))
+        .watch(triggerImmediately: true)
+        // Map it to a single streak object or null
+        .asyncMap((query) async {
+          final result = await query.findFirstAsync();
+          print("RESULT FROM watchTodaysStreak: $result");
           return result;
         });
   }

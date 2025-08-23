@@ -30,7 +30,7 @@ final class QuickStatsProvider
   QuickStats create() => QuickStats();
 }
 
-String _$quickStatsHash() => r'a38841c245b739dd171dc9b567e1956ea8178f33';
+String _$quickStatsHash() => r'847faeab8389c769b2a49f2bca0cb3639f1e857d';
 
 abstract class _$QuickStats extends $StreamNotifier<quick_stats.QuickStats> {
   Stream<quick_stats.QuickStats> build();

@@ -36,7 +36,7 @@ final class TodaysStreakProvider
   TodaysStreak create() => TodaysStreak();
 }
 
-String _$todaysStreakHash() => r'14996115596fa7becb5dd35b9185e9d8ea20f489';
+String _$todaysStreakHash() => r'2419dfd8c4e5b9ca9ccfb8c5db80d2d43c6186ad';
 
 abstract class _$TodaysStreak extends $StreamNotifier<Streak?> {
   Stream<Streak?> build();
@@ -56,6 +56,42 @@ abstract class _$TodaysStreak extends $StreamNotifier<Streak?> {
     element.handleValue(ref, created);
   }
 }
+
+/// A provider that exclusively watches the latest streak
+@ProviderFor(latestStreak)
+const latestStreakProvider = LatestStreakProvider._();
+
+/// A provider that exclusively watches the latest streak
+final class LatestStreakProvider
+    extends $FunctionalProvider<AsyncValue<Streak?>, Streak?, Stream<Streak?>>
+    with $FutureModifier<Streak?>, $StreamProvider<Streak?> {
+  /// A provider that exclusively watches the latest streak
+  const LatestStreakProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'latestStreakProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$latestStreakHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<Streak?> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<Streak?> create(Ref ref) {
+    return latestStreak(ref);
+  }
+}
+
+String _$latestStreakHash() => r'afb2641d5ce3a682082a367aa2602bf7a53cd519';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

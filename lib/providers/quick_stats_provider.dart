@@ -24,7 +24,7 @@ class QuickStats extends _$QuickStats {
   ) async* {
     final prayerCountStream = prayerRepository.watchCompletedPrayerCount();
     final bestStreakStream = streakRepository.watchBestStreak();
-    final currentStreakStream = streakRepository.watchCurrentStreak();
+    final currentStreakStream = streakRepository.watchLatestStreak();
     final streakGoal = ref.watch(goalProvider);
 
     // Get initial values
