@@ -36,7 +36,7 @@ final class TodaysStreakProvider
   TodaysStreak create() => TodaysStreak();
 }
 
-String _$todaysStreakHash() => r'd14fd2700098184ab2792ad621ab8ea4198f4dcd';
+String _$todaysStreakHash() => r'14996115596fa7becb5dd35b9185e9d8ea20f489';
 
 abstract class _$TodaysStreak extends $StreamNotifier<Streak?> {
   Stream<Streak?> build();

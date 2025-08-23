@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:escape/models/temptation.dart';
 import 'package:escape/providers/current_active_temptation_provider.dart';
 import 'package:escape/providers/user_profile_provider.dart';
-import 'package:escape/repositories/temptation_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/theme/app_theme.dart';
@@ -24,11 +23,11 @@ class TemptationFlowScreen extends ConsumerStatefulWidget {
 class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   late PageController _pageController;
   int _currentPage = 0;
-  String? _selectedActivity;
   final List<String> _selectedTriggers = [];
   final List<String> _helpfulActivities = [];
   final TemptationStorageService _storageService = TemptationStorageService();
   Timer? _timerRefresh;
+  bool _isInitialized = false;
 
   // Helper method to get appropriate text color for theme
   Color _getTextColor(Color defaultColor) {
@@ -55,11 +54,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     await _storageService.initialize();
 
     if (_storageService.hasActiveTemptation()) {
-      // Resume existing temptation - the provider will handle this
-      setState(() {
-        _selectedActivity = _storageService.getSelectedActivity();
-      });
-
+      // Resume existing temptation - let the provider handle loading
       // Check if timer is active and navigate directly to timer screen (page 4)
       if (_storageService.isTimerActive()) {
         // Jump to timer screen (page 4)
@@ -71,19 +66,15 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         _startTimerRefresh();
       }
     } else {
-      // Create new temptation using the repository
-      final newTemptation = Temptation(createdAt: DateTime.now());
-      final id = await ref
-          .read(temptationRepositoryProvider.notifier)
-          .createTemptation(newTemptation);
-
-      // Store in SharedPreferences
-      await _storageService.storeActiveTemptation(
-        temptationId: id,
-        startTime: newTemptation.createdAt,
-        intensityBefore: 5, // Default intensity
-      );
+      // Create new temptation using the provider
+      await ref
+          .read(currentActiveTemptationProvider.notifier)
+          .startTemptation(intensityBefore: 5); // Default intensity
     }
+
+    setState(() {
+      _isInitialized = true;
+    });
   }
 
   void _startTimerRefresh() {
@@ -121,45 +112,65 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   }
 
   void _onSuccess() async {
-    // Stop timer first
-    await _storageService.stopTimer();
+    try {
+      // Stop timer first
+      await _storageService.stopTimer();
 
-    // Use the currentActiveTemptation provider to complete temptation successfully
-    await ref
-        .read(currentActiveTemptationProvider.notifier)
-        .completeTemptation(
-          temptation: Temptation(
-            createdAt: DateTime.now(),
-            wasSuccessful: true,
-            resolutionNotes:
-                'Successfully overcame temptation through activity: $_selectedActivity',
-            triggers: _selectedTriggers,
-            helpfulActivities: _helpfulActivities,
-          ),
+      // Check if widget is still mounted before proceeding
+      if (!mounted) return;
+
+      // Get current temptation from provider and update it
+      final currentTemptation = ref.read(currentActiveTemptationProvider).value;
+      if (currentTemptation != null) {
+        final updatedTemptation = currentTemptation.copyWith(
+          wasSuccessful: true,
+          resolutionNotes:
+              'Successfully overcame temptation through activity: ${currentTemptation.selectedActivity}',
+          triggers: _selectedTriggers,
+          helpfulActivities: _helpfulActivities,
+          resolvedAt: DateTime.now(),
         );
 
-    if (mounted) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: const Text('Alhamdulillah! 🎉'),
-          content: const Text(
-            'Allah has blessed you with strength! '
-            'May Allah grant you more victories like this. '
-            'Your victory has been recorded.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              child: const Text('Continue'),
+        await ref
+            .read(currentActiveTemptationProvider.notifier)
+            .completeTemptation(temptation: updatedTemptation);
+      }
+
+      // Check again if widget is still mounted before showing dialog
+      if (mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text('Alhamdulillah! 🎉'),
+            content: const Text(
+              'Allah has blessed you with strength! '
+              'May Allah grant you more victories like this. '
+              'Your victory has been recorded.',
             ),
-          ],
-        ),
-      );
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Continue'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle errors gracefully
+      // print('Error in _onSuccess: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred. Please try again.'),
+            backgroundColor: AppTheme.errorRed,
+          ),
+        );
+      }
     }
   }
 
@@ -184,44 +195,66 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   }
 
   Future<void> _onRelapse() async {
-    // Stop timer first
-    await _storageService.stopTimer();
+    try {
+      // Stop timer first
+      await _storageService.stopTimer();
 
-    // Use the currentActiveTemptation provider to complete temptation with relapse
-    await ref
-        .read(currentActiveTemptationProvider.notifier)
-        .completeTemptation(
-          temptation: Temptation(
-            createdAt: DateTime.now(),
-            wasSuccessful: false,
-            resolutionNotes: 'Relapsed but made tawbah',
-            triggers: _selectedTriggers,
-            helpfulActivities: _helpfulActivities,
-          ),
+      // Check if widget is still mounted before proceeding
+      if (!mounted) return;
+
+      // Get current temptation from provider and update it
+      final currentTemptation = ref.read(currentActiveTemptationProvider).value;
+      if (currentTemptation != null) {
+        final updatedTemptation = currentTemptation.copyWith(
+          wasSuccessful: false,
+          resolutionNotes: 'Relapsed but made tawbah',
+          triggers: _selectedTriggers,
+          helpfulActivities: _helpfulActivities,
+          resolvedAt: DateTime.now(),
         );
 
-    if (mounted) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: const Text('Don\'t worry, Allah will always forgive you! 🌙'),
-          content: const Text(
-            'Allah is At-Tawwab, The Accepter of Repentance. '
-            'Make tawbah and move forward, don\'t dwell on it. '
-            'Every new moment is a chance to start again.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              child: const Text('Continue'),
+        await ref
+            .read(currentActiveTemptationProvider.notifier)
+            .completeTemptation(temptation: updatedTemptation);
+      }
+
+      // Check again if widget is still mounted before showing dialog
+      if (mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text(
+              'Don\'t worry, Allah will always forgive you! 🌙',
             ),
-          ],
-        ),
-      );
+            content: const Text(
+              'Allah is At-Tawwab, The Accepter of Repentance. '
+              'Make tawbah and move forward, don\'t dwell on it. '
+              'Every new moment is a chance to start again.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Continue'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle errors gracefully
+      // print('Error in _onRelapse: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred. Please try again.'),
+            backgroundColor: AppTheme.errorRed,
+          ),
+        );
+      }
     }
   }
 
@@ -251,87 +284,160 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     );
 
     if (shouldCancel == true) {
-      // Stop timer first
-      await _storageService.stopTimer();
+      try {
+        // Stop timer first
+        await _storageService.stopTimer();
 
-      // Use the currentActiveTemptation provider to cancel temptation
-      await ref
-          .read(currentActiveTemptationProvider.notifier)
-          .cancelTemptation();
+        // Use the currentActiveTemptation provider to cancel temptation
+        await ref
+            .read(currentActiveTemptationProvider.notifier)
+            .cancelTemptation();
 
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      } catch (e) {
+        // print('Error in _onCancelSession: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('An error occurred while canceling.'),
+              backgroundColor: AppTheme.errorRed,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> _onActivitySelected(String activity) async {
+    try {
+      // Get current temptation from provider and update it with selected activity
+      final currentTemptation = ref.read(currentActiveTemptationProvider).value;
+      if (currentTemptation != null) {
+        final updatedTemptation = currentTemptation.copyWith(
+          selectedActivity: activity,
+        );
+
+        // Update the temptation using the provider's updateTemptation method
+        await ref
+            .read(currentActiveTemptationProvider.notifier)
+            .updateTemptation(updatedTemptation);
+
+        // Start timer when activity is selected
+        _storageService.startTimer(durationMinutes: 30);
+      }
+    } catch (e) {
+      // print('Error in _onActivitySelected: $e');
       if (mounted) {
-        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred while selecting activity.'),
+            backgroundColor: AppTheme.errorRed,
+          ),
+        );
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _currentPage == 0 ? 'I Need Help' : 'Temptation Protocols',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
+    // Show loading screen while initializing
+    if (!_isInitialized) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    // Watch the current active temptation
+    final currentTemptationAsync = ref.watch(currentActiveTemptationProvider);
+
+    return currentTemptationAsync.when(
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, stack) => Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error, size: 64, color: AppTheme.errorRed),
+              const SizedBox(height: 16),
+              Text('Error: $error'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  ref.invalidate(currentActiveTemptationProvider);
+                },
+                child: const Text('Retry'),
+              ),
+            ],
           ),
         ),
-        automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-          // Progress indicator
-          Padding(
-            padding: const EdgeInsets.all(AppTheme.spacingM),
-            child: Row(
-              children: [
-                Text(
-                  'Step ${_currentPage + 1} of 6',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.mediumGray,
-                    fontSize: 14,
+      data: (currentTemptation) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            _currentPage == 0 ? 'I Need Help' : 'Temptation Protocols',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          automaticallyImplyLeading: false,
+        ),
+        body: Column(
+          children: [
+            // Progress indicator
+            Padding(
+              padding: const EdgeInsets.all(AppTheme.spacingM),
+              child: Row(
+                children: [
+                  Text(
+                    'Step ${_currentPage + 1} of 6',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppTheme.mediumGray,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                TemptationPageIndicator(
-                  currentPage: _currentPage,
-                  pageCount: 6,
-                  activeColor: AppTheme.primaryGreen,
-                  inactiveColor: AppTheme.mediumGray,
-                ),
-              ],
+                  const Spacer(),
+                  TemptationPageIndicator(
+                    currentPage: _currentPage,
+                    pageCount: 6,
+                    activeColor: AppTheme.primaryGreen,
+                    inactiveColor: AppTheme.mediumGray,
+                  ),
+                ],
+              ),
             ),
-          ),
-          // Page content
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: _onPageChanged,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                switch (index) {
-                  case 0:
-                    return _buildCalmPage();
-                  case 1:
-                    return _buildEducationPage();
-                  case 2:
-                    return _buildMotivationPage();
-                  case 3:
-                    return _buildActivityPage();
-                  case 4:
-                    return _buildActionPage();
-                  case 5:
-                    return _buildResolutionPage();
-                  default:
-                    return const SizedBox.shrink();
-                }
-              },
+            // Page content
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: _onPageChanged,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  switch (index) {
+                    case 0:
+                      return _buildCalmPage();
+                    case 1:
+                      return _buildEducationPage();
+                    case 2:
+                      return _buildMotivationPage();
+                    case 3:
+                      return _buildActivityPage(currentTemptation);
+                    case 4:
+                      return _buildActionPage(currentTemptation);
+                    case 5:
+                      return _buildResolutionPage();
+                    default:
+                      return const SizedBox.shrink();
+                  }
+                },
+              ),
             ),
-          ),
-          // Navigation buttons
-          _buildNavigationButtons(),
-        ],
+            // Navigation buttons
+            _buildNavigationButtons(),
+          ],
+        ),
       ),
     );
   }
@@ -400,7 +506,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     );
   }
 
-  Widget _buildActivityPage() {
+  Widget _buildActivityPage(Temptation? currentTemptation) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppTheme.spacingXL),
       child: Column(
@@ -408,19 +514,13 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         children: [
           ActivitySelector(
             predefinedActivities: PredefinedActivities.activityNames,
-            onActivitySelected: (activity) {
-              setState(() {
-                _selectedActivity = activity;
-              });
-
-              // Start timer when activity is selected
-              _storageService.startTimer(durationMinutes: 30);
-            },
+            selectedActivity: currentTemptation?.selectedActivity,
+            onActivitySelected: _onActivitySelected,
           ),
-          if (_selectedActivity != null) ...[
+          if (currentTemptation?.selectedActivity != null) ...[
             const SizedBox(height: AppTheme.spacingXL),
             Text(
-              'Selected: $_selectedActivity',
+              'Selected: ${currentTemptation!.selectedActivity}',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: _getTextColor(AppTheme.primaryGreen),
@@ -442,15 +542,15 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     );
   }
 
-  Widget _buildActionPage() {
+  Widget _buildActionPage(Temptation? currentTemptation) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppTheme.spacingXL),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            _selectedActivity != null
-                ? 'Go ${_selectedActivity?.toLowerCase()} for 30 minutes'
+            currentTemptation?.selectedActivity != null
+                ? 'Go ${currentTemptation!.selectedActivity!.toLowerCase()} for 30 minutes'
                 : 'Select an activity above for 30 minutes',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,

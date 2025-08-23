@@ -7,11 +7,13 @@ import '../atoms/activity_button.dart';
 class ActivitySelector extends ConsumerStatefulWidget {
   final Function(String)? onActivitySelected;
   final List<String>? predefinedActivities;
+  final String? selectedActivity; // Add this parameter
 
   const ActivitySelector({
     super.key,
     this.onActivitySelected,
     this.predefinedActivities,
+    this.selectedActivity, // Add this parameter
   });
 
   @override
@@ -32,7 +34,20 @@ class _ActivitySelectorState extends ConsumerState<ActivitySelector> {
   @override
   void initState() {
     super.initState();
+    // Initialize with the passed selectedActivity
+    _selectedActivity = widget.selectedActivity;
     _loadActivities();
+  }
+
+  @override
+  void didUpdateWidget(ActivitySelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update if the selectedActivity prop changes
+    if (oldWidget.selectedActivity != widget.selectedActivity) {
+      setState(() {
+        _selectedActivity = widget.selectedActivity;
+      });
+    }
   }
 
   void _loadActivities() {

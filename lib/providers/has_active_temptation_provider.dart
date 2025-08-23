@@ -19,9 +19,4 @@ class HasActiveTemptation extends _$HasActiveTemptation {
     // Check if there's an active temptation in SharedPreferences
     return _storageService.hasActiveTemptation();
   }
-
-  /// Method to refresh the provider state
-  void refresh() {
-    ;
-  }
 }

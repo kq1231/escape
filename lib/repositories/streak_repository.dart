@@ -184,7 +184,6 @@ class StreakRepository extends _$StreakRepository {
         // Map it to a single streak object or null
         .asyncMap((query) async {
           final result = await query.findFirstAsync();
-          print("RESULT OF LAST STREAK: $result");
           return result;
         });
   }

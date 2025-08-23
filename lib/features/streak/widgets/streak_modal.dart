@@ -148,9 +148,9 @@ class _StreakModalState extends ConsumerState<StreakModal> {
             ),
             Slider(
               value: moodIntensity.toDouble(),
-              min: 1,
+              min: 0,
               max: 10,
-              divisions: 9,
+              divisions: 10,
               label: moodIntensity.toString(),
               onChanged: (value) {
                 setState(() {

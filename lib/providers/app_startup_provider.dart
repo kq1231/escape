@@ -1,7 +1,6 @@
 import 'package:escape/features/temptation/services/temptation_storage_service.dart';
 import 'package:escape/providers/user_profile_provider.dart';
 import 'package:escape/providers/has_active_temptation_provider.dart';
-import 'package:escape/providers/current_active_temptation_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter/foundation.dart';
 import 'objectbox_provider.dart';
@@ -35,7 +34,6 @@ class AppStartup extends _$AppStartup {
 
       // Initialize temptation providers
       ref.read(hasActiveTemptationProvider);
-      ref.read(currentActiveTemptationProvider);
 
       // Add any other initialization code here
       // For example:
