@@ -156,10 +156,8 @@ class TemptationRepository extends _$TemptationRepository {
     final temptation = getTemptationById(temptationId);
     if (temptation != null) {
       final updatedTemptation = temptation.copyWith(
-        resolvedAt: DateTime.now(),
         wasSuccessful: wasSuccessful,
         resolutionNotes: notes,
-        intensityAfter: intensityAfter,
       );
       await updateTemptation(updatedTemptation);
     }
@@ -193,15 +191,6 @@ class TemptationRepository extends _$TemptationRepository {
     final temptation = getTemptationById(temptationId);
     if (temptation != null) {
       final updatedTemptation = temptation.copyWith(selectedActivity: activity);
-      await updateTemptation(updatedTemptation);
-    }
-  }
-
-  // Set intensity before temptation
-  Future<void> setIntensityBefore(int temptationId, int intensity) async {
-    final temptation = getTemptationById(temptationId);
-    if (temptation != null) {
-      final updatedTemptation = temptation.copyWith(intensityBefore: intensity);
       await updateTemptation(updatedTemptation);
     }
   }

@@ -39,31 +39,22 @@ class Temptation {
   Temptation copyWith({
     int? id,
     DateTime? createdAt,
-    DateTime? resolvedAt,
     List<String>? triggers,
     List<String>? helpfulActivities,
     String? selectedActivity,
     bool? wasSuccessful,
     String? resolutionNotes,
-    int? intensityBefore,
-    int? intensityAfter,
   }) {
     return Temptation(
         createdAt: createdAt ?? this.createdAt,
         wasSuccessful: wasSuccessful ?? this.wasSuccessful,
-        intensityBefore: intensityBefore ?? this.intensityBefore,
-        intensityAfter: intensityAfter ?? this.intensityAfter,
         resolutionNotes: resolutionNotes ?? this.resolutionNotes,
       )
       ..id = id ?? this.id
-      ..resolvedAt = resolvedAt ?? this.resolvedAt
       ..triggers = triggers ?? this.triggers
       ..helpfulActivities = helpfulActivities ?? this.helpfulActivities
       ..selectedActivity = selectedActivity ?? this.selectedActivity;
   }
-
-  // Check if temptation is active (not resolved)
-  bool get isActive => resolvedAt == null;
 
   // Get duration of temptation
   Duration? get duration {
