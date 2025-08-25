@@ -1,5 +1,7 @@
+import 'package:escape/models/xp_history_item_model.dart';
 import 'package:escape/providers/prayer_provider.dart';
 import 'package:escape/repositories/prayer_repository.dart';
+import 'package:escape/providers/xp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../molecules/prayer_row.dart';
@@ -17,6 +19,24 @@ class DailyPrayerGrid extends ConsumerWidget {
     this.onPrayerTap,
   });
 
+  // Helper method to get XP amount for different prayers
+  int _getXPForPrayer(String prayerName) {
+    switch (prayerName) {
+      case 'Fajr':
+        return 300;
+      case 'Asr':
+        return 300;
+      case 'Tahajjud':
+        return 5000;
+      case 'Dhuhr':
+      case 'Maghrib':
+      case 'Isha':
+        return 100;
+      default:
+        return 100;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todaysPrayersAsync = ref.watch(todaysPrayersProvider());
@@ -25,6 +45,7 @@ class DailyPrayerGrid extends ConsumerWidget {
       data: (prayers) {
         // List of the 5 daily prayers in order
         final List<String> prayerNames = [
+          'Tahajjud',
           'Fajr',
           'Dhuhr',
           'Asr',
@@ -82,11 +103,24 @@ class DailyPrayerGrid extends ConsumerWidget {
                   children: [
                     PrayerRow(
                       prayerName: prayerName,
+                      xp: _getXPForPrayer(prayerName),
                       prayer: prayer,
-                      onStateChanged: (state) {
+                      onStateChanged: (state) async {
                         // Handle prayer state changes
                         switch (state) {
                           case CheckboxState.checked:
+                            // Award XP based on prayer type
+                            int xpAmount = _getXPForPrayer(prayerName);
+
+                            // Award XP first
+                            XPHistoryItem xpHistoryItem = await ref
+                                .read(xPControllerProvider.notifier)
+                                .createXP(
+                                  xpAmount,
+                                  'Completed $prayerName prayer',
+                                  context: context,
+                                );
+
                             // Create or update prayer as completed
                             if (prayer == null) {
                               // Create new prayer
@@ -98,7 +132,7 @@ class DailyPrayerGrid extends ConsumerWidget {
                                   DateTime.now().month,
                                   DateTime.now().day,
                                 ),
-                              );
+                              )..xpHistory.target = xpHistoryItem;
                               ref
                                   .read(prayerRepositoryProvider.notifier)
                                   .createPrayer(newPrayer);
@@ -113,7 +147,7 @@ class DailyPrayerGrid extends ConsumerWidget {
                             }
                             break;
                           case CheckboxState.unchecked:
-                            // Create or update prayer as not completed
+                            // Create or update prayer as not completed and reverse XP
                             if (prayer!.id == 0) {
                               // Create new prayer
                               final newPrayer = Prayer(
@@ -129,13 +163,18 @@ class DailyPrayerGrid extends ConsumerWidget {
                                   .read(prayerRepositoryProvider.notifier)
                                   .createPrayer(newPrayer);
                             } else {
-                              // Update existing prayer
+                              // Update existing prayer and reverse XP
                               final updatedPrayer = prayer.copyWith(
                                 isCompleted: false,
                               );
                               ref
                                   .read(prayerRepositoryProvider.notifier)
                                   .updatePrayer(updatedPrayer);
+
+                              // Reverse XP when prayer is unmarked
+                              await ref
+                                  .read(xPControllerProvider.notifier)
+                                  .deleteXPOfPrayer(prayer, context: context);
                             }
                             break;
                           case CheckboxState.empty:

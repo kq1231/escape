@@ -91,7 +91,7 @@ final class LatestStreakProvider
   }
 }
 
-String _$latestStreakHash() => r'afb2641d5ce3a682082a367aa2602bf7a53cd519';
+String _$latestStreakHash() => r'08d06b8e7118e47ab081885bb06559f178d3ae52';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

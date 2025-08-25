@@ -7,6 +7,7 @@ import '../widgets/goal_modal.dart';
 import '../../../providers/goal_provider.dart';
 import '../../../providers/user_profile_provider.dart';
 import '../../profile/screens/profile_screen.dart';
+import '../../../widgets/xp_badge.dart';
 import 'dart:io';
 
 class StreakOrganism extends ConsumerWidget {
@@ -72,54 +73,206 @@ class StreakOrganism extends ConsumerWidget {
   }
 
   Widget _buildProfileButton(BuildContext context, WidgetRef ref) {
-    // Get the user profile from the provider
-    final userProfile = ref.read(userProfileProvider).requireValue;
+    return Consumer(
+      builder: (context, ref, child) {
+        // Watch the user profile provider to get XP updates
+        final userProfileAsync = ref.watch(userProfileProvider);
 
-    // If no picture, show default user icon
-    if (userProfile!.profilePicture.isEmpty) {
-      return Container(
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          color: AppTheme.white.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
-        ),
-        child: IconButton(
-          icon: const Icon(Icons.person, color: AppTheme.white, size: 24),
-          onPressed: () {
-            // Navigate to profile screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+        return userProfileAsync.when(
+          data: (userProfile) {
+            // If no picture, show default user icon
+            if (userProfile!.profilePicture.isEmpty) {
+              return userProfile.xp > 0
+                  ? Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: AppTheme.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(
+                              AppTheme.radiusM,
+                            ),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.person,
+                              color: AppTheme.white,
+                              size: 24,
+                            ),
+                            onPressed: () {
+                              // Navigate to profile screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProfileScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        Positioned(
+                          bottom: -10,
+                          right: -15,
+                          child: XPBadge(
+                            xpAmount: userProfile.xp,
+                            backgroundColor: Colors.amber[700] ?? Colors.amber,
+                            textColor: Colors.black87,
+                            fontSize: 14,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4,
+                              vertical: 1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: AppTheme.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.person,
+                          color: AppTheme.white,
+                          size: 24,
+                        ),
+                        onPressed: () {
+                          // Navigate to profile screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfileScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+            }
+            // Check if user has a profile picture
+            else {
+              // Try to load the profile image
+              return userProfile.xp > 0
+                  ? Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppTheme.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(
+                              AppTheme.radiusM,
+                            ),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Navigate to profile screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProfileScreen(),
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 16,
+                              backgroundImage: FileImage(
+                                File(userProfile.profilePicture),
+                              ),
+                              backgroundColor: AppTheme.white.withValues(
+                                alpha: 0.2,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: -10,
+                          right: -15,
+                          child: XPBadge(
+                            xpAmount: userProfile.xp,
+                            backgroundColor: Colors.amber[700] ?? Colors.amber,
+                            textColor: Colors.black87,
+                            fontSize: 14,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4,
+                              vertical: 1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppTheme.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Navigate to profile screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfileScreen(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 16,
+                          backgroundImage: FileImage(
+                            File(userProfile.profilePicture),
+                          ),
+                          backgroundColor: AppTheme.white.withValues(
+                            alpha: 0.2,
+                          ),
+                        ),
+                      ),
+                    );
+            }
+          },
+          error: (_, _) {
+            return Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppTheme.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(AppTheme.radiusM),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.person, color: AppTheme.white, size: 24),
+                onPressed: () {
+                  // Navigate to profile screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfileScreen(),
+                    ),
+                  );
+                },
+              ),
             );
           },
-        ),
-      );
-    }
-    // Check if user has a profile picture
-    else {
-      // Try to load the profile image
-      return Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppTheme.white.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
-        ),
-        child: GestureDetector(
-          onTap: () {
-            // Navigate to profile screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+          loading: () {
+            return Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppTheme.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(AppTheme.radiusM),
+              ),
+              child: const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppTheme.white),
+                ),
+              ),
             );
           },
-          child: CircleAvatar(
-            radius: 16,
-            backgroundImage: FileImage(File(userProfile.profilePicture)),
-            backgroundColor: AppTheme.white.withValues(alpha: 0.2),
-          ),
-        ),
-      );
-    }
+        );
+      },
+    );
   }
 
   @override

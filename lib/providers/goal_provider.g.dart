@@ -43,7 +43,7 @@ final class GoalProvider extends $NotifierProvider<Goal, int> {
   }
 }
 
-String _$goalHash() => r'642c792b2dbc826a1d5ebb9dc9e126abc9afe7cc';
+String _$goalHash() => r'90ec168710a66f0ac80b885db3c5896273357d1e';
 
 abstract class _$Goal extends $Notifier<int> {
   int build();

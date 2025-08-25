@@ -1,4 +1,5 @@
 import 'package:objectbox/objectbox.dart';
+import 'xp_history_item_model.dart';
 
 @Entity()
 class Prayer {
@@ -14,6 +15,9 @@ class Prayer {
   // Date of the prayer record
   @Property(type: PropertyType.date)
   DateTime date;
+
+  // Relation to XP history item
+  final xpHistory = ToOne<XPHistoryItem>();
 
   // Constructor
   Prayer({

@@ -1,39 +1,44 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'temptation_repository.dart';
+part of 'xp_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(TemptationRepository)
-const temptationRepositoryProvider = TemptationRepositoryProvider._();
+/// A controller that handles XP-related operations
+/// This controller has keepAlive: false (autoDispose) for efficiency
+@ProviderFor(XPController)
+const xPControllerProvider = XPControllerProvider._();
 
-final class TemptationRepositoryProvider
-    extends $AsyncNotifierProvider<TemptationRepository, void> {
-  const TemptationRepositoryProvider._()
+/// A controller that handles XP-related operations
+/// This controller has keepAlive: false (autoDispose) for efficiency
+final class XPControllerProvider
+    extends $AsyncNotifierProvider<XPController, void> {
+  /// A controller that handles XP-related operations
+  /// This controller has keepAlive: false (autoDispose) for efficiency
+  const XPControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'temptationRepositoryProvider',
-        isAutoDispose: true,
+        name: r'xPControllerProvider',
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$temptationRepositoryHash();
+  String debugGetCreateSourceHash() => _$xPControllerHash();
 
   @$internal
   @override
-  TemptationRepository create() => TemptationRepository();
+  XPController create() => XPController();
 }
 
-String _$temptationRepositoryHash() =>
-    r'2774e90804bdb538b9b542d8270fe0a3ea3adee7';
+String _$xPControllerHash() => r'3dfc9ae6e0a6a8a55d7be4a113076b193f0c27ee';
 
-abstract class _$TemptationRepository extends $AsyncNotifier<void> {
+abstract class _$XPController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

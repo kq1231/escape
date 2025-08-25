@@ -3,6 +3,7 @@ import 'package:escape/models/temptation.dart';
 import 'package:escape/providers/current_active_temptation_provider.dart';
 import 'package:escape/providers/streak_provider.dart';
 import 'package:escape/providers/user_profile_provider.dart';
+import 'package:escape/providers/xp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/theme/app_theme.dart';
@@ -12,6 +13,10 @@ import '../atoms/countdown_timer.dart';
 import '../molecules/motivation_card.dart';
 import '../molecules/lust_cycle_diagram.dart';
 import '../molecules/activity_selector.dart';
+import '../atoms/xp_confirmation_dialog.dart';
+import '../screens/success_screen.dart';
+import '../screens/tawbah_screen.dart';
+import 'package:escape/widgets/xp_badge.dart';
 
 class TemptationFlowScreen extends ConsumerStatefulWidget {
   const TemptationFlowScreen({super.key});
@@ -127,6 +132,26 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
       // Check if widget is still mounted before proceeding
       if (!mounted) return;
 
+      // Show confirmation dialog
+      bool confirmed = false;
+      await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => XPConfirmationDialog(
+          title: 'Confirm Success',
+          content:
+              'Are you sure you successfully overcame this temptation? '
+              'This will award you 1,000 XP for your victory.',
+          xpAmount: 1000,
+          xpDescription: 'Successfully overcame temptation',
+          onConfirm: () {
+            confirmed = true;
+          },
+        ),
+      );
+
+      if (confirmed != true) return;
+
       // Get current temptation from provider and update it
       final currentTemptation = ref.read(currentActiveTemptationProvider).value;
       if (currentTemptation != null) {
@@ -143,28 +168,19 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             .completeTemptation(temptation: updatedTemptation);
       }
 
-      // Check again if widget is still mounted before showing dialog
+      // Award XP
+      await ref
+          .read(xPControllerProvider.notifier)
+          .createXP(
+            1000,
+            'Successfully overcame temptation',
+            context: (context.mounted) ? context : null,
+          );
+
+      // Navigate to success screen
       if (mounted) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: const Text('Alhamdulillah! 🎉'),
-            content: const Text(
-              'Allah has blessed you with strength! '
-              'May Allah grant you more victories like this. '
-              'Your victory has been recorded.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Continue'),
-              ),
-            ],
-          ),
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const SuccessScreen()),
         );
       }
     } catch (e) {
@@ -209,6 +225,28 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
       // Check if widget is still mounted before proceeding
       if (!mounted) return;
 
+      // Show confirmation dialog
+      bool confirmed = false;
+
+      await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => XPConfirmationDialog(
+          title: 'Confirm Relapse',
+          content:
+              'Are you sure you relapsed? '
+              'Don\'t worry - Allah is The Most Merciful! '
+              'This will guide you through tawbah and award 200 XP.',
+          xpAmount: 200,
+          xpDescription: 'Made sincere tawbah',
+          onConfirm: () {
+            confirmed = true;
+          },
+        ),
+      );
+
+      if (confirmed != true) return;
+
       // Get current temptation from provider and update it
       final currentTemptation = ref.read(currentActiveTemptationProvider).value;
       if (currentTemptation != null) {
@@ -227,30 +265,19 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
       // Invalidate the latestStreakProvider
       ref.invalidate(latestStreakProvider);
 
-      // Check again if widget is still mounted before showing dialog
+      // Award XP for tawbah
+      await ref
+          .read(xPControllerProvider.notifier)
+          .createXP(
+            200,
+            'Made sincere tawbah',
+            context: (context.mounted) ? context : null,
+          );
+
+      // Navigate to tawbah screen
       if (mounted) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: const Text(
-              'Don\'t worry, Allah will always forgive you! 🌙',
-            ),
-            content: const Text(
-              'Allah is At-Tawwab, The Accepter of Repentance. '
-              'Make tawbah and move forward, don\'t dwell on it. '
-              'Every new moment is a chance to start again.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Continue'),
-              ),
-            ],
-          ),
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const TawbahScreen()),
         );
       }
     } catch (e) {
@@ -886,7 +913,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   ),
                   minimumSize: const Size(150, 80),
                 ),
-              ),
+              ).withXPBadge(xpAmount: 1000, badgeColor: AppTheme.primaryGreen),
               ElevatedButton.icon(
                 onPressed: _onRelapse,
                 icon: const Icon(Icons.cancel, color: AppTheme.white),
@@ -902,7 +929,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   ),
                   minimumSize: const Size(150, 80),
                 ),
-              ),
+              ).withXPBadge(xpAmount: 200, badgeColor: AppTheme.errorRed),
             ],
           ),
         ],

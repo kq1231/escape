@@ -1,4 +1,5 @@
 import 'package:objectbox/objectbox.dart';
+import 'xp_history_item_model.dart';
 
 @Entity()
 class Streak {
@@ -31,6 +32,9 @@ class Streak {
 
   // Success flag - true means success, false means relapse
   bool isSuccess;
+
+  // Relation to XP history item
+  final xpHistory = ToOne<XPHistoryItem>();
 
   // Constructor
   Streak({

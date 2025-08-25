@@ -30,7 +30,7 @@ final class StreakRepositoryProvider
   StreakRepository create() => StreakRepository();
 }
 
-String _$streakRepositoryHash() => r'8baad2d667dee734960804a0169341c0d872775b';
+String _$streakRepositoryHash() => r'1212725fea821eed807a170c23b7ceab871e8db8';
 
 abstract class _$StreakRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

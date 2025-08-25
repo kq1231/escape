@@ -109,7 +109,7 @@ class CustomButton extends StatelessWidget {
 
   Widget _buildFilledButton(BuildContext context, {required bool isDark}) {
     return SizedBox(
-      width: width,
+      width: width ?? double.infinity, // This will make it expand
       height: height,
       child: ElevatedButton(
         onPressed: onPressed,
@@ -150,7 +150,7 @@ class CustomButton extends StatelessWidget {
 
   Widget _buildOutlineButton(BuildContext context, {required bool isDark}) {
     return SizedBox(
-      width: width,
+      width: width ?? double.infinity, // This will make it expand
       height: height,
       child: OutlinedButton(
         onPressed: onPressed,

@@ -1,4 +1,5 @@
 import 'package:objectbox/objectbox.dart';
+import 'xp_history_item_model.dart';
 
 @Entity()
 class Temptation {
@@ -23,6 +24,9 @@ class Temptation {
   // Emotional state
   int? intensityBefore; // 1-10 scale
   int? intensityAfter; // 1-10 scale
+
+  // Relation to XP history item
+  final xpHistory = ToOne<XPHistoryItem>();
 
   Temptation({
     required this.createdAt,

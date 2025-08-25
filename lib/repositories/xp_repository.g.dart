@@ -1,39 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'temptation_repository.dart';
+part of 'xp_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(TemptationRepository)
-const temptationRepositoryProvider = TemptationRepositoryProvider._();
+@ProviderFor(XPRepository)
+const xPRepositoryProvider = XPRepositoryProvider._();
 
-final class TemptationRepositoryProvider
-    extends $AsyncNotifierProvider<TemptationRepository, void> {
-  const TemptationRepositoryProvider._()
+final class XPRepositoryProvider
+    extends $AsyncNotifierProvider<XPRepository, void> {
+  const XPRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'temptationRepositoryProvider',
+        name: r'xPRepositoryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$temptationRepositoryHash();
+  String debugGetCreateSourceHash() => _$xPRepositoryHash();
 
   @$internal
   @override
-  TemptationRepository create() => TemptationRepository();
+  XPRepository create() => XPRepository();
 }
 
-String _$temptationRepositoryHash() =>
-    r'2774e90804bdb538b9b542d8270fe0a3ea3adee7';
+String _$xPRepositoryHash() => r'584501884c7ff769eccae8e2a9ec060a86f08996';
 
-abstract class _$TemptationRepository extends $AsyncNotifier<void> {
+abstract class _$XPRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

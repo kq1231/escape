@@ -32,6 +32,9 @@ class UserProfile {
   // Profile picture path/URL (relative path)
   String profilePicture;
 
+  // Total experience points
+  int xp = 0;
+
   // Getter to get the full path of the profile picture
   String get fullProfilePicturePath {
     if (profilePicture.isEmpty) return '';
@@ -60,6 +63,7 @@ class UserProfile {
     this.biometricEnabled = false,
     this.notificationsEnabled = true,
     this.profilePicture = '',
+    this.xp = 0,
     DateTime? createdAt,
     DateTime? lastUpdated,
   }) : goals = goals ?? [],
@@ -80,6 +84,7 @@ class UserProfile {
     bool? biometricEnabled,
     bool? notificationsEnabled,
     String? profilePicture,
+    int? xp,
     DateTime? createdAt,
     DateTime? lastUpdated,
   }) {
@@ -94,6 +99,7 @@ class UserProfile {
       biometricEnabled: biometricEnabled ?? this.biometricEnabled,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       profilePicture: profilePicture ?? this.profilePicture,
+      xp: xp ?? this.xp,
       createdAt: createdAt ?? this.createdAt,
       lastUpdated: lastUpdated ?? DateTime.now(),
     );
@@ -110,6 +116,6 @@ class UserProfile {
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, name: $name, goals: $goals, hobbies: $hobbies, triggers: $triggers, streakGoal: $streakGoal, passwordHash: $passwordHash, biometricEnabled: $biometricEnabled, notificationsEnabled: $notificationsEnabled, profilePicture: $profilePicture, createdAt: $createdAt, lastUpdated: $lastUpdated)';
+    return 'UserProfile(id: $id, name: $name, goals: $goals, hobbies: $hobbies, triggers: $triggers, streakGoal: $streakGoal, passwordHash: $passwordHash, biometricEnabled: $biometricEnabled, notificationsEnabled: $notificationsEnabled, profilePicture: $profilePicture, xp: $xp, createdAt: $createdAt, lastUpdated: $lastUpdated)';
   }
 }

@@ -1,10 +1,13 @@
 import 'package:escape/models/streak_model.dart';
+import 'package:escape/models/xp_history_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/theme/app_theme.dart';
 import 'package:escape/providers/streak_provider.dart';
+import 'package:escape/providers/xp_controller.dart';
 import 'package:escape/widgets/custom_button.dart';
 import 'package:escape/widgets/choice_chip_group.dart';
+import 'package:escape/widgets/xp_badge.dart';
 
 class StreakModal extends ConsumerStatefulWidget {
   final Streak? streak;
@@ -93,16 +96,18 @@ class _StreakModalState extends ConsumerState<StreakModal> {
             // Success/Relapse buttons
             Row(
               children: [
-                Expanded(
-                  child: CustomButton.success(
-                    isSelected: isSuccess == true,
-                    text: 'Yes, I\nsucceeded',
-                    onPressed: () {
-                      setState(() {
-                        isSuccess = true;
-                      });
-                    },
-                  ),
+                CustomButton.success(
+                  isSelected: isSuccess == true,
+                  text: 'Yes, I\nsucceeded',
+                  onPressed: () {
+                    setState(() {
+                      isSuccess = true;
+                    });
+                  },
+                ).withXPBadge(
+                  xpAmount: 500,
+                  badgeColor: AppTheme.successGreen,
+                  expanded: true, // Add this parameter
                 ),
                 const SizedBox(width: AppTheme.spacingM),
                 Expanded(
@@ -169,7 +174,30 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                     ? () {
                         // Do nothing if success/relapse is not selected
                       }
-                    : () {
+                    : () async {
+                        XPHistoryItem? xpHistoryItem;
+
+                        // Award XP only for success
+                        if (isSuccess!) {
+                          xpHistoryItem = await ref
+                              .read(xPControllerProvider.notifier)
+                              .createXP(
+                                500,
+                                'Successful streak day',
+                                context: context,
+                              );
+                        } else {
+                          // Reverse XP when changing from success to relapse
+                          if (widget.streak?.isSuccess == true) {
+                            await ref
+                                .read(xPControllerProvider.notifier)
+                                .deleteXPOfStreak(
+                                  widget.streak!,
+                                  context: context,
+                                );
+                          }
+                        }
+
                         // Update already existing streak
                         if (widget.streak != null) {
                           // If changed to success from relapse, increment count
@@ -181,7 +209,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                     emotion: selectedEmotion,
                                     moodIntensity: moodIntensity,
                                     isSuccess: isSuccess,
-                                  ),
+                                  )..xpHistory.target = xpHistoryItem,
                                 );
                           }
                           // If changed to relapse from success, reset count
@@ -194,7 +222,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                     emotion: selectedEmotion,
                                     moodIntensity: moodIntensity,
                                     isSuccess: isSuccess,
-                                  ),
+                                  )..xpHistory.target = xpHistoryItem,
                                 );
                           } else {
                             // If success did not change, just update the streak
@@ -205,7 +233,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                     emotion: selectedEmotion,
                                     moodIntensity: moodIntensity,
                                     isSuccess: isSuccess,
-                                  ),
+                                  )..xpHistory.target = xpHistoryItem,
                                 );
                           }
                         } else {
@@ -217,7 +245,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                   Streak(
                                     emotion: selectedEmotion,
                                     moodIntensity: moodIntensity,
-                                  ),
+                                  )..xpHistory.target = xpHistoryItem,
                                 );
                           } else {
                             ref
@@ -226,7 +254,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                   Streak(
                                     emotion: selectedEmotion,
                                     moodIntensity: moodIntensity,
-                                  ),
+                                  )..xpHistory.target = xpHistoryItem,
                                 );
                           }
                         }

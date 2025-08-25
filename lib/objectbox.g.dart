@@ -18,6 +18,7 @@ import 'models/prayer_model.dart';
 import 'models/streak_model.dart';
 import 'models/temptation.dart';
 import 'models/user_profile_model.dart';
+import 'models/xp_history_item_model.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -25,7 +26,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(1, 1338698365441690232),
     name: 'Prayer',
-    lastPropertyId: const obx_int.IdUid(4, 4985978825233514570),
+    lastPropertyId: const obx_int.IdUid(5, 8161649086128211093),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -52,6 +53,14 @@ final _entities = <obx_int.ModelEntity>[
         type: 10,
         flags: 0,
       ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 8161649086128211093),
+        name: 'xpHistoryId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(1, 1128823597899153944),
+        relationTarget: 'XPHistoryItem',
+      ),
     ],
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
@@ -59,7 +68,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(2, 706345959104340872),
     name: 'Streak',
-    lastPropertyId: const obx_int.IdUid(10, 6392053059665417157),
+    lastPropertyId: const obx_int.IdUid(11, 9152171727215301684),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -116,6 +125,14 @@ final _entities = <obx_int.ModelEntity>[
         type: 1,
         flags: 0,
       ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 9152171727215301684),
+        name: 'xpHistoryId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(2, 632438745793644113),
+        relationTarget: 'XPHistoryItem',
+      ),
     ],
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
@@ -123,7 +140,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(3, 8512291693082550534),
     name: 'UserProfile',
-    lastPropertyId: const obx_int.IdUid(12, 4431811609107151357),
+    lastPropertyId: const obx_int.IdUid(13, 1892833832546443536),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -198,6 +215,12 @@ final _entities = <obx_int.ModelEntity>[
         type: 9,
         flags: 0,
       ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(13, 1892833832546443536),
+        name: 'xp',
+        type: 6,
+        flags: 0,
+      ),
     ],
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
@@ -205,7 +228,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(4, 5989821107332366666),
     name: 'Temptation',
-    lastPropertyId: const obx_int.IdUid(10, 413574071793923485),
+    lastPropertyId: const obx_int.IdUid(11, 4593547370337186821),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -268,6 +291,48 @@ final _entities = <obx_int.ModelEntity>[
         type: 6,
         flags: 0,
       ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 4593547370337186821),
+        name: 'xpHistoryId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(3, 374482867967219037),
+        relationTarget: 'XPHistoryItem',
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(5, 8320926897872393874),
+    name: 'XPHistoryItem',
+    lastPropertyId: const obx_int.IdUid(4, 6389020876003628461),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 926498438497895275),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 6356618502041027489),
+        name: 'amount',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 8537177048229919959),
+        name: 'description',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 6389020876003628461),
+        name: 'createdAt',
+        type: 10,
+        flags: 0,
+      ),
     ],
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
@@ -312,8 +377,8 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(4, 5989821107332366666),
-    lastIndexId: const obx_int.IdUid(0, 0),
+    lastEntityId: const obx_int.IdUid(5, 8320926897872393874),
+    lastIndexId: const obx_int.IdUid(3, 374482867967219037),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
@@ -328,7 +393,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
   final bindings = <Type, obx_int.EntityDefinition>{
     Prayer: obx_int.EntityDefinition<Prayer>(
       model: _entities[0],
-      toOneRelations: (Prayer object) => [],
+      toOneRelations: (Prayer object) => [object.xpHistory],
       toManyRelations: (Prayer object) => {},
       getId: (Prayer object) => object.id,
       setId: (Prayer object, int id) {
@@ -336,11 +401,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (Prayer object, fb.Builder fbb) {
         final nameOffset = fbb.writeString(object.name);
-        fbb.startTable(5);
+        fbb.startTable(6);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, nameOffset);
         fbb.addBool(2, object.isCompleted);
         fbb.addInt64(3, object.date.millisecondsSinceEpoch);
+        fbb.addInt64(4, object.xpHistory.targetId);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -371,13 +437,19 @@ obx_int.ModelDefinition getObjectBoxModel() {
           isCompleted: isCompletedParam,
           date: dateParam,
         );
-
+        object.xpHistory.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          0,
+        );
+        object.xpHistory.attach(store);
         return object;
       },
     ),
     Streak: obx_int.EntityDefinition<Streak>(
       model: _entities[1],
-      toOneRelations: (Streak object) => [],
+      toOneRelations: (Streak object) => [object.xpHistory],
       toManyRelations: (Streak object) => {},
       getId: (Streak object) => object.id,
       setId: (Streak object, int id) {
@@ -385,7 +457,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (Streak object, fb.Builder fbb) {
         final emotionOffset = fbb.writeString(object.emotion);
-        fbb.startTable(11);
+        fbb.startTable(12);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.count);
         fbb.addInt64(2, object.goal);
@@ -395,6 +467,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(7, object.createdAt.millisecondsSinceEpoch);
         fbb.addInt64(8, object.lastUpdated.millisecondsSinceEpoch);
         fbb.addBool(9, object.isSuccess);
+        fbb.addInt64(10, object.xpHistory.targetId);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -454,7 +527,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
           createdAt: createdAtParam,
           lastUpdated: lastUpdatedParam,
         );
-
+        object.xpHistory.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          24,
+          0,
+        );
+        object.xpHistory.attach(store);
         return object;
       },
     ),
@@ -479,7 +558,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         );
         final passwordHashOffset = fbb.writeString(object.passwordHash);
         final profilePictureOffset = fbb.writeString(object.profilePicture);
-        fbb.startTable(13);
+        fbb.startTable(14);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, nameOffset);
         fbb.addOffset(2, goalsOffset);
@@ -492,6 +571,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(9, object.createdAt.millisecondsSinceEpoch);
         fbb.addInt64(10, object.lastUpdated.millisecondsSinceEpoch);
         fbb.addOffset(11, profilePictureOffset);
+        fbb.addInt64(12, object.xp);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -543,6 +623,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final profilePictureParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 26, '');
+        final xpParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          28,
+          0,
+        );
         final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
           const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0),
         );
@@ -560,6 +646,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           biometricEnabled: biometricEnabledParam,
           notificationsEnabled: notificationsEnabledParam,
           profilePicture: profilePictureParam,
+          xp: xpParam,
           createdAt: createdAtParam,
           lastUpdated: lastUpdatedParam,
         );
@@ -569,7 +656,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     ),
     Temptation: obx_int.EntityDefinition<Temptation>(
       model: _entities[3],
-      toOneRelations: (Temptation object) => [],
+      toOneRelations: (Temptation object) => [object.xpHistory],
       toManyRelations: (Temptation object) => {},
       getId: (Temptation object) => object.id,
       setId: (Temptation object, int id) {
@@ -588,7 +675,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final resolutionNotesOffset = object.resolutionNotes == null
             ? null
             : fbb.writeString(object.resolutionNotes!);
-        fbb.startTable(11);
+        fbb.startTable(12);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.createdAt.millisecondsSinceEpoch);
         fbb.addInt64(2, object.resolvedAt?.millisecondsSinceEpoch);
@@ -599,6 +686,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(7, resolutionNotesOffset);
         fbb.addInt64(8, object.intensityBefore);
         fbb.addInt64(9, object.intensityAfter);
+        fbb.addInt64(10, object.xpHistory.targetId);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -658,6 +746,61 @@ obx_int.ModelDefinition getObjectBoxModel() {
               ..resolvedAt = resolvedAtValue == null
                   ? null
                   : DateTime.fromMillisecondsSinceEpoch(resolvedAtValue);
+        object.xpHistory.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          24,
+          0,
+        );
+        object.xpHistory.attach(store);
+        return object;
+      },
+    ),
+    XPHistoryItem: obx_int.EntityDefinition<XPHistoryItem>(
+      model: _entities[4],
+      toOneRelations: (XPHistoryItem object) => [],
+      toManyRelations: (XPHistoryItem object) => {},
+      getId: (XPHistoryItem object) => object.id,
+      setId: (XPHistoryItem object, int id) {
+        object.id = id;
+      },
+      objectToFB: (XPHistoryItem object, fb.Builder fbb) {
+        final descriptionOffset = fbb.writeString(object.description);
+        fbb.startTable(5);
+        fbb.addInt64(0, object.id);
+        fbb.addInt64(1, object.amount);
+        fbb.addOffset(2, descriptionOffset);
+        fbb.addInt64(3, object.createdAt.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final amountParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          6,
+          0,
+        );
+        final descriptionParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0),
+        );
+        final object = XPHistoryItem(
+          id: idParam,
+          amount: amountParam,
+          description: descriptionParam,
+          createdAt: createdAtParam,
+        );
 
         return object;
       },
@@ -686,6 +829,11 @@ class Prayer_ {
 
   /// See [Prayer.date].
   static final date = obx.QueryDateProperty<Prayer>(_entities[0].properties[3]);
+
+  /// See [Prayer.xpHistory].
+  static final xpHistory = obx.QueryRelationToOne<Prayer, XPHistoryItem>(
+    _entities[0].properties[4],
+  );
 }
 
 /// [Streak] entity fields to define ObjectBox queries.
@@ -731,6 +879,11 @@ class Streak_ {
   /// See [Streak.isSuccess].
   static final isSuccess = obx.QueryBooleanProperty<Streak>(
     _entities[1].properties[8],
+  );
+
+  /// See [Streak.xpHistory].
+  static final xpHistory = obx.QueryRelationToOne<Streak, XPHistoryItem>(
+    _entities[1].properties[9],
   );
 }
 
@@ -795,6 +948,11 @@ class UserProfile_ {
   static final profilePicture = obx.QueryStringProperty<UserProfile>(
     _entities[2].properties[11],
   );
+
+  /// See [UserProfile.xp].
+  static final xp = obx.QueryIntegerProperty<UserProfile>(
+    _entities[2].properties[12],
+  );
 }
 
 /// [Temptation] entity fields to define ObjectBox queries.
@@ -847,5 +1005,33 @@ class Temptation_ {
   /// See [Temptation.intensityAfter].
   static final intensityAfter = obx.QueryIntegerProperty<Temptation>(
     _entities[3].properties[9],
+  );
+
+  /// See [Temptation.xpHistory].
+  static final xpHistory = obx.QueryRelationToOne<Temptation, XPHistoryItem>(
+    _entities[3].properties[10],
+  );
+}
+
+/// [XPHistoryItem] entity fields to define ObjectBox queries.
+class XPHistoryItem_ {
+  /// See [XPHistoryItem.id].
+  static final id = obx.QueryIntegerProperty<XPHistoryItem>(
+    _entities[4].properties[0],
+  );
+
+  /// See [XPHistoryItem.amount].
+  static final amount = obx.QueryIntegerProperty<XPHistoryItem>(
+    _entities[4].properties[1],
+  );
+
+  /// See [XPHistoryItem.description].
+  static final description = obx.QueryStringProperty<XPHistoryItem>(
+    _entities[4].properties[2],
+  );
+
+  /// See [XPHistoryItem.createdAt].
+  static final createdAt = obx.QueryDateProperty<XPHistoryItem>(
+    _entities[4].properties[3],
   );
 }
