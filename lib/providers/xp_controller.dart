@@ -9,7 +9,6 @@ import '../models/temptation.dart';
 part 'xp_controller.g.dart';
 
 /// A controller that handles XP-related operations
-/// This controller has keepAlive: false (autoDispose) for efficiency
 @Riverpod(keepAlive: true)
 class XPController extends _$XPController {
   @override

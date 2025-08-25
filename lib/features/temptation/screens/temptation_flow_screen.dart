@@ -133,7 +133,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
       if (!mounted) return;
 
       // Show confirmation dialog
-      bool confirmed = false;
       await showDialog<bool>(
         context: context,
         barrierDismissible: false,
@@ -144,38 +143,41 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
               'This will award you 1,000 XP for your victory.',
           xpAmount: 1000,
           xpDescription: 'Successfully overcame temptation',
-          onConfirm: () {
-            confirmed = true;
+          onConfirm: () async {
+            // Get current temptation from provider and update it
+            final currentTemptation = ref
+                .read(currentActiveTemptationProvider)
+                .value;
+            if (currentTemptation != null) {
+              final updatedTemptation = currentTemptation.copyWith(
+                wasSuccessful: true,
+                resolutionNotes:
+                    'Successfully overcame temptation through activity: ${currentTemptation.selectedActivity}',
+                triggers: _selectedTriggers,
+                helpfulActivities: _helpfulActivities,
+              );
+
+              await ref
+                  .read(currentActiveTemptationProvider.notifier)
+                  .completeTemptation(temptation: updatedTemptation);
+            }
+
+            // Award XP
+            await ref
+                .read(xPControllerProvider.notifier)
+                .createXP(
+                  1000,
+                  'Successfully overcame temptation',
+                  context: (context.mounted) ? context : null,
+                );
+
+            // Pop the dialog
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
           },
         ),
       );
-
-      if (confirmed != true) return;
-
-      // Get current temptation from provider and update it
-      final currentTemptation = ref.read(currentActiveTemptationProvider).value;
-      if (currentTemptation != null) {
-        final updatedTemptation = currentTemptation.copyWith(
-          wasSuccessful: true,
-          resolutionNotes:
-              'Successfully overcame temptation through activity: ${currentTemptation.selectedActivity}',
-          triggers: _selectedTriggers,
-          helpfulActivities: _helpfulActivities,
-        );
-
-        await ref
-            .read(currentActiveTemptationProvider.notifier)
-            .completeTemptation(temptation: updatedTemptation);
-      }
-
-      // Award XP
-      await ref
-          .read(xPControllerProvider.notifier)
-          .createXP(
-            1000,
-            'Successfully overcame temptation',
-            context: (context.mounted) ? context : null,
-          );
 
       // Navigate to success screen
       if (mounted) {
@@ -226,8 +228,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
       if (!mounted) return;
 
       // Show confirmation dialog
-      bool confirmed = false;
-
       await showDialog<bool>(
         context: context,
         barrierDismissible: false,
@@ -239,40 +239,43 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
               'This will guide you through tawbah and award 200 XP.',
           xpAmount: 200,
           xpDescription: 'Made sincere tawbah',
-          onConfirm: () {
-            confirmed = true;
+          onConfirm: () async {
+            // Get current temptation from provider and update it
+            final currentTemptation = ref
+                .read(currentActiveTemptationProvider)
+                .value;
+            if (currentTemptation != null) {
+              final updatedTemptation = currentTemptation.copyWith(
+                wasSuccessful: false,
+                resolutionNotes: 'Relapsed but made tawbah',
+                triggers: _selectedTriggers,
+                helpfulActivities: _helpfulActivities,
+              );
+
+              await ref
+                  .read(currentActiveTemptationProvider.notifier)
+                  .completeTemptation(temptation: updatedTemptation);
+            }
+
+            // Invalidate the latestStreakProvider
+            ref.invalidate(latestStreakProvider);
+
+            // Award XP for tawbah
+            await ref
+                .read(xPControllerProvider.notifier)
+                .createXP(
+                  200,
+                  'Made sincere tawbah',
+                  context: (context.mounted) ? context : null,
+                );
+
+            // Pop the dialog
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
           },
         ),
       );
-
-      if (confirmed != true) return;
-
-      // Get current temptation from provider and update it
-      final currentTemptation = ref.read(currentActiveTemptationProvider).value;
-      if (currentTemptation != null) {
-        final updatedTemptation = currentTemptation.copyWith(
-          wasSuccessful: false,
-          resolutionNotes: 'Relapsed but made tawbah',
-          triggers: _selectedTriggers,
-          helpfulActivities: _helpfulActivities,
-        );
-
-        await ref
-            .read(currentActiveTemptationProvider.notifier)
-            .completeTemptation(temptation: updatedTemptation);
-      }
-
-      // Invalidate the latestStreakProvider
-      ref.invalidate(latestStreakProvider);
-
-      // Award XP for tawbah
-      await ref
-          .read(xPControllerProvider.notifier)
-          .createXP(
-            200,
-            'Made sincere tawbah',
-            context: (context.mounted) ? context : null,
-          );
 
       // Navigate to tawbah screen
       if (mounted) {

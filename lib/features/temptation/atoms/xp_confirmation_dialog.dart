@@ -103,7 +103,6 @@ class XPConfirmationDialog extends ConsumerWidget {
               data: (data) => TextButton(
                 onPressed: () {
                   onConfirm();
-                  Navigator.of(context).pop();
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: AppTheme.primaryGreen,

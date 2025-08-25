@@ -7,7 +7,8 @@ class XPBadge extends StatelessWidget {
   final Color? textColor;
   final double? fontSize;
   final EdgeInsetsGeometry? padding;
-  final double? badgeSize; // Add this parameter
+  final double? badgeSize;
+  final bool isTotal;
 
   const XPBadge({
     super.key,
@@ -16,14 +17,22 @@ class XPBadge extends StatelessWidget {
     this.textColor,
     this.fontSize,
     this.padding,
-    this.badgeSize, // Add this parameter
+    this.badgeSize,
+    this.isTotal = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    String displayText;
+    if (isTotal) {
+      displayText = '${_formatXPWithK(xpAmount)} XP';
+    } else {
+      displayText = '+ ${_formatXPWithK(xpAmount)} ';
+    }
+
     return Badge(
       label: Text(
-        '+$xpAmount',
+        displayText,
         style: TextStyle(
           color: textColor ?? AppTheme.white,
           fontSize: fontSize ?? 12, // Increased default size
@@ -46,6 +55,13 @@ class XPBadge extends StatelessWidget {
       ),
     );
   }
+
+  String _formatXPWithK(int xp) {
+    if (xp >= 1000) {
+      return '${(xp / 1000).toStringAsFixed(1)}K';
+    }
+    return xp.toString();
+  }
 }
 
 /// Extension method to add XP badge to any widget
@@ -57,29 +73,50 @@ extension XPBadgeExtension on Widget {
     double? badgeFontSize,
     EdgeInsetsGeometry? badgePadding,
     bool expanded = false,
-    double? badgeSize, // Add this parameter
+    double? badgeSize,
+    bool isTotal = false,
   }) {
-    final badge = Badge(
-      label: Text(
-        '+$xpAmount',
-        style: TextStyle(
-          color: badgeTextColor ?? AppTheme.white,
-          fontSize: badgeFontSize ?? 12, // Increased default
-          fontWeight: FontWeight.bold,
-          fontFamily: 'monospace',
+    String formatXPWithK(int xp) {
+      if (xp >= 1000) {
+        return '${(xp / 1000).toStringAsFixed(1)}K';
+      }
+      return xp.toString();
+    }
+
+    String displayText;
+    if (isTotal) {
+      displayText = '${formatXPWithK(xpAmount)} XP ';
+    } else {
+      displayText = '+ ${formatXPWithK(xpAmount)} ';
+    }
+
+    final badgedWidget = Stack(
+      clipBehavior: Clip.none,
+      children: [
+        this,
+        Positioned(
+          top: -8,
+          right: -8,
+          child: Badge(
+            label: Text(
+              displayText,
+              style: TextStyle(
+                color: badgeTextColor ?? AppTheme.white,
+                fontSize: badgeFontSize ?? 12,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'monospace',
+              ),
+            ),
+            backgroundColor: badgeColor ?? AppTheme.primaryGreen,
+            padding:
+                badgePadding ??
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            largeSize: badgeSize ?? 20,
+          ),
         ),
-      ),
-      backgroundColor: badgeColor ?? AppTheme.primaryGreen,
-      padding:
-          badgePadding ??
-          const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 4,
-          ), // Increased padding
-      largeSize: badgeSize ?? 20, // Increased default size
-      child: this,
+      ],
     );
 
-    return expanded ? Expanded(child: badge) : badge;
+    return expanded ? Expanded(child: badgedWidget) : badgedWidget;
   }
 }

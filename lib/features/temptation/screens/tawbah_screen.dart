@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/providers/xp_controller.dart';
 import 'package:escape/theme/app_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TawbahScreen extends ConsumerStatefulWidget {
   const TawbahScreen({super.key});
@@ -194,10 +195,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                                 '4. Return to Allah with sincere repentance',
                               ),
                               _buildTawbahStep(
-                                '5. Make amends if you wronged others',
-                              ),
-                              _buildTawbahStep(
-                                '6. Do good deeds to strengthen your faith',
+                                '5. Do good deeds to strengthen your faith',
                               ),
                             ],
                           ),
@@ -372,10 +370,11 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
             ),
             child: Text(
               dua,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              style: GoogleFonts.amiri(
                 color: Colors.white,
-                fontFamily: 'ArabicFont', // You'll need to add an Arabic font
+                fontSize: 16,
                 height: 1.6,
+                fontWeight: FontWeight.w500,
               ),
               textAlign: TextAlign.right,
             ),
