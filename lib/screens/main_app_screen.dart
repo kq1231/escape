@@ -16,6 +16,25 @@ class MainAppScreen extends StatefulWidget {
 
 class _MainAppScreenState extends State<MainAppScreen> {
   int _currentIndex = 0;
+  final List<Widget> _baseScreens = [];
+  final int _analyticsIndex = 3; // Analytics screen index
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeScreens();
+  }
+
+  void _initializeScreens() {
+    _baseScreens.addAll([
+      HomeScreen(),
+      PrayerTrackerScreen(),
+      ChallengesScreen(),
+      Container(), // Placeholder for analytics - will be added dynamically, Inshaa Allah
+      MediaScreen(),
+      SettingsScreen(),
+    ]);
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -24,14 +43,17 @@ class _MainAppScreenState extends State<MainAppScreen> {
   }
 
   List<Widget> _buildScreens() {
-    return const [
-      HomeScreen(),
-      PrayerTrackerScreen(),
-      ChallengesScreen(),
-      AnalyticsScreen(),
-      MediaScreen(),
-      SettingsScreen(),
-    ];
+    List<Widget> screens = List.from(_baseScreens);
+
+    // Only add Analytics screen if we're currently on it
+    if (_currentIndex == _analyticsIndex) {
+      screens[_analyticsIndex] = const AnalyticsScreen();
+    } else {
+      // Remove analytics screen when navigating away
+      screens[_analyticsIndex] = Container(); // Empty placeholder
+    }
+
+    return screens;
   }
 
   @override

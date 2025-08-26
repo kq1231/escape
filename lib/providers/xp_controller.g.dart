@@ -7,16 +7,13 @@ part of 'xp_controller.dart';
 // **************************************************************************
 
 /// A controller that handles XP-related operations
-/// This controller has keepAlive: false (autoDispose) for efficiency
 @ProviderFor(XPController)
 const xPControllerProvider = XPControllerProvider._();
 
 /// A controller that handles XP-related operations
-/// This controller has keepAlive: false (autoDispose) for efficiency
 final class XPControllerProvider
     extends $AsyncNotifierProvider<XPController, void> {
   /// A controller that handles XP-related operations
-  /// This controller has keepAlive: false (autoDispose) for efficiency
   const XPControllerProvider._()
     : super(
         from: null,
@@ -36,7 +33,7 @@ final class XPControllerProvider
   XPController create() => XPController();
 }
 
-String _$xPControllerHash() => r'3dfc9ae6e0a6a8a55d7be4a113076b193f0c27ee';
+String _$xPControllerHash() => r'470c518743a9d21003f05fdaa4f647af4a971168';
 
 abstract class _$XPController extends $AsyncNotifier<void> {
   FutureOr<void> build();

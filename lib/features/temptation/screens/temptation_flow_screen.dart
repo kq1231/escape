@@ -172,7 +172,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                 );
 
             // Pop the dialog
-            if (mounted) {
+            if (context.mounted) {
               Navigator.of(context).pop();
             }
           },

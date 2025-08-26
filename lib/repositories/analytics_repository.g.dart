@@ -1,38 +1,39 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'xp_repository.dart';
+part of 'analytics_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(XPRepository)
-const xPRepositoryProvider = XPRepositoryProvider._();
+@ProviderFor(AnalyticsRepository)
+const analyticsRepositoryProvider = AnalyticsRepositoryProvider._();
 
-final class XPRepositoryProvider
-    extends $AsyncNotifierProvider<XPRepository, void> {
-  const XPRepositoryProvider._()
+final class AnalyticsRepositoryProvider
+    extends $AsyncNotifierProvider<AnalyticsRepository, void> {
+  const AnalyticsRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'xPRepositoryProvider',
+        name: r'analyticsRepositoryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$xPRepositoryHash();
+  String debugGetCreateSourceHash() => _$analyticsRepositoryHash();
 
   @$internal
   @override
-  XPRepository create() => XPRepository();
+  AnalyticsRepository create() => AnalyticsRepository();
 }
 
-String _$xPRepositoryHash() => r'18066de15ce51d4ab4f81c17a7138645846b6a94';
+String _$analyticsRepositoryHash() =>
+    r'1b448fa070a10493ed40f3aceeb159751e385a71';
 
-abstract class _$XPRepository extends $AsyncNotifier<void> {
+abstract class _$AnalyticsRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
