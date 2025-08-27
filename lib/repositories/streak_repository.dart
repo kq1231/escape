@@ -31,25 +31,25 @@ class StreakRepository extends _$StreakRepository {
   }
 
   // Get streak by ID
-  Streak? getStreakById(int id) {
-    return _streakBox.get(id);
+  Future<Streak?> getStreakById(int id) async {
+    return await _streakBox.getAsync(id);
   }
 
   // Get streak by date
-  Streak? getStreakByDate(DateTime date) {
+  Future<Streak?> getStreakByDate(DateTime date) async {
     final query = _streakBox.query(Streak_.date.equalsDate(date)).build();
-    final result = query.findFirst();
+    final result = await query.findFirstAsync();
     query.close();
     return result;
   }
 
   // Get today's streak
-  Streak? getTodaysStreak() {
+  Future<Streak?> getTodaysStreak() async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
     final query = _streakBox.query(Streak_.date.equalsDate(today)).build();
-    final result = query.find();
+    final result = await query.findAsync();
     query.close();
     return result.isEmpty ? null : result.first;
   }
@@ -71,40 +71,45 @@ class StreakRepository extends _$StreakRepository {
 
   // Delete streak
   Future<bool> deleteStreak(int id) async {
-    final result = _streakBox.remove(id);
+    final result = await _streakBox.removeAsync(id);
     return result;
   }
 
   // Delete all streaks
   Future<int> deleteAllStreaks() async {
-    final count = _streakBox.removeAll();
+    final count = await _streakBox.removeAllAsync();
     return count;
   }
 
   // Get streak count
-  int getStreakCount() {
-    return _streakBox.count();
+  Future<int> getStreakCount() async {
+    final query = _streakBox.query().build();
+    final count = query.count();
+    query.close();
+    return count;
   }
 
   // Get current streak (highest consecutive count)
-  Streak? getCurrentStreak() {
+  Future<Streak?> getCurrentStreak() async {
     final query = _streakBox
         .query()
         .order(Streak_.date, flags: Order.descending)
         .build();
 
-    return query.findFirst();
+    final result = await query.findFirstAsync();
+    query.close();
+    return result;
   }
 
   // Get best streak (highest count with latest date)
-  Streak? getBestStreak() {
+  Future<Streak?> getBestStreak() async {
     // Get all streaks sorted by count descending, then by date descending
     final query = _streakBox
         .query()
         .order(Streak_.count, flags: Order.descending)
         .order(Streak_.date, flags: Order.descending)
         .build();
-    final result = query.find();
+    final result = await query.findAsync();
     query.close();
 
     // Return the first result (highest count, latest date) or null if empty
@@ -137,7 +142,7 @@ class StreakRepository extends _$StreakRepository {
 
     streak.date = date;
 
-    final id = _streakBox.put(
+    final id = await _streakBox.putAsync(
       streak
         ..count = streak.count + 1
         ..isSuccess = true,
@@ -156,7 +161,7 @@ class StreakRepository extends _$StreakRepository {
 
     streak.date = date;
 
-    final id = _streakBox.put(
+    final id = await _streakBox.putAsync(
       streak
         ..count = 0
         ..isSuccess = false,
@@ -171,7 +176,7 @@ class StreakRepository extends _$StreakRepository {
         .query()
         .watch(triggerImmediately: true)
         // Map it to a list of objects to be used by a StreamBuilder.
-        .map((query) => query.find());
+        .asyncMap((query) async => await query.findAsync());
   }
 
   // Watch latest streak
@@ -207,15 +212,17 @@ class StreakRepository extends _$StreakRepository {
   // Upsert operation - update if exists, create if doesn't
   Future<int> upsertStreakCountAndSuccess(Streak streak) async {
     // Check if streak exists for this date
-    final existing = getStreakByDate(streak.date);
+    final existing = await getStreakByDate(streak.date);
 
     if (existing != null) {
       // Update existing
-      existing.count = streak.count;
-      existing.isSuccess = streak.isSuccess;
-      existing.lastUpdated = DateTime.now();
+      final updatedStreak = existing.copyWith(
+        count: streak.count,
+        isSuccess: streak.isSuccess,
+        lastUpdated: DateTime.now(),
+      );
 
-      return await updateStreak(existing);
+      return await updateStreak(updatedStreak);
     } else {
       // Create new
       return await createStreak(streak);

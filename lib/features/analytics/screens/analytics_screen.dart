@@ -63,24 +63,33 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Streak Analytics
+        // Streak Analytics - Load first (most important)
         const SizedBox(height: AppTheme.spacingM),
-        StreakActivityGrid(timeRange: _selectedTimeRange),
+        _buildLazySection(
+          () => StreakActivityGrid(timeRange: _selectedTimeRange),
+        ),
         const SizedBox(height: AppTheme.spacingXL),
 
         // Streak Success Rate Card
-        StreakSuccessRateCard(timeRange: _selectedTimeRange),
+        _buildLazySection(
+          () => StreakSuccessRateCard(timeRange: _selectedTimeRange),
+        ),
         const SizedBox(height: AppTheme.spacingXL),
 
+        // Prayer Analytics - Load second
         const SizedBox(height: AppTheme.spacingM),
-        PrayerActivityGrid(timeRange: _selectedTimeRange),
+        _buildLazySection(
+          () => PrayerActivityGrid(timeRange: _selectedTimeRange),
+        ),
         const SizedBox(height: AppTheme.spacingXL),
 
         // Prayer Success Rate Card
-        PrayerSuccessRateCard(timeRange: _selectedTimeRange),
+        _buildLazySection(
+          () => PrayerSuccessRateCard(timeRange: _selectedTimeRange),
+        ),
         const SizedBox(height: AppTheme.spacingXL),
 
-        // Temptation Analytics
+        // Temptation Analytics - Load third
         Text(
           'Temptation Success Rate',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -89,18 +98,54 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           ),
         ),
         const SizedBox(height: AppTheme.spacingM),
-        TemptationStackedBarChart(timeRange: _selectedTimeRange),
+        _buildLazySection(
+          () => TemptationStackedBarChart(timeRange: _selectedTimeRange),
+        ),
         const SizedBox(height: AppTheme.spacingXL),
 
         // Temptation Success Rate Card
-        TemptationSuccessRateCard(timeRange: _selectedTimeRange),
+        _buildLazySection(
+          () => TemptationSuccessRateCard(timeRange: _selectedTimeRange),
+        ),
         const SizedBox(height: AppTheme.spacingXL),
 
-        // XP Analytics
+        // XP Analytics - Load last (least critical for immediate viewing)
         const SizedBox(height: AppTheme.spacingM),
-        XPGrowthChart(timeRange: _selectedTimeRange),
+        _buildLazySection(() => XPGrowthChart(timeRange: _selectedTimeRange)),
         const SizedBox(height: AppTheme.spacingXL),
       ],
+    );
+  }
+
+  /// Builds a section that only loads when it becomes visible
+  Widget _buildLazySection(Widget Function() builder) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Use a simple container with minimum height to reserve space
+        // The actual widget will be built when it's about to be visible
+        return Container(
+          constraints: const BoxConstraints(minHeight: 200),
+          child: FutureBuilder<Widget>(
+            future: Future.microtask(() => builder()),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return snapshot.data!;
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error loading section: ${snapshot.error}'),
+                );
+              } else {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }

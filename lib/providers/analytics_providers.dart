@@ -11,9 +11,9 @@ part 'analytics_providers.g.dart';
 Future<List<StreakGridData>> streakGridData(
   Ref ref, {
   AnalyticsTimeRange? range,
-}) {
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getStreakGridData(range: range);
+  return await analyticsRepository.getStreakGridData(range: range);
 }
 
 /// Provider for streak progress data for line chart
@@ -21,9 +21,9 @@ Future<List<StreakGridData>> streakGridData(
 Future<List<Map<String, dynamic>>> streakProgressData(
   Ref ref, {
   AnalyticsTimeRange? range,
-}) {
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getStreakProgressData(range: range);
+  return await analyticsRepository.getStreakProgressData(range: range);
 }
 
 /// Provider for streak statistics
@@ -31,9 +31,9 @@ Future<List<Map<String, dynamic>>> streakProgressData(
 Future<StreakStatistics> streakStatistics(
   Ref ref, {
   AnalyticsTimeRange? range,
-}) {
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getStreakStatistics(range: range);
+  return await analyticsRepository.getStreakStatistics(range: range);
 }
 
 /// Prayer Analytics Providers
@@ -43,16 +43,19 @@ Future<StreakStatistics> streakStatistics(
 Future<List<PrayerGridData>> prayerGridData(
   Ref ref, {
   AnalyticsTimeRange? range,
-}) {
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getPrayerGridData(range: range);
+  return await analyticsRepository.getPrayerGridData(range: range);
 }
 
 /// Provider for prayer completion breakdown by prayer type
 @riverpod
-Future<Map<String, int>> prayerBreakdown(Ref ref, {AnalyticsTimeRange? range}) {
+Future<Map<String, int>> prayerBreakdown(
+  Ref ref, {
+  AnalyticsTimeRange? range,
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getPrayerBreakdown(range: range);
+  return await analyticsRepository.getPrayerBreakdown(range: range);
 }
 
 /// Provider for prayer statistics
@@ -60,9 +63,9 @@ Future<Map<String, int>> prayerBreakdown(Ref ref, {AnalyticsTimeRange? range}) {
 Future<PrayerStatistics> prayerStatistics(
   Ref ref, {
   AnalyticsTimeRange? range,
-}) {
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getPrayerStatistics(range: range);
+  return await analyticsRepository.getPrayerStatistics(range: range);
 }
 
 /// Temptation Analytics Providers
@@ -72,9 +75,9 @@ Future<PrayerStatistics> prayerStatistics(
 Future<List<TemptationBarData>> temptationBarData(
   Ref ref, {
   AnalyticsTimeRange? range,
-}) {
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getTemptationBarData(range: range);
+  return await analyticsRepository.getTemptationBarData(range: range);
 }
 
 /// Provider for temptation statistics
@@ -82,18 +85,21 @@ Future<List<TemptationBarData>> temptationBarData(
 Future<TemptationStatistics> temptationStatistics(
   Ref ref, {
   AnalyticsTimeRange? range,
-}) {
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getTemptationStatistics(range: range);
+  return await analyticsRepository.getTemptationStatistics(range: range);
 }
 
 /// XP Analytics Providers
 
 /// Provider for XP growth data for line chart (cumulative and daily)
 @riverpod
-Future<List<XPGrowthData>> xpGrowthData(Ref ref, {AnalyticsTimeRange? range}) {
+Future<List<XPGrowthData>> xpGrowthData(
+  Ref ref, {
+  AnalyticsTimeRange? range,
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getXPGrowthData(range: range);
+  return await analyticsRepository.getXPGrowthData(range: range);
 }
 
 /// Provider for XP source breakdown for pie chart
@@ -101,16 +107,16 @@ Future<List<XPGrowthData>> xpGrowthData(Ref ref, {AnalyticsTimeRange? range}) {
 Future<List<XPSourceData>> xpSourceBreakdown(
   Ref ref, {
   AnalyticsTimeRange? range,
-}) {
+}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getXPSourceBreakdown(range: range);
+  return await analyticsRepository.getXPSourceBreakdown(range: range);
 }
 
 /// Provider for XP statistics
 @riverpod
-Future<XPStatistics> xpStatistics(Ref ref, {AnalyticsTimeRange? range}) {
+Future<XPStatistics> xpStatistics(Ref ref, {AnalyticsTimeRange? range}) async {
   final analyticsRepository = ref.read(analyticsRepositoryProvider.notifier);
-  return analyticsRepository.getXPStatistics(range: range);
+  return await analyticsRepository.getXPStatistics(range: range);
 }
 
 /// Combined Analytics Providers
@@ -217,23 +223,19 @@ class AllAnalytics extends _$AllAnalytics {
   Future<Map<String, dynamic>> build({AnalyticsTimeRange? range}) async {
     final repository = ref.read(analyticsRepositoryProvider.notifier);
 
-    // Get all analytics data in parallel
-    final streakFuture = repository.getStreakStatistics(range: range);
-    final prayerFuture = repository.getPrayerStatistics(range: range);
-    final temptationFuture = repository.getTemptationStatistics(range: range);
-    final xpFuture = repository.getXPStatistics(range: range);
-
-    // Wait for all futures to complete
-    final streakStats = await streakFuture;
-    final prayerStats = await prayerFuture;
-    final temptationStats = await temptationFuture;
-    final xpStats = await xpFuture;
+    // Get all analytics data in parallel using Future.wait
+    final results = await Future.wait([
+      repository.getStreakStatistics(range: range),
+      repository.getPrayerStatistics(range: range),
+      repository.getTemptationStatistics(range: range),
+      repository.getXPStatistics(range: range),
+    ]);
 
     return {
-      'streak': streakStats,
-      'prayer': prayerStats,
-      'temptation': temptationStats,
-      'xp': xpStats,
+      'streak': results[0],
+      'prayer': results[1],
+      'temptation': results[2],
+      'xp': results[3],
     };
   }
 

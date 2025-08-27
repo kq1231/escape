@@ -20,8 +20,8 @@ class UserProfileRepository extends _$UserProfileRepository {
   }
 
   // Get the user profile (always ID 1)
-  UserProfile? getUserProfile() {
-    return _userProfileBox.get(1);
+  Future<UserProfile?> getUserProfile() async {
+    return await _userProfileBox.getAsync(1);
   }
 
   // Create or update the user profile
@@ -34,14 +34,14 @@ class UserProfileRepository extends _$UserProfileRepository {
   }
 
   // Check if user profile exists and is complete
-  bool isOnboardingComplete() {
-    final profile = getUserProfile();
+  Future<bool> isOnboardingComplete() async {
+    final profile = await getUserProfile();
     return profile != null && profile.isComplete;
   }
 
   // Delete the user profile
   Future<bool> deleteUserProfile() async {
-    final result = _userProfileBox.remove(1);
+    final result = await _userProfileBox.removeAsync(1);
     return result;
   }
 

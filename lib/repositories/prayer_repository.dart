@@ -17,59 +17,62 @@ class PrayerRepository extends _$PrayerRepository {
 
   // Create a new prayer record
   Future<int> createPrayer(Prayer prayer) async {
-    final id = _prayerBox.put(prayer);
+    final id = await _prayerBox.putAsync(prayer);
     return id;
   }
 
   // Get prayer by ID
-  Prayer? getPrayerById(int id) {
-    return _prayerBox.get(id);
+  Future<Prayer?> getPrayerById(int id) async {
+    return await _prayerBox.getAsync(id);
   }
 
   // Get prayers by date
-  List<Prayer> getPrayersByDate(DateTime date) {
+  Future<List<Prayer>> getPrayersByDate(DateTime date) async {
     final startOfDay = DateTime(date.year, date.month, date.day);
     final endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
     final query = _prayerBox
         .query(Prayer_.date.betweenDate(startOfDay, endOfDay))
         .build();
-    final result = query.find();
+    final result = await query.findAsync();
     query.close();
     return result;
   }
 
   // Get today's prayers
-  List<Prayer> getTodayPrayers() {
+  Future<List<Prayer>> getTodayPrayers() async {
     final today = DateTime.now();
-    return getPrayersByDate(today);
+    return await getPrayersByDate(today);
   }
 
   // Update prayer
   Future<int> updatePrayer(Prayer prayer) async {
-    final id = _prayerBox.put(prayer);
+    final id = await _prayerBox.putAsync(prayer);
     return id;
   }
 
   // Delete prayer
   Future<bool> deletePrayer(int id) async {
-    final result = _prayerBox.remove(id);
+    final result = await _prayerBox.removeAsync(id);
     return result;
   }
 
   // Delete all prayers
   Future<int> deleteAllPrayers() async {
-    final count = _prayerBox.removeAll();
+    final count = await _prayerBox.removeAllAsync();
     return count;
   }
 
   // Get prayer count
-  int getPrayerCount() {
-    return _prayerBox.count();
+  Future<int> getPrayerCount() async {
+    final query = _prayerBox.query().build();
+    final count = query.count();
+    query.close();
+    return count;
   }
 
   // Get completed prayer count
-  int getCompletedPrayerCount() {
+  Future<int> getCompletedPrayerCount() async {
     final query = _prayerBox.query(Prayer_.isCompleted.equals(true)).build();
     final count = query.count();
     query.close();
@@ -90,20 +93,43 @@ class PrayerRepository extends _$PrayerRepository {
   }
 
   // Get completed prayer count for today
-  int getTodayCompletedPrayerCount() {
-    final todayPrayers = getTodayPrayers();
-    return todayPrayers.where((prayer) => prayer.isCompleted).length;
+  Future<int> getTodayCompletedPrayerCount() async {
+    final today = DateTime.now();
+    final startOfDay = DateTime(today.year, today.month, today.day);
+    final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
+
+    final query = _prayerBox
+        .query(
+          Prayer_.date
+              .betweenDate(startOfDay, endOfDay)
+              .and(Prayer_.isCompleted.equals(true)),
+        )
+        .build();
+    final count = query.count();
+    query.close();
+    return count;
   }
 
   // Get completed prayer count for a specific date
-  int getCompletedPrayerCountByDate(DateTime date) {
-    final prayers = getPrayersByDate(date);
-    return prayers.where((prayer) => prayer.isCompleted).length;
+  Future<int> getCompletedPrayerCountByDate(DateTime date) async {
+    final startOfDay = DateTime(date.year, date.month, date.day);
+    final endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
+
+    final query = _prayerBox
+        .query(
+          Prayer_.date
+              .betweenDate(startOfDay, endOfDay)
+              .and(Prayer_.isCompleted.equals(true)),
+        )
+        .build();
+    final count = query.count();
+    query.close();
+    return count;
   }
 
   // Toggle prayer completion status
   Future<void> togglePrayerCompletion(int prayerId) async {
-    final prayer = getPrayerById(prayerId);
+    final prayer = await getPrayerById(prayerId);
     if (prayer != null) {
       final updatedPrayer = prayer.copyWith(isCompleted: !prayer.isCompleted);
       await updatePrayer(updatedPrayer);
@@ -123,6 +149,6 @@ class PrayerRepository extends _$PrayerRepository {
         )
         .watch(triggerImmediately: true)
         // Map it to a list of objects to be used by a StreamBuilder.
-        .map((query) => query.find());
+        .asyncMap((query) async => await query.findAsync());
   }
 }

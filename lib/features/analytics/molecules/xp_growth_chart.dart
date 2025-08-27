@@ -55,18 +55,24 @@ class XPGrowthChart extends ConsumerWidget {
     BuildContext context,
     List<XPGrowthData> growthData,
   ) {
-    // Sort data by date
-    growthData.sort((a, b) => a.date.compareTo(b.date));
+    // Data should already be sorted from repository, but ensure it
+    if (growthData.length > 1 &&
+        growthData.first.date.isAfter(growthData.last.date)) {
+      growthData.sort((a, b) => a.date.compareTo(b.date));
+    }
 
-    // Get max values for scaling
-    final maxCumulativeXP = growthData.fold(
-      0,
-      (max, data) => data.cumulativeXP > max ? data.cumulativeXP : max,
-    );
-    final maxDailyXP = growthData.fold(
-      0,
-      (max, data) => data.dailyXP > max ? data.dailyXP : max,
-    );
+    // Get max values for scaling - use more efficient approach
+    int maxCumulativeXP = 0;
+    int maxDailyXP = 0;
+
+    for (final data in growthData) {
+      if (data.cumulativeXP > maxCumulativeXP) {
+        maxCumulativeXP = data.cumulativeXP;
+      }
+      if (data.dailyXP > maxDailyXP) {
+        maxDailyXP = data.dailyXP;
+      }
+    }
 
     return LineChart(
       LineChartData(
@@ -193,13 +199,19 @@ class XPGrowthChart extends ConsumerWidget {
     final lastData = growthData.last;
     final totalXP = lastData.cumulativeXP;
     final totalGained = lastData.cumulativeXP - firstData.cumulativeXP;
-    final avgDailyXP =
-        growthData.fold(0, (sum, data) => sum + data.dailyXP) /
-        growthData.length;
-    final maxDailyXP = growthData.fold(
-      0,
-      (max, data) => data.dailyXP > max ? data.dailyXP : max,
-    );
+
+    // Calculate stats in single pass for efficiency
+    int totalDailyXP = 0;
+    int maxDailyXP = 0;
+
+    for (final data in growthData) {
+      totalDailyXP += data.dailyXP;
+      if (data.dailyXP > maxDailyXP) {
+        maxDailyXP = data.dailyXP;
+      }
+    }
+
+    final avgDailyXP = totalDailyXP / growthData.length;
 
     return Container(
       padding: const EdgeInsets.all(AppTheme.spacingM),

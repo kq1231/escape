@@ -69,7 +69,7 @@ final class StreakGridDataProvider
   }
 }
 
-String _$streakGridDataHash() => r'a2074e43515e5dcc62e0037dea42b5dcb014060d';
+String _$streakGridDataHash() => r'82a15bf148c94687f3ded053746205d7de204586';
 
 /// Streak Analytics Providers
 /// Provider for streak contribution grid data (GitHub-style activity grid)
@@ -158,7 +158,7 @@ final class StreakProgressDataProvider
 }
 
 String _$streakProgressDataHash() =>
-    r'4065dfe2bc253e766e51884b062135d2338e0753';
+    r'c3a1dc7453e1bbe56a7ac365ab19a87889a887a7';
 
 /// Provider for streak progress data for line chart
 final class StreakProgressDataFamily extends $Family
@@ -242,7 +242,7 @@ final class StreakStatisticsProvider
   }
 }
 
-String _$streakStatisticsHash() => r'8c03a9d326d5c72ea1900c7d992ffb755088f69f';
+String _$streakStatisticsHash() => r'a7ee34a6f8fc8d00f92010a9cce0e53c4cbb518b';
 
 /// Provider for streak statistics
 final class StreakStatisticsFamily extends $Family
@@ -331,7 +331,7 @@ final class PrayerGridDataProvider
   }
 }
 
-String _$prayerGridDataHash() => r'7f966be3def1c83f82d078793146f5588b7a9d1c';
+String _$prayerGridDataHash() => r'98967c9dd72b53a087e68911b02949b8f9badf59';
 
 /// Prayer Analytics Providers
 /// Provider for prayer completion grid data
@@ -417,7 +417,7 @@ final class PrayerBreakdownProvider
   }
 }
 
-String _$prayerBreakdownHash() => r'83872972bf2aced2395e49982c4d236a53397c9e';
+String _$prayerBreakdownHash() => r'9454379f7d48d34974039c7774b3d750a3237bde';
 
 /// Provider for prayer completion breakdown by prayer type
 final class PrayerBreakdownFamily extends $Family
@@ -501,7 +501,7 @@ final class PrayerStatisticsProvider
   }
 }
 
-String _$prayerStatisticsHash() => r'87aa458d8a6a6f6f59c9971d6722a5208ea45abd';
+String _$prayerStatisticsHash() => r'2c83a7cd66bd9c23f93bbe1feea909358c0df178';
 
 /// Provider for prayer statistics
 final class PrayerStatisticsFamily extends $Family
@@ -590,7 +590,7 @@ final class TemptationBarDataProvider
   }
 }
 
-String _$temptationBarDataHash() => r'538d710b8d9322812a085cd3dbd992cb91bba86b';
+String _$temptationBarDataHash() => r'bb23c05fcf01720bb4a2854c2536d27d6f10fba3';
 
 /// Temptation Analytics Providers
 /// Provider for temptation bar chart data (stacked bar chart)
@@ -679,7 +679,7 @@ final class TemptationStatisticsProvider
 }
 
 String _$temptationStatisticsHash() =>
-    r'df6e07afe247ae233ca23958c6413574391f36a5';
+    r'dc237635fa01c88e6058feaba6d21d8cad5f0ee7';
 
 /// Provider for temptation statistics
 final class TemptationStatisticsFamily extends $Family
@@ -768,7 +768,7 @@ final class XpGrowthDataProvider
   }
 }
 
-String _$xpGrowthDataHash() => r'2a17adf020d2a0f470a5919f1bb2d9489370ccb9';
+String _$xpGrowthDataHash() => r'792059df7767f34d0432fdd6f4036a0129b65ef4';
 
 /// XP Analytics Providers
 /// Provider for XP growth data for line chart (cumulative and daily)
@@ -856,7 +856,7 @@ final class XpSourceBreakdownProvider
   }
 }
 
-String _$xpSourceBreakdownHash() => r'99ee88e2b08d030bb712f179169b38873c0a81fa';
+String _$xpSourceBreakdownHash() => r'188131c8c2b74822713b8a87dffcfd6f25b101a5';
 
 /// Provider for XP source breakdown for pie chart
 final class XpSourceBreakdownFamily extends $Family
@@ -940,7 +940,7 @@ final class XpStatisticsProvider
   }
 }
 
-String _$xpStatisticsHash() => r'4e3ed856b69f8a06b0d8d5b5e4420305af3c8574';
+String _$xpStatisticsHash() => r'e7c91da9e180a1101edb7065de084bddd7804bc1';
 
 /// Provider for XP statistics
 final class XpStatisticsFamily extends $Family
@@ -1010,7 +1010,7 @@ final class StreakAnalyticsProvider
   }
 }
 
-String _$streakAnalyticsHash() => r'62217d698e44f4d9a0226776eff1b359b48bef46';
+String _$streakAnalyticsHash() => r'5bcb5759c8110ae8a850771b4052643487af4a3f';
 
 /// Combined Analytics Providers
 /// Provider for all streak analytics data
@@ -1112,7 +1112,7 @@ final class PrayerAnalyticsProvider
   }
 }
 
-String _$prayerAnalyticsHash() => r'573972dcfd1c72224d05069191b175cd1c3f0b47';
+String _$prayerAnalyticsHash() => r'7ef8534a534ce40e84d49abc0d706e6ec691b9a6';
 
 /// Provider for all prayer analytics data
 final class PrayerAnalyticsFamily extends $Family
@@ -1213,7 +1213,7 @@ final class TemptationAnalyticsProvider
 }
 
 String _$temptationAnalyticsHash() =>
-    r'5c24a1e0cb8404afa4d4193e97a44e93e504b0f8';
+    r'c7e4799b79ad0ee8955106db74deb692f173d6e4';
 
 /// Provider for all temptation analytics data
 final class TemptationAnalyticsFamily extends $Family
@@ -1314,7 +1314,7 @@ final class XPAnalyticsProvider
   }
 }
 
-String _$xPAnalyticsHash() => r'561e25424af6a7fa51c8fa21cc69a19c58ed729d';
+String _$xPAnalyticsHash() => r'375d93a78258e35488a31c92f3ef3f69824830a1';
 
 /// Provider for all XP analytics data
 final class XPAnalyticsFamily extends $Family
@@ -1414,7 +1414,7 @@ final class AllAnalyticsProvider
   }
 }
 
-String _$allAnalyticsHash() => r'233d696cf9a6d8f002b6133023a3ed354527991e';
+String _$allAnalyticsHash() => r'926169b6a57cd0cde16db113763f60cee08fea66';
 
 /// Provider for all analytics data combined
 final class AllAnalyticsFamily extends $Family

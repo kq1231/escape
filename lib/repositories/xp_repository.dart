@@ -141,7 +141,7 @@ class XPRepository extends _$XPRepository {
   // Delete XP history entry (legacy method)
   Future<bool> deleteXPHistoryItem(int id) async {
     try {
-      final result = _xpHistoryBox.remove(id);
+      final result = await _xpHistoryBox.removeAsync(id);
       return result;
     } catch (e) {
       throw Exception('Failed to delete XP history item: ${e.toString()}');
@@ -151,7 +151,7 @@ class XPRepository extends _$XPRepository {
   // Delete all XP history entries
   Future<int> deleteAllXPHistory() async {
     try {
-      final count = _xpHistoryBox.removeAll();
+      final count = await _xpHistoryBox.removeAllAsync();
       return count;
     } catch (e) {
       throw Exception('Failed to delete all XP history: ${e.toString()}');
@@ -163,8 +163,8 @@ class XPRepository extends _$XPRepository {
     return _userProfileBox
         .query(UserProfile_.id.equals(1))
         .watch(triggerImmediately: true)
-        .map((query) {
-          final profile = query.findFirst();
+        .asyncMap((query) async {
+          final profile = await query.findFirstAsync();
           return profile?.xp ?? 0;
         });
   }
@@ -175,7 +175,7 @@ class XPRepository extends _$XPRepository {
         .query()
         .order(XPHistoryItem_.createdAt, flags: Order.descending)
         .watch(triggerImmediately: true)
-        .map((query) => query.find());
+        .asyncMap((query) async => await query.findAsync());
   }
 
   // Watch today's XP history for real-time updates

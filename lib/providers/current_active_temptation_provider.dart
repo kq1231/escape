@@ -29,7 +29,7 @@ class CurrentActiveTemptation extends _$CurrentActiveTemptation {
     if (temptationId == null) return null;
 
     // Get the full temptation from ObjectBox
-    return ref
+    return await ref
         .read(temptationRepositoryProvider.notifier)
         .getTemptationById(temptationId);
   }

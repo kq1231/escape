@@ -51,15 +51,13 @@ class PrayerActivityGrid extends ConsumerWidget {
     BuildContext context,
     List<PrayerGridData> gridData,
   ) {
-    // Group data by week
-    final weeks = <int, List<PrayerGridData>>{};
+    // Create efficient lookup map by date
+    final dataMap = <String, PrayerGridData>{};
     for (final data in gridData) {
-      final week = data.date.weekday; // 1 = Monday, 7 = Sunday
-      weeks.putIfAbsent(week, () => []).add(data);
+      final key = '${data.date.year}-${data.date.month}-${data.date.day}';
+      dataMap[key] = data;
     }
 
-    // Sort days of week
-    final weekDays = [1, 2, 3, 4, 5, 6, 7];
     final dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return Column(
@@ -68,11 +66,11 @@ class PrayerActivityGrid extends ConsumerWidget {
         Row(
           children: [
             const SizedBox(width: 40), // Space for week numbers
-            ...weekDays.map(
-              (day) => Expanded(
+            ...dayLabels.map(
+              (label) => Expanded(
                 child: Center(
                   child: Text(
-                    dayLabels[day - 1],
+                    label,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppTheme.mediumGray,
                       fontWeight: FontWeight.w500,
@@ -85,14 +83,13 @@ class PrayerActivityGrid extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         // Week rows
-        ..._generateWeekRows(weeks, weekDays, context),
+        ..._generateWeekRows(dataMap, context),
       ],
     );
   }
 
   List<Widget> _generateWeekRows(
-    Map<int, List<PrayerGridData>> weeks,
-    List<int> weekDays,
+    Map<String, PrayerGridData> dataMap,
     BuildContext context,
   ) {
     final now = DateTime.now();
@@ -100,7 +97,11 @@ class PrayerActivityGrid extends ConsumerWidget {
 
     List<Widget> rows = [];
 
-    for (int week = 0; week < 5; week++) {
+    // Calculate number of weeks needed
+    final totalDays = 30;
+    final weeksNeeded = (totalDays / 7).ceil();
+
+    for (int week = 0; week < weeksNeeded; week++) {
       final weekStart = startDate.add(Duration(days: week * 7));
 
       rows.add(
@@ -111,7 +112,7 @@ class PrayerActivityGrid extends ConsumerWidget {
               width: 40,
               child: Center(
                 child: Text(
-                  'W${5 - week}',
+                  'W${weeksNeeded - week}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGray,
                     fontWeight: FontWeight.w500,
@@ -119,17 +120,18 @@ class PrayerActivityGrid extends ConsumerWidget {
                 ),
               ),
             ),
-            // Day cells
-            ...weekDays.map((day) {
-              final date = weekStart.add(Duration(days: day - 1));
-              final dayData = weeks[day]?.firstWhere(
-                (data) => _isSameDay(data.date, date),
-                orElse: () => PrayerGridData(
-                  date: date,
-                  prayersCompleted: 0,
-                  intensity: 0.0,
-                ),
-              );
+            // Day cells for this week
+            ...List.generate(7, (dayIndex) {
+              final date = weekStart.add(Duration(days: dayIndex));
+
+              // Skip if date is in the future
+              if (date.isAfter(now)) {
+                return const Expanded(child: SizedBox.shrink());
+              }
+
+              // Efficient O(1) lookup
+              final key = '${date.year}-${date.month}-${date.day}';
+              final dayData = dataMap[key];
 
               return Expanded(child: _buildDayCell(context, dayData));
             }),
@@ -246,9 +248,5 @@ class PrayerActivityGrid extends ConsumerWidget {
     final darkGreen = AppTheme.primaryGreen;
 
     return Color.lerp(baseGreen, darkGreen, intensity)!;
-  }
-
-  bool _isSameDay(DateTime a, DateTime b) {
-    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }

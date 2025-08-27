@@ -21,75 +21,81 @@ class TemptationRepository extends _$TemptationRepository {
 
   // Create a new temptation record
   Future<int> createTemptation(Temptation temptation) async {
-    final id = _temptationBox.put(temptation);
+    final id = await _temptationBox.putAsync(temptation);
     return id;
   }
 
   // Get temptation by ID
-  Temptation? getTemptationById(int id) {
-    return _temptationBox.get(id);
+  Future<Temptation?> getTemptationById(int id) async {
+    return await _temptationBox.getAsync(id);
   }
 
   // Get all temptations
-  List<Temptation> getAllTemptations() {
-    return _temptationBox.getAll();
+  Future<List<Temptation>> getAllTemptations() async {
+    return await _temptationBox.getAllAsync();
   }
 
   // Get temptations by date range
-  List<Temptation> getTemptationsByDateRange(DateTime start, DateTime end) {
+  Future<List<Temptation>> getTemptationsByDateRange(
+    DateTime start,
+    DateTime end,
+  ) async {
     final query = _temptationBox
         .query(Temptation_.createdAt.betweenDate(start, end))
         .build();
-    final result = query.find();
+    final result = await query.findAsync();
     query.close();
     return result;
   }
 
   // Get today's temptations
-  List<Temptation> getTodayTemptations() {
+  Future<List<Temptation>> getTodayTemptations() async {
     final today = DateTime.now();
     final startOfDay = DateTime(today.year, today.month, today.day);
     final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
-    return getTemptationsByDateRange(startOfDay, endOfDay);
+    return await getTemptationsByDateRange(startOfDay, endOfDay);
   }
 
   // Get active temptations (not resolved)
-  List<Temptation> getActiveTemptations() {
+  Future<List<Temptation>> getActiveTemptations() async {
     final query = _temptationBox
         .query(
           Temptation_.resolvedAt.isNull().and(Temptation_.createdAt.notNull()),
         )
         .build();
-    final result = query.find();
+    final result = await query.findAsync();
     query.close();
     return result;
   }
 
   // Update temptation
   Future<int> updateTemptation(Temptation temptation) async {
-    final id = _temptationBox.put(temptation);
+    final id = await _temptationBox.putAsync(temptation);
     return id;
   }
 
   // Delete temptation
   Future<bool> deleteTemptation(int id) async {
-    final result = _temptationBox.remove(id);
+    final result = await _temptationBox.removeAsync(id);
     return result;
   }
 
   // Delete all temptations
   Future<int> deleteAllTemptations() async {
-    final count = _temptationBox.removeAll();
+    final count = await _temptationBox.removeAllAsync();
     return count;
   }
 
   // Get temptation count
-  int getTemptationCount() {
-    return _temptationBox.count();
+  Future<int> getTemptationCount() async {
+    final query = _temptationBox.query().build();
+    final count = query.count();
+    query.close();
+    return count;
   }
 
   // Get successful temptation count
-  int getSuccessfulTemptationCount() {
+  Future<int> getSuccessfulTemptationCount() async {
     final query = _temptationBox
         .query(Temptation_.wasSuccessful.equals(true))
         .build();
@@ -99,7 +105,7 @@ class TemptationRepository extends _$TemptationRepository {
   }
 
   // Get relapse count
-  int getRelapseCount() {
+  Future<int> getRelapseCount() async {
     final query = _temptationBox
         .query(Temptation_.wasSuccessful.equals(false))
         .build();
@@ -109,23 +115,47 @@ class TemptationRepository extends _$TemptationRepository {
   }
 
   // Get success rate
-  double getSuccessRate() {
-    final total = getTemptationCount();
+  Future<double> getSuccessRate() async {
+    final total = await getTemptationCount();
     if (total == 0) return 0.0;
-    final successful = getSuccessfulTemptationCount();
+    final successful = await getSuccessfulTemptationCount();
     return successful / total;
   }
 
   // Get successful temptation count for today
-  int getTodaySuccessfulTemptationCount() {
-    final todayTemptations = getTodayTemptations();
-    return todayTemptations.where((t) => t.wasSuccessful).length;
+  Future<int> getTodaySuccessfulTemptationCount() async {
+    final today = DateTime.now();
+    final startOfDay = DateTime(today.year, today.month, today.day);
+    final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
+
+    final query = _temptationBox
+        .query(
+          Temptation_.createdAt
+              .betweenDate(startOfDay, endOfDay)
+              .and(Temptation_.wasSuccessful.equals(true)),
+        )
+        .build();
+    final count = query.count();
+    query.close();
+    return count;
   }
 
   // Get relapse count for today
-  int getTodayRelapseCount() {
-    final todayTemptations = getTodayTemptations();
-    return todayTemptations.where((t) => !t.wasSuccessful).length;
+  Future<int> getTodayRelapseCount() async {
+    final today = DateTime.now();
+    final startOfDay = DateTime(today.year, today.month, today.day);
+    final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
+
+    final query = _temptationBox
+        .query(
+          Temptation_.createdAt
+              .betweenDate(startOfDay, endOfDay)
+              .and(Temptation_.wasSuccessful.equals(false)),
+        )
+        .build();
+    final count = query.count();
+    query.close();
+    return count;
   }
 
   // Watch temptation changes
@@ -133,7 +163,7 @@ class TemptationRepository extends _$TemptationRepository {
     return _temptationBox
         .query()
         .watch(triggerImmediately: true)
-        .map((query) => query.find());
+        .asyncMap((query) async => await query.findAsync());
   }
 
   // Watch active temptations
@@ -143,7 +173,7 @@ class TemptationRepository extends _$TemptationRepository {
           Temptation_.resolvedAt.isNull().and(Temptation_.createdAt.notNull()),
         )
         .watch(triggerImmediately: true)
-        .map((query) => query.find());
+        .asyncMap((query) async => await query.findAsync());
   }
 
   // Resolve temptation (mark as completed)
@@ -153,7 +183,7 @@ class TemptationRepository extends _$TemptationRepository {
     String? notes,
     int? intensityAfter,
   }) async {
-    final temptation = getTemptationById(temptationId);
+    final temptation = await getTemptationById(temptationId);
     if (temptation != null) {
       final updatedTemptation = temptation.copyWith(
         wasSuccessful: wasSuccessful,
@@ -165,7 +195,7 @@ class TemptationRepository extends _$TemptationRepository {
 
   // Add trigger to temptation
   Future<void> addTrigger(int temptationId, String trigger) async {
-    final temptation = getTemptationById(temptationId);
+    final temptation = await getTemptationById(temptationId);
     if (temptation != null && !temptation.triggers.contains(trigger)) {
       final updatedTemptation = temptation.copyWith(
         triggers: [...temptation.triggers, trigger],
@@ -176,7 +206,7 @@ class TemptationRepository extends _$TemptationRepository {
 
   // Add helpful activity to temptation
   Future<void> addHelpfulActivity(int temptationId, String activity) async {
-    final temptation = getTemptationById(temptationId);
+    final temptation = await getTemptationById(temptationId);
     if (temptation != null &&
         !temptation.helpfulActivities.contains(activity)) {
       final updatedTemptation = temptation.copyWith(
@@ -188,7 +218,7 @@ class TemptationRepository extends _$TemptationRepository {
 
   // Set selected activity for temptation
   Future<void> setSelectedActivity(int temptationId, String activity) async {
-    final temptation = getTemptationById(temptationId);
+    final temptation = await getTemptationById(temptationId);
     if (temptation != null) {
       final updatedTemptation = temptation.copyWith(selectedActivity: activity);
       await updateTemptation(updatedTemptation);
@@ -196,30 +226,35 @@ class TemptationRepository extends _$TemptationRepository {
   }
 
   // Get temptations by trigger
-  List<Temptation> getTemptationsByTrigger(String trigger) {
+  Future<List<Temptation>> getTemptationsByTrigger(String trigger) async {
     final query = _temptationBox
         .query(Temptation_.triggers.containsElement(trigger))
         .build();
-    final result = query.find();
+    final result = await query.findAsync();
     query.close();
     return result;
   }
 
   // Get temptations by helpful activity
-  List<Temptation> getTemptationsByHelpfulActivity(String activity) {
+  Future<List<Temptation>> getTemptationsByHelpfulActivity(
+    String activity,
+  ) async {
     final query = _temptationBox
         .query(Temptation_.helpfulActivities.containsElement(activity))
         .build();
-    final result = query.find();
+    final result = await query.findAsync();
     query.close();
     return result;
   }
 
   // Get most common triggers
-  List<MapEntry<String, int>> getMostCommonTriggers({int limit = 10}) {
+  Future<List<MapEntry<String, int>>> getMostCommonTriggers({
+    int limit = 10,
+  }) async {
     final triggerCounts = <String, int>{};
 
-    for (final temptation in getAllTemptations()) {
+    final temptations = await getAllTemptations();
+    for (final temptation in temptations) {
       for (final trigger in temptation.triggers) {
         triggerCounts[trigger] = (triggerCounts[trigger] ?? 0) + 1;
       }
@@ -231,10 +266,13 @@ class TemptationRepository extends _$TemptationRepository {
   }
 
   // Get most helpful activities
-  List<MapEntry<String, int>> getMostHelpfulActivities({int limit = 10}) {
+  Future<List<MapEntry<String, int>>> getMostHelpfulActivities({
+    int limit = 10,
+  }) async {
     final activityCounts = <String, int>{};
 
-    for (final temptation in getAllTemptations()) {
+    final temptations = await getAllTemptations();
+    for (final temptation in temptations) {
       for (final activity in temptation.helpfulActivities) {
         activityCounts[activity] = (activityCounts[activity] ?? 0) + 1;
       }

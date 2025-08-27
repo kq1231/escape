@@ -58,13 +58,13 @@ class TodaysStreak extends _$TodaysStreak {
   }
 
   /// Get today's streak
-  Streak? getTodaysStreak() {
-    return ref.read(streakRepositoryProvider.notifier).getTodaysStreak();
+  Future<Streak?> getTodaysStreak() async {
+    return await ref.read(streakRepositoryProvider.notifier).getTodaysStreak();
   }
 
   /// Get streak by ID
-  Streak? getStreakById(int id) {
-    return ref.read(streakRepositoryProvider.notifier).getStreakById(id);
+  Future<Streak?> getStreakById(int id) async {
+    return await ref.read(streakRepositoryProvider.notifier).getStreakById(id);
   }
 
   /// Reset streak due to relapse
