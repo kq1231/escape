@@ -51,17 +51,33 @@ class TemptationStackedBarChart extends ConsumerWidget {
   }
 
   Widget _buildBarChart(BuildContext context, List<TemptationBarData> barData) {
-    // Sort data by date
-    barData.sort((a, b) => a.date.compareTo(b.date));
+    // Sort data by date and ensure no null/infinite values
+    final validBarData = barData
+        .where(
+          (data) =>
+              data.successfulCount >= 0 &&
+              data.relapseCount >= 0 &&
+              data.successfulCount.isFinite &&
+              data.relapseCount.isFinite,
+        )
+        .toList();
+
+    validBarData.sort((a, b) => a.date.compareTo(b.date));
+
+    if (validBarData.isEmpty) {
+      return const Center(child: Text('No valid data to display'));
+    }
 
     return BarChart(
       BarChartData(
         alignment: BarChartAlignment.spaceAround,
+        maxY: _calculateMaxY(validBarData),
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 40,
+              interval: _calculateInterval(validBarData),
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toInt().toString(),
@@ -72,16 +88,20 @@ class TemptationStackedBarChart extends ConsumerWidget {
               },
             ),
           ),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
-                if (index >= 0 && index < barData.length) {
-                  final date = barData[index].date;
+                if (index >= 0 && index < validBarData.length) {
+                  final date = validBarData[index].date;
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
@@ -98,27 +118,35 @@ class TemptationStackedBarChart extends ConsumerWidget {
           ),
         ),
         borderData: FlBorderData(show: false),
-        barGroups: barData.asMap().entries.map((entry) {
+        barGroups: validBarData.asMap().entries.map((entry) {
           final index = entry.key;
           final data = entry.value;
+          final successfulCount = data.successfulCount.toDouble();
+          final relapseCount = data.relapseCount.toDouble();
+          final total = successfulCount + relapseCount;
 
           return BarChartGroupData(
             x: index,
             barRods: [
               BarChartRodData(
-                toY: data.successfulCount.toDouble(),
-                color: AppTheme.successGreen,
-                width: 20,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              BarChartRodData(
-                toY: data.relapseCount.toDouble(),
+                toY: total,
                 color: AppTheme.errorRed,
                 width: 20,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4),
+                  topRight: Radius.circular(4),
+                ),
+                rodStackItems: total > 0
+                    ? [
+                        BarChartRodStackItem(
+                          0,
+                          successfulCount,
+                          AppTheme.successGreen,
+                        ),
+                      ]
+                    : [],
               ),
             ],
-            showingTooltipIndicators: [0],
           );
         }).toList(),
         gridData: FlGridData(
@@ -128,8 +156,41 @@ class TemptationStackedBarChart extends ConsumerWidget {
             return FlLine(color: AppTheme.lightGray, strokeWidth: 1);
           },
         ),
+        barTouchData: BarTouchData(
+          touchTooltipData: BarTouchTooltipData(
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              final data = validBarData[group.x];
+              return BarTooltipItem(
+                'Date: ${data.date.day}/${data.date.month}\n'
+                'Successful: ${data.successfulCount}\n'
+                'Relapsed: ${data.relapseCount}\n'
+                'Total: ${data.successfulCount + data.relapseCount}',
+                const TextStyle(color: Colors.white),
+              );
+            },
+          ),
+        ),
       ),
     );
+  }
+
+  double _calculateMaxY(List<TemptationBarData> barData) {
+    if (barData.isEmpty) return 10;
+
+    final maxTotal = barData
+        .map((data) => data.successfulCount + data.relapseCount)
+        .reduce((a, b) => a > b ? a : b);
+
+    // Add 10% padding to the top
+    return (maxTotal * 1.1).ceilToDouble();
+  }
+
+  double? _calculateInterval(List<TemptationBarData> barData) {
+    final maxY = _calculateMaxY(barData);
+    if (maxY <= 10) return 1;
+    if (maxY <= 50) return 5;
+    if (maxY <= 100) return 10;
+    return null; // Let fl_chart decide
   }
 
   Widget _buildLegend(BuildContext context) {

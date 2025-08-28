@@ -5,10 +5,10 @@ import '../organisms/time_range_filter.dart';
 import '../organisms/streak_success_rate_card.dart';
 import '../organisms/prayer_success_rate_card.dart';
 import '../organisms/temptation_success_rate_card.dart';
-import '../molecules/streak_activity_grid.dart';
-import '../molecules/prayer_activity_grid.dart';
 import '../molecules/temptation_stacked_bar_chart.dart';
 import '../molecules/xp_growth_chart.dart';
+import '../molecules/streak_activity_grid.dart';
+import '../molecules/prayer_activity_grid.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
@@ -32,24 +32,29 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppTheme.spacingM),
         child: Column(
+          spacing: AppTheme.spacingL,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header with title
-            Text(
-              'Analytics Dashboard',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppTheme.darkGreen,
+            Center(
+              child: Text(
+                textAlign: TextAlign.center,
+                'Analytics Dashboard',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.darkGreen,
+                ),
               ),
             ),
-            const SizedBox(height: AppTheme.spacingM),
 
             // Time range filter
-            TimeRangeFilter(
-              initialRange: _selectedTimeRange,
-              onRangeChanged: _onTimeRangeChanged,
+            Center(
+              child: TimeRangeFilter(
+                initialRange: _selectedTimeRange,
+                onRangeChanged: _onTimeRangeChanged,
+              ),
             ),
-            const SizedBox(height: AppTheme.spacingXL),
 
             // Analytics sections
             _buildAnalyticsSection(context),
@@ -61,58 +66,40 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   Widget _buildAnalyticsSection(BuildContext context) {
     return Column(
+      spacing: AppTheme.spacingL,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Streak Analytics - Load first (most important)
-        const SizedBox(height: AppTheme.spacingM),
         _buildLazySection(
           () => StreakActivityGrid(timeRange: _selectedTimeRange),
         ),
-        const SizedBox(height: AppTheme.spacingXL),
 
         // Streak Success Rate Card
         _buildLazySection(
           () => StreakSuccessRateCard(timeRange: _selectedTimeRange),
         ),
-        const SizedBox(height: AppTheme.spacingXL),
 
         // Prayer Analytics - Load second
-        const SizedBox(height: AppTheme.spacingM),
         _buildLazySection(
           () => PrayerActivityGrid(timeRange: _selectedTimeRange),
         ),
-        const SizedBox(height: AppTheme.spacingXL),
 
         // Prayer Success Rate Card
         _buildLazySection(
           () => PrayerSuccessRateCard(timeRange: _selectedTimeRange),
         ),
-        const SizedBox(height: AppTheme.spacingXL),
 
-        // Temptation Analytics - Load third
-        Text(
-          'Temptation Success Rate',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppTheme.darkGreen,
-          ),
-        ),
-        const SizedBox(height: AppTheme.spacingM),
         _buildLazySection(
           () => TemptationStackedBarChart(timeRange: _selectedTimeRange),
         ),
-        const SizedBox(height: AppTheme.spacingXL),
 
         // Temptation Success Rate Card
         _buildLazySection(
           () => TemptationSuccessRateCard(timeRange: _selectedTimeRange),
         ),
-        const SizedBox(height: AppTheme.spacingXL),
 
         // XP Analytics - Load last (least critical for immediate viewing)
-        const SizedBox(height: AppTheme.spacingM),
         _buildLazySection(() => XPGrowthChart(timeRange: _selectedTimeRange)),
-        const SizedBox(height: AppTheme.spacingXL),
       ],
     );
   }

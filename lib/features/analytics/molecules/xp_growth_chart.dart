@@ -55,13 +55,12 @@ class XPGrowthChart extends ConsumerWidget {
     BuildContext context,
     List<XPGrowthData> growthData,
   ) {
-    // Data should already be sorted from repository, but ensure it
+    // Ensure sorted
     if (growthData.length > 1 &&
         growthData.first.date.isAfter(growthData.last.date)) {
-      growthData.sort((a, b) => a.date.compareTo(b.date));
+      growthData = [...growthData]..sort((a, b) => a.date.compareTo(b.date));
     }
 
-    // Get max values for scaling - use more efficient approach
     int maxCumulativeXP = 0;
     int maxDailyXP = 0;
 
@@ -69,37 +68,36 @@ class XPGrowthChart extends ConsumerWidget {
       if (data.cumulativeXP > maxCumulativeXP) {
         maxCumulativeXP = data.cumulativeXP;
       }
-      if (data.dailyXP > maxDailyXP) {
-        maxDailyXP = data.dailyXP;
-      }
+      if (data.dailyXP > maxDailyXP) maxDailyXP = data.dailyXP;
     }
+
+    final scaleFactor = maxDailyXP == 0 ? 1.0 : (maxCumulativeXP / maxDailyXP);
 
     return LineChart(
       LineChartData(
         gridData: FlGridData(
           show: true,
           drawVerticalLine: true,
-          getDrawingHorizontalLine: (value) {
-            return FlLine(color: AppTheme.lightGray, strokeWidth: 1);
-          },
-          getDrawingVerticalLine: (value) {
-            return FlLine(color: AppTheme.lightGray, strokeWidth: 1);
-          },
+          getDrawingHorizontalLine: (value) =>
+              FlLine(color: AppTheme.lightGray, strokeWidth: 1),
+          getDrawingVerticalLine: (value) =>
+              FlLine(color: AppTheme.lightGray, strokeWidth: 1),
         ),
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 60,
-              interval: 1,
-              getTitlesWidget: (value, meta) {
-                return Text(
-                  value.toInt().toString(),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
-                );
-              },
+              interval: (maxCumulativeXP / 5).ceilToDouble().clamp(
+                1,
+                double.infinity,
+              ),
+              getTitlesWidget: (value, meta) => Text(
+                value.toInt().toString(),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+              ),
             ),
           ),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -122,69 +120,44 @@ class XPGrowthChart extends ConsumerWidget {
                     ),
                   );
                 }
-                return const Text('');
+                return const SizedBox.shrink();
               },
             ),
           ),
         ),
         borderData: FlBorderData(show: false),
         minX: 0,
-        maxX: growthData.length - 1.0,
+        maxX: (growthData.length - 1).toDouble(),
         minY: 0,
         maxY: (maxCumulativeXP * 1.1).toDouble(),
         lineBarsData: [
           // Cumulative XP line
           LineChartBarData(
-            spots: growthData.asMap().entries.map((entry) {
-              final index = entry.key;
-              final data = entry.value;
-              return FlSpot(index.toDouble(), data.cumulativeXP.toDouble());
-            }).toList(),
+            spots: [
+              for (var i = 0; i < growthData.length; i++)
+                FlSpot(i.toDouble(), growthData[i].cumulativeXP.toDouble()),
+            ],
             isCurved: true,
             color: AppTheme.primaryGreen,
             barWidth: 3,
             isStrokeCapRound: true,
-            dotData: FlDotData(
-              show: true,
-              getDotPainter: (spot, percent, barData, index) {
-                return FlDotCirclePainter(
-                  radius: 4,
-                  color: AppTheme.primaryGreen,
-                  strokeWidth: 2,
-                  strokeColor: Colors.white,
-                );
-              },
-            ),
+            dotData: FlDotData(show: growthData.length < 50),
             belowBarData: BarAreaData(
               show: true,
               color: AppTheme.primaryGreen.withValues(alpha: 0.1),
             ),
           ),
-          // Daily XP line (scaled to fit)
+          // Daily XP line (scaled)
           LineChartBarData(
-            spots: growthData.asMap().entries.map((entry) {
-              final index = entry.key;
-              final data = entry.value;
-              // Scale daily XP to fit on the same chart
-              final scaledDailyXP =
-                  data.dailyXP * (maxCumulativeXP / maxDailyXP);
-              return FlSpot(index.toDouble(), scaledDailyXP);
-            }).toList(),
+            spots: [
+              for (var i = 0; i < growthData.length; i++)
+                FlSpot(i.toDouble(), growthData[i].dailyXP * scaleFactor),
+            ],
             isCurved: true,
             color: AppTheme.accentGreen,
             barWidth: 2,
             isStrokeCapRound: true,
-            dotData: FlDotData(
-              show: true,
-              getDotPainter: (spot, percent, barData, index) {
-                return FlDotCirclePainter(
-                  radius: 3,
-                  color: AppTheme.accentGreen,
-                  strokeWidth: 2,
-                  strokeColor: Colors.white,
-                );
-              },
-            ),
+            dotData: FlDotData(show: growthData.length < 50),
             belowBarData: BarAreaData(show: false),
           ),
         ],
@@ -200,15 +173,12 @@ class XPGrowthChart extends ConsumerWidget {
     final totalXP = lastData.cumulativeXP;
     final totalGained = lastData.cumulativeXP - firstData.cumulativeXP;
 
-    // Calculate stats in single pass for efficiency
     int totalDailyXP = 0;
     int maxDailyXP = 0;
 
     for (final data in growthData) {
       totalDailyXP += data.dailyXP;
-      if (data.dailyXP > maxDailyXP) {
-        maxDailyXP = data.dailyXP;
-      }
+      if (data.dailyXP > maxDailyXP) maxDailyXP = data.dailyXP;
     }
 
     final avgDailyXP = totalDailyXP / growthData.length;
