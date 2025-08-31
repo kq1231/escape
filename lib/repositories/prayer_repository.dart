@@ -6,7 +6,7 @@ import '../models/prayer_model.dart';
 
 part 'prayer_repository.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod()
 class PrayerRepository extends _$PrayerRepository {
   late Box<Prayer> _prayerBox;
 

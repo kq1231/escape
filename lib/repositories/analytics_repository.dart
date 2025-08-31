@@ -4,7 +4,7 @@ import 'package:escape/objectbox.g.dart';
 import 'package:escape/providers/objectbox_provider.dart';
 import 'package:escape/models/streak_model.dart';
 import 'package:escape/models/prayer_model.dart';
-import 'package:escape/models/temptation.dart';
+import 'package:escape/models/temptation_model.dart';
 import 'package:escape/models/analytics_models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analytics_repository.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod()
 class AnalyticsRepository extends _$AnalyticsRepository {
   late Box<Streak> _streakBox;
   late Box<Prayer> _prayerBox;

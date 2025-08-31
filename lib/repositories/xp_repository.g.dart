@@ -30,7 +30,7 @@ final class XPRepositoryProvider
   XPRepository create() => XPRepository();
 }
 
-String _$xPRepositoryHash() => r'18066de15ce51d4ab4f81c17a7138645846b6a94';
+String _$xPRepositoryHash() => r'7ee64a21f747f6826222acdda81ad198e5e77182';
 
 abstract class _$XPRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

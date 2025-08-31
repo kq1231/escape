@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:escape/models/temptation.dart';
+import 'package:escape/models/temptation_model.dart';
 import 'package:escape/providers/current_active_temptation_provider.dart';
-import 'package:escape/providers/streak_provider.dart';
 import 'package:escape/providers/user_profile_provider.dart';
 import 'package:escape/providers/xp_controller.dart';
 import 'package:flutter/material.dart';
@@ -256,9 +255,6 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   .read(currentActiveTemptationProvider.notifier)
                   .completeTemptation(temptation: updatedTemptation);
             }
-
-            // Invalidate the latestStreakProvider
-            ref.invalidate(latestStreakProvider);
 
             // Award XP for tawbah
             await ref

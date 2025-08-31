@@ -15,7 +15,7 @@ class ImageRepositoryException implements Exception {
   String toString() => 'ImageRepositoryException: $message';
 }
 
-@Riverpod(keepAlive: false)
+@Riverpod()
 class ImageRepository extends _$ImageRepository {
   static const String _profileImagesDir = 'profile_images';
 

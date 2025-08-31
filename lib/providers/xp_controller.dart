@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../repositories/xp_repository.dart';
 import '../models/prayer_model.dart';
 import '../models/streak_model.dart';
-import '../models/temptation.dart';
+import '../models/temptation_model.dart';
 
 part 'xp_controller.g.dart';
 

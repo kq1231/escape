@@ -31,7 +31,7 @@ final class AnalyticsRepositoryProvider
 }
 
 String _$analyticsRepositoryHash() =>
-    r'45b3e1d930bbd55df025ab047ab096076eb163fa';
+    r'30ba9e5234b3e2e592b1725f62971ab2f99d281d';
 
 abstract class _$AnalyticsRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

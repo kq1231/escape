@@ -29,6 +29,7 @@ class Temptation {
   final xpHistory = ToOne<XPHistoryItem>();
 
   Temptation({
+    this.id = 0,
     required this.createdAt,
     this.wasSuccessful = false,
     this.intensityBefore,

@@ -40,7 +40,7 @@ final class CurrentActiveTemptationProvider
 }
 
 String _$currentActiveTemptationHash() =>
-    r'988413750f47745456226d23cb666538abdff6a3';
+    r'66bd89ce05e4f0ea021351bbd0e17139c1c26902';
 
 abstract class _$CurrentActiveTemptation extends $AsyncNotifier<Temptation?> {
   FutureOr<Temptation?> build();

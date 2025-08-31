@@ -6,8 +6,8 @@ import '../repositories/streak_repository.dart';
 part 'streak_provider.g.dart';
 
 /// A provider that handles all streak-related operations
-/// This provider has keepAlive: false (autoDispose) for efficiency
-@Riverpod(keepAlive: false)
+/// This provider has  (autoDispose) for efficiency
+@Riverpod()
 class TodaysStreak extends _$TodaysStreak {
   late int streakGoal;
 
@@ -21,7 +21,9 @@ class TodaysStreak extends _$TodaysStreak {
         .read(streakRepositoryProvider.notifier)
         .watchTodaysStreak();
 
-    yield* stream;
+    await for (Streak? streak in stream) {
+      yield streak;
+    }
   }
 
   /// Create a new streak record
@@ -89,6 +91,7 @@ Stream<Streak?> latestStreak(Ref ref) async* {
   Stream<Streak?> stream = ref
       .read(streakRepositoryProvider.notifier)
       .watchLatestStreak();
-
-  yield* stream;
+  await for (Streak? streak in stream) {
+    yield streak;
+  }
 }

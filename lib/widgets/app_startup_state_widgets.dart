@@ -1,5 +1,6 @@
 import 'package:escape/models/user_profile_model.dart' as user_profile;
 import 'package:escape/providers/user_profile_provider.dart';
+import 'package:escape/providers/challenges_watcher_provider.dart';
 import 'package:escape/screens/main_app_screen.dart';
 import 'package:escape/theme/app_theme.dart';
 import 'package:escape/theme/theme_provider.dart';
@@ -91,6 +92,28 @@ class AppStartupSuccessWidget extends ConsumerWidget {
                 themeMode: data,
 
                 home: const MainAppScreen(),
+                builder: (context, child) {
+                  return Stack(
+                    children: [
+                      child!, // Your main app content
+                      // Global Achievement Overlay
+                      Consumer(
+                        builder: (context, ref, _) {
+                          return ref
+                              .watch(challengesWatcherProvider)
+                              .when(
+                                data: (newAchievements) =>
+                                    newAchievements.isNotEmpty
+                                    ? _buildAchievementOverlay(newAchievements)
+                                    : const SizedBox.shrink(),
+                                loading: () => const SizedBox.shrink(),
+                                error: (_, _) => const SizedBox.shrink(),
+                              );
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
             },
             loading: () => const MaterialApp(
@@ -113,6 +136,124 @@ class AppStartupSuccessWidget extends ConsumerWidget {
               ),
             ),
           );
+  }
+
+  Widget _buildAchievementOverlay(List<dynamic> newAchievements) {
+    // Import the achievement overlay widget
+    return Positioned(
+      bottom: 20,
+      left: 20,
+      right: 20,
+      child: SizedBox(
+        height: 120,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: newAchievements.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Container(
+                width: 280,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.blue.shade600.withValues(alpha: 0.9),
+                      Colors.blue.shade600.withValues(alpha: 0.7),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 15,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.2),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '🎉 Achievement!',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'Challenge Completed',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '+50 XP',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Barakallahu feek! 🤲',
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 11,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 

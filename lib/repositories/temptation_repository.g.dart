@@ -31,7 +31,7 @@ final class TemptationRepositoryProvider
 }
 
 String _$temptationRepositoryHash() =>
-    r'2774e90804bdb538b9b542d8270fe0a3ea3adee7';
+    r'615f6acc62507553922bd30a49d094e6da31d86f';
 
 abstract class _$TemptationRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

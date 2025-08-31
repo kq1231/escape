@@ -8,7 +8,7 @@ import 'package:escape/models/streak_model.dart';
 
 part 'quick_stats_provider.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod()
 class QuickStats extends _$QuickStats {
   @override
   Stream<quick_stats.QuickStats> build() {

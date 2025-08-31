@@ -31,7 +31,7 @@ final class UserProfileRepositoryProvider
 }
 
 String _$userProfileRepositoryHash() =>
-    r'565b1eaea197e28df0eff72c5ae9cb9084cb3d75';
+    r'19be205e0ca92ac398070d297a3143b3f94225ac';
 
 abstract class _$UserProfileRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

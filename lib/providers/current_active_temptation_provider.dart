@@ -1,4 +1,4 @@
-import 'package:escape/models/temptation.dart';
+import 'package:escape/models/temptation_model.dart';
 import 'package:escape/features/temptation/services/temptation_storage_service.dart';
 import 'package:escape/repositories/temptation_repository.dart';
 import 'package:escape/providers/streak_provider.dart';
@@ -9,8 +9,8 @@ part 'current_active_temptation_provider.g.dart';
 
 /// Provider for the current active temptation (if any)
 /// Used in the temptation flow screen to manage temptation state
-/// keepAlive: false because it's only used during active temptation sessions
-@Riverpod(keepAlive: false)
+///  because it's only used during active temptation sessions
+@Riverpod()
 class CurrentActiveTemptation extends _$CurrentActiveTemptation {
   late TemptationStorageService _storageService;
 

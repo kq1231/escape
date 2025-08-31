@@ -6,11 +6,11 @@ import '../models/user_profile_model.dart';
 import '../models/xp_history_item_model.dart';
 import '../models/prayer_model.dart';
 import '../models/streak_model.dart';
-import '../models/temptation.dart';
+import '../models/temptation_model.dart';
 
 part 'xp_repository.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod()
 class XPRepository extends _$XPRepository {
   late Box<UserProfile> _userProfileBox;
   late Box<XPHistoryItem> _xpHistoryBox;

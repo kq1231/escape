@@ -5,8 +5,8 @@ import '../repositories/prayer_repository.dart';
 part 'prayer_provider.g.dart';
 
 /// A provider that handles all prayer-related operations
-/// This provider has keepAlive: false (autoDispose) for efficiency
-@Riverpod(keepAlive: false)
+/// This provider has  (autoDispose) for efficiency
+@Riverpod()
 class TodaysPrayers extends _$TodaysPrayers {
   @override
   Stream<List<Prayer>> build([DateTime? date]) async* {
@@ -15,7 +15,9 @@ class TodaysPrayers extends _$TodaysPrayers {
         .watchPrayers();
 
     // Watch the prayer repository for changes
-    yield* stream;
+    await for (List<Prayer> prayers in stream) {
+      yield prayers;
+    }
   }
 
   /// Toggle the completion status of a prayer

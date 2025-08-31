@@ -14,9 +14,10 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'models/challenge_model.dart';
 import 'models/prayer_model.dart';
 import 'models/streak_model.dart';
-import 'models/temptation.dart';
+import 'models/temptation_model.dart';
 import 'models/user_profile_model.dart';
 import 'models/xp_history_item_model.dart';
 
@@ -337,6 +338,78 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(6, 6291498019752657236),
+    name: 'Challenge',
+    lastPropertyId: const obx_int.IdUid(10, 6978369473478093011),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 3972189838365105288),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 7387352861388391673),
+        name: 'title',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 1048566736513530322),
+        name: 'description',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 1109013356722225666),
+        name: 'featureName',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 4925002412145861563),
+        name: 'conditionJson',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 5168496962090283635),
+        name: 'iconPath',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 5442020530038481552),
+        name: 'isCompleted',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 5633638316268850998),
+        name: 'completedAt',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 7846699043998571435),
+        name: 'xp',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 6978369473478093011),
+        name: 'xpHistoryId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(4, 3964634972446993293),
+        relationTarget: 'XPHistoryItem',
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -377,8 +450,8 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(5, 8320926897872393874),
-    lastIndexId: const obx_int.IdUid(3, 374482867967219037),
+    lastEntityId: const obx_int.IdUid(6, 6291498019752657236),
+    lastIndexId: const obx_int.IdUid(4, 3964634972446993293),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
@@ -698,6 +771,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           8,
         );
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
         final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
           const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0),
         );
@@ -733,6 +812,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 12, []);
         final object =
             Temptation(
+                id: idParam,
                 createdAt: createdAtParam,
                 wasSuccessful: wasSuccessfulParam,
                 intensityBefore: intensityBeforeParam,
@@ -742,7 +822,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 triggers: triggersParam,
                 helpfulActivities: helpfulActivitiesParam,
               )
-              ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
               ..resolvedAt = resolvedAtValue == null
                   ? null
                   : DateTime.fromMillisecondsSinceEpoch(resolvedAtValue);
@@ -802,6 +881,99 @@ obx_int.ModelDefinition getObjectBoxModel() {
           createdAt: createdAtParam,
         );
 
+        return object;
+      },
+    ),
+    Challenge: obx_int.EntityDefinition<Challenge>(
+      model: _entities[5],
+      toOneRelations: (Challenge object) => [object.xpHistory],
+      toManyRelations: (Challenge object) => {},
+      getId: (Challenge object) => object.id,
+      setId: (Challenge object, int id) {
+        object.id = id;
+      },
+      objectToFB: (Challenge object, fb.Builder fbb) {
+        final titleOffset = fbb.writeString(object.title);
+        final descriptionOffset = fbb.writeString(object.description);
+        final featureNameOffset = fbb.writeString(object.featureName);
+        final conditionJsonOffset = fbb.writeString(object.conditionJson);
+        final iconPathOffset = fbb.writeString(object.iconPath);
+        fbb.startTable(11);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, titleOffset);
+        fbb.addOffset(2, descriptionOffset);
+        fbb.addOffset(3, featureNameOffset);
+        fbb.addOffset(4, conditionJsonOffset);
+        fbb.addOffset(5, iconPathOffset);
+        fbb.addBool(6, object.isCompleted);
+        fbb.addInt64(7, object.completedAt?.millisecondsSinceEpoch);
+        fbb.addInt64(8, object.xp);
+        fbb.addInt64(9, object.xpHistory.targetId);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final completedAtValue = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          18,
+        );
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final titleParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final descriptionParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final featureNameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final conditionJsonParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
+        final iconPathParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 14, '');
+        final isCompletedParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          16,
+          false,
+        );
+        final completedAtParam = completedAtValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(completedAtValue);
+        final xpParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          20,
+          0,
+        );
+        final object = Challenge(
+          id: idParam,
+          title: titleParam,
+          description: descriptionParam,
+          featureName: featureNameParam,
+          conditionJson: conditionJsonParam,
+          iconPath: iconPathParam,
+          isCompleted: isCompletedParam,
+          completedAt: completedAtParam,
+          xp: xpParam,
+        );
+        object.xpHistory.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          22,
+          0,
+        );
+        object.xpHistory.attach(store);
         return object;
       },
     ),
@@ -1033,5 +1205,58 @@ class XPHistoryItem_ {
   /// See [XPHistoryItem.createdAt].
   static final createdAt = obx.QueryDateProperty<XPHistoryItem>(
     _entities[4].properties[3],
+  );
+}
+
+/// [Challenge] entity fields to define ObjectBox queries.
+class Challenge_ {
+  /// See [Challenge.id].
+  static final id = obx.QueryIntegerProperty<Challenge>(
+    _entities[5].properties[0],
+  );
+
+  /// See [Challenge.title].
+  static final title = obx.QueryStringProperty<Challenge>(
+    _entities[5].properties[1],
+  );
+
+  /// See [Challenge.description].
+  static final description = obx.QueryStringProperty<Challenge>(
+    _entities[5].properties[2],
+  );
+
+  /// See [Challenge.featureName].
+  static final featureName = obx.QueryStringProperty<Challenge>(
+    _entities[5].properties[3],
+  );
+
+  /// See [Challenge.conditionJson].
+  static final conditionJson = obx.QueryStringProperty<Challenge>(
+    _entities[5].properties[4],
+  );
+
+  /// See [Challenge.iconPath].
+  static final iconPath = obx.QueryStringProperty<Challenge>(
+    _entities[5].properties[5],
+  );
+
+  /// See [Challenge.isCompleted].
+  static final isCompleted = obx.QueryBooleanProperty<Challenge>(
+    _entities[5].properties[6],
+  );
+
+  /// See [Challenge.completedAt].
+  static final completedAt = obx.QueryDateProperty<Challenge>(
+    _entities[5].properties[7],
+  );
+
+  /// See [Challenge.xp].
+  static final xp = obx.QueryIntegerProperty<Challenge>(
+    _entities[5].properties[8],
+  );
+
+  /// See [Challenge.xpHistory].
+  static final xpHistory = obx.QueryRelationToOne<Challenge, XPHistoryItem>(
+    _entities[5].properties[9],
   );
 }

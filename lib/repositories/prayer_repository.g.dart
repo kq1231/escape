@@ -30,7 +30,7 @@ final class PrayerRepositoryProvider
   PrayerRepository create() => PrayerRepository();
 }
 
-String _$prayerRepositoryHash() => r'179c7ddfed32fca54903af21c4829ce9a0c5e610';
+String _$prayerRepositoryHash() => r'02146925bd85347cfedf68cdda8cc1172e79eb00';
 
 abstract class _$PrayerRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

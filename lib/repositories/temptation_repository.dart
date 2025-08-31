@@ -2,11 +2,11 @@ import 'package:escape/objectbox.g.dart';
 import 'package:escape/providers/objectbox_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'dart:async';
-import '../models/temptation.dart';
+import '../models/temptation_model.dart';
 
 part 'temptation_repository.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod()
 class TemptationRepository extends _$TemptationRepository {
   late Box<Temptation> _temptationBox;
 

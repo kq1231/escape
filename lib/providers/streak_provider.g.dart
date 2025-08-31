@@ -36,7 +36,7 @@ final class TodaysStreakProvider
   TodaysStreak create() => TodaysStreak();
 }
 
-String _$todaysStreakHash() => r'2419dfd8c4e5b9ca9ccfb8c5db80d2d43c6186ad';
+String _$todaysStreakHash() => r'96d632ffed9ddb3e14e03bc2c5ed11c3087b783a';
 
 abstract class _$TodaysStreak extends $StreamNotifier<Streak?> {
   Stream<Streak?> build();
@@ -91,7 +91,7 @@ final class LatestStreakProvider
   }
 }
 
-String _$latestStreakHash() => r'08d06b8e7118e47ab081885bb06559f178d3ae52';
+String _$latestStreakHash() => r'fb9983b44d9b906c632c564b9306442e5a782caa';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

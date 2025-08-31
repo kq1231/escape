@@ -53,7 +53,7 @@ final class TodaysPrayersProvider
   }
 }
 
-String _$todaysPrayersHash() => r'820706190aca1fc2b9a535a2e613a590ad5d2a63';
+String _$todaysPrayersHash() => r'c8abc1279b0ca5e736b145c39f5a685b1994e8d0';
 
 /// A provider that handles all prayer-related operations
 /// This provider has keepAlive: false (autoDispose) for efficiency
