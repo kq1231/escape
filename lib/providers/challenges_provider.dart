@@ -31,7 +31,6 @@ class Challenges extends _$Challenges {
     return [
       // Beginner Challenges (Easy, 10-50 XP)
       Challenge(
-        id: 1,
         title: 'First Temptation',
         description: 'Record your first temptation in the database',
         featureName: 'temptation',
@@ -40,7 +39,6 @@ class Challenges extends _$Challenges {
         xp: 10,
       ),
       Challenge(
-        id: 2,
         title: 'One Day Streak',
         description: 'Maintain a 1-day streak',
         featureName: 'streak',
@@ -49,7 +47,6 @@ class Challenges extends _$Challenges {
         xp: 15,
       ),
       Challenge(
-        id: 3,
         title: 'Morning Reflection',
         description: 'Complete morning reflection for 3 consecutive days',
         featureName: 'prayer',
@@ -59,7 +56,6 @@ class Challenges extends _$Challenges {
         xp: 20,
       ),
       Challenge(
-        id: 4,
         title: 'First Success',
         description: 'Successfully overcome your first temptation',
         featureName: 'temptation',
@@ -69,7 +65,6 @@ class Challenges extends _$Challenges {
         xp: 25,
       ),
       Challenge(
-        id: 5,
         title: 'Three Day Warrior',
         description: 'Maintain a 3-day streak',
         featureName: 'streak',
@@ -80,7 +75,6 @@ class Challenges extends _$Challenges {
 
       // Intermediate Challenges (Medium, 50-100 XP)
       Challenge(
-        id: 6,
         title: 'Week Warrior',
         description: 'Maintain a 7-day streak',
         featureName: 'streak',
@@ -89,7 +83,6 @@ class Challenges extends _$Challenges {
         xp: 50,
       ),
       Challenge(
-        id: 16,
         title: 'Tahajjud Beginner',
         description: 'Complete 1 Tahajjud prayer',
         featureName: 'prayer',
@@ -99,7 +92,6 @@ class Challenges extends _$Challenges {
         xp: 40,
       ),
       Challenge(
-        id: 7,
         title: 'Prayer Master',
         description: 'Complete all 5 daily prayers for a week',
         featureName: 'prayer',
@@ -109,7 +101,6 @@ class Challenges extends _$Challenges {
         xp: 60,
       ),
       Challenge(
-        id: 8,
         title: 'Temptation Fighter',
         description: 'Successfully overcome 5 temptations',
         featureName: 'temptation',
@@ -119,7 +110,6 @@ class Challenges extends _$Challenges {
         xp: 70,
       ),
       Challenge(
-        id: 9,
         title: 'Gratitude Journal',
         description: 'Write gratitude journal for 7 days straight',
         featureName: 'prayer',
@@ -129,7 +119,6 @@ class Challenges extends _$Challenges {
         xp: 75,
       ),
       Challenge(
-        id: 10,
         title: 'Two Week Champion',
         description: 'Maintain a 14-day streak',
         featureName: 'streak',
@@ -140,7 +129,6 @@ class Challenges extends _$Challenges {
 
       // Advanced Challenges (Hard, 100-200 XP)
       Challenge(
-        id: 11,
         title: 'Month Master',
         description: 'Maintain a 30-day streak',
         featureName: 'streak',
@@ -149,7 +137,6 @@ class Challenges extends _$Challenges {
         xp: 100,
       ),
       Challenge(
-        id: 12,
         title: 'Prayer Saint',
         description: 'Complete all prayers for a month',
         featureName: 'prayer',
@@ -159,7 +146,6 @@ class Challenges extends _$Challenges {
         xp: 120,
       ),
       Challenge(
-        id: 13,
         title: 'Temptation Conqueror',
         description: 'Successfully overcome 20 temptations',
         featureName: 'temptation',
@@ -169,7 +155,6 @@ class Challenges extends _$Challenges {
         xp: 150,
       ),
       Challenge(
-        id: 14,
         title: 'Three Month Legend',
         description: 'Maintain a 90-day streak',
         featureName: 'streak',
@@ -178,7 +163,6 @@ class Challenges extends _$Challenges {
         xp: 180,
       ),
       Challenge(
-        id: 15,
         title: 'Complete Transformation',
         description:
             'Successfully overcome 50 temptations and maintain 60-day streak',
@@ -201,12 +185,12 @@ class Challenges extends _$Challenges {
 
     // Create a map of database challenges by ID for quick lookup
     final dbChallengesMap = {
-      for (final challenge in dbChallenges) challenge.id: challenge,
+      for (final challenge in dbChallenges) challenge.title: challenge,
     };
 
     // Add hardcoded challenges, replacing with database ones if they exist
     for (final hardcodedChallenge in hardcoded) {
-      final dbChallenge = dbChallengesMap[hardcodedChallenge.id];
+      final dbChallenge = dbChallengesMap[hardcodedChallenge.title];
       if (dbChallenge != null) {
         merged.add(dbChallenge);
       } else {

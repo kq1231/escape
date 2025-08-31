@@ -1,3 +1,4 @@
+import 'package:escape/models/challenge_model.dart';
 import 'package:escape/models/user_profile_model.dart' as user_profile;
 import 'package:escape/providers/user_profile_provider.dart';
 import 'package:escape/providers/challenges_watcher_provider.dart';
@@ -17,7 +18,6 @@ class AppStartupLoadingWidget extends StatelessWidget {
     return MaterialApp(
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-
       home: SplashScreen(),
     );
   }
@@ -69,20 +69,16 @@ class AppStartupErrorWidget extends ConsumerWidget {
   }
 }
 
-/// A widget that displays the success state with a MaterialApp
 class AppStartupSuccessWidget extends ConsumerWidget {
   const AppStartupSuccessWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the user profile provider to determine which screen to show
     user_profile.UserProfile? userProfile = ref
         .read(userProfileProvider)
         .requireValue;
-
     final themeModeAsync = ref.watch(themeModeNotifierProvider);
 
-    // If user profile exists, show main app, otherwise show onboarding
     return userProfile != null
         ? themeModeAsync.when(
             data: (data) {
@@ -90,7 +86,6 @@ class AppStartupSuccessWidget extends ConsumerWidget {
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
                 themeMode: data,
-
                 home: const MainAppScreen(),
                 builder: (context, child) {
                   return Stack(
@@ -104,10 +99,12 @@ class AppStartupSuccessWidget extends ConsumerWidget {
                               .when(
                                 data: (newAchievements) =>
                                     newAchievements.isNotEmpty
-                                    ? _buildAchievementOverlay(newAchievements)
+                                    ? AchievementOverlay(
+                                        challenges: newAchievements,
+                                      )
                                     : const SizedBox.shrink(),
                                 loading: () => const SizedBox.shrink(),
-                                error: (_, _) => const SizedBox.shrink(),
+                                error: (_, __) => const SizedBox.shrink(),
                               );
                         },
                       ),
@@ -129,7 +126,6 @@ class AppStartupSuccessWidget extends ConsumerWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: ThemeMode.light,
-
             home: OnboardingFlow(
               onComplete: (ctx) => Navigator.of(ctx).pushReplacement(
                 MaterialPageRoute(builder: (context) => MainAppScreen()),
@@ -137,123 +133,314 @@ class AppStartupSuccessWidget extends ConsumerWidget {
             ),
           );
   }
+}
 
-  Widget _buildAchievementOverlay(List<dynamic> newAchievements) {
-    // Import the achievement overlay widget
+/// Beautiful Achievement Overlay Widget
+class AchievementOverlay extends StatefulWidget {
+  final List<Challenge> challenges;
+
+  const AchievementOverlay({super.key, required this.challenges});
+
+  @override
+  State<AchievementOverlay> createState() => _AchievementOverlayState();
+}
+
+class _AchievementOverlayState extends State<AchievementOverlay>
+    with TickerProviderStateMixin {
+  late AnimationController _slideController;
+  late AnimationController _pulseController;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
+
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupAnimations();
+    _showNextAchievement();
+  }
+
+  void _setupAnimations() {
+    _slideController = AnimationController(
+      duration: const Duration(milliseconds: 3000),
+      vsync: this,
+    );
+
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, -1.5), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _slideController,
+            curve: const Interval(0.0, 0.4, curve: Curves.elasticOut),
+          ),
+        );
+
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _slideController,
+        curve: const Interval(0.0, 0.3, curve: Curves.easeInOut),
+      ),
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _slideController,
+        curve: const Interval(0.0, 0.4, curve: Curves.elasticOut),
+      ),
+    );
+
+    // Gentle pulse effect
+    _pulseController.repeat(reverse: true);
+  }
+
+  void _showNextAchievement() async {
+    if (_currentIndex < widget.challenges.length) {
+      // Slide in
+      await _slideController.forward();
+
+      // Show for 5 seconds
+      await Future.delayed(const Duration(seconds: 5));
+
+      // Slide out
+      await _slideController.reverse();
+
+      if (mounted) {
+        setState(() {
+          _currentIndex++;
+        });
+        _showNextAchievement();
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_currentIndex >= widget.challenges.length) {
+      return const SizedBox.shrink();
+    }
+
+    final challenge = widget.challenges[_currentIndex];
+
     return Positioned(
-      bottom: 20,
+      top: MediaQuery.of(context).padding.top + 20,
       left: 20,
       right: 20,
-      child: SizedBox(
-        height: 120,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: newAchievements.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Container(
-                width: 280,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.blue.shade600.withValues(alpha: 0.9),
-                      Colors.blue.shade600.withValues(alpha: 0.7),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: 15,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.2),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: 20,
-                          ),
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: AnimatedBuilder(
+              animation: _pulseController,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: 1.0 + (_pulseController.value * 0.02), // Subtle pulse
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: _getGradientColors(challenge.featureName),
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 20,
+                          spreadRadius: 3,
+                          offset: const Offset(0, 10),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
+                        BoxShadow(
+                          color: _getFeatureColor(
+                            challenge.featureName,
+                          ).withOpacity(0.4),
+                          blurRadius: 30,
+                          spreadRadius: -5,
+                          offset: const Offset(0, 15),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Header with icon and celebration
+                        Row(
+                          children: [
+                            Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.15),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 5),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                _getFeatureIcon(challenge.featureName),
+                                color: _getFeatureColor(challenge.featureName),
+                                size: 36,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '🎉 Masha\'Allah!',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Challenge Completed',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // Challenge details
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '🎉 Achievement!',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Challenge Completed',
+                                challenge.title,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 20,
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                challenge.description,
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 15,
+                                  height: 1.3,
+                                ),
                               ),
                             ],
                           ),
                         ),
+
+                        const SizedBox(height: 16),
+
+                        // Footer with blessing
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Barakallahu feek! 🤲',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              '${_currentIndex + 1}/${widget.challenges.length}',
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '+50 XP',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Barakallahu feek! 🤲',
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 11,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+                  ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
+  }
+
+  List<Color> _getGradientColors(String feature) {
+    return switch (feature) {
+      'streak' => [
+        Colors.orange.shade600,
+        Colors.orange.shade700,
+        Colors.red.shade600,
+      ],
+      'prayer' => [
+        Colors.blue.shade600,
+        Colors.blue.shade700,
+        Colors.indigo.shade600,
+      ],
+      'temptation' => [
+        Colors.purple.shade600,
+        Colors.purple.shade700,
+        Colors.pink.shade600,
+      ],
+      _ => [Colors.grey.shade600, Colors.grey.shade700, Colors.grey.shade800],
+    };
+  }
+
+  IconData _getFeatureIcon(String feature) {
+    return switch (feature) {
+      'streak' => Icons.local_fire_department,
+      'prayer' => Icons.mosque,
+      'temptation' => Icons.shield,
+      _ => Icons.emoji_events,
+    };
+  }
+
+  Color _getFeatureColor(String feature) {
+    return switch (feature) {
+      'streak' => Colors.orange.shade700,
+      'prayer' => Colors.blue.shade700,
+      'temptation' => Colors.purple.shade700,
+      _ => Colors.grey.shade700,
+    };
+  }
+
+  @override
+  void dispose() {
+    _slideController.dispose();
+    _pulseController.dispose();
+    super.dispose();
   }
 }
 

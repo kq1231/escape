@@ -38,7 +38,7 @@ class ChallengesWatcher extends _$ChallengesWatcher {
         if (repo.isChallengeMet(challenge)) {
           newlyAchieved.add(challenge);
           // Mark as completed to prevent re-detection
-          repo.markChallengeCompleted(challenge.id);
+          repo.markChallengeCompleted(challenge);
 
           // Add XP to user profile
           final xpController = ref.read(xPControllerProvider.notifier);

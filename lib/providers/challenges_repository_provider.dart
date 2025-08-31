@@ -710,16 +710,10 @@ class ChallengesRepository extends _$ChallengesRepository {
   }
 
   /// Mark challenge as completed
-  Future<void> markChallengeCompleted(int challengeId) async {
-    final challenge = _challengeBox
-        .query(Challenge_.id.equals(challengeId))
-        .build()
-        .findFirst();
-    if (challenge != null) {
-      challenge.isCompleted = true;
-      challenge.completedAt = DateTime.now();
-      _challengeBox.put(challenge);
-    }
+  Future<void> markChallengeCompleted(Challenge challenge) async {
+    challenge.isCompleted = true;
+    challenge.completedAt = DateTime.now();
+    await _challengeBox.putAsync(challenge);
   }
 
   /// Get all incomplete challenges that are ready to be completed
