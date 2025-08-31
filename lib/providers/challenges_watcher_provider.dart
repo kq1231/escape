@@ -24,9 +24,9 @@ class ChallengesWatcher extends _$ChallengesWatcher {
     // Create a controller to manage the combined output
     final controller = StreamController<List<Challenge>>();
 
-    void checkAndEmitAchievements() {
+    void checkAndEmitAchievements() async {
       // Get current unmet challenges
-      final allChallenges = ref.read(challengesProvider).requireValue;
+      final allChallenges = await ref.read(challengesProvider.future);
       final unmetChallenges = allChallenges
           .where((c) => !c.isCompleted)
           .toList();
