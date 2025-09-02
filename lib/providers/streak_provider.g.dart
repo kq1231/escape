@@ -7,16 +7,16 @@ part of 'streak_provider.dart';
 // **************************************************************************
 
 /// A provider that handles all streak-related operations
-/// This provider has keepAlive: false (autoDispose) for efficiency
+/// This provider has  (autoDispose) for efficiency
 @ProviderFor(TodaysStreak)
 const todaysStreakProvider = TodaysStreakProvider._();
 
 /// A provider that handles all streak-related operations
-/// This provider has keepAlive: false (autoDispose) for efficiency
+/// This provider has  (autoDispose) for efficiency
 final class TodaysStreakProvider
     extends $StreamNotifierProvider<TodaysStreak, Streak?> {
   /// A provider that handles all streak-related operations
-  /// This provider has keepAlive: false (autoDispose) for efficiency
+  /// This provider has  (autoDispose) for efficiency
   const TodaysStreakProvider._()
     : super(
         from: null,
@@ -36,7 +36,7 @@ final class TodaysStreakProvider
   TodaysStreak create() => TodaysStreak();
 }
 
-String _$todaysStreakHash() => r'96d632ffed9ddb3e14e03bc2c5ed11c3087b783a';
+String _$todaysStreakHash() => r'4a5a2992c7fd0942a78ca804817566fefdb00a59';
 
 abstract class _$TodaysStreak extends $StreamNotifier<Streak?> {
   Stream<Streak?> build();

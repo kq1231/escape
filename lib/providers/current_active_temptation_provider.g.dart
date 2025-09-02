@@ -8,18 +8,18 @@ part of 'current_active_temptation_provider.dart';
 
 /// Provider for the current active temptation (if any)
 /// Used in the temptation flow screen to manage temptation state
-/// keepAlive: false because it's only used during active temptation sessions
+///  because it's only used during active temptation sessions
 @ProviderFor(CurrentActiveTemptation)
 const currentActiveTemptationProvider = CurrentActiveTemptationProvider._();
 
 /// Provider for the current active temptation (if any)
 /// Used in the temptation flow screen to manage temptation state
-/// keepAlive: false because it's only used during active temptation sessions
+///  because it's only used during active temptation sessions
 final class CurrentActiveTemptationProvider
     extends $AsyncNotifierProvider<CurrentActiveTemptation, Temptation?> {
   /// Provider for the current active temptation (if any)
   /// Used in the temptation flow screen to manage temptation state
-  /// keepAlive: false because it's only used during active temptation sessions
+  ///  because it's only used during active temptation sessions
   const CurrentActiveTemptationProvider._()
     : super(
         from: null,
@@ -40,7 +40,7 @@ final class CurrentActiveTemptationProvider
 }
 
 String _$currentActiveTemptationHash() =>
-    r'66bd89ce05e4f0ea021351bbd0e17139c1c26902';
+    r'8b5e5ab8c171fe1c50274d3eec3527b179243c3b';
 
 abstract class _$CurrentActiveTemptation extends $AsyncNotifier<Temptation?> {
   FutureOr<Temptation?> build();

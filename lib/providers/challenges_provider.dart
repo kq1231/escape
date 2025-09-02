@@ -6,7 +6,7 @@ part 'challenges_provider.g.dart';
 
 /// A provider that manages challenges by combining hardcoded challenges with database challenges
 /// This provider watches for challenges from the database and merges them with hardcoded challenges
-@Riverpod(keepAlive: true)
+@Riverpod()
 class Challenges extends _$Challenges {
   @override
   Stream<List<Challenge>> build() async* {
@@ -36,7 +36,7 @@ class Challenges extends _$Challenges {
         featureName: 'temptation',
         conditionJson: '{"field": "count", "operator": ">=", "value": 1}',
         iconPath: 'assets/icons/temptation.png',
-        xp: 10,
+        xp: 1000 * 10,
       ),
       Challenge(
         title: 'One Day Streak',
@@ -44,7 +44,7 @@ class Challenges extends _$Challenges {
         featureName: 'streak',
         conditionJson: '{"field": "count", "operator": ">=", "value": 1}',
         iconPath: 'assets/icons/streak.png',
-        xp: 15,
+        xp: 1000 * 15,
       ),
       Challenge(
         title: 'Morning Reflection',
@@ -53,7 +53,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"field": "morning_reflection", "operator": ">=", "value": 3}',
         iconPath: 'assets/icons/prayer.png',
-        xp: 20,
+        xp: 1000 * 20,
       ),
       Challenge(
         title: 'First Success',
@@ -62,7 +62,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"field": "success_count", "operator": ">=", "value": 1}',
         iconPath: 'assets/icons/success.png',
-        xp: 25,
+        xp: 1000 * 25,
       ),
       Challenge(
         title: 'Three Day Warrior',
@@ -70,7 +70,7 @@ class Challenges extends _$Challenges {
         featureName: 'streak',
         conditionJson: '{"field": "count", "operator": ">=", "value": 3}',
         iconPath: 'assets/icons/warrior.png',
-        xp: 30,
+        xp: 1000 * 30,
       ),
 
       // Intermediate Challenges (Medium, 50-100 XP)
@@ -80,7 +80,7 @@ class Challenges extends _$Challenges {
         featureName: 'streak',
         conditionJson: '{"field": "count", "operator": ">=", "value": 7}',
         iconPath: 'assets/icons/week_warrior.png',
-        xp: 50,
+        xp: 1000 * 50,
       ),
       Challenge(
         title: 'Tahajjud Beginner',
@@ -89,7 +89,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"field": "tahajjud_count", "operator": "==", "value": 1}',
         iconPath: 'assets/icons/tahajjud.png',
-        xp: 40,
+        xp: 1000 * 40,
       ),
       Challenge(
         title: 'Prayer Master',
@@ -98,7 +98,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"field": "daily_prayers_completed", "operator": ">=", "value": 35}',
         iconPath: 'assets/icons/prayer_master.png',
-        xp: 60,
+        xp: 1000 * 60,
       ),
       Challenge(
         title: 'Temptation Fighter',
@@ -107,7 +107,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"field": "success_count", "operator": ">=", "value": 5}',
         iconPath: 'assets/icons/fighter.png',
-        xp: 70,
+        xp: 1000 * 70,
       ),
       Challenge(
         title: 'Gratitude Journal',
@@ -116,7 +116,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"field": "gratitude_entries", "operator": ">=", "value": 7}',
         iconPath: 'assets/icons/gratitude.png',
-        xp: 75,
+        xp: 1000 * 75,
       ),
       Challenge(
         title: 'Two Week Champion',
@@ -124,7 +124,7 @@ class Challenges extends _$Challenges {
         featureName: 'streak',
         conditionJson: '{"field": "count", "operator": ">=", "value": 14}',
         iconPath: 'assets/icons/champion.png',
-        xp: 80,
+        xp: 1000 * 80,
       ),
 
       // Advanced Challenges (Hard, 100-200 XP)
@@ -134,7 +134,7 @@ class Challenges extends _$Challenges {
         featureName: 'streak',
         conditionJson: '{"field": "count", "operator": ">=", "value": 30}',
         iconPath: 'assets/icons/month_master.png',
-        xp: 100,
+        xp: 1000 * 100,
       ),
       Challenge(
         title: 'Prayer Saint',
@@ -143,7 +143,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"field": "monthly_prayers_completed", "operator": ">=", "value": 150}',
         iconPath: 'assets/icons/saint.png',
-        xp: 120,
+        xp: 1000 * 120,
       ),
       Challenge(
         title: 'Temptation Conqueror',
@@ -152,7 +152,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"field": "success_count", "operator": ">=", "value": 20}',
         iconPath: 'assets/icons/conqueror.png',
-        xp: 150,
+        xp: 1000 * 150,
       ),
       Challenge(
         title: 'Three Month Legend',
@@ -160,7 +160,7 @@ class Challenges extends _$Challenges {
         featureName: 'streak',
         conditionJson: '{"field": "count", "operator": ">=", "value": 90}',
         iconPath: 'assets/icons/legend.png',
-        xp: 180,
+        xp: 1000 * 180,
       ),
       Challenge(
         title: 'Complete Transformation',
@@ -170,7 +170,7 @@ class Challenges extends _$Challenges {
         conditionJson:
             '{"operator": "AND", "conditions": [{"field": "success_count", "operator": ">=", "value": 50}, {"field": "streak_count", "operator": ">=", "value": 60}]}',
         iconPath: 'assets/icons/transformation.png',
-        xp: 200,
+        xp: 1000 * 200,
       ),
     ];
   }
@@ -195,13 +195,6 @@ class Challenges extends _$Challenges {
         merged.add(dbChallenge);
       } else {
         merged.add(hardcodedChallenge);
-      }
-    }
-
-    // Add any database challenges that don't exist in hardcoded list
-    for (final dbChallenge in dbChallenges) {
-      if (!hardcoded.any((c) => c.id == dbChallenge.id)) {
-        merged.add(dbChallenge);
       }
     }
 

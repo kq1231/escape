@@ -99,12 +99,14 @@ class AppStartupSuccessWidget extends ConsumerWidget {
                               .when(
                                 data: (newAchievements) =>
                                     newAchievements.isNotEmpty
-                                    ? AchievementOverlay(
-                                        challenges: newAchievements,
+                                    ? Scaffold(
+                                        body: AchievementOverlay(
+                                          challenges: newAchievements,
+                                        ),
                                       )
                                     : const SizedBox.shrink(),
                                 loading: () => const SizedBox.shrink(),
-                                error: (_, __) => const SizedBox.shrink(),
+                                error: (_, _) => const SizedBox.shrink(),
                               );
                         },
                       ),
@@ -254,7 +256,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                           blurRadius: 20,
                           spreadRadius: 3,
                           offset: const Offset(0, 10),
@@ -262,7 +264,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                         BoxShadow(
                           color: _getFeatureColor(
                             challenge.featureName,
-                          ).withOpacity(0.4),
+                          ).withValues(alpha: 0.4),
                           blurRadius: 30,
                           spreadRadius: -5,
                           offset: const Offset(0, 15),
@@ -283,7 +285,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.15),
+                                    color: Colors.black.withValues(alpha: 0.15),
                                     blurRadius: 10,
                                     offset: const Offset(0, 5),
                                   ),
@@ -330,10 +332,10 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                           width: double.infinity,
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.15),
+                            color: Colors.white.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),

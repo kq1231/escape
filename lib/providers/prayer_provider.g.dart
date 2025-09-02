@@ -7,16 +7,16 @@ part of 'prayer_provider.dart';
 // **************************************************************************
 
 /// A provider that handles all prayer-related operations
-/// This provider has keepAlive: false (autoDispose) for efficiency
+/// This provider has  (autoDispose) for efficiency
 @ProviderFor(TodaysPrayers)
 const todaysPrayersProvider = TodaysPrayersFamily._();
 
 /// A provider that handles all prayer-related operations
-/// This provider has keepAlive: false (autoDispose) for efficiency
+/// This provider has  (autoDispose) for efficiency
 final class TodaysPrayersProvider
     extends $StreamNotifierProvider<TodaysPrayers, List<Prayer>> {
   /// A provider that handles all prayer-related operations
-  /// This provider has keepAlive: false (autoDispose) for efficiency
+  /// This provider has  (autoDispose) for efficiency
   const TodaysPrayersProvider._({
     required TodaysPrayersFamily super.from,
     required DateTime? super.argument,
@@ -53,10 +53,10 @@ final class TodaysPrayersProvider
   }
 }
 
-String _$todaysPrayersHash() => r'c8abc1279b0ca5e736b145c39f5a685b1994e8d0';
+String _$todaysPrayersHash() => r'd2a1765b7040608cf857eff28ac0bf43e5d8da2c';
 
 /// A provider that handles all prayer-related operations
-/// This provider has keepAlive: false (autoDispose) for efficiency
+/// This provider has  (autoDispose) for efficiency
 final class TodaysPrayersFamily extends $Family
     with
         $ClassFamilyOverride<
@@ -76,7 +76,7 @@ final class TodaysPrayersFamily extends $Family
       );
 
   /// A provider that handles all prayer-related operations
-  /// This provider has keepAlive: false (autoDispose) for efficiency
+  /// This provider has  (autoDispose) for efficiency
   TodaysPrayersProvider call([DateTime? date]) =>
       TodaysPrayersProvider._(argument: date, from: this);
 

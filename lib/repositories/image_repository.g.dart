@@ -30,7 +30,7 @@ final class ImageRepositoryProvider
   ImageRepository create() => ImageRepository();
 }
 
-String _$imageRepositoryHash() => r'3be520706a6542ad9a527e28ee170c18d1e2aa47';
+String _$imageRepositoryHash() => r'65e67be3a2cace027e4706cf79a1a0d11ea1ce4d';
 
 abstract class _$ImageRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

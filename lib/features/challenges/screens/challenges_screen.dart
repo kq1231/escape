@@ -32,7 +32,7 @@ class _ChallengesScreenState extends ConsumerState<ChallengesScreen> {
 
   String _getDifficultyText(int xp) {
     if (xp <= 50) return 'Easy';
-    if (xp <= 100) return 'Medium';
+    if (xp <= 100) return 'Med';
     return 'Hard';
   }
 
@@ -126,21 +126,17 @@ class _ChallengesScreenState extends ConsumerState<ChallengesScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final crossAxisCount = constraints.maxWidth > 600
-                          ? 3
-                          : constraints.maxWidth > 360
-                          ? 2
-                          : 1;
-                      final childAspectRatio = constraints.maxWidth > 600
-                          ? 1.2
-                          : 1.0;
+                      // Use 2x2 grid for smaller screens, 3x3 for larger screens
+                      final maxCrossAxisExtent = constraints.maxWidth > 600
+                          ? constraints.maxWidth / 3
+                          : constraints.maxWidth / 2;
 
                       return GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          childAspectRatio: childAspectRatio,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: maxCrossAxisExtent,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          mainAxisExtent: 300,
                         ),
                         itemCount: challenges.length,
                         itemBuilder: (context, index) {
@@ -149,8 +145,9 @@ class _ChallengesScreenState extends ConsumerState<ChallengesScreen> {
                             title: challenge.title,
                             description: challenge.description,
                             progress: challenge.isCompleted ? 1.0 : 0.0,
-                            rating: 4.5,
+                            rating: 0.0, // Remove stars by setting rating to 0
                             difficulty: _getDifficultyText(challenge.xp),
+                            xp: challenge.xp,
                             isCompleted: challenge.isCompleted,
                             leadingWidget: Container(
                               width: 48,
@@ -168,46 +165,6 @@ class _ChallengesScreenState extends ConsumerState<ChallengesScreen> {
                                 size: 24,
                               ),
                             ),
-                            trailingWidgets: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .secondaryContainer
-                                      .withValues(alpha: 0.3),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.star,
-                                      size: 16,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.secondary,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      '${challenge.xp}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.secondary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
                           );
                         },
                       );
