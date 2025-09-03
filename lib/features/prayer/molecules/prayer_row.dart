@@ -58,18 +58,18 @@ class PrayerRow extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppTheme.spacingM,
-          vertical: AppTheme.spacingS,
+          horizontal: AppConstants.spacingM,
+          vertical: AppConstants.spacingS,
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).brightness == Brightness.dark
               ? const Color(0xFF1E1E1E)
-              : AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+              : AppConstants.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusM),
           border: Border.all(
             color: Theme.of(context).brightness == Brightness.dark
                 ? const Color(0xFF2A2A2A)
-                : AppTheme.lightGray,
+                : AppConstants.lightGray,
           ),
         ),
         child: Row(
@@ -83,7 +83,7 @@ class PrayerRow extends StatelessWidget {
                     const SizedBox(width: 8),
                     XPBadge(
                       xpAmount: xp ?? 100,
-                      backgroundColor: AppTheme.primaryGreen,
+                      backgroundColor: AppConstants.primaryGreen,
                       fontSize: 14,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 4,

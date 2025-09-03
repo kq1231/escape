@@ -4,8 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   app_links
+  audioplayers_windows
   dynamic_color
   file_selector_windows
+  flutter_inappwebview_windows
   objectbox_flutter_libs
   url_launcher_windows
 )

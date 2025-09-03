@@ -51,12 +51,13 @@ class ChallengeProgressBar extends StatelessWidget {
             ],
           ),
         if (leadingText != null || trailingText != null)
-          const SizedBox(height: AppTheme.spacingXS),
+          const SizedBox(height: AppConstants.spacingXS),
         ClipRRect(
-          borderRadius: borderRadius ?? BorderRadius.circular(AppTheme.radiusM),
+          borderRadius:
+              borderRadius ?? BorderRadius.circular(AppConstants.radiusM),
           child: Container(
             height: height,
-            color: backgroundColor ?? AppTheme.lightGray,
+            color: backgroundColor ?? AppConstants.lightGray,
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return Stack(
@@ -64,7 +65,7 @@ class ChallengeProgressBar extends StatelessWidget {
                     // Progress fill
                     Container(
                       width: constraints.maxWidth * clampedProgress,
-                      color: progressColor ?? AppTheme.primaryGreen,
+                      color: progressColor ?? AppConstants.primaryGreen,
                     ),
                     // Animated progress (optional visual enhancement)
                     if (clampedProgress > 0)
@@ -76,9 +77,9 @@ class ChallengeProgressBar extends StatelessWidget {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                (progressColor ?? AppTheme.primaryGreen)
+                                (progressColor ?? AppConstants.primaryGreen)
                                     .withValues(alpha: 0.3),
-                                (progressColor ?? AppTheme.primaryGreen)
+                                (progressColor ?? AppConstants.primaryGreen)
                                     .withValues(alpha: 0.1),
                               ],
                               begin: Alignment.centerLeft,

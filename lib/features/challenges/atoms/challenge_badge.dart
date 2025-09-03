@@ -26,10 +26,10 @@ class ChallengeBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final badgeColor = isCompleted
-        ? backgroundColor ?? AppTheme.successGreen
-        : backgroundColor ?? AppTheme.lightGray;
+        ? backgroundColor ?? AppConstants.successGreen
+        : backgroundColor ?? AppConstants.lightGray;
 
-    final textColor = isCompleted ? AppTheme.white : AppTheme.darkGray;
+    final textColor = isCompleted ? AppConstants.white : AppConstants.darkGray;
 
     return GestureDetector(
       onTap: onTap,
@@ -39,7 +39,7 @@ class ChallengeBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: badgeColor,
           shape: BoxShape.circle,
-          boxShadow: AppTheme.cardShadow,
+          boxShadow: AppConstants.cardShadow,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +47,7 @@ class ChallengeBadge extends StatelessWidget {
             if (icon != null)
               Icon(icon, color: iconColor ?? textColor, size: size * 0.4),
             if (icon != null && subtitle != null)
-              const SizedBox(height: AppTheme.spacingXS),
+              const SizedBox(height: AppConstants.spacingXS),
             Text(
               title,
               style: Theme.of(context).textTheme.labelMedium?.copyWith(

@@ -71,44 +71,47 @@ class InputField extends StatelessWidget {
         errorText: showError ? errorText : null,
         errorMaxLines: 5,
         filled: true,
-        fillColor: fillColor ?? AppTheme.lightGray,
+        fillColor: fillColor ?? AppConstants.lightGray,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+          borderRadius: BorderRadius.circular(AppConstants.radiusM),
           borderSide: BorderSide(
             color: borderColor ?? Colors.transparent,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+          borderRadius: BorderRadius.circular(AppConstants.radiusM),
           borderSide: BorderSide(
             color: borderColor ?? Colors.transparent,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
-          borderSide: const BorderSide(color: AppTheme.primaryGreen, width: 2),
+          borderRadius: BorderRadius.circular(AppConstants.radiusM),
+          borderSide: const BorderSide(
+            color: AppConstants.primaryGreen,
+            width: 2,
+          ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
-          borderSide: const BorderSide(color: AppTheme.errorRed, width: 1),
+          borderRadius: BorderRadius.circular(AppConstants.radiusM),
+          borderSide: const BorderSide(color: AppConstants.errorRed, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
-          borderSide: const BorderSide(color: AppTheme.errorRed, width: 2),
+          borderRadius: BorderRadius.circular(AppConstants.radiusM),
+          borderSide: const BorderSide(color: AppConstants.errorRed, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppTheme.spacingM,
-          vertical: AppTheme.spacingM,
+          horizontal: AppConstants.spacingM,
+          vertical: AppConstants.spacingM,
         ),
         hintStyle: Theme.of(
           context,
-        ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+        ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
         labelStyle: Theme.of(context).textTheme.bodyMedium,
         errorStyle: Theme.of(
           context,
-        ).textTheme.bodySmall?.copyWith(color: AppTheme.errorRed),
+        ).textTheme.bodySmall?.copyWith(color: AppConstants.errorRed),
       ),
     );
   }

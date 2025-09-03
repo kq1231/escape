@@ -64,14 +64,14 @@ class DailyPrayerGrid extends ConsumerWidget {
             .length;
 
         return Container(
-          padding: const EdgeInsets.all(AppTheme.spacingM),
+          padding: const EdgeInsets.all(AppConstants.spacingM),
           decoration: BoxDecoration(
             color: Theme.of(context).brightness == Brightness.dark
-                ? AppTheme.black
-                : AppTheme.white,
-            borderRadius: BorderRadius.circular(AppTheme.radiusL),
-            border: Border.all(color: AppTheme.lightGray),
-            boxShadow: AppTheme.cardShadow,
+                ? AppConstants.black
+                : AppConstants.white,
+            borderRadius: BorderRadius.circular(AppConstants.radiusL),
+            border: Border.all(color: AppConstants.lightGray),
+            boxShadow: AppConstants.cardShadow,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -89,13 +89,13 @@ class DailyPrayerGrid extends ConsumerWidget {
                   Text(
                     '$completedCount/${prayerNames.length}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.primaryGreen,
+                      color: AppConstants.primaryGreen,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: AppTheme.spacingM),
+              const SizedBox(height: AppConstants.spacingM),
               // Prayer rows
               ...prayerNames.map((prayerName) {
                 final prayer = prayerMap[prayerName];
@@ -192,7 +192,7 @@ class DailyPrayerGrid extends ConsumerWidget {
                       },
                     ),
                     if (prayerName != prayerNames.last)
-                      const SizedBox(height: AppTheme.spacingS),
+                      const SizedBox(height: AppConstants.spacingS),
                   ],
                 );
               }),

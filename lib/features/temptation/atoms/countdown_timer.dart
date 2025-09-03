@@ -70,8 +70,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = widget.primaryColor ?? AppTheme.primaryGreen;
-    final backgroundColor = widget.backgroundColor ?? AppTheme.lightGreen;
+    final primaryColor = widget.primaryColor ?? AppConstants.primaryGreen;
+    final backgroundColor = widget.backgroundColor ?? AppConstants.lightGreen;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +115,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
                 Text(
                   'remaining',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: _getTextColor(AppTheme.black),
+                    color: _getTextColor(AppConstants.black),
                     fontSize: 16,
                   ),
                 ),
@@ -123,12 +123,12 @@ class _CountdownTimerState extends State<CountdownTimer> {
             ),
           ],
         ),
-        const SizedBox(height: AppTheme.spacingXL),
+        const SizedBox(height: AppConstants.spacingXL),
         // Instruction text
         Text(
           'Focus on your chosen activity and resist the temptation',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: _getTextColor(AppTheme.darkGreen),
+            color: _getTextColor(AppConstants.darkGreen),
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),

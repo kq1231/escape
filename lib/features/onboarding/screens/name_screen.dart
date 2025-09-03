@@ -66,11 +66,11 @@ class _NameScreenState extends State<NameScreen> {
           Text(
             'Please enter your name so we can personalize your experience',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGray,
+              color: AppConstants.mediumGray,
               height: 1.5,
             ),
           ),
-          const SizedBox(height: AppTheme.spacingXXL),
+          const SizedBox(height: AppConstants.spacingXXL),
           InputField(
             controller: _nameController,
             labelText: 'Your Name',

@@ -23,7 +23,7 @@ class StreakSuccessRateCard extends ConsumerWidget {
           'Error loading streak stats: $error',
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(color: AppTheme.errorRed),
+          ).textTheme.bodyMedium?.copyWith(color: AppConstants.errorRed),
         ),
       ),
       data: (stats) {
@@ -33,7 +33,7 @@ class StreakSuccessRateCard extends ConsumerWidget {
           subtitle:
               '${stats.currentStreak} day current streak • ${stats.longestStreak} day best',
           icon: Icons.local_fire_department,
-          iconColor: AppTheme.warningOrange,
+          iconColor: AppConstants.warningOrange,
           trend: _getTrend(stats.successRate),
         );
       },

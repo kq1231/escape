@@ -51,7 +51,7 @@ class StatisticsPieChart extends StatelessWidget {
           title: '${percentage.toStringAsFixed(1)}%',
           radius: 50,
           titleStyle: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
-            color: AppTheme.white,
+            color: AppConstants.white,
             fontWeight: FontWeight.bold,
             fontSize: 12,
           ),
@@ -63,11 +63,11 @@ class StatisticsPieChart extends StatelessWidget {
 
   Color _getColorByIndex(int index) {
     List<Color> colors = [
-      AppTheme.primaryGreen,
-      AppTheme.lightGreen,
-      AppTheme.accentGreen,
-      AppTheme.warningOrange,
-      AppTheme.successGreen,
+      AppConstants.primaryGreen,
+      AppConstants.lightGreen,
+      AppConstants.accentGreen,
+      AppConstants.warningOrange,
+      AppConstants.successGreen,
     ];
     return colors[index % colors.length];
   }

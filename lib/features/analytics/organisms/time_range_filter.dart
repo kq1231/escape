@@ -34,10 +34,10 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
         // Filter button
         Container(
           decoration: BoxDecoration(
-            color: AppTheme.white,
-            borderRadius: BorderRadius.circular(AppTheme.radiusM),
-            border: Border.all(color: AppTheme.lightGray),
-            boxShadow: AppTheme.cardShadow,
+            color: AppConstants.white,
+            borderRadius: BorderRadius.circular(AppConstants.radiusM),
+            border: Border.all(color: AppConstants.lightGray),
+            boxShadow: AppConstants.cardShadow,
           ),
           child: TextButton.icon(
             onPressed: () {
@@ -47,20 +47,20 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
             },
             icon: Icon(
               Icons.filter_list,
-              color: AppTheme.primaryGreen,
+              color: AppConstants.primaryGreen,
               size: 20,
             ),
             label: Text(
               _selectedRange?.label ?? 'Select Time Range',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.primaryGreen,
+                color: AppConstants.primaryGreen,
                 fontWeight: FontWeight.w500,
               ),
             ),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppTheme.spacingM,
-                vertical: AppTheme.spacingS,
+                horizontal: AppConstants.spacingM,
+                vertical: AppConstants.spacingS,
               ),
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -73,24 +73,24 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            margin: const EdgeInsets.only(top: AppTheme.spacingM),
+            margin: const EdgeInsets.only(top: AppConstants.spacingM),
             decoration: BoxDecoration(
-              color: AppTheme.white,
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
-              border: Border.all(color: AppTheme.lightGray),
-              boxShadow: AppTheme.cardShadow,
+              color: AppConstants.white,
+              borderRadius: BorderRadius.circular(AppConstants.radiusM),
+              border: Border.all(color: AppConstants.lightGray),
+              boxShadow: AppConstants.cardShadow,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Quick filter options
                 Padding(
-                  padding: const EdgeInsets.all(AppTheme.spacingM),
+                  padding: const EdgeInsets.all(AppConstants.spacingM),
                   child: Text(
                     'Quick Filters',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.darkGreen,
+                      color: AppConstants.darkGreen,
                     ),
                   ),
                 ),
@@ -98,7 +98,7 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
                 // Quick filter buttons
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.spacingM,
+                    horizontal: AppConstants.spacingM,
                   ),
                   child: Wrap(
                     spacing: 8,
@@ -132,13 +132,13 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
                   ),
                 ),
 
-                const Divider(height: 1, color: AppTheme.lightGray),
+                const Divider(height: 1, color: AppConstants.lightGray),
 
                 // Custom range option
                 ListTile(
                   leading: const Icon(
                     Icons.calendar_today,
-                    color: AppTheme.primaryGreen,
+                    color: AppConstants.primaryGreen,
                     size: 20,
                   ),
                   title: Text(
@@ -157,13 +157,13 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
                   ListTile(
                     leading: const Icon(
                       Icons.clear,
-                      color: AppTheme.errorRed,
+                      color: AppConstants.errorRed,
                       size: 20,
                     ),
                     title: Text(
                       'Clear Filter',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.errorRed,
+                        color: AppConstants.errorRed,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -189,7 +189,7 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
       label: Text(
         label,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: isSelected ? AppTheme.white : AppTheme.darkGreen,
+          color: isSelected ? AppConstants.white : AppConstants.darkGreen,
         ),
       ),
       selected: isSelected,
@@ -200,9 +200,9 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
           _isExpanded = false;
         });
       },
-      backgroundColor: AppTheme.lightGray,
-      selectedColor: AppTheme.primaryGreen,
-      checkmarkColor: AppTheme.white,
+      backgroundColor: AppConstants.lightGray,
+      selectedColor: AppConstants.primaryGreen,
+      checkmarkColor: AppConstants.white,
       pressElevation: 2,
     );
   }
@@ -216,14 +216,14 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: AppTheme.primaryGreen,
-              onPrimary: AppTheme.white,
-              surface: AppTheme.white,
-              onSurface: AppTheme.darkGreen,
+              primary: AppConstants.primaryGreen,
+              onPrimary: AppConstants.white,
+              surface: AppConstants.white,
+              onSurface: AppConstants.darkGreen,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: AppTheme.primaryGreen,
+                foregroundColor: AppConstants.primaryGreen,
               ),
             ),
           ),

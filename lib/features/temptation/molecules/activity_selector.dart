@@ -70,11 +70,11 @@ class _ActivitySelectorState extends ConsumerState<ActivitySelector> {
           Text(
             'No activities available',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: _getTextColor(AppTheme.mediumGray),
+              color: _getTextColor(AppConstants.mediumGray),
               fontSize: 16,
             ),
           ),
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           ElevatedButton(
             onPressed: _loadActivities,
             child: const Text('Refresh Activities'),
@@ -90,16 +90,16 @@ class _ActivitySelectorState extends ConsumerState<ActivitySelector> {
           'Pick an activity to do right now:',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: _getTextColor(AppTheme.darkGreen),
+            color: _getTextColor(AppConstants.darkGreen),
             fontSize: 20,
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: AppTheme.spacingXL),
+        const SizedBox(height: AppConstants.spacingXL),
         // Activity grid
         Wrap(
-          spacing: AppTheme.spacingM,
-          runSpacing: AppTheme.spacingM,
+          spacing: AppConstants.spacingM,
+          runSpacing: AppConstants.spacingM,
           children: activities.map((activity) {
             return ActivityButton(
               activity: activity,

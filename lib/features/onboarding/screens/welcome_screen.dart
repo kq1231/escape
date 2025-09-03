@@ -13,16 +13,18 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.white,
+      backgroundColor: AppConstants.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingXL,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(flex: 2),
               const IslamicGreeting(),
-              const SizedBox(height: AppTheme.spacingXXL),
+              const SizedBox(height: AppConstants.spacingXXL),
               WelcomeText(
                 title: OnboardingConstants.welcomeTitle,
                 subtitle: OnboardingConstants.welcomeSubtitle,
@@ -34,7 +36,7 @@ class WelcomeScreen extends StatelessWidget {
                 onPressed: onNext,
                 width: double.infinity,
               ),
-              const SizedBox(height: AppTheme.spacingL),
+              const SizedBox(height: AppConstants.spacingL),
             ],
           ),
         ),

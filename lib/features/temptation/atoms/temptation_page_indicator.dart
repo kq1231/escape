@@ -28,8 +28,8 @@ class TemptationPageIndicator extends StatelessWidget {
           width: isActive ? 24 : 8,
           decoration: BoxDecoration(
             color: isActive
-                ? (activeColor ?? AppTheme.primaryGreen)
-                : (inactiveColor ?? AppTheme.mediumGray),
+                ? (activeColor ?? AppConstants.primaryGreen)
+                : (inactiveColor ?? AppConstants.mediumGray),
             borderRadius: BorderRadius.circular(4),
           ),
         );

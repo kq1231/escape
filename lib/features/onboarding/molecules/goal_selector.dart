@@ -45,7 +45,9 @@ class _GoalSelectorState extends State<GoalSelector> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingXL,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -56,7 +58,7 @@ class _GoalSelectorState extends State<GoalSelector> {
                   fontSize: 32, // Increased from default headlineMedium size
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingS),
+              const SizedBox(height: AppConstants.spacingS),
               Text(
                 OnboardingConstants.goalsSubtitle,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -67,10 +69,12 @@ class _GoalSelectorState extends State<GoalSelector> {
             ],
           ),
         ),
-        const SizedBox(height: AppTheme.spacingL),
+        const SizedBox(height: AppConstants.spacingL),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXL,
+            ),
             itemCount: OnboardingConstants.goals.length,
             itemBuilder: (context, index) {
               final goal = OnboardingConstants.goals[index];
@@ -85,11 +89,13 @@ class _GoalSelectorState extends State<GoalSelector> {
         ),
         if (widget.showError && _selectedGoals.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXL,
+            ),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.errorRed,
+                color: AppConstants.errorRed,
                 fontWeight: FontWeight.w500,
               ),
             ),

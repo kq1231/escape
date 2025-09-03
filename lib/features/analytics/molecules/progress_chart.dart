@@ -31,7 +31,7 @@ class ProgressChart extends StatelessWidget {
                   LineChartBarData(
                     spots: _generateSpots(),
                     isCurved: true,
-                    color: AppTheme.primaryGreen,
+                    color: AppConstants.primaryGreen,
                     barWidth: 3,
                     isStrokeCapRound: true,
                     dotData: FlDotData(
@@ -39,13 +39,13 @@ class ProgressChart extends StatelessWidget {
                       getDotPainter: (spot, percent, barData, index) {
                         return FlDotCirclePainter(
                           radius: 5,
-                          color: AppTheme.primaryGreen,
+                          color: AppConstants.primaryGreen,
                         );
                       },
                     ),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: AppTheme.primaryGreen.withValues(alpha: 0.1),
+                      color: AppConstants.primaryGreen.withValues(alpha: 0.1),
                     ),
                   ),
                 ],
@@ -67,7 +67,7 @@ class ProgressChart extends StatelessWidget {
                             '${date.day}/${date.month}',
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
-                                  color: AppTheme.mediumGray,
+                                  color: AppConstants.mediumGray,
                                   fontWeight: FontWeight.w500,
                                 ),
                           );
@@ -85,7 +85,7 @@ class ProgressChart extends StatelessWidget {
                           value.toInt().toString(),
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(
-                                color: AppTheme.mediumGray,
+                                color: AppConstants.mediumGray,
                                 fontWeight: FontWeight.w500,
                               ),
                         );
@@ -99,12 +99,15 @@ class ProgressChart extends StatelessWidget {
                   drawVerticalLine: false,
                   horizontalInterval: 1,
                   getDrawingHorizontalLine: (value) {
-                    return FlLine(color: AppTheme.lightGray, strokeWidth: 1);
+                    return FlLine(
+                      color: AppConstants.lightGray,
+                      strokeWidth: 1,
+                    );
                   },
                 ),
                 borderData: FlBorderData(
                   show: true,
-                  border: Border.all(color: AppTheme.lightGray),
+                  border: Border.all(color: AppConstants.lightGray),
                 ),
                 minX: 0,
                 maxX: data.length > 1 ? (data.length - 1).toDouble() : 1,

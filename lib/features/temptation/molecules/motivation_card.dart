@@ -25,17 +25,17 @@ class MotivationCard extends StatelessWidget {
     final cardColor =
         backgroundColor ??
         (isDarkMode
-            ? AppTheme.primaryGreen.withValues(alpha: 0.2)
-            : AppTheme.lightGreen);
+            ? AppConstants.primaryGreen.withValues(alpha: 0.2)
+            : AppConstants.lightGreen);
     final textColorValue =
-        textColor ?? (isDarkMode ? Colors.white70 : AppTheme.white);
+        textColor ?? (isDarkMode ? Colors.white70 : AppConstants.white);
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(AppConstants.spacingXL),
       decoration: BoxDecoration(
         color: cardColor,
-        borderRadius: BorderRadius.circular(AppTheme.radiusXL),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXL),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: isDarkMode ? 0.3 : 0.1),
@@ -49,7 +49,7 @@ class MotivationCard extends StatelessWidget {
         children: [
           if (icon != null) ...[
             Icon(icon, size: 48, color: textColorValue),
-            const SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppConstants.spacingL),
           ],
           Text(
             title,
@@ -60,7 +60,7 @@ class MotivationCard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           Text(
             content,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -84,47 +84,47 @@ class IslamicMotivationCards {
       'content':
           'Allah does not burden a soul beyond that it can bear. (Quran 2:286)',
       'icon': Icons.favorite,
-      'backgroundColor': AppTheme.lightGreen,
-      'textColor': AppTheme.darkGreen,
+      'backgroundColor': AppConstants.lightGreen,
+      'textColor': AppConstants.darkGreen,
     },
     {
       'title': 'Div Mercy',
       'content':
           'Allah is Ar-Rahman, The Most Merciful. His mercy encompasses all things.',
       'icon': Icons.all_inclusive,
-      'backgroundColor': AppTheme.lightGreen.withValues(alpha: 0.8),
-      'textColor': AppTheme.darkGreen,
+      'backgroundColor': AppConstants.lightGreen.withValues(alpha: 0.8),
+      'textColor': AppConstants.darkGreen,
     },
     {
       'title': 'You Are In Control',
       'content':
           'You are in control of this moment. Allah has given you the strength to overcome.',
       'icon': Icons.psychology,
-      'backgroundColor': AppTheme.lightGreen.withValues(alpha: 0.6),
-      'textColor': AppTheme.darkGreen,
+      'backgroundColor': AppConstants.lightGreen.withValues(alpha: 0.6),
+      'textColor': AppConstants.darkGreen,
     },
     {
       'title': 'Temporary Feeling',
       'content': 'This feeling will pass InshaAllah. You are strong',
       'icon': Icons.hourglass_bottom,
-      'backgroundColor': AppTheme.lightGreen.withValues(alpha: 0.4),
-      'textColor': AppTheme.darkGreen,
+      'backgroundColor': AppConstants.lightGreen.withValues(alpha: 0.4),
+      'textColor': AppConstants.darkGreen,
     },
     {
       'title': 'Spiritual Rewards',
       'content':
           'Every moment of resistance is worship. Imagine the sakeenah Allah will place in your heart.',
       'icon': Icons.lightbulb,
-      'backgroundColor': AppTheme.lightGreen.withValues(alpha: 0.7),
-      'textColor': AppTheme.darkGreen,
+      'backgroundColor': AppConstants.lightGreen.withValues(alpha: 0.7),
+      'textColor': AppConstants.darkGreen,
     },
     {
       'title': 'Immense AJR',
       'content':
           'Think of the immense ajr (reward) for staying away from haram in the hereafter.',
       'icon': Icons.star,
-      'backgroundColor': AppTheme.lightGreen.withValues(alpha: 0.5),
-      'textColor': AppTheme.darkGreen,
+      'backgroundColor': AppConstants.lightGreen.withValues(alpha: 0.5),
+      'textColor': AppConstants.darkGreen,
     },
   ];
 

@@ -40,7 +40,7 @@ class StreakGraph extends StatelessWidget {
                       return Text(
                         '${date.day}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.mediumGray,
+                          color: AppConstants.mediumGray,
                           fontWeight: FontWeight.w500,
                         ),
                       );
@@ -57,7 +57,7 @@ class StreakGraph extends StatelessWidget {
                     return Text(
                       value.toInt().toString(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                         fontWeight: FontWeight.w500,
                       ),
                     );
@@ -71,12 +71,12 @@ class StreakGraph extends StatelessWidget {
               drawVerticalLine: false,
               horizontalInterval: 1,
               getDrawingHorizontalLine: (value) {
-                return FlLine(color: AppTheme.lightGray, strokeWidth: 1);
+                return FlLine(color: AppConstants.lightGray, strokeWidth: 1);
               },
             ),
             borderData: FlBorderData(
               show: true,
-              border: Border.all(color: AppTheme.lightGray),
+              border: Border.all(color: AppConstants.lightGray),
             ),
             barTouchData: BarTouchData(
               enabled: true,
@@ -85,7 +85,7 @@ class StreakGraph extends StatelessWidget {
                   return BarTooltipItem(
                     '${data[groupIndex].streakCount}',
                     Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: AppTheme.darkGray,
+                      color: AppConstants.darkGray,
                       fontWeight: FontWeight.bold,
                     ),
                   );
@@ -108,8 +108,8 @@ class StreakGraph extends StatelessWidget {
             BarChartRodData(
               toY: data[i].streakCount.toDouble(),
               color: data[i].isActive
-                  ? AppTheme.primaryGreen
-                  : AppTheme.mediumGray,
+                  ? AppConstants.primaryGreen
+                  : AppConstants.mediumGray,
               width: 16,
               borderRadius: BorderRadius.zero,
             ),

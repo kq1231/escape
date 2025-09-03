@@ -26,7 +26,7 @@ class HistoryTimeline extends StatelessWidget {
             fontSize: 28, // Increased from default headlineMedium size
           ),
         ),
-        SizedBox(height: AppTheme.spacingM),
+        SizedBox(height: AppConstants.spacingM),
         if (records.isEmpty) ...[
           Center(
             child: Column(
@@ -34,18 +34,18 @@ class HistoryTimeline extends StatelessWidget {
                 Icon(
                   Icons.history_toggle_off,
                   size: 48,
-                  color: AppTheme.mediumGray,
+                  color: AppConstants.mediumGray,
                 ),
-                SizedBox(height: AppTheme.spacingM),
+                SizedBox(height: AppConstants.spacingM),
                 Text(
                   'No relapse records yet',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.mediumGray,
+                    color: AppConstants.mediumGray,
                     fontWeight: FontWeight.w500,
                     fontSize: 18, // Increased from default bodyMedium size
                   ),
                 ),
-                SizedBox(height: AppTheme.spacingM),
+                SizedBox(height: AppConstants.spacingM),
                 Text(
                   'Keep up the great work!',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -62,7 +62,7 @@ class HistoryTimeline extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: records.length,
             separatorBuilder: (context, index) =>
-                SizedBox(height: AppTheme.spacingM),
+                SizedBox(height: AppConstants.spacingM),
             itemBuilder: (context, index) {
               final record = records[index];
               return HistoryItem(
@@ -70,7 +70,7 @@ class HistoryTimeline extends StatelessWidget {
                 date: record.date,
                 description: record.description,
                 icon: record.icon ?? Icons.history,
-                iconColor: record.iconColor ?? AppTheme.errorRed,
+                iconColor: record.iconColor ?? AppConstants.errorRed,
                 onTap: () => onRecordTap?.call(),
               );
             },

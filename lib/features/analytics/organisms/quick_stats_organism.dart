@@ -32,7 +32,7 @@ class QuickStatsOrganism extends ConsumerWidget {
             fontSize: 32,
           ),
         ),
-        const SizedBox(height: AppTheme.spacingM),
+        const SizedBox(height: AppConstants.spacingM),
         quickStatsAsync.when(
           data: (stats) {
             return Column(
@@ -48,20 +48,20 @@ class QuickStatsOrganism extends ConsumerWidget {
                         onTap: onPrayersTap,
                       ),
                     ),
-                    const SizedBox(width: AppTheme.spacingM),
+                    const SizedBox(width: AppConstants.spacingM),
                     Expanded(
                       child: QuickStatsCard(
                         title: 'Best Streak',
                         value: '${stats.bestStreak}',
                         subtitle: 'All time',
                         icon: Icons.local_fire_department,
-                        iconColor: AppTheme.primaryGreen,
+                        iconColor: AppConstants.primaryGreen,
                         onTap: onBestStreakTap,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: AppTheme.spacingM),
+                const SizedBox(height: AppConstants.spacingM),
                 Row(
                   children: [
                     Expanded(
@@ -74,7 +74,7 @@ class QuickStatsOrganism extends ConsumerWidget {
                         onTap: onMoodTap,
                       ),
                     ),
-                    const SizedBox(width: AppTheme.spacingM),
+                    const SizedBox(width: AppConstants.spacingM),
                     Expanded(
                       child: QuickStatsCard(
                         title: 'Progress',

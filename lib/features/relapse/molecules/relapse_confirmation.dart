@@ -35,7 +35,7 @@ class RelapseConfirmation extends StatelessWidget {
             cancelText,
             style: Theme.of(
               context,
-            ).textTheme.labelMedium?.copyWith(color: AppTheme.primaryGreen),
+            ).textTheme.labelMedium?.copyWith(color: AppConstants.primaryGreen),
           ),
         ),
         RelapseButton(
@@ -54,8 +54,8 @@ class RelapseConfirmation extends StatelessWidget {
             // Close the dialog
             Navigator.of(context).pop();
           },
-          backgroundColor: AppTheme.errorRed,
-          foregroundColor: AppTheme.white,
+          backgroundColor: AppConstants.errorRed,
+          foregroundColor: AppConstants.white,
         ),
       ],
     );

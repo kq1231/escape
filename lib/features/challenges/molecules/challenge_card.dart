@@ -35,18 +35,18 @@ class ChallengeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusColor = isCompleted
-        ? AppTheme.successGreen
+        ? AppConstants.successGreen
         : progress > 0
-        ? AppTheme.warningOrange
-        : AppTheme.mediumGray;
+        ? AppConstants.warningOrange
+        : AppConstants.mediumGray;
 
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radiusL),
+          color: AppConstants.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusL),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.1),
@@ -69,16 +69,16 @@ class ChallengeCard extends StatelessWidget {
                 right: 5,
                 child: XPBadge(
                   backgroundColor: isCompleted
-                      ? AppTheme.successGreen
+                      ? AppConstants.successGreen
                       : Colors.orange[700]!,
-                  textColor: AppTheme.white,
+                  textColor: AppConstants.white,
                   xpAmount: xp!,
                 ),
               ),
 
             // Main card content
             Padding(
-              padding: const EdgeInsets.all(AppTheme.spacingM),
+              padding: const EdgeInsets.all(AppConstants.spacingM),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -87,7 +87,7 @@ class ChallengeCard extends StatelessWidget {
                     children: [
                       if (leadingWidget != null) ...[
                         leadingWidget!,
-                        const SizedBox(width: AppTheme.spacingS),
+                        const SizedBox(width: AppConstants.spacingS),
                       ] else
                         ChallengeBadge(
                           title: title.substring(0, 1),
@@ -95,19 +95,19 @@ class ChallengeCard extends StatelessWidget {
                           size: 40,
                         ),
                       if (trailingWidgets != null) ...[
-                        const SizedBox(width: AppTheme.spacingS),
+                        const SizedBox(width: AppConstants.spacingS),
                         ...trailingWidgets!,
                       ] else if (difficulty != null) ...[
-                        const SizedBox(width: AppTheme.spacingS),
+                        const SizedBox(width: AppConstants.spacingS),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: AppTheme.spacingS,
-                            vertical: AppTheme.spacingXS,
+                            horizontal: AppConstants.spacingS,
+                            vertical: AppConstants.spacingXS,
                           ),
                           decoration: BoxDecoration(
                             color: statusColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(
-                              AppTheme.radiusS,
+                              AppConstants.radiusS,
                             ),
                           ),
                           child: Text(
@@ -119,20 +119,20 @@ class ChallengeCard extends StatelessWidget {
                       ],
                     ],
                   ),
-                  const SizedBox(height: AppTheme.spacingS),
+                  const SizedBox(height: AppConstants.spacingS),
                   // Title in separate line
                   Text(
                     title,
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: isCompleted
-                          ? AppTheme.successGreen
-                          : AppTheme.darkGray,
+                          ? AppConstants.successGreen
+                          : AppConstants.darkGray,
                       fontWeight: FontWeight.bold,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: AppTheme.spacingS),
+                  const SizedBox(height: AppConstants.spacingS),
                   // Description
                   Flexible(
                     child: Text(
@@ -144,38 +144,40 @@ class ChallengeCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(height: AppTheme.spacingM),
+                  const SizedBox(height: AppConstants.spacingM),
                   // Progress bar
                   ChallengeProgressBar(
                     progress: progress,
                     leadingText: 'Progress',
                     trailingText: '${(progress * 100).round()}%',
                   ),
-                  const SizedBox(height: AppTheme.spacingM),
+                  const SizedBox(height: AppConstants.spacingM),
                   // Badges section
                   if (isCompleted)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppTheme.spacingM,
-                        vertical: AppTheme.spacingS,
+                        horizontal: AppConstants.spacingM,
+                        vertical: AppConstants.spacingS,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.successGreen.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                        color: AppConstants.successGreen.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusM,
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             Icons.check_circle,
-                            color: AppTheme.successGreen,
+                            color: AppConstants.successGreen,
                             size: 16,
                           ),
-                          const SizedBox(width: AppTheme.spacingXS),
+                          const SizedBox(width: AppConstants.spacingXS),
                           Text(
                             'Done',
                             style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(color: AppTheme.successGreen),
+                                ?.copyWith(color: AppConstants.successGreen),
                           ),
                         ],
                       ),

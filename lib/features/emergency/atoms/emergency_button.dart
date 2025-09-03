@@ -29,18 +29,18 @@ class EmergencyButton extends StatelessWidget {
 
     final buttonStyle = OutlinedButton.styleFrom(
       side: BorderSide(
-        color: isDarkMode ? AppTheme.white : AppTheme.darkGreen,
+        color: isDarkMode ? AppConstants.white : AppConstants.darkGreen,
         width: 2,
       ),
       elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        borderRadius: BorderRadius.circular(AppConstants.radiusL),
       ),
       padding:
           padding ??
           const EdgeInsets.symmetric(
-            horizontal: AppTheme.spacingXL,
-            vertical: AppTheme.spacingM,
+            horizontal: AppConstants.spacingXL,
+            vertical: AppConstants.spacingM,
           ),
     );
 
@@ -50,7 +50,7 @@ class EmergencyButton extends StatelessWidget {
       children: [
         if (icon != null) ...[
           Icon(icon, size: 24), // Increased from 20 to 24
-          const SizedBox(width: AppTheme.spacingS),
+          const SizedBox(width: AppConstants.spacingS),
         ],
         Text(
           text,

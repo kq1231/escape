@@ -31,11 +31,11 @@ class VideoCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.spacingM),
+        padding: const EdgeInsets.all(AppConstants.spacingM),
         decoration: BoxDecoration(
-          color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radiusL),
-          boxShadow: AppTheme.cardShadow,
+          color: AppConstants.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusL),
+          boxShadow: AppConstants.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,12 +60,12 @@ class VideoCard extends StatelessWidget {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryGreen.withValues(alpha: 0.8),
+                        color: AppConstants.primaryGreen.withValues(alpha: 0.8),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.play_arrow,
-                        color: AppTheme.white,
+                        color: AppConstants.white,
                         size: 30,
                       ),
                     ),
@@ -74,27 +74,29 @@ class VideoCard extends StatelessWidget {
                 // Duration badge
                 if (duration != null)
                   Positioned(
-                    right: AppTheme.spacingS,
-                    bottom: AppTheme.spacingS,
+                    right: AppConstants.spacingS,
+                    bottom: AppConstants.spacingS,
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: AppTheme.spacingS,
-                        vertical: AppTheme.spacingXS,
+                        horizontal: AppConstants.spacingS,
+                        vertical: AppConstants.spacingXS,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.black.withValues(alpha: 0.7),
-                        borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                        color: AppConstants.black.withValues(alpha: 0.7),
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusS,
+                        ),
                       ),
                       child: Text(
                         duration!,
                         style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(color: AppTheme.white),
+                            ?.copyWith(color: AppConstants.white),
                       ),
                     ),
                   ),
               ],
             ),
-            SizedBox(height: AppTheme.spacingM),
+            SizedBox(height: AppConstants.spacingM),
             // Title
             MediaTitle(
               title: title,
@@ -104,14 +106,14 @@ class VideoCard extends StatelessWidget {
             ),
             // Metadata
             if (author != null || views != null) ...[
-              SizedBox(height: AppTheme.spacingXS),
+              SizedBox(height: AppConstants.spacingXS),
               Row(
                 children: [
                   if (author != null) ...[
                     Text(
                       author!,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                       ),
                     ),
                   ],
@@ -119,7 +121,7 @@ class VideoCard extends StatelessWidget {
                     Text(
                       ' • ',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                       ),
                     ),
                   ],
@@ -127,24 +129,24 @@ class VideoCard extends StatelessWidget {
                     Text(
                       '${views!} views',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                       ),
                     ),
                   ],
                 ],
               ),
             ],
-            SizedBox(height: AppTheme.spacingS),
+            SizedBox(height: AppConstants.spacingS),
             // Tags
             if (tags.isNotEmpty) ...[
               Wrap(
-                spacing: AppTheme.spacingS,
-                runSpacing: AppTheme.spacingS,
+                spacing: AppConstants.spacingS,
+                runSpacing: AppConstants.spacingS,
                 children: tags.map((tag) {
                   return MediaTag(
                     label: tag,
-                    backgroundColor: AppTheme.lightGray,
-                    textColor: AppTheme.darkGray,
+                    backgroundColor: AppConstants.lightGray,
+                    textColor: AppConstants.darkGray,
                     onTap: onTagTap,
                   );
                 }).toList(),

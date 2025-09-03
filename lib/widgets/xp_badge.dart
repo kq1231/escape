@@ -34,13 +34,13 @@ class XPBadge extends StatelessWidget {
       label: Text(
         displayText,
         style: TextStyle(
-          color: textColor ?? AppTheme.white,
+          color: textColor ?? AppConstants.white,
           fontSize: fontSize ?? 12, // Increased default size
           fontWeight: FontWeight.bold,
           fontFamily: 'monospace',
         ),
       ),
-      backgroundColor: backgroundColor ?? AppTheme.primaryGreen,
+      backgroundColor: backgroundColor ?? AppConstants.primaryGreen,
       padding:
           padding ??
           const EdgeInsets.symmetric(
@@ -49,7 +49,7 @@ class XPBadge extends StatelessWidget {
           ), // Increased padding
       largeSize: badgeSize ?? 20, // Increased default size
       textStyle: TextStyle(
-        color: textColor ?? AppTheme.white,
+        color: textColor ?? AppConstants.white,
         fontSize: fontSize ?? 12, // Increased default size
         fontWeight: FontWeight.bold,
       ),
@@ -101,13 +101,13 @@ extension XPBadgeExtension on Widget {
             label: Text(
               displayText,
               style: TextStyle(
-                color: badgeTextColor ?? AppTheme.white,
+                color: badgeTextColor ?? AppConstants.white,
                 fontSize: badgeFontSize ?? 12,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'monospace',
               ),
             ),
-            backgroundColor: badgeColor ?? AppTheme.primaryGreen,
+            backgroundColor: badgeColor ?? AppConstants.primaryGreen,
             padding:
                 badgePadding ??
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

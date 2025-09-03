@@ -36,7 +36,7 @@ final class ChallengesProvider
   Challenges create() => Challenges();
 }
 
-String _$challengesHash() => r'7296c4d527c512fc29358cd937214c0f4320522f';
+String _$challengesHash() => r'94b8b751a758242ec1cf78c5f38c206da23fe126';
 
 abstract class _$Challenges extends $StreamNotifier<List<Challenge>> {
   Stream<List<Challenge>> build();

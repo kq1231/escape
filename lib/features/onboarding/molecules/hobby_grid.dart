@@ -44,7 +44,9 @@ class _HobbyGridState extends State<HobbyGrid> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingXL,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,7 +57,7 @@ class _HobbyGridState extends State<HobbyGrid> {
                   fontSize: 32, // Increased from default headlineMedium size
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingS),
+              const SizedBox(height: AppConstants.spacingS),
               Text(
                 OnboardingConstants.hobbiesSubtitle,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -66,14 +68,16 @@ class _HobbyGridState extends State<HobbyGrid> {
             ],
           ),
         ),
-        const SizedBox(height: AppTheme.spacingL),
+        const SizedBox(height: AppConstants.spacingL),
         Expanded(
           child: GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXL,
+            ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: AppTheme.spacingM,
-              mainAxisSpacing: AppTheme.spacingM,
+              crossAxisSpacing: AppConstants.spacingM,
+              mainAxisSpacing: AppConstants.spacingM,
               childAspectRatio: 2.5,
             ),
             itemCount: OnboardingConstants.hobbies.length,
@@ -86,26 +90,26 @@ class _HobbyGridState extends State<HobbyGrid> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppTheme.primaryGreen.withValues(alpha: 0.1)
-                        : AppTheme.white,
-                    borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                        ? AppConstants.primaryGreen.withValues(alpha: 0.1)
+                        : AppConstants.white,
+                    borderRadius: BorderRadius.circular(AppConstants.radiusL),
                     border: Border.all(
                       color: isSelected
-                          ? AppTheme.primaryGreen
-                          : AppTheme.mediumGray,
+                          ? AppConstants.primaryGreen
+                          : AppConstants.mediumGray,
                       width: 1,
                     ),
-                    boxShadow: AppTheme.cardShadow,
+                    boxShadow: AppConstants.cardShadow,
                   ),
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(AppTheme.spacingS),
+                      padding: const EdgeInsets.all(AppConstants.spacingS),
                       child: Text(
                         hobby,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: isSelected
-                              ? AppTheme.primaryGreen
-                              : AppTheme.darkGray,
+                              ? AppConstants.primaryGreen
+                              : AppConstants.darkGray,
                           fontWeight: isSelected
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -123,11 +127,13 @@ class _HobbyGridState extends State<HobbyGrid> {
         ),
         if (widget.showError && _selectedHobbies.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXL,
+            ),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.errorRed,
+                color: AppConstants.errorRed,
                 fontWeight: FontWeight.w500,
               ),
             ),

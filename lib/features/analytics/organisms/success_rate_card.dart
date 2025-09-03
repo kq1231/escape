@@ -28,37 +28,39 @@ class SuccessRateCard extends StatelessWidget {
         : successRate.round().toString();
     final isSuccess = successRate >= 70;
     final trendColor = trend == 'up'
-        ? AppTheme.successGreen
+        ? AppConstants.successGreen
         : trend == 'down'
-        ? AppTheme.errorRed
-        : AppTheme.mediumGray;
+        ? AppConstants.errorRed
+        : AppConstants.mediumGray;
 
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingL),
+      padding: const EdgeInsets.all(AppConstants.spacingL),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isSuccess
               ? [
-                  AppTheme.successGreen.withValues(alpha: 0.1),
-                  AppTheme.successGreen.withValues(alpha: 0.05),
+                  AppConstants.successGreen.withValues(alpha: 0.1),
+                  AppConstants.successGreen.withValues(alpha: 0.05),
                 ]
               : [
-                  AppTheme.warningOrange.withValues(alpha: 0.1),
-                  AppTheme.warningOrange.withValues(alpha: 0.05),
+                  AppConstants.warningOrange.withValues(alpha: 0.1),
+                  AppConstants.warningOrange.withValues(alpha: 0.05),
                 ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        borderRadius: BorderRadius.circular(AppConstants.radiusL),
         border: Border.all(
-          color: isSuccess ? AppTheme.successGreen : AppTheme.warningOrange,
+          color: isSuccess
+              ? AppConstants.successGreen
+              : AppConstants.warningOrange,
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
             color: isSuccess
-                ? AppTheme.successGreen.withValues(alpha: 0.2)
-                : AppTheme.warningOrange.withValues(alpha: 0.2),
+                ? AppConstants.successGreen.withValues(alpha: 0.2)
+                : AppConstants.warningOrange.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -76,22 +78,22 @@ class SuccessRateCard extends StatelessWidget {
                   color:
                       (iconColor ??
                               (isSuccess
-                                  ? AppTheme.successGreen
-                                  : AppTheme.warningOrange))
+                                  ? AppConstants.successGreen
+                                  : AppConstants.warningOrange))
                           .withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusM),
                 ),
                 child: Icon(
                   icon,
                   color:
                       iconColor ??
                       (isSuccess
-                          ? AppTheme.successGreen
-                          : AppTheme.warningOrange),
+                          ? AppConstants.successGreen
+                          : AppConstants.warningOrange),
                   size: 24,
                 ),
               ),
-              const SizedBox(width: AppTheme.spacingM),
+              const SizedBox(width: AppConstants.spacingM),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,13 +102,13 @@ class SuccessRateCard extends StatelessWidget {
                       title,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGreen,
+                        color: AppConstants.darkGreen,
                       ),
                     ),
                     Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                       ),
                     ),
                   ],
@@ -114,7 +116,7 @@ class SuccessRateCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: AppConstants.spacingL),
 
           // Success rate display
           Row(
@@ -126,7 +128,7 @@ class SuccessRateCard extends StatelessWidget {
                     Text(
                       'Success Rate',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -137,8 +139,8 @@ class SuccessRateCard extends StatelessWidget {
                           ?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: isSuccess
-                                ? AppTheme.successGreen
-                                : AppTheme.warningOrange,
+                                ? AppConstants.successGreen
+                                : AppConstants.warningOrange,
                             fontSize: 36,
                           ),
                     ),
@@ -169,11 +171,11 @@ class SuccessRateCard extends StatelessWidget {
           ),
 
           // Progress bar
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           Container(
             height: 8,
             decoration: BoxDecoration(
-              color: AppTheme.lightGray,
+              color: AppConstants.lightGray,
               borderRadius: BorderRadius.circular(4),
             ),
             child: FractionallySizedBox(
@@ -182,8 +184,8 @@ class SuccessRateCard extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: isSuccess
-                      ? AppTheme.successGreen
-                      : AppTheme.warningOrange,
+                      ? AppConstants.successGreen
+                      : AppConstants.warningOrange,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -191,11 +193,13 @@ class SuccessRateCard extends StatelessWidget {
           ),
 
           // Performance indicator
-          const SizedBox(height: AppTheme.spacingS),
+          const SizedBox(height: AppConstants.spacingS),
           Text(
             _getPerformanceText(successRate),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: isSuccess ? AppTheme.successGreen : AppTheme.warningOrange,
+              color: isSuccess
+                  ? AppConstants.successGreen
+                  : AppConstants.warningOrange,
               fontWeight: FontWeight.w600,
             ),
           ),

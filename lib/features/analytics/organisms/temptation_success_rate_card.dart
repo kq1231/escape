@@ -23,7 +23,7 @@ class TemptationSuccessRateCard extends ConsumerWidget {
           'Error loading temptation stats: $error',
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(color: AppTheme.errorRed),
+          ).textTheme.bodyMedium?.copyWith(color: AppConstants.errorRed),
         ),
       ),
       data: (stats) {
@@ -33,7 +33,7 @@ class TemptationSuccessRateCard extends ConsumerWidget {
           subtitle:
               '${stats.successfulTemptations}/${stats.totalTemptations} temptations overcome',
           icon: Icons.shield,
-          iconColor: AppTheme.successGreen,
+          iconColor: AppConstants.successGreen,
           trend: _getTrend(stats.successRate),
         );
       },

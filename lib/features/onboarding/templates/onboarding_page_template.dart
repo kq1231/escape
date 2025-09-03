@@ -38,14 +38,14 @@ class OnboardingPageTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.white,
+      backgroundColor: AppConstants.white,
       appBar: AppBar(
-        backgroundColor: AppTheme.white,
+        backgroundColor: AppConstants.white,
         elevation: 0,
         leading: showBackButton && onBack != null
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                color: AppTheme.darkGray,
+                color: AppConstants.darkGray,
                 onPressed: onBack,
               )
             : null,
@@ -75,7 +75,7 @@ class OnboardingPageTemplate extends StatelessWidget {
                         title,
                         style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(
-                              color: AppTheme.darkGray,
+                              color: AppConstants.darkGray,
                               fontWeight: FontWeight.bold,
                               fontSize:
                                   32, // Increased from default headlineMedium size
@@ -87,7 +87,9 @@ class OnboardingPageTemplate extends StatelessWidget {
                           subtitle!,
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(
-                                color: AppTheme.darkGray.withValues(alpha: 0.8),
+                                color: AppConstants.darkGray.withValues(
+                                  alpha: 0.8,
+                                ),
                                 fontWeight: FontWeight.w500,
                                 fontSize:
                                     20, // Increased from default bodyLarge size
@@ -119,7 +121,9 @@ class OnboardingPageTemplate extends StatelessWidget {
                           'Your data is encrypted and never shared',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
-                                color: AppTheme.darkGray.withValues(alpha: 0.6),
+                                color: AppConstants.darkGray.withValues(
+                                  alpha: 0.6,
+                                ),
                                 fontWeight: FontWeight.w500,
                               ),
                           textAlign: TextAlign.center,

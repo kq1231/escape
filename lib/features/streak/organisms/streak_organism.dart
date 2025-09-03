@@ -43,14 +43,14 @@ class StreakOrganism extends ConsumerWidget {
         return Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: AppTheme.white.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(AppTheme.radiusM),
+            color: AppConstants.white.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(AppConstants.radiusM),
           ),
           child: IconButton(
             icon: Text(
               _getGoalDisplay(goal),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.white,
+                color: AppConstants.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -89,15 +89,15 @@ class StreakOrganism extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            color: AppTheme.white.withValues(alpha: 0.2),
+                            color: AppConstants.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(
-                              AppTheme.radiusM,
+                              AppConstants.radiusM,
                             ),
                           ),
                           child: IconButton(
                             icon: const Icon(
                               Icons.person,
-                              color: AppTheme.white,
+                              color: AppConstants.white,
                               size: 24,
                             ),
                             onPressed: () {
@@ -131,13 +131,15 @@ class StreakOrganism extends ConsumerWidget {
                   : Container(
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: AppTheme.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                        color: AppConstants.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusM,
+                        ),
                       ),
                       child: IconButton(
                         icon: const Icon(
                           Icons.person,
-                          color: AppTheme.white,
+                          color: AppConstants.white,
                           size: 24,
                         ),
                         onPressed: () {
@@ -162,9 +164,9 @@ class StreakOrganism extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppTheme.white.withValues(alpha: 0.2),
+                            color: AppConstants.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(
-                              AppTheme.radiusM,
+                              AppConstants.radiusM,
                             ),
                           ),
                           child: GestureDetector(
@@ -182,7 +184,7 @@ class StreakOrganism extends ConsumerWidget {
                               backgroundImage: FileImage(
                                 File(userProfile.profilePicture),
                               ),
-                              backgroundColor: AppTheme.white.withValues(
+                              backgroundColor: AppConstants.white.withValues(
                                 alpha: 0.2,
                               ),
                             ),
@@ -208,8 +210,10 @@ class StreakOrganism extends ConsumerWidget {
                   : Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppTheme.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                        color: AppConstants.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusM,
+                        ),
                       ),
                       child: GestureDetector(
                         onTap: () {
@@ -226,7 +230,7 @@ class StreakOrganism extends ConsumerWidget {
                           backgroundImage: FileImage(
                             File(userProfile.profilePicture),
                           ),
-                          backgroundColor: AppTheme.white.withValues(
+                          backgroundColor: AppConstants.white.withValues(
                             alpha: 0.2,
                           ),
                         ),
@@ -238,11 +242,15 @@ class StreakOrganism extends ConsumerWidget {
             return Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: AppTheme.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                color: AppConstants.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(AppConstants.radiusM),
               ),
               child: IconButton(
-                icon: const Icon(Icons.person, color: AppTheme.white, size: 24),
+                icon: const Icon(
+                  Icons.person,
+                  color: AppConstants.white,
+                  size: 24,
+                ),
                 onPressed: () {
                   // Navigate to profile screen
                   Navigator.push(
@@ -259,15 +267,15 @@ class StreakOrganism extends ConsumerWidget {
             return Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: AppTheme.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                color: AppConstants.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(AppConstants.radiusM),
               ),
               child: const SizedBox(
                 width: 24,
                 height: 24,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppTheme.white),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppConstants.white),
                 ),
               ),
             );
@@ -315,17 +323,17 @@ class StreakOrganism extends ConsumerWidget {
           },
           child: Container(
             width: double.infinity, // Take full width
-            padding: const EdgeInsets.all(AppTheme.spacingL),
+            padding: const EdgeInsets.all(AppConstants.spacingL),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppTheme.primaryGreen, AppTheme.lightGreen],
+                colors: [AppConstants.primaryGreen, AppConstants.lightGreen],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(AppTheme.radiusXXL),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXXL),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.primaryGreen.withValues(alpha: 0.3),
+                  color: AppConstants.primaryGreen.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -378,11 +386,11 @@ class StreakOrganism extends ConsumerWidget {
                                         ..scale(1.2),
                                   child: Icon(
                                     Icons.local_fire_department,
-                                    color: AppTheme.white,
+                                    color: AppConstants.white,
                                     size: 40,
                                   ),
                                 ),
-                                const SizedBox(width: AppTheme.spacingL),
+                                const SizedBox(width: AppConstants.spacingL),
                                 // Text content
                                 Expanded(
                                   child: Column(
@@ -399,10 +407,10 @@ class StreakOrganism extends ConsumerWidget {
                                             ?.copyWith(
                                               fontSize: 60,
                                               fontWeight: FontWeight.bold,
-                                              color: AppTheme.white,
+                                              color: AppConstants.white,
                                               shadows: [
                                                 Shadow(
-                                                  color: AppTheme.darkGreen
+                                                  color: AppConstants.darkGreen
                                                       .withValues(alpha: 0.5),
                                                   offset: const Offset(2, 2),
                                                   blurRadius: 4,
@@ -411,7 +419,7 @@ class StreakOrganism extends ConsumerWidget {
                                             ),
                                       ),
                                       const SizedBox(
-                                        height: AppTheme.spacingXS,
+                                        height: AppConstants.spacingXS,
                                       ),
                                       // Label with smaller, but still readable text
                                       Text(
@@ -420,13 +428,13 @@ class StreakOrganism extends ConsumerWidget {
                                             .textTheme
                                             .bodyLarge
                                             ?.copyWith(
-                                              color: AppTheme.white,
+                                              color: AppConstants.white,
                                               fontWeight: FontWeight.w600,
                                               fontSize: 18,
                                             ),
                                       ),
                                       const SizedBox(
-                                        height: AppTheme.spacingXS,
+                                        height: AppConstants.spacingXS,
                                       ),
                                     ],
                                   ),
@@ -446,11 +454,11 @@ class StreakOrganism extends ConsumerWidget {
                                         ..scale(1.2),
                                   child: Icon(
                                     Icons.local_fire_department,
-                                    color: AppTheme.white,
+                                    color: AppConstants.white,
                                     size: 40,
                                   ),
                                 ),
-                                const SizedBox(height: AppTheme.spacingS),
+                                const SizedBox(height: AppConstants.spacingS),
                                 // Streak count with larger, more prominent text
                                 Text(
                                   '${streak?.count ?? 0}',
@@ -459,10 +467,10 @@ class StreakOrganism extends ConsumerWidget {
                                       .displayLarge
                                       ?.copyWith(
                                         fontSize: 70,
-                                        color: AppTheme.white,
+                                        color: AppConstants.white,
                                         shadows: [
                                           Shadow(
-                                            color: AppTheme.darkGreen
+                                            color: AppConstants.darkGreen
                                                 .withValues(alpha: 0.5),
                                             offset: const Offset(2, 2),
                                             blurRadius: 4,
@@ -470,18 +478,18 @@ class StreakOrganism extends ConsumerWidget {
                                         ],
                                       ),
                                 ),
-                                const SizedBox(height: AppTheme.spacingXS),
+                                const SizedBox(height: AppConstants.spacingXS),
                                 // Label with smaller, but still readable text
                                 Text(
                                   labelText,
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
-                                        color: AppTheme.white,
+                                        color: AppConstants.white,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 18,
                                       ),
                                 ),
-                                const SizedBox(height: AppTheme.spacingXS),
+                                const SizedBox(height: AppConstants.spacingXS),
                               ],
                             ),
                     ),

@@ -31,15 +31,15 @@ class ChallengeStar extends StatelessWidget {
         if (rating >= starRating) {
           // Full star
           icon = Icons.star;
-          color = filledColor ?? AppTheme.warningOrange;
+          color = filledColor ?? AppConstants.warningOrange;
         } else if (showHalfStars && rating > index) {
           // Half star
           icon = Icons.star_half;
-          color = filledColor ?? AppTheme.warningOrange;
+          color = filledColor ?? AppConstants.warningOrange;
         } else {
           // Empty star
           icon = Icons.star_border;
-          color = unfilledColor ?? AppTheme.mediumGray;
+          color = unfilledColor ?? AppConstants.mediumGray;
         }
 
         return Icon(icon, size: size, color: color);

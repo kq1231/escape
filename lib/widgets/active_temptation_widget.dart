@@ -11,23 +11,23 @@ class ActiveTemptationWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Get theme-aware colors
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDarkMode ? Colors.white : AppTheme.darkGray;
+    final textColor = isDarkMode ? Colors.white : AppConstants.darkGray;
     final borderColor = isDarkMode
         ? Colors.white.withValues(alpha: 0.3)
-        : AppTheme.errorRed.withValues(alpha: 0.3);
+        : AppConstants.errorRed.withValues(alpha: 0.3);
     final backgroundColor = isDarkMode
-        ? AppTheme.errorRed.withValues(alpha: 0.2)
-        : AppTheme.errorRed.withValues(alpha: 0.1);
+        ? AppConstants.errorRed.withValues(alpha: 0.2)
+        : AppConstants.errorRed.withValues(alpha: 0.1);
 
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingL),
+      padding: const EdgeInsets.all(AppConstants.spacingL),
       margin: const EdgeInsets.symmetric(
-        horizontal: AppTheme.spacingL,
-        vertical: AppTheme.spacingM,
+        horizontal: AppConstants.spacingL,
+        vertical: AppConstants.spacingM,
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(AppTheme.radiusXL),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXL),
         border: Border.all(color: borderColor),
       ),
       child: Column(
@@ -37,22 +37,22 @@ class ActiveTemptationWidget extends ConsumerWidget {
             children: [
               Icon(
                 Icons.warning_amber,
-                color: isDarkMode ? Colors.white70 : AppTheme.errorRed,
+                color: isDarkMode ? Colors.white70 : AppConstants.errorRed,
                 size: 24,
               ),
-              const SizedBox(width: AppTheme.spacingS),
+              const SizedBox(width: AppConstants.spacingS),
               Expanded(
                 child: Text(
                   'Active Temptation Session',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: isDarkMode ? Colors.white70 : AppTheme.errorRed,
+                    color: isDarkMode ? Colors.white70 : AppConstants.errorRed,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           Text(
             'You have an active temptation session. '
             'Would you like to continue where you left off?',
@@ -60,7 +60,7 @@ class ActiveTemptationWidget extends ConsumerWidget {
               context,
             ).textTheme.bodyMedium?.copyWith(color: textColor),
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: AppConstants.spacingL),
           // Three buttons: Continue Later, Cancel Session, Continue Now
           Column(
             children: [
@@ -78,23 +78,23 @@ class ActiveTemptationWidget extends ConsumerWidget {
                       Navigator.of(context).pop();
                     }
                   },
-                  icon: const Icon(Icons.cancel, color: AppTheme.errorRed),
+                  icon: const Icon(Icons.cancel, color: AppConstants.errorRed),
                   label: Text(
                     'Cancel Session',
                     style: TextStyle(
-                      color: AppTheme.errorRed,
+                      color: AppConstants.errorRed,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppTheme.errorRed),
+                    side: BorderSide(color: AppConstants.errorRed),
                     padding: const EdgeInsets.symmetric(
-                      vertical: AppTheme.spacingM,
+                      vertical: AppConstants.spacingM,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingM),
+              const SizedBox(height: AppConstants.spacingM),
               // Row with Continue Later and Continue Now
               Row(
                 children: [
@@ -107,7 +107,7 @@ class ActiveTemptationWidget extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: AppTheme.spacingM),
+                  const SizedBox(width: AppConstants.spacingM),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -120,8 +120,8 @@ class ActiveTemptationWidget extends ConsumerWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.errorRed,
-                        foregroundColor: AppTheme.white,
+                        backgroundColor: AppConstants.errorRed,
+                        foregroundColor: AppConstants.white,
                       ),
                       child: const Text('Continue Now'),
                     ),

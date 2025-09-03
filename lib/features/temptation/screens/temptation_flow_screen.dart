@@ -191,7 +191,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('An error occurred. Please try again.'),
-            backgroundColor: AppTheme.errorRed,
+            backgroundColor: AppConstants.errorRed,
           ),
         );
       }
@@ -286,7 +286,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('An error occurred. Please try again.'),
-            backgroundColor: AppTheme.errorRed,
+            backgroundColor: AppConstants.errorRed,
           ),
         );
       }
@@ -311,7 +311,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(foregroundColor: AppTheme.errorRed),
+            style: TextButton.styleFrom(foregroundColor: AppConstants.errorRed),
             child: const Text('Yes, Cancel'),
           ),
         ],
@@ -337,7 +337,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('An error occurred while canceling.'),
-              backgroundColor: AppTheme.errorRed,
+              backgroundColor: AppConstants.errorRed,
             ),
           );
         }
@@ -397,7 +397,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('An error occurred while starting timer.'),
-            backgroundColor: AppTheme.errorRed,
+            backgroundColor: AppConstants.errorRed,
           ),
         );
       }
@@ -432,7 +432,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error, size: 64, color: AppTheme.errorRed),
+              const Icon(Icons.error, size: 64, color: AppConstants.errorRed),
               const SizedBox(height: 16),
               Text('Error: $error'),
               const SizedBox(height: 16),
@@ -466,13 +466,13 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           children: [
             // Progress indicator
             Padding(
-              padding: const EdgeInsets.all(AppTheme.spacingM),
+              padding: const EdgeInsets.all(AppConstants.spacingM),
               child: Row(
                 children: [
                   Text(
                     'Step ${_currentPage + 1} of 6',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.mediumGray,
+                      color: AppConstants.mediumGray,
                       fontSize: 14,
                     ),
                   ),
@@ -480,8 +480,8 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   TemptationPageIndicator(
                     currentPage: _currentPage,
                     pageCount: 6,
-                    activeColor: AppTheme.primaryGreen,
-                    inactiveColor: AppTheme.mediumGray,
+                    activeColor: AppConstants.primaryGreen,
+                    inactiveColor: AppConstants.mediumGray,
                   ),
                 ],
               ),
@@ -523,28 +523,28 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildCalmPage() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(AppConstants.spacingXL),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.mosque, size: 80, color: AppTheme.primaryGreen),
-          const SizedBox(height: AppTheme.spacingXL),
+          Icon(Icons.mosque, size: 80, color: AppConstants.primaryGreen),
+          const SizedBox(height: AppConstants.spacingXL),
           Text(
             'Assalamu alaykum brother/sister',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: _getTextColor(AppTheme.darkGreen),
+              color: _getTextColor(AppConstants.darkGreen),
               fontSize: 28,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: AppConstants.spacingL),
           IslamicMotivationCards.buildCard(context, 0), // Allah's Promise
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
           Text(
             'Take a deep breath and know that Allah is with you.',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: _getTextColor(AppTheme.mediumGray),
+              color: _getTextColor(AppConstants.mediumGray),
               fontSize: 18,
               height: 1.5,
             ),
@@ -557,12 +557,12 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildEducationPage() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(AppConstants.spacingXL),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const LustCycleDiagram(),
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
           IslamicMotivationCards.buildCard(context, 3), // Temporary Feeling
         ],
       ),
@@ -571,14 +571,14 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildMotivationPage() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(AppConstants.spacingXL),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IslamicMotivationCards.buildCard(context, 4), // Spiritual Rewards
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           IslamicMotivationCards.buildCard(context, 5), // Immense AJR
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           IslamicMotivationCards.buildCard(context, 1), // Divine Mercy
         ],
       ),
@@ -587,7 +587,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildActivityPage(Temptation? currentTemptation) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(AppConstants.spacingXL),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -595,12 +595,12 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             'Choose an activity to distract yourself',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: _getTextColor(AppTheme.darkGreen),
+              color: _getTextColor(AppConstants.darkGreen),
               fontSize: 22,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
 
           ActivitySelector(
             predefinedActivities: [
@@ -612,14 +612,14 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           ),
 
           if (_showCustomActivityField) ...[
-            const SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppConstants.spacingL),
             TextField(
               controller: _customActivityController,
               decoration: InputDecoration(
                 labelText: 'Enter your custom activity',
                 hintText: 'e.g., Call a friend, Read a book...',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusM),
                 ),
                 prefixIcon: const Icon(Icons.edit),
               ),
@@ -631,13 +631,13 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
           ],
 
           if (_selectedActivity != null) ...[
-            const SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppConstants.spacingL),
             Container(
-              padding: const EdgeInsets.all(AppTheme.spacingM),
+              padding: const EdgeInsets.all(AppConstants.spacingM),
               decoration: BoxDecoration(
-                color: AppTheme.lightGreen.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(AppTheme.radiusL),
-                border: Border.all(color: AppTheme.primaryGreen),
+                color: AppConstants.lightGreen.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(AppConstants.radiusL),
+                border: Border.all(color: AppConstants.primaryGreen),
               ),
               child: Column(
                 children: [
@@ -645,16 +645,16 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                     'Selected Activity:',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.primaryGreen,
+                      color: AppConstants.primaryGreen,
                     ),
                   ),
-                  const SizedBox(height: AppTheme.spacingS),
+                  const SizedBox(height: AppConstants.spacingS),
                   Text(
                     _selectedActivity == 'Something Else'
                         ? _customActivityController.text.trim()
                         : _selectedActivity!,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: _getTextColor(AppTheme.darkGreen),
+                      color: _getTextColor(AppConstants.darkGreen),
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
@@ -670,7 +670,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildActionPage(Temptation? currentTemptation) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(AppConstants.spacingXL),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -680,21 +680,21 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                 : 'Select an activity to start timer',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: _getTextColor(AppTheme.darkGreen),
+              color: _getTextColor(AppConstants.darkGreen),
               fontSize: 24,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
 
           // Show timer status
           if (_storageService.isTimerActive()) ...[
             Container(
-              padding: const EdgeInsets.all(AppTheme.spacingM),
+              padding: const EdgeInsets.all(AppConstants.spacingM),
               decoration: BoxDecoration(
-                color: AppTheme.lightGreen.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(AppTheme.radiusL),
-                border: Border.all(color: AppTheme.primaryGreen),
+                color: AppConstants.lightGreen.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(AppConstants.radiusL),
+                border: Border.all(color: AppConstants.primaryGreen),
               ),
               child: Column(
                 children: [
@@ -702,38 +702,38 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                     'Timer Active',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.primaryGreen,
+                      color: AppConstants.primaryGreen,
                     ),
                   ),
-                  const SizedBox(height: AppTheme.spacingS),
+                  const SizedBox(height: AppConstants.spacingS),
                   Text(
                     'Time remaining: ${_storageService.getFormattedRemainingTime()}',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: _getTextColor(AppTheme.darkGreen),
+                      color: _getTextColor(AppConstants.darkGreen),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: AppTheme.spacingS),
+                  const SizedBox(height: AppConstants.spacingS),
                   Text(
                     'Time elapsed: ${_storageService.getFormattedElapsedTime()}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: _getTextColor(AppTheme.mediumGray),
+                      color: _getTextColor(AppConstants.mediumGray),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: AppTheme.spacingXL),
+            const SizedBox(height: AppConstants.spacingXL),
           ] else ...[
             Text(
               'Timer will start once you proceed from activity selection',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: AppTheme.errorRed,
+                color: AppConstants.errorRed,
                 fontWeight: FontWeight.w500,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppTheme.spacingXL),
+            const SizedBox(height: AppConstants.spacingXL),
           ],
 
           CountdownTimer(
@@ -741,37 +741,37 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                 ? _storageService.getRemainingTime().inSeconds
                 : 30 * 60, // Default 30 minutes if no active timer
             onComplete: _onCountdownComplete,
-            primaryColor: AppTheme.primaryGreen,
-            backgroundColor: AppTheme.lightGreen,
+            primaryColor: AppConstants.primaryGreen,
+            backgroundColor: AppConstants.lightGreen,
           ),
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
 
           // Cancel Session Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: _onCancelSession,
-              icon: const Icon(Icons.cancel, color: AppTheme.white),
+              icon: const Icon(Icons.cancel, color: AppConstants.white),
               label: const Text(
                 'Cancel Session',
-                style: TextStyle(color: AppTheme.white),
+                style: TextStyle(color: AppConstants.white),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.errorRed,
-                foregroundColor: AppTheme.white,
+                backgroundColor: AppConstants.errorRed,
+                foregroundColor: AppConstants.white,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.spacingL,
-                  vertical: AppTheme.spacingXL,
+                  horizontal: AppConstants.spacingL,
+                  vertical: AppConstants.spacingXL,
                 ),
               ),
             ),
           ),
 
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
           Text(
             'Come back when you\'re done! You can close the app.',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: _getTextColor(AppTheme.mediumGray),
+              color: _getTextColor(AppConstants.mediumGray),
               fontSize: 16,
             ),
             textAlign: TextAlign.center,
@@ -783,18 +783,18 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildResolutionPage() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(AppConstants.spacingXL),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Optional questions section
           Container(
-            padding: const EdgeInsets.all(AppTheme.spacingL),
+            padding: const EdgeInsets.all(AppConstants.spacingL),
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.dark
-                  ? AppTheme.primaryGreen.withValues(alpha: 0.1)
-                  : AppTheme.lightGreen.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                  ? AppConstants.primaryGreen.withValues(alpha: 0.1)
+                  : AppConstants.lightGreen.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(AppConstants.radiusL),
             ),
             child: Column(
               children: [
@@ -805,7 +805,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: AppTheme.spacingM),
+                const SizedBox(height: AppConstants.spacingM),
 
                 // Triggers section
                 Column(
@@ -817,10 +817,10 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: AppTheme.spacingS),
+                    const SizedBox(height: AppConstants.spacingS),
                     Wrap(
-                      spacing: AppTheme.spacingS,
-                      runSpacing: AppTheme.spacingS,
+                      spacing: AppConstants.spacingS,
+                      runSpacing: AppConstants.spacingS,
                       children: [
                         // User's personal triggers from profile
                         ...?ref
@@ -848,7 +848,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                   ],
                 ),
 
-                const SizedBox(height: AppTheme.spacingM),
+                const SizedBox(height: AppConstants.spacingM),
 
                 // Helpful activities section
                 Column(
@@ -860,10 +860,10 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: AppTheme.spacingS),
+                    const SizedBox(height: AppConstants.spacingS),
                     Wrap(
-                      spacing: AppTheme.spacingS,
-                      runSpacing: AppTheme.spacingS,
+                      spacing: AppConstants.spacingS,
+                      runSpacing: AppConstants.spacingS,
                       children: [
                         _buildHelpfulActivityChip('Selected Activity'),
                         _buildHelpfulActivityChip('Deep Breathing'),
@@ -880,55 +880,58 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             ),
           ),
 
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
 
           Text(
             'How did it go?',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: _getTextColor(AppTheme.darkGreen),
+              color: _getTextColor(AppConstants.darkGreen),
               fontSize: 24,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
           Wrap(
-            spacing: AppTheme.spacingM,
-            runSpacing: AppTheme.spacingM,
+            spacing: AppConstants.spacingM,
+            runSpacing: AppConstants.spacingM,
             alignment: WrapAlignment.center,
             children: [
               ElevatedButton.icon(
                 onPressed: _onSuccess,
-                icon: const Icon(Icons.check_circle, color: AppTheme.white),
+                icon: const Icon(Icons.check_circle, color: AppConstants.white),
                 label: const Text(
                   'Alhamdulillah,\nI destroyed it!',
-                  style: TextStyle(color: AppTheme.white),
+                  style: TextStyle(color: AppConstants.white),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryGreen,
+                  backgroundColor: AppConstants.primaryGreen,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.spacingL,
-                    vertical: AppTheme.spacingXL,
+                    horizontal: AppConstants.spacingL,
+                    vertical: AppConstants.spacingXL,
                   ),
                   minimumSize: const Size(150, 80),
                 ),
-              ).withXPBadge(xpAmount: 1000, badgeColor: AppTheme.primaryGreen),
+              ).withXPBadge(
+                xpAmount: 1000,
+                badgeColor: AppConstants.primaryGreen,
+              ),
               ElevatedButton.icon(
                 onPressed: _onRelapse,
-                icon: const Icon(Icons.cancel, color: AppTheme.white),
+                icon: const Icon(Icons.cancel, color: AppConstants.white),
                 label: const Text(
                   'Relapsed',
-                  style: TextStyle(color: AppTheme.white),
+                  style: TextStyle(color: AppConstants.white),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.errorRed,
+                  backgroundColor: AppConstants.errorRed,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.spacingL,
-                    vertical: AppTheme.spacingXL,
+                    horizontal: AppConstants.spacingL,
+                    vertical: AppConstants.spacingXL,
                   ),
                   minimumSize: const Size(150, 80),
                 ),
-              ).withXPBadge(xpAmount: 200, badgeColor: AppTheme.errorRed),
+              ).withXPBadge(xpAmount: 200, badgeColor: AppConstants.errorRed),
             ],
           ),
         ],
@@ -949,14 +952,14 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         _onTriggerSelected(trigger);
       },
       backgroundColor: isDarkMode
-          ? AppTheme.primaryGreen.withValues(alpha: 0.2)
-          : AppTheme.lightGreen.withValues(alpha: 0.3),
-      selectedColor: AppTheme.primaryGreen.withValues(alpha: 0.6),
-      checkmarkColor: AppTheme.white,
+          ? AppConstants.primaryGreen.withValues(alpha: 0.2)
+          : AppConstants.lightGreen.withValues(alpha: 0.3),
+      selectedColor: AppConstants.primaryGreen.withValues(alpha: 0.6),
+      checkmarkColor: AppConstants.white,
       labelStyle: TextStyle(
         color: isSelected
-            ? AppTheme.white
-            : _getTextColor(AppTheme.primaryGreen),
+            ? AppConstants.white
+            : _getTextColor(AppConstants.primaryGreen),
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),
     );
@@ -974,14 +977,14 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
         _onHelpfulActivitySelected(activity);
       },
       backgroundColor: isDarkMode
-          ? AppTheme.primaryGreen.withValues(alpha: 0.2)
-          : AppTheme.lightGreen.withValues(alpha: 0.3),
-      selectedColor: AppTheme.primaryGreen.withValues(alpha: 0.6),
-      checkmarkColor: AppTheme.white,
+          ? AppConstants.primaryGreen.withValues(alpha: 0.2)
+          : AppConstants.lightGreen.withValues(alpha: 0.3),
+      selectedColor: AppConstants.primaryGreen.withValues(alpha: 0.6),
+      checkmarkColor: AppConstants.white,
       labelStyle: TextStyle(
         color: isSelected
-            ? AppTheme.white
-            : _getTextColor(AppTheme.primaryGreen),
+            ? AppConstants.white
+            : _getTextColor(AppConstants.primaryGreen),
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),
     );
@@ -989,7 +992,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
 
   Widget _buildNavigationButtons() {
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingL),
+      padding: const EdgeInsets.all(AppConstants.spacingL),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         boxShadow: [
@@ -1012,7 +1015,7 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                 );
               },
               style: TextButton.styleFrom(
-                foregroundColor: AppTheme.primaryGreen,
+                foregroundColor: AppConstants.primaryGreen,
               ),
               child: const Text('Back'),
             )
@@ -1031,10 +1034,12 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
                       );
                     },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryGreen,
-                foregroundColor: AppTheme.white,
-                disabledBackgroundColor: AppTheme.mediumGray,
-                disabledForegroundColor: AppTheme.white.withValues(alpha: 0.6),
+                backgroundColor: AppConstants.primaryGreen,
+                foregroundColor: AppConstants.white,
+                disabledBackgroundColor: AppConstants.mediumGray,
+                disabledForegroundColor: AppConstants.white.withValues(
+                  alpha: 0.6,
+                ),
               ),
               child: Text(_currentPage == 3 ? 'Start Timer' : 'Next'),
             )

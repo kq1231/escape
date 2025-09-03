@@ -26,7 +26,7 @@ class PrayerTimeLabel extends StatelessWidget {
             color ??
             (Theme.of(context).brightness == Brightness.dark
                 ? Colors.white70
-                : AppTheme.darkGray),
+                : AppConstants.darkGray),
         fontWeight: FontWeight.bold, // Changed from w500 to bold
       ),
     );

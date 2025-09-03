@@ -27,31 +27,31 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final buttonStyle = isOutlined
         ? OutlinedButton.styleFrom(
-            foregroundColor: AppTheme.primaryGreen,
-            side: const BorderSide(color: AppTheme.primaryGreen),
+            foregroundColor: AppConstants.primaryGreen,
+            side: const BorderSide(color: AppConstants.primaryGreen),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme.radiusL),
+              borderRadius: BorderRadius.circular(AppConstants.radiusL),
             ),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
-                  horizontal: AppTheme.spacingXL,
-                  vertical: AppTheme.spacingM,
+                  horizontal: AppConstants.spacingXL,
+                  vertical: AppConstants.spacingM,
                 ),
             textStyle: Theme.of(context).textTheme.labelLarge,
           )
         : ElevatedButton.styleFrom(
-            backgroundColor: AppTheme.primaryGreen,
-            foregroundColor: AppTheme.white,
+            backgroundColor: AppConstants.primaryGreen,
+            foregroundColor: AppConstants.white,
             elevation: 2,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme.radiusL),
+              borderRadius: BorderRadius.circular(AppConstants.radiusL),
             ),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
-                  horizontal: AppTheme.spacingXL,
-                  vertical: AppTheme.spacingM,
+                  horizontal: AppConstants.spacingXL,
+                  vertical: AppConstants.spacingM,
                 ),
             textStyle: Theme.of(context).textTheme.labelLarge,
           );
@@ -71,7 +71,7 @@ class PrimaryButton extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 icon!,
-                const SizedBox(width: AppTheme.spacingS),
+                const SizedBox(width: AppConstants.spacingS),
               ],
               Text(text),
             ],

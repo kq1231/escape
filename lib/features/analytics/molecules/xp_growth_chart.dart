@@ -36,7 +36,7 @@ class XPGrowthChart extends ConsumerWidget {
               timeRange?.label ?? 'Last 30 days',
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+              ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
             ),
             const SizedBox(height: 20),
             SizedBox(
@@ -79,9 +79,9 @@ class XPGrowthChart extends ConsumerWidget {
           show: true,
           drawVerticalLine: true,
           getDrawingHorizontalLine: (value) =>
-              FlLine(color: AppTheme.lightGray, strokeWidth: 1),
+              FlLine(color: AppConstants.lightGray, strokeWidth: 1),
           getDrawingVerticalLine: (value) =>
-              FlLine(color: AppTheme.lightGray, strokeWidth: 1),
+              FlLine(color: AppConstants.lightGray, strokeWidth: 1),
         ),
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
@@ -96,7 +96,7 @@ class XPGrowthChart extends ConsumerWidget {
                 value.toInt().toString(),
                 style: Theme.of(
                   context,
-                ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+                ).textTheme.bodySmall?.copyWith(color: AppConstants.mediumGray),
               ),
             ),
           ),
@@ -115,7 +115,7 @@ class XPGrowthChart extends ConsumerWidget {
                     child: Text(
                       '${date.day}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                       ),
                     ),
                   );
@@ -138,13 +138,13 @@ class XPGrowthChart extends ConsumerWidget {
                 FlSpot(i.toDouble(), growthData[i].cumulativeXP.toDouble()),
             ],
             isCurved: true,
-            color: AppTheme.primaryGreen,
+            color: AppConstants.primaryGreen,
             barWidth: 3,
             isStrokeCapRound: true,
             dotData: FlDotData(show: growthData.length < 50),
             belowBarData: BarAreaData(
               show: true,
-              color: AppTheme.primaryGreen.withValues(alpha: 0.1),
+              color: AppConstants.primaryGreen.withValues(alpha: 0.1),
             ),
           ),
           // Daily XP line (scaled)
@@ -154,7 +154,7 @@ class XPGrowthChart extends ConsumerWidget {
                 FlSpot(i.toDouble(), growthData[i].dailyXP * scaleFactor),
             ],
             isCurved: true,
-            color: AppTheme.accentGreen,
+            color: AppConstants.accentGreen,
             barWidth: 2,
             isStrokeCapRound: true,
             dotData: FlDotData(show: growthData.length < 50),
@@ -184,11 +184,11 @@ class XPGrowthChart extends ConsumerWidget {
     final avgDailyXP = totalDailyXP / growthData.length;
 
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingM),
+      padding: const EdgeInsets.all(AppConstants.spacingM),
       decoration: BoxDecoration(
-        color: AppTheme.lightGreen.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
-        border: Border.all(color: AppTheme.lightGreen),
+        color: AppConstants.lightGreen.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
+        border: Border.all(color: AppConstants.lightGreen),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +197,7 @@ class XPGrowthChart extends ConsumerWidget {
             'XP Statistics',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppTheme.primaryGreen,
+              color: AppConstants.primaryGreen,
             ),
           ),
           const SizedBox(height: 12),
@@ -209,7 +209,7 @@ class XPGrowthChart extends ConsumerWidget {
                   'Total XP',
                   totalXP.toString(),
                   Icons.stars,
-                  color: AppTheme.warningOrange,
+                  color: AppConstants.warningOrange,
                 ),
               ),
               const SizedBox(width: 16),
@@ -219,7 +219,7 @@ class XPGrowthChart extends ConsumerWidget {
                   'Gained',
                   totalGained.toString(),
                   Icons.trending_up,
-                  color: AppTheme.successGreen,
+                  color: AppConstants.successGreen,
                 ),
               ),
             ],
@@ -233,7 +233,7 @@ class XPGrowthChart extends ConsumerWidget {
                   'Avg Daily',
                   avgDailyXP.round().toString(),
                   Icons.calendar_today,
-                  color: AppTheme.primaryGreen,
+                  color: AppConstants.primaryGreen,
                 ),
               ),
               const SizedBox(width: 16),
@@ -243,7 +243,7 @@ class XPGrowthChart extends ConsumerWidget {
                   'Best Day',
                   maxDailyXP.toString(),
                   Icons.emoji_events,
-                  color: AppTheme.accentGreen,
+                  color: AppConstants.accentGreen,
                 ),
               ),
             ],
@@ -262,7 +262,7 @@ class XPGrowthChart extends ConsumerWidget {
   }) {
     return Row(
       children: [
-        Icon(icon, color: color ?? AppTheme.primaryGreen, size: 20),
+        Icon(icon, color: color ?? AppConstants.primaryGreen, size: 20),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
@@ -272,13 +272,13 @@ class XPGrowthChart extends ConsumerWidget {
                 label,
                 style: Theme.of(
                   context,
-                ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+                ).textTheme.bodySmall?.copyWith(color: AppConstants.mediumGray),
               ),
               Text(
                 value,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: color ?? AppTheme.primaryGreen,
+                  color: color ?? AppConstants.primaryGreen,
                 ),
               ),
             ],

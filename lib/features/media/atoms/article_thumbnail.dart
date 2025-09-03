@@ -23,14 +23,14 @@ class ArticleThumbnail extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: AppTheme.lightGray,
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        color: AppConstants.lightGray,
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
         image: imageUrl != null
             ? DecorationImage(image: NetworkImage(imageUrl!), fit: fit)
             : null,
       ),
       child: imageUrl == null
-          ? Icon(Icons.image_outlined, color: AppTheme.mediumGray, size: 40)
+          ? Icon(Icons.image_outlined, color: AppConstants.mediumGray, size: 40)
           : null,
     );
 

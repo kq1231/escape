@@ -22,11 +22,11 @@ class ChartContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.spacingM),
+        padding: const EdgeInsets.all(AppConstants.spacingM),
         decoration: BoxDecoration(
-          color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radiusL),
-          boxShadow: AppTheme.cardShadow,
+          color: AppConstants.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusL),
+          boxShadow: AppConstants.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,19 +39,19 @@ class ChartContainer extends StatelessWidget {
                   fontSize: 26, // Increased from default headlineSmall size
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingXS),
+              const SizedBox(height: AppConstants.spacingXS),
             ],
             if (subtitle != null) ...[
               Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.mediumGray,
+                  color: AppConstants.mediumGray,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingM),
+              const SizedBox(height: AppConstants.spacingM),
             ] else if (title != null) ...[
-              const SizedBox(height: AppTheme.spacingM),
+              const SizedBox(height: AppConstants.spacingM),
             ],
             Padding(padding: padding ?? EdgeInsets.zero, child: child),
           ],

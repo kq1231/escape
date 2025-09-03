@@ -51,7 +51,7 @@ class _TripleStateCheckboxState extends State<TripleStateCheckbox> {
         height: widget.size,
         decoration: BoxDecoration(
           color: _getBackgroundColor(),
-          borderRadius: BorderRadius.circular(AppTheme.radiusS),
+          borderRadius: BorderRadius.circular(AppConstants.radiusS),
           border: Border.all(color: _getBorderColor(), width: 3.0),
         ),
         child: _getIcon(),
@@ -62,13 +62,13 @@ class _TripleStateCheckboxState extends State<TripleStateCheckbox> {
   Color _getBackgroundColor() {
     switch (widget.state) {
       case CheckboxState.checked:
-        return AppTheme.primaryGreen;
+        return AppConstants.primaryGreen;
       case CheckboxState.unchecked:
-        return AppTheme.errorRed; // Red background for unchecked state
+        return AppConstants.errorRed; // Red background for unchecked state
       case CheckboxState.empty:
         return Theme.of(context).brightness == Brightness.dark
             ? const Color(0xFF2A2A2A)
-            : AppTheme.white.withValues(
+            : AppConstants.white.withValues(
                 alpha: 0.5,
               ); // More subtle for empty state
     }
@@ -77,13 +77,13 @@ class _TripleStateCheckboxState extends State<TripleStateCheckbox> {
   Color _getBorderColor() {
     switch (widget.state) {
       case CheckboxState.checked:
-        return AppTheme.primaryGreen;
+        return AppConstants.primaryGreen;
       case CheckboxState.unchecked:
-        return AppTheme.errorRed; // Red border for unchecked state
+        return AppConstants.errorRed; // Red border for unchecked state
       case CheckboxState.empty:
         return Theme.of(context).brightness == Brightness.dark
-            ? AppTheme.mediumGray.withValues(alpha: 0.5)
-            : AppTheme.mediumGray.withValues(
+            ? AppConstants.mediumGray.withValues(alpha: 0.5)
+            : AppConstants.mediumGray.withValues(
                 alpha: 0.5,
               ); // More subtle for empty state
     }
@@ -95,13 +95,13 @@ class _TripleStateCheckboxState extends State<TripleStateCheckbox> {
         return Icon(
           Icons.check,
           size: widget.size * 0.7,
-          color: AppTheme.white,
+          color: AppConstants.white,
         );
       case CheckboxState.unchecked:
         return Icon(
           Icons.close,
           size: widget.size * 0.7,
-          color: AppTheme.white, // White "X" for unchecked state
+          color: AppConstants.white, // White "X" for unchecked state
         );
       case CheckboxState.empty:
         return null;

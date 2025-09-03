@@ -27,11 +27,11 @@ class ArticleCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.spacingM),
+        padding: const EdgeInsets.all(AppConstants.spacingM),
         decoration: BoxDecoration(
-          color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radiusL),
-          boxShadow: AppTheme.cardShadow,
+          color: AppConstants.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusL),
+          boxShadow: AppConstants.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,7 @@ class ArticleCard extends StatelessWidget {
               width: double.infinity,
               fit: BoxFit.cover,
             ),
-            SizedBox(height: AppTheme.spacingM),
+            SizedBox(height: AppConstants.spacingM),
             // Title
             MediaTitle(
               title: title,
@@ -52,27 +52,27 @@ class ArticleCard extends StatelessWidget {
               ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             if (excerpt != null) ...[
-              SizedBox(height: AppTheme.spacingXS),
+              SizedBox(height: AppConstants.spacingXS),
               Text(
                 excerpt!,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppConstants.mediumGray,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
-            SizedBox(height: AppTheme.spacingS),
+            SizedBox(height: AppConstants.spacingS),
             // Tags
             if (tags.isNotEmpty) ...[
               Wrap(
-                spacing: AppTheme.spacingS,
-                runSpacing: AppTheme.spacingS,
+                spacing: AppConstants.spacingS,
+                runSpacing: AppConstants.spacingS,
                 children: tags.map((tag) {
                   return MediaTag(
                     label: tag,
-                    backgroundColor: AppTheme.lightGray,
-                    textColor: AppTheme.darkGray,
+                    backgroundColor: AppConstants.lightGray,
+                    textColor: AppConstants.darkGray,
                     onTap: onTagTap,
                   );
                 }).toList(),

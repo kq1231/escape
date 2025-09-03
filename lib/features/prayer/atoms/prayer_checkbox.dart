@@ -23,22 +23,22 @@ class PrayerCheckbox extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           color: isChecked
-              ? AppTheme.primaryGreen
+              ? AppConstants.primaryGreen
               : (Theme.of(context).brightness == Brightness.dark
                     ? const Color(0xFF2A2A2A)
-                    : AppTheme.white),
-          borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                    : AppConstants.white),
+          borderRadius: BorderRadius.circular(AppConstants.radiusS),
           border: Border.all(
             color: isChecked
-                ? AppTheme.primaryGreen
+                ? AppConstants.primaryGreen
                 : (Theme.of(context).brightness == Brightness.dark
-                      ? AppTheme.mediumGray
-                      : AppTheme.mediumGray),
+                      ? AppConstants.mediumGray
+                      : AppConstants.mediumGray),
             width: 3.0, // Made outline more pronounced
           ),
         ),
         child: isChecked
-            ? Icon(Icons.check, size: size * 0.7, color: AppTheme.white)
+            ? Icon(Icons.check, size: size * 0.7, color: AppConstants.white)
             : null,
       ),
     );

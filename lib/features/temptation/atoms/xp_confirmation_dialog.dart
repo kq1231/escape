@@ -26,13 +26,13 @@ class XPConfirmationDialog extends ConsumerWidget {
     return AlertDialog(
       title: Row(
         children: [
-          Icon(Icons.star, color: AppTheme.primaryGreen, size: 28),
+          Icon(Icons.star, color: AppConstants.primaryGreen, size: 28),
           const SizedBox(width: 8),
           Text(
             title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppTheme.darkGreen,
+              color: AppConstants.darkGreen,
             ),
           ),
         ],
@@ -52,23 +52,27 @@ class XPConfirmationDialog extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(AppTheme.spacingM),
+            padding: const EdgeInsets.all(AppConstants.spacingM),
             decoration: BoxDecoration(
-              color: AppTheme.primaryGreen.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+              color: AppConstants.primaryGreen.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppConstants.radiusM),
               border: Border.all(
-                color: AppTheme.primaryGreen.withValues(alpha: 0.3),
+                color: AppConstants.primaryGreen.withValues(alpha: 0.3),
               ),
             ),
             child: Row(
               children: [
-                Icon(Icons.add_circle, color: AppTheme.primaryGreen, size: 24),
+                Icon(
+                  Icons.add_circle,
+                  color: AppConstants.primaryGreen,
+                  size: 24,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   '+$xpAmount XP',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryGreen,
+                    color: AppConstants.primaryGreen,
                   ),
                 ),
               ],
@@ -79,7 +83,7 @@ class XPConfirmationDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          style: TextButton.styleFrom(foregroundColor: AppTheme.mediumGray),
+          style: TextButton.styleFrom(foregroundColor: AppConstants.mediumGray),
           child: const Text('Cancel'),
         ),
         Consumer(
@@ -91,13 +95,15 @@ class XPConfirmationDialog extends ConsumerWidget {
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    AppTheme.primaryGreen,
+                    AppConstants.primaryGreen,
                   ),
                 ),
               ),
               error: (error, stack) => TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                style: TextButton.styleFrom(foregroundColor: AppTheme.errorRed),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppConstants.errorRed,
+                ),
                 child: const Text('Retry'),
               ),
               data: (data) => TextButton(
@@ -105,8 +111,10 @@ class XPConfirmationDialog extends ConsumerWidget {
                   onConfirm();
                 },
                 style: TextButton.styleFrom(
-                  foregroundColor: AppTheme.primaryGreen,
-                  backgroundColor: AppTheme.primaryGreen.withValues(alpha: 0.1),
+                  foregroundColor: AppConstants.primaryGreen,
+                  backgroundColor: AppConstants.primaryGreen.withValues(
+                    alpha: 0.1,
+                  ),
                 ),
                 child: const Text('Yes'),
               ),

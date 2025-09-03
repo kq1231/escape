@@ -23,7 +23,9 @@ class MediaFeed extends StatelessWidget {
         // Header
         if (title != null) ...[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingM,
+            ),
             child: Text(
               title!,
               style: Theme.of(
@@ -31,13 +33,13 @@ class MediaFeed extends StatelessWidget {
               ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: AppTheme.spacingM),
+          SizedBox(height: AppConstants.spacingM),
         ],
         // Content
         if (isLoading) ...[
           const Center(
             child: Padding(
-              padding: EdgeInsets.all(AppTheme.spacingL),
+              padding: EdgeInsets.all(AppConstants.spacingL),
               child: CircularProgressIndicator(),
             ),
           ),
@@ -56,9 +58,9 @@ class MediaFeed extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.only(
-                    left: AppTheme.spacingM,
-                    right: AppTheme.spacingM,
-                    bottom: AppTheme.spacingM,
+                    left: AppConstants.spacingM,
+                    right: AppConstants.spacingM,
+                    bottom: AppConstants.spacingM,
                   ),
                   child: items[index],
                 );

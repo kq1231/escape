@@ -16,8 +16,8 @@ class AppStartupLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: AppConstants.lightTheme,
+      darkTheme: AppConstants.darkTheme,
       home: SplashScreen(),
     );
   }
@@ -83,8 +83,8 @@ class AppStartupSuccessWidget extends ConsumerWidget {
         ? themeModeAsync.when(
             data: (data) {
               return MaterialApp(
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
+                theme: AppConstants.lightTheme,
+                darkTheme: AppConstants.darkTheme,
                 themeMode: data,
                 home: const MainAppScreen(),
                 builder: (context, child) {
@@ -125,8 +125,8 @@ class AppStartupSuccessWidget extends ConsumerWidget {
             ),
           )
         : MaterialApp(
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
+            theme: AppConstants.lightTheme,
+            darkTheme: AppConstants.darkTheme,
             themeMode: ThemeMode.light,
             home: OnboardingFlow(
               onComplete: (ctx) => Navigator.of(ctx).pushReplacement(
@@ -457,7 +457,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryGreen,
+      backgroundColor: AppConstants.primaryGreen,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

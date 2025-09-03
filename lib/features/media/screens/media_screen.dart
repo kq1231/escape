@@ -1,134 +1,44 @@
+import 'package:escape/models/post_model.dart';
+import 'package:escape/providers/posts_provider.dart';
+import 'package:escape/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:escape/theme/app_theme.dart';
 import '../atoms/media_tag.dart';
 import '../molecules/article_card.dart';
 import '../molecules/video_card.dart';
-import '../templates/media_feed.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'post_page.dart';
 
-class MediaScreen extends StatefulWidget {
+class MediaScreen extends ConsumerStatefulWidget {
   const MediaScreen({super.key});
 
   @override
-  State<MediaScreen> createState() => _MediaScreenState();
+  ConsumerState<MediaScreen> createState() => _MediaScreenState();
 }
 
-class _MediaScreenState extends State<MediaScreen> {
-  List<Widget> _allItems = [];
-  List<Widget> _articleItems = [];
-  List<Widget> _videoItems = [];
+class _MediaScreenState extends ConsumerState<MediaScreen> {
   String _selectedCategory = 'All';
+  PostType? _currentFilter;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _initializeMediaContent();
+    _scrollController.addListener(_scrollListener);
   }
 
-  void _initializeMediaContent() {
-    setState(() {
-      // Article items
-      _articleItems = [
-        ArticleCard(
-          title: 'Understanding Islamic Finance',
-          imageUrl:
-              'https://images.unsplash.com/photo-1579532536505-600b177b8e7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          excerpt:
-              'Learn about the principles and practices of Islamic finance and how it differs from conventional banking.',
-          tags: ['Finance', 'Education'],
-          onTap: () {
-            // Handle article tap
-          },
-        ),
-        ArticleCard(
-          title: 'The Importance of Salah in Daily Life',
-          imageUrl:
-              'https://images.unsplash.com/photo-1614023345100-00cd7c00c31e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          excerpt:
-              'Discover how regular prayer can bring peace and structure to your daily routine.',
-          tags: ['Spirituality', 'Prayer'],
-          onTap: () {
-            // Handle article tap
-          },
-        ),
-        ArticleCard(
-          title: 'Building Strong Family Bonds in Islam',
-          imageUrl:
-              'https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          excerpt:
-              'Explore the Islamic teachings on family relationships and how to strengthen them.',
-          tags: ['Family', 'Relationships'],
-          onTap: () {
-            // Handle article tap
-          },
-        ),
-        ArticleCard(
-          title: 'Charity in Islam: Zakat and Sadaqah',
-          imageUrl:
-              'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          excerpt:
-              'Learn about the importance of giving in Islam and the different forms of charity.',
-          tags: ['Charity', 'Zakat'],
-          onTap: () {
-            // Handle article tap
-          },
-        ),
-      ];
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-      // Video items
-      _videoItems = [
-        VideoCard(
-          title: 'Introduction to Ramadan',
-          thumbnailUrl:
-              'https://images.unsplash.com/photo-1614023345100-00cd7c00c31e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          duration: '12:35',
-          views: 12500,
-          author: 'Islamic Learning Center',
-          tags: ['Ramadan', 'Basics'],
-          onTap: () {
-            // Handle video tap
-          },
-        ),
-        VideoCard(
-          title: 'Hajj Preparation Guide',
-          thumbnailUrl:
-              'https://images.unsplash.com/photo-1579532536505-600b177b8e7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          duration: '24:18',
-          views: 8900,
-          author: 'Pilgrimage Experts',
-          tags: ['Hajj', 'Guide'],
-          onTap: () {
-            // Handle video tap
-          },
-        ),
-        VideoCard(
-          title: 'Understanding the Quran: Surah Yasin',
-          thumbnailUrl:
-              'https://images.unsplash.com/photo-1611162617474-99bb5f1d4b9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          duration: '32:45',
-          views: 15600,
-          author: 'Quranic Studies',
-          tags: ['Quran', 'Tafsir'],
-          onTap: () {
-            // Handle video tap
-          },
-        ),
-        VideoCard(
-          title: 'Dua for Difficult Times',
-          thumbnailUrl:
-              'https://images.unsplash.com/photo-1545239351-ef35f43d01b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          duration: '8:22',
-          views: 9800,
-          author: 'Spiritual Guidance',
-          tags: ['Dua', 'Spirituality'],
-          onTap: () {
-            // Handle video tap
-          },
-        ),
-      ];
-
-      // All items
-      _allItems = [..._articleItems, ..._videoItems];
-    });
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      // Load more posts when reaching the bottom
+      ref.read(postsProviderProvider().notifier).loadMorePosts();
+    }
   }
 
   void _filterContent(String category) {
@@ -136,96 +46,182 @@ class _MediaScreenState extends State<MediaScreen> {
       _selectedCategory = category;
       switch (category) {
         case 'Articles':
-          _allItems = _articleItems;
+          _currentFilter = PostType.article;
           break;
         case 'Videos':
-          _allItems = _videoItems;
+          _currentFilter = PostType.video;
           break;
         default:
-          _allItems = [..._articleItems, ..._videoItems];
+          _currentFilter = null;
       }
     });
+    // Use the provider to filter posts
+    ref.read(postsProviderProvider().notifier).filterPosts(_currentFilter);
   }
 
   @override
   Widget build(BuildContext context) {
+    final postsAsyncValue = ref.watch(postsProviderProvider());
+
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await ref.read(postsProviderProvider().notifier).refreshPosts();
+        },
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
             // Category tags
-            SizedBox(
-              height: 50,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.spacingM,
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 50,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppConstants.spacingM,
+                  ),
+                  children: [
+                    MediaTag(
+                      label: 'All',
+                      backgroundColor: _selectedCategory == 'All'
+                          ? AppConstants.primaryGreen
+                          : AppConstants.lightGray,
+                      textColor: _selectedCategory == 'All'
+                          ? AppConstants.white
+                          : AppConstants.darkGray,
+                      onTap: () => _filterContent('All'),
+                    ),
+                    SizedBox(width: AppConstants.spacingS),
+                    MediaTag(
+                      label: 'Articles',
+                      backgroundColor: _selectedCategory == 'Articles'
+                          ? AppConstants.primaryGreen
+                          : AppConstants.lightGray,
+                      textColor: _selectedCategory == 'Articles'
+                          ? AppConstants.white
+                          : AppConstants.darkGray,
+                      onTap: () => _filterContent('Articles'),
+                    ),
+                    SizedBox(width: AppConstants.spacingS),
+                    MediaTag(
+                      label: 'Videos',
+                      backgroundColor: _selectedCategory == 'Videos'
+                          ? AppConstants.primaryGreen
+                          : AppConstants.lightGray,
+                      textColor: _selectedCategory == 'Videos'
+                          ? AppConstants.white
+                          : AppConstants.darkGray,
+                      onTap: () => _filterContent('Videos'),
+                    ),
+                    // Other tags...
+                  ],
                 ),
-                children: [
-                  MediaTag(
-                    label: 'All',
-                    backgroundColor: _selectedCategory == 'All'
-                        ? AppTheme.primaryGreen
-                        : AppTheme.lightGray,
-                    textColor: _selectedCategory == 'All'
-                        ? AppTheme.white
-                        : AppTheme.darkGray,
-                    onTap: () => _filterContent('All'),
-                  ),
-                  SizedBox(width: AppTheme.spacingS),
-                  MediaTag(
-                    label: 'Articles',
-                    backgroundColor: _selectedCategory == 'Articles'
-                        ? AppTheme.primaryGreen
-                        : AppTheme.lightGray,
-                    textColor: _selectedCategory == 'Articles'
-                        ? AppTheme.white
-                        : AppTheme.darkGray,
-                    onTap: () => _filterContent('Articles'),
-                  ),
-                  SizedBox(width: AppTheme.spacingS),
-                  MediaTag(
-                    label: 'Videos',
-                    backgroundColor: _selectedCategory == 'Videos'
-                        ? AppTheme.primaryGreen
-                        : AppTheme.lightGray,
-                    textColor: _selectedCategory == 'Videos'
-                        ? AppTheme.white
-                        : AppTheme.darkGray,
-                    onTap: () => _filterContent('Videos'),
-                  ),
-                  SizedBox(width: AppTheme.spacingS),
-                  MediaTag(
-                    label: 'Podcasts',
-                    backgroundColor: AppTheme.lightGray,
-                    textColor: AppTheme.darkGray,
-                    onTap: () {
-                      // Handle podcast filter
-                    },
-                  ),
-                  SizedBox(width: AppTheme.spacingS),
-                  MediaTag(
-                    label: 'Courses',
-                    backgroundColor: AppTheme.lightGray,
-                    textColor: AppTheme.darkGray,
-                    onTap: () {
-                      // Handle courses filter
-                    },
-                  ),
-                ],
               ),
             ),
-            SizedBox(height: AppTheme.spacingM),
+            SliverToBoxAdapter(child: SizedBox(height: AppConstants.spacingM)),
             // Media feed
-            MediaFeed(
-              title: 'Latest Content',
-              items: _allItems,
-              onRefresh: () {
-                // Handle refresh
-              },
+            postsAsyncValue.when(
+              loading: () => SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => _buildShimmerCard(),
+                  childCount: 5,
+                ),
+              ),
+              error: (error, stack) => SliverToBoxAdapter(
+                child: Center(child: Text('Error loading posts: $error')),
+              ),
+              data: (posts) => SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final post = posts[index];
+                  if (post.postType == PostType.article) {
+                    return ArticleCard(
+                      title: post.title,
+                      imageUrl: post.featuredImageUrl ?? '',
+                      excerpt: post.excerpt ?? '',
+                      tags: post.tags,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => PostPage(postId: post.id),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (post.postType == PostType.video) {
+                    return VideoCard(
+                      title: post.title,
+                      thumbnailUrl: post.featuredImageUrl ?? '',
+                      duration: post.duration.toString(),
+                      views: post.viewsCount,
+                      author: post.author?.name,
+                      tags: post.tags,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => PostPage(postId: post.id),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return const SizedBox.shrink();
+                }, childCount: posts.length),
+              ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerCard() {
+    return Padding(
+      padding: const EdgeInsets.all(AppConstants.spacingM),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildShimmerContainer(
+            height: 200,
+            width: double.infinity,
+            borderRadius: 8,
+          ),
+          const SizedBox(height: 8),
+          _buildShimmerContainer(
+            height: 20,
+            width: double.infinity,
+            borderRadius: 4,
+          ),
+          const SizedBox(height: 8),
+          _buildShimmerContainer(
+            height: 15,
+            width: double.infinity,
+            borderRadius: 4,
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              _buildShimmerContainer(height: 15, width: 60, borderRadius: 12),
+              const SizedBox(width: 8),
+              _buildShimmerContainer(height: 15, width: 60, borderRadius: 12),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerContainer({
+    required double height,
+    required double width,
+    double borderRadius = 0,
+  }) {
+    return Shimmer(
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
     );

@@ -12,10 +12,10 @@ class IslamicGreeting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? const EdgeInsets.only(bottom: AppTheme.spacingL),
+      padding: padding ?? const EdgeInsets.only(bottom: AppConstants.spacingL),
       child: Text(
         OnboardingConstants.islamicGreeting,
-        style: style ?? AppTheme.islamicText,
+        style: style ?? AppConstants.islamicText,
         textAlign: textAlign ?? TextAlign.center,
         textDirection: TextDirection.rtl,
       ),

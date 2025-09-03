@@ -24,31 +24,31 @@ class HistoryItem extends StatelessWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
         child: Padding(
-          padding: EdgeInsets.all(AppTheme.spacingM),
+          padding: EdgeInsets.all(AppConstants.spacingM),
           child: Row(
             children: [
               if (icon != null) ...[
                 Container(
-                  padding: EdgeInsets.all(AppTheme.spacingS),
+                  padding: EdgeInsets.all(AppConstants.spacingS),
                   decoration: BoxDecoration(
                     color:
                         iconColor?.withValues(alpha: 0.1) ??
-                        AppTheme.errorRed.withValues(alpha: 0.1),
+                        AppConstants.errorRed.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     icon,
-                    color: iconColor ?? AppTheme.errorRed,
+                    color: iconColor ?? AppConstants.errorRed,
                     size: 24,
                   ),
                 ),
-                SizedBox(width: AppTheme.spacingM),
+                SizedBox(width: AppConstants.spacingM),
               ],
               Expanded(
                 child: Column(
@@ -58,15 +58,15 @@ class HistoryItem extends StatelessWidget {
                       title,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    SizedBox(height: AppTheme.spacingXS),
+                    SizedBox(height: AppConstants.spacingXS),
                     Text(
                       date,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                       ),
                     ),
                     if (description != null) ...[
-                      SizedBox(height: AppTheme.spacingS),
+                      SizedBox(height: AppConstants.spacingS),
                       Text(
                         description!,
                         style: Theme.of(context).textTheme.bodyMedium,

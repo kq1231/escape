@@ -25,21 +25,21 @@ class RelapseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonColor = backgroundColor ?? AppTheme.errorRed;
-    final textColor = foregroundColor ?? AppTheme.white;
+    final buttonColor = backgroundColor ?? AppConstants.errorRed;
+    final textColor = foregroundColor ?? AppConstants.white;
 
     final buttonStyle = ElevatedButton.styleFrom(
       backgroundColor: buttonColor,
       foregroundColor: textColor,
       elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        borderRadius: BorderRadius.circular(AppConstants.radiusL),
       ),
       padding:
           padding ??
           EdgeInsets.symmetric(
-            horizontal: AppTheme.spacingXL,
-            vertical: AppTheme.spacingM,
+            horizontal: AppConstants.spacingXL,
+            vertical: AppConstants.spacingM,
           ),
     );
 
@@ -49,7 +49,7 @@ class RelapseButton extends StatelessWidget {
       children: [
         if (icon != null) ...[
           Icon(icon, size: 20),
-          SizedBox(width: AppTheme.spacingS),
+          SizedBox(width: AppConstants.spacingS),
         ],
         Text(text, style: Theme.of(context).textTheme.labelLarge),
       ],

@@ -25,7 +25,8 @@ class WelcomeText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          padding ?? const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+          padding ??
+          const EdgeInsets.symmetric(horizontal: AppConstants.spacingXL),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -34,13 +35,13 @@ class WelcomeText extends StatelessWidget {
             style: titleStyle ?? Theme.of(context).textTheme.displayLarge,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingS),
+          const SizedBox(height: AppConstants.spacingS),
           Text(
             subtitle,
             style: subtitleStyle ?? Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: AppConstants.spacingL),
           Text(
             description,
             style: descriptionStyle ?? Theme.of(context).textTheme.bodyLarge,

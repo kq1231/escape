@@ -23,21 +23,21 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
       date: 'Yesterday, 2:30 PM',
       description: 'Spent 30 minutes scrolling through social media',
       icon: Icons.phone_android,
-      iconColor: AppTheme.warningOrange,
+      iconColor: AppConstants.warningOrange,
     ),
     RelapseRecord(
       title: 'Inappropriate Content',
       date: '3 days ago, 11:15 AM',
       description: 'Watched inappropriate content online',
       icon: Icons.tv,
-      iconColor: AppTheme.errorRed,
+      iconColor: AppConstants.errorRed,
     ),
     RelapseRecord(
       title: 'Negative Thoughts',
       date: '1 week ago, 8:45 PM',
       description: 'Struggled with negative thoughts',
       icon: Icons.psychology,
-      iconColor: AppTheme.mediumGray,
+      iconColor: AppConstants.mediumGray,
     ),
   ];
 
@@ -99,17 +99,17 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
         title: Text(
           'Relapse History',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: AppTheme.darkGreen,
+            color: AppConstants.darkGreen,
             fontWeight: FontWeight.bold,
             fontSize: 28, // Increased from default headlineMedium size
           ),
         ),
-        backgroundColor: AppTheme.white,
-        foregroundColor: AppTheme.darkGreen,
+        backgroundColor: AppConstants.white,
+        foregroundColor: AppConstants.darkGreen,
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(AppTheme.spacingM),
+        padding: EdgeInsets.all(AppConstants.spacingM),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -120,7 +120,7 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
                 fontSize: 18, // Increased from default bodyMedium size
               ),
             ),
-            SizedBox(height: AppTheme.spacingXL),
+            SizedBox(height: AppConstants.spacingXL),
             HistoryTimeline(
               records: relapseRecords,
               title: 'Your Relapse History',
@@ -128,7 +128,7 @@ class _RelapseHistoryScreenState extends State<RelapseHistoryScreen> {
                 // Handle record tap
               },
             ),
-            SizedBox(height: AppTheme.spacingXL),
+            SizedBox(height: AppConstants.spacingXL),
             Center(
               child: RelapseButton(
                 text: 'Record New Relapse',

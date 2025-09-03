@@ -19,16 +19,16 @@ class LustCycleDiagram extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(AppConstants.spacingXL),
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark
-            ? AppTheme.primaryGreen.withValues(alpha: 0.05)
-            : AppTheme.lightGreen.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+            ? AppConstants.primaryGreen.withValues(alpha: 0.05)
+            : AppConstants.lightGreen.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppConstants.radiusL),
         border: Border.all(
           color: Theme.of(context).brightness == Brightness.dark
               ? Colors.white.withValues(alpha: 0.2)
-              : AppTheme.primaryGreen.withValues(alpha: 0.3),
+              : AppConstants.primaryGreen.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -39,79 +39,79 @@ class LustCycleDiagram extends StatelessWidget {
             'The Lust Cycle',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: _getTextColor(context, AppTheme.darkGreen),
+              color: _getTextColor(context, AppConstants.darkGreen),
               fontSize: 22,
             ),
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: AppConstants.spacingL),
           // Cycle diagram
           SizedBox(
             width: 400,
             height: 200,
             child: CustomPaint(painter: _LustCyclePainter()),
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: AppConstants.spacingL),
           // Cycle explanation
           Text(
             'Lust cycles peak quickly (often within 5-10 minutes) and then gradually decline over 30 minutes.',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: _getTextColor(context, AppTheme.darkGreen),
+              color: _getTextColor(context, AppConstants.darkGreen),
               fontSize: 16,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           // Skewness explanation
           Container(
-            padding: const EdgeInsets.all(AppTheme.spacingS),
+            padding: const EdgeInsets.all(AppConstants.spacingS),
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.dark
-                  ? AppTheme.primaryGreen.withValues(alpha: 0.05)
-                  : AppTheme.lightGreen.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                  ? AppConstants.primaryGreen.withValues(alpha: 0.05)
+                  : AppConstants.lightGreen.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppConstants.radiusM),
             ),
             child: Text(
               'Why left-skewed? Triggers make intensity spike early, but it takes time for the urge to fully disappear.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: _getTextColor(context, AppTheme.darkGreen),
+                color: _getTextColor(context, AppConstants.darkGreen),
                 fontSize: 14,
                 fontStyle: FontStyle.italic,
               ),
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           // Key insight
           Container(
-            padding: const EdgeInsets.all(AppTheme.spacingM),
+            padding: const EdgeInsets.all(AppConstants.spacingM),
             decoration: BoxDecoration(
-              color: AppTheme.primaryGreen.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+              color: AppConstants.primaryGreen.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppConstants.radiusM),
             ),
             child: Text(
               'Key Insight: If you can resist for just 30 minutes, the urge will be DESTROYED Insha\'Allah.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: _getTextColor(context, AppTheme.primaryGreen),
+                color: _getTextColor(context, AppConstants.primaryGreen),
                 fontWeight: FontWeight.w500,
                 fontSize: 14,
               ),
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           // Improvement motivation
           Container(
-            padding: const EdgeInsets.all(AppTheme.spacingM),
+            padding: const EdgeInsets.all(AppConstants.spacingM),
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.dark
-                  ? AppTheme.primaryGreen.withValues(alpha: 0.08)
-                  : AppTheme.primaryGreen.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                  ? AppConstants.primaryGreen.withValues(alpha: 0.08)
+                  : AppConstants.primaryGreen.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(AppConstants.radiusM),
               border: Border.all(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.white.withValues(alpha: 0.2)
-                    : AppTheme.primaryGreen.withValues(alpha: 0.3),
+                    : AppConstants.primaryGreen.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -120,17 +120,17 @@ class LustCycleDiagram extends StatelessWidget {
                 Text(
                   'The Power of Practice',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: _getTextColor(context, AppTheme.primaryGreen),
+                    color: _getTextColor(context, AppConstants.primaryGreen),
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: AppTheme.spacingS),
+                const SizedBox(height: AppConstants.spacingS),
                 Text(
                   'Every time you overcome temptation, this graph will SHRINK! Time, intensity, and frequency will decrease exponentially. Just a few victories will make a massive difference.',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: _getTextColor(context, AppTheme.darkGreen),
+                    color: _getTextColor(context, AppConstants.darkGreen),
                     fontSize: 13,
                     height: 1.4,
                   ),
@@ -151,7 +151,7 @@ class _LustCyclePainter extends CustomPainter {
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
-      ..color = AppTheme.primaryGreen;
+      ..color = AppConstants.primaryGreen;
 
     // Draw the cycle curve (left-skewed bell curve)
     final path = Path();
@@ -210,7 +210,7 @@ class _LustCyclePainter extends CustomPainter {
     final textPainter = TextPainter(
       text: TextSpan(
         text: text,
-        style: const TextStyle(color: AppTheme.mediumGray, fontSize: 10),
+        style: const TextStyle(color: AppConstants.mediumGray, fontSize: 10),
       ),
       textDirection: TextDirection.ltr,
     );

@@ -45,11 +45,11 @@ class AnalyticsDashboard extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.settings_outlined),
                   onPressed: onSettingsPressed,
-                  color: AppTheme.mediumGray,
+                  color: AppConstants.mediumGray,
                 ),
             ],
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: AppConstants.spacingL),
         ],
         // Stats grid
         GridView.builder(
@@ -57,8 +57,8 @@ class AnalyticsDashboard extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: AppTheme.spacingM,
-            mainAxisSpacing: AppTheme.spacingM,
+            crossAxisSpacing: AppConstants.spacingM,
+            mainAxisSpacing: AppConstants.spacingM,
             childAspectRatio: 1.2,
           ),
           itemCount: statCards.length,
@@ -66,14 +66,14 @@ class AnalyticsDashboard extends StatelessWidget {
             return statCards[index];
           },
         ),
-        const SizedBox(height: AppTheme.spacingXL),
+        const SizedBox(height: AppConstants.spacingXL),
         // Progress chart
         progressChart,
-        const SizedBox(height: AppTheme.spacingXL),
+        const SizedBox(height: AppConstants.spacingXL),
         // Streak graph
         streakGraph,
         if (statisticsPieChart != null) ...[
-          const SizedBox(height: AppTheme.spacingXL),
+          const SizedBox(height: AppConstants.spacingXL),
           statisticsPieChart!,
         ],
       ],

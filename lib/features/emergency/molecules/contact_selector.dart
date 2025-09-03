@@ -33,7 +33,7 @@ class ContactSelector extends StatelessWidget {
           subtitle,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
             fontSize: 14,
-            color: AppTheme.mediumGray,
+            color: AppConstants.mediumGray,
           ),
         ),
         const SizedBox(height: 16),

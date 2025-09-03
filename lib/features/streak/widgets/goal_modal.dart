@@ -54,11 +54,11 @@ class _GoalModalState extends ConsumerState<GoalModal> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingL),
+      padding: const EdgeInsets.all(AppConstants.spacingL),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(AppTheme.radiusXXL),
+          top: Radius.circular(AppConstants.radiusXXL),
         ),
       ),
       child: SingleChildScrollView(
@@ -80,21 +80,21 @@ class _GoalModalState extends ConsumerState<GoalModal> {
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
 
             // Description
             Text(
               'Set your streak goal. This helps you track your progress and stay motivated.',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            const SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppConstants.spacingL),
 
             // Goal input
             Text(
               'Streak Goal:',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
 
             // Number input with increment/decrement buttons and unit selector
             Row(
@@ -108,25 +108,25 @@ class _GoalModalState extends ConsumerState<GoalModal> {
                     });
                   },
                 ),
-                const SizedBox(width: AppTheme.spacingM),
+                const SizedBox(width: AppConstants.spacingM),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.spacingL,
-                    vertical: AppTheme.spacingM,
+                    horizontal: AppConstants.spacingL,
+                    vertical: AppConstants.spacingM,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryGreen,
-                    borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                    color: AppConstants.primaryGreen,
+                    borderRadius: BorderRadius.circular(AppConstants.radiusL),
                   ),
                   child: Text(
                     '$_value',
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: AppTheme.white,
+                      color: AppConstants.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                const SizedBox(width: AppTheme.spacingM),
+                const SizedBox(width: AppConstants.spacingM),
                 IconButton(
                   icon: const Icon(Icons.add_circle_outline),
                   onPressed: () {
@@ -137,7 +137,7 @@ class _GoalModalState extends ConsumerState<GoalModal> {
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
 
             // Unit selector
             Center(
@@ -152,7 +152,7 @@ class _GoalModalState extends ConsumerState<GoalModal> {
                 },
               ),
             ),
-            const SizedBox(height: AppTheme.spacingXL),
+            const SizedBox(height: AppConstants.spacingXL),
 
             // Save button
             SizedBox(
@@ -180,16 +180,16 @@ class _GoalModalState extends ConsumerState<GoalModal> {
                         content: Text(
                           'Goal updated to $_value $unitLabel!',
                           style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: AppTheme.white),
+                              ?.copyWith(color: AppConstants.white),
                         ),
-                        backgroundColor: AppTheme.successGreen,
+                        backgroundColor: AppConstants.successGreen,
                       ),
                     );
                   }
                 },
               ),
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
           ],
         ),
       ),

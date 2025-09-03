@@ -50,7 +50,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [AppTheme.primaryGreen, AppTheme.lightGreen],
+            colors: [AppConstants.primaryGreen, AppConstants.lightGreen],
           ),
         ),
         child: SafeArea(
@@ -80,12 +80,12 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                     child: const Icon(
                       Icons.emoji_events,
                       size: 80,
-                      color: AppTheme.primaryGreen,
+                      color: AppConstants.primaryGreen,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingXL),
+              const SizedBox(height: AppConstants.spacingXL),
 
               // Title
               FadeTransition(
@@ -100,7 +100,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingM),
+              const SizedBox(height: AppConstants.spacingM),
 
               // XP Award with controller integration
               ref
@@ -143,7 +143,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                       ),
                     ),
                   ),
-              const SizedBox(height: AppTheme.spacingXL),
+              const SizedBox(height: AppConstants.spacingXL),
 
               // Celebration animation
               FadeTransition(
@@ -173,7 +173,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                           children: [
                             Icon(
                               Icons.celebration,
-                              color: AppTheme.primaryGreen,
+                              color: AppConstants.primaryGreen,
                               size: 60,
                             ),
                             const SizedBox(height: 8),
@@ -182,7 +182,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                               style: Theme.of(context).textTheme.titleLarge
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: AppTheme.primaryGreen,
+                                    color: AppConstants.primaryGreen,
                                   ),
                             ),
                           ],
@@ -192,14 +192,14 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                   },
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingXL),
+              const SizedBox(height: AppConstants.spacingXL),
 
               // Success message
               Expanded(
                 child: FadeTransition(
                   opacity: _opacityAnimation,
                   child: Container(
-                    padding: const EdgeInsets.all(AppTheme.spacingXL),
+                    padding: const EdgeInsets.all(AppConstants.spacingXL),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -212,7 +212,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                                 fontSize: 24,
                               ),
                         ),
-                        const SizedBox(height: AppTheme.spacingM),
+                        const SizedBox(height: AppConstants.spacingM),
                         Text(
                           'Your victory has been recorded and you\'ve earned 1,000 XP for successfully overcoming this temptation.',
                           style: Theme.of(context).textTheme.bodyLarge
@@ -221,15 +221,15 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                                 height: 1.6,
                               ),
                         ),
-                        const SizedBox(height: AppTheme.spacingXL),
+                        const SizedBox(height: AppConstants.spacingXL),
 
                         // Tips section
                         Container(
-                          padding: const EdgeInsets.all(AppTheme.spacingM),
+                          padding: const EdgeInsets.all(AppConstants.spacingM),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(
-                              AppTheme.radiusM,
+                              AppConstants.radiusM,
                             ),
                           ),
                           child: Column(
@@ -243,7 +243,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                                       color: Colors.white,
                                     ),
                               ),
-                              const SizedBox(height: AppTheme.spacingS),
+                              const SizedBox(height: AppConstants.spacingS),
                               _buildTipItem(
                                 'Remember: Perfection is not the goal',
                               ),
@@ -265,7 +265,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
 
               // Continue button
               Padding(
-                padding: const EdgeInsets.all(AppTheme.spacingXL),
+                padding: const EdgeInsets.all(AppConstants.spacingXL),
                 child: FadeTransition(
                   opacity: _opacityAnimation,
                   child: SizedBox(
@@ -277,12 +277,14 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        foregroundColor: AppTheme.primaryGreen,
+                        foregroundColor: AppConstants.primaryGreen,
                         padding: const EdgeInsets.symmetric(
-                          vertical: AppTheme.spacingXL,
+                          vertical: AppConstants.spacingXL,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                          borderRadius: BorderRadius.circular(
+                            AppConstants.radiusL,
+                          ),
                         ),
                       ),
                       child: const Text(
@@ -305,7 +307,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen>
 
   Widget _buildTipItem(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
+      padding: const EdgeInsets.only(bottom: AppConstants.spacingS),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

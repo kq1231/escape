@@ -28,29 +28,29 @@ class ActivityButton extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(
-          horizontal: AppTheme.spacingL,
-          vertical: AppTheme.spacingM,
+          horizontal: AppConstants.spacingL,
+          vertical: AppConstants.spacingM,
         ),
         decoration: BoxDecoration(
           color: isSelected
-              ? (selectedColor ?? AppTheme.primaryGreen)
+              ? (selectedColor ?? AppConstants.primaryGreen)
               : (backgroundColor ??
                     (isDarkMode
-                        ? AppTheme.primaryGreen.withValues(alpha: 0.1)
-                        : AppTheme.lightGreen.withValues(alpha: 0.3))),
-          borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                        ? AppConstants.primaryGreen.withValues(alpha: 0.1)
+                        : AppConstants.lightGreen.withValues(alpha: 0.3))),
+          borderRadius: BorderRadius.circular(AppConstants.radiusL),
           border: Border.all(
             color: isSelected
-                ? (selectedColor ?? AppTheme.primaryGreen)
+                ? (selectedColor ?? AppConstants.primaryGreen)
                 : (isDarkMode
                       ? Colors.white.withValues(alpha: 0.3)
-                      : AppTheme.mediumGray.withValues(alpha: 0.5)),
+                      : AppConstants.mediumGray.withValues(alpha: 0.5)),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppTheme.primaryGreen.withValues(alpha: 0.3),
+                    color: AppConstants.primaryGreen.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -65,18 +65,18 @@ class ActivityButton extends StatelessWidget {
                 icon,
                 size: 24,
                 color: isSelected
-                    ? AppTheme.white
-                    : (isDarkMode ? Colors.white70 : AppTheme.darkGreen),
+                    ? AppConstants.white
+                    : (isDarkMode ? Colors.white70 : AppConstants.darkGreen),
               ),
-              const SizedBox(width: AppTheme.spacingS),
+              const SizedBox(width: AppConstants.spacingS),
             ],
             Text(
               activity,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                 color: isSelected
-                    ? AppTheme.white
-                    : (isDarkMode ? Colors.white70 : AppTheme.darkGreen),
+                    ? AppConstants.white
+                    : (isDarkMode ? Colors.white70 : AppConstants.darkGreen),
                 fontSize: 16,
               ),
             ),

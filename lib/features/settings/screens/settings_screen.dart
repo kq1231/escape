@@ -56,7 +56,7 @@ class SettingsScreen extends ConsumerWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -141,7 +141,7 @@ class SettingsScreen extends ConsumerWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

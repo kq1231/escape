@@ -139,12 +139,12 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
           Text(
             'Make your profile more personal by adding a profile picture. This step is completely optional.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGray,
+              color: AppConstants.mediumGray,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingXXL),
+          const SizedBox(height: AppConstants.spacingXXL),
           Center(
             child: GestureDetector(
               onTap: _pickImage,
@@ -152,7 +152,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
                 children: [
                   CircleAvatar(
                     radius: 80,
-                    backgroundColor: AppTheme.lightGray,
+                    backgroundColor: AppConstants.lightGray,
                     backgroundImage: _profileImage != null
                         ? FileImage(_profileImage!)
                         : null,
@@ -174,7 +174,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
               ),
             ),
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: AppConstants.spacingL),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -183,7 +183,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
                 child: const Text('Choose Photo'),
               ),
               if (_profileImage != null) ...[
-                const SizedBox(width: AppTheme.spacingM),
+                const SizedBox(width: AppConstants.spacingM),
                 TextButton(
                   onPressed: _removeImage,
                   child: const Text('Remove'),
@@ -191,7 +191,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
               ],
             ],
           ),
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
           TextButton(onPressed: _handleSkip, child: const Text('Skip for now')),
         ],
       ),

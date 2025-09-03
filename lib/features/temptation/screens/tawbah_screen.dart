@@ -46,7 +46,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [AppTheme.lightGreen, AppTheme.darkGreen],
+            colors: [AppConstants.lightGreen, AppConstants.darkGreen],
           ),
         ),
         child: SafeArea(
@@ -67,7 +67,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingXL),
+              const SizedBox(height: AppConstants.spacingXL),
 
               // Mercy message
               Expanded(
@@ -79,11 +79,11 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                       children: [
                         // Allah's mercy reminder
                         Container(
-                          padding: const EdgeInsets.all(AppTheme.spacingL),
+                          padding: const EdgeInsets.all(AppConstants.spacingL),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(
-                              AppTheme.radiusXL,
+                              AppConstants.radiusXL,
                             ),
                           ),
                           child: Column(
@@ -97,7 +97,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                                       color: Colors.white,
                                     ),
                               ),
-                              const SizedBox(height: AppTheme.spacingM),
+                              const SizedBox(height: AppConstants.spacingM),
                               Text(
                                 'Allah says in the Quran:',
                                 style: Theme.of(context).textTheme.bodyLarge
@@ -107,15 +107,15 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                                       fontStyle: FontStyle.italic,
                                     ),
                               ),
-                              const SizedBox(height: AppTheme.spacingS),
+                              const SizedBox(height: AppConstants.spacingS),
                               Container(
                                 padding: const EdgeInsets.all(
-                                  AppTheme.spacingM,
+                                  AppConstants.spacingM,
                                 ),
                                 decoration: BoxDecoration(
                                   color: Colors.white.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(
-                                    AppTheme.radiusM,
+                                    AppConstants.radiusM,
                                   ),
                                 ),
                                 child: Text(
@@ -131,7 +131,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                             ],
                           ),
                         ),
-                        const SizedBox(height: AppTheme.spacingXL),
+                        const SizedBox(height: AppConstants.spacingXL),
 
                         // Prophet's duas
                         Text(
@@ -142,7 +142,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                                 color: Colors.white,
                               ),
                         ),
-                        const SizedBox(height: AppTheme.spacingM),
+                        const SizedBox(height: AppConstants.spacingM),
 
                         _buildDuaCard(
                           title: 'Dua for Seeking Forgiveness',
@@ -152,7 +152,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                               'O Allah, You are my Lord, none has the right to be worshipped but You. You created me and I am Your slave, and I am faithful to my covenant and my promise as far as I can. I seek refuge with You from all the evil I have done. I acknowledge Your favor upon me and I acknowledge my sin. So forgive me, for none forgives sins except You.',
                         ),
 
-                        const SizedBox(height: AppTheme.spacingM),
+                        const SizedBox(height: AppConstants.spacingM),
 
                         _buildDuaCard(
                           title: 'Simple Repentance Dua',
@@ -161,15 +161,15 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                               'I seek forgiveness from Allah, my Lord, and I repent to Him.',
                         ),
 
-                        const SizedBox(height: AppTheme.spacingXL),
+                        const SizedBox(height: AppConstants.spacingXL),
 
                         // Tawbah process
                         Container(
-                          padding: const EdgeInsets.all(AppTheme.spacingL),
+                          padding: const EdgeInsets.all(AppConstants.spacingL),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(
-                              AppTheme.radiusL,
+                              AppConstants.radiusL,
                             ),
                           ),
                           child: Column(
@@ -183,7 +183,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                                       color: Colors.white,
                                     ),
                               ),
-                              const SizedBox(height: AppTheme.spacingM),
+                              const SizedBox(height: AppConstants.spacingM),
                               _buildTawbahStep('1. Stop the sin immediately'),
                               _buildTawbahStep(
                                 '2. Feel sincere regret for what you did',
@@ -208,7 +208,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
 
               // XP Award and Continue button
               Padding(
-                padding: const EdgeInsets.all(AppTheme.spacingXL),
+                padding: const EdgeInsets.all(AppConstants.spacingXL),
                 child: Column(
                   children: [
                     // XP Award with controller integration
@@ -217,31 +217,33 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                         .when(
                           loading: () => const Center(
                             child: CircularProgressIndicator(
-                              color: AppTheme.primaryGreen,
+                              color: AppConstants.primaryGreen,
                             ),
                           ),
                           error: (error, stack) => Container(
-                            padding: const EdgeInsets.all(AppTheme.spacingM),
+                            padding: const EdgeInsets.all(
+                              AppConstants.spacingM,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(
-                                AppTheme.radiusL,
+                                AppConstants.radiusL,
                               ),
-                              border: Border.all(color: AppTheme.errorRed),
+                              border: Border.all(color: AppConstants.errorRed),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
                                   Icons.error,
-                                  color: AppTheme.errorRed,
+                                  color: AppConstants.errorRed,
                                   size: 24,
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
                                   'Error loading XP',
                                   style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(color: AppTheme.errorRed),
+                                      ?.copyWith(color: AppConstants.errorRed),
                                 ),
                               ],
                             ),
@@ -249,11 +251,13 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                           data: (xpController) => FadeTransition(
                             opacity: _fadeInAnimation,
                             child: Container(
-                              padding: const EdgeInsets.all(AppTheme.spacingM),
+                              padding: const EdgeInsets.all(
+                                AppConstants.spacingM,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(
-                                  AppTheme.radiusL,
+                                  AppConstants.radiusL,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
@@ -268,7 +272,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                                 children: [
                                   Icon(
                                     Icons.add_circle,
-                                    color: AppTheme.primaryGreen,
+                                    color: AppConstants.primaryGreen,
                                     size: 28,
                                   ),
                                   const SizedBox(width: 8),
@@ -281,7 +285,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                                           .titleLarge
                                           ?.copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: AppTheme.primaryGreen,
+                                            color: AppConstants.primaryGreen,
                                           ),
                                     ),
                                   ),
@@ -290,7 +294,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                             ),
                           ),
                         ),
-                    const SizedBox(height: AppTheme.spacingM),
+                    const SizedBox(height: AppConstants.spacingM),
 
                     // Continue button
                     FadeTransition(
@@ -304,13 +308,13 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            foregroundColor: AppTheme.primaryGreen,
+                            foregroundColor: AppConstants.primaryGreen,
                             padding: const EdgeInsets.symmetric(
-                              vertical: AppTheme.spacingXL,
+                              vertical: AppConstants.spacingXL,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
-                                AppTheme.radiusL,
+                                AppConstants.radiusL,
                               ),
                             ),
                           ),
@@ -344,11 +348,11 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
     required String translation,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: AppTheme.spacingM),
-      padding: const EdgeInsets.all(AppTheme.spacingM),
+      margin: const EdgeInsets.only(bottom: AppConstants.spacingM),
+      padding: const EdgeInsets.all(AppConstants.spacingM),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
         border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
       ),
       child: Column(
@@ -361,12 +365,12 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: AppTheme.spacingS),
+          const SizedBox(height: AppConstants.spacingS),
           Container(
-            padding: const EdgeInsets.all(AppTheme.spacingS),
+            padding: const EdgeInsets.all(AppConstants.spacingS),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppTheme.radiusS),
+              borderRadius: BorderRadius.circular(AppConstants.radiusS),
             ),
             child: Text(
               dua,
@@ -379,7 +383,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
               textAlign: TextAlign.right,
             ),
           ),
-          const SizedBox(height: AppTheme.spacingS),
+          const SizedBox(height: AppConstants.spacingS),
           Text(
             translation,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -395,7 +399,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
 
   Widget _buildTawbahStep(String step) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
+      padding: const EdgeInsets.only(bottom: AppConstants.spacingS),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -410,7 +414,7 @@ class _TawbahScreenState extends ConsumerState<TawbahScreen>
               child: Text(
                 step.split('.').first,
                 style: TextStyle(
-                  color: AppTheme.primaryGreen,
+                  color: AppConstants.primaryGreen,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),

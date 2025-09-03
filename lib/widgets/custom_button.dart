@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
     super.key,
     this.isSelected = false,
     required this.text,
-    this.selectedColor = AppTheme.primaryGreen,
+    this.selectedColor = AppConstants.primaryGreen,
     required this.onPressed,
     this.width,
     this.height,
@@ -32,7 +32,7 @@ class CustomButton extends StatelessWidget {
     this.height,
     this.padding,
     this.variant = ButtonVariant.filled,
-  }) : selectedColor = AppTheme.successGreen;
+  }) : selectedColor = AppConstants.successGreen;
 
   const CustomButton.error({
     super.key,
@@ -43,7 +43,7 @@ class CustomButton extends StatelessWidget {
     this.height,
     this.padding,
     this.variant = ButtonVariant.filled,
-  }) : selectedColor = AppTheme.errorRed;
+  }) : selectedColor = AppConstants.errorRed;
 
   const CustomButton.danger({
     super.key,
@@ -54,7 +54,7 @@ class CustomButton extends StatelessWidget {
     this.height,
     this.padding,
     this.variant = ButtonVariant.filled,
-  }) : selectedColor = AppTheme.errorRed;
+  }) : selectedColor = AppConstants.errorRed;
 
   const CustomButton.outline({
     super.key,
@@ -64,7 +64,7 @@ class CustomButton extends StatelessWidget {
     this.width,
     this.height,
     this.padding,
-    this.selectedColor = AppTheme.primaryGreen,
+    this.selectedColor = AppConstants.primaryGreen,
   }) : variant = ButtonVariant.outline;
 
   const CustomButton.filled({
@@ -75,7 +75,7 @@ class CustomButton extends StatelessWidget {
     this.width,
     this.height,
     this.padding,
-    this.selectedColor = AppTheme.primaryGreen,
+    this.selectedColor = AppConstants.primaryGreen,
   }) : variant = ButtonVariant.filled;
 
   @override
@@ -117,31 +117,31 @@ class CustomButton extends StatelessWidget {
           backgroundColor: isSelected
               ? selectedColor
               : isDark
-              ? AppTheme.black
-              : AppTheme.white,
+              ? AppConstants.black
+              : AppConstants.white,
           foregroundColor: isSelected
-              ? AppTheme.white
+              ? AppConstants.white
               : isDark
-              ? AppTheme.white
-              : AppTheme.darkGreen,
+              ? AppConstants.white
+              : AppConstants.darkGreen,
           padding:
               padding ??
-              const EdgeInsets.symmetric(vertical: AppTheme.spacingM),
+              const EdgeInsets.symmetric(vertical: AppConstants.spacingM),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppTheme.radiusL),
+            borderRadius: BorderRadius.circular(AppConstants.radiusL),
             side: BorderSide(
               color: isSelected
                   ? Colors.transparent
                   : isDark
-                  ? AppTheme.white
-                  : AppTheme.darkGreen,
+                  ? AppConstants.white
+                  : AppConstants.darkGreen,
               width: 2,
             ),
           ),
           elevation: isSelected ? 4 : 2,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(AppTheme.spacingS),
+          padding: const EdgeInsets.all(AppConstants.spacingS),
           child: Text(text, textAlign: TextAlign.center),
         ),
       ),
@@ -157,27 +157,27 @@ class CustomButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           backgroundColor: isSelected ? selectedColor : Colors.transparent,
           foregroundColor: isSelected
-              ? AppTheme.white
+              ? AppConstants.white
               : isDark
-              ? AppTheme.white
-              : AppTheme.darkGreen,
+              ? AppConstants.white
+              : AppConstants.darkGreen,
           padding:
               padding ??
-              const EdgeInsets.symmetric(vertical: AppTheme.spacingM),
+              const EdgeInsets.symmetric(vertical: AppConstants.spacingM),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppTheme.radiusL),
+            borderRadius: BorderRadius.circular(AppConstants.radiusL),
           ),
           side: BorderSide(
             color: isSelected
                 ? selectedColor
                 : isDark
-                ? AppTheme.white
-                : AppTheme.darkGreen,
+                ? AppConstants.white
+                : AppConstants.darkGreen,
             width: 2,
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(AppTheme.spacingS),
+          padding: const EdgeInsets.all(AppConstants.spacingS),
           child: Text(text, textAlign: TextAlign.center),
         ),
       ),

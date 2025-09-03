@@ -47,7 +47,7 @@ dependencies:
   path_provider: ^2.1.5
 
   # Backend
-  supabase_flutter: ^2.9.1
+  supabase_flutter: ^2.10.0
 
   # UI & Design
   mix: ^1.7.0
@@ -66,6 +66,16 @@ dependencies:
   # Charting
   fl_chart: ^1.0.0
 
+  # Markdown rendering
+  flutter_markdown_plus: ^1.0.5
+
+  # Video/Audio handling
+  youtube_player_flutter: ^9.1.2
+  audioplayers: ^6.5.1
+
+  # Image handling
+  cached_network_image: ^3.4.1
+
   # Utilities
   intl: ^0.20.2
   shared_preferences: ^2.5.3
@@ -73,6 +83,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   async: ^2.13.0
+  envied: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +102,7 @@ dev_dependencies:
   riverpod_generator: ^3.0.0-dev.16
   riverpod_lint: ^3.0.0-dev.16
   objectbox_generator: ^4.3.0
+  envied_generator: ^1.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -36,23 +36,23 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.spacingL),
+        padding: const EdgeInsets.all(AppConstants.spacingL),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Show active temptation warning if exists
             if (hasActiveTemptation) ...[
               Container(
-                padding: const EdgeInsets.all(AppTheme.spacingL),
+                padding: const EdgeInsets.all(AppConstants.spacingL),
                 margin: const EdgeInsets.symmetric(
                   horizontal: 0,
-                  vertical: AppTheme.spacingM,
+                  vertical: AppConstants.spacingM,
                 ),
                 decoration: BoxDecoration(
-                  color: AppTheme.errorRed.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusXL),
+                  color: AppConstants.errorRed.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXL),
                   border: Border.all(
-                    color: AppTheme.errorRed.withValues(alpha: 0.3),
+                    color: AppConstants.errorRed.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Column(
@@ -62,31 +62,31 @@ class HomeScreen extends ConsumerWidget {
                       children: [
                         Icon(
                           Icons.warning_amber,
-                          color: AppTheme.errorRed,
+                          color: AppConstants.errorRed,
                           size: 24,
                         ),
-                        const SizedBox(width: AppTheme.spacingS),
+                        const SizedBox(width: AppConstants.spacingS),
                         Text(
                           'Active Temptation Session',
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
-                                color: AppTheme.errorRed,
+                                color: AppConstants.errorRed,
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppTheme.spacingM),
+                    const SizedBox(height: AppConstants.spacingM),
                     Text(
                       'You have an ongoing temptation session. '
                       'Tap below to continue your journey.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).brightness == Brightness.light
-                            ? AppTheme.darkGray
-                            : AppTheme.white,
+                            ? AppConstants.darkGray
+                            : AppConstants.white,
                       ),
                     ),
-                    const SizedBox(height: AppTheme.spacingL),
+                    const SizedBox(height: AppConstants.spacingL),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -100,8 +100,8 @@ class HomeScreen extends ConsumerWidget {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.errorRed,
-                          foregroundColor: AppTheme.white,
+                          backgroundColor: AppConstants.errorRed,
+                          foregroundColor: AppConstants.white,
                         ),
                         child: const Text('Continue Session'),
                       ),
@@ -109,15 +109,15 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingXL),
+              const SizedBox(height: AppConstants.spacingXL),
             ],
             StreakOrganism(labelText: 'Days Clean', isActive: true),
 
-            const SizedBox(height: AppTheme.spacingXL),
+            const SizedBox(height: AppConstants.spacingXL),
 
             DailyPrayerGrid(),
 
-            const SizedBox(height: AppTheme.spacingXL),
+            const SizedBox(height: AppConstants.spacingXL),
 
             // Emergency Button
             Center(
@@ -130,7 +130,7 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: AppTheme.spacingXL),
+            const SizedBox(height: AppConstants.spacingXL),
 
             // Quick Stats Mini Analytics Preview
             QuickStatsOrganism(

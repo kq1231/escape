@@ -41,21 +41,21 @@ class CustomChoiceChip extends StatelessWidget {
         style:
             labelStyle ??
             TextStyle(
-              color: selected ? AppTheme.white : AppTheme.white,
+              color: selected ? AppConstants.white : AppConstants.white,
               fontSize: 14,
               fontWeight: selected ? FontWeight.bold : FontWeight.normal,
             ),
       ),
       selected: selected,
-      selectedColor: selectedColor ?? AppTheme.primaryGreen,
-      backgroundColor: backgroundColor ?? AppTheme.black,
+      selectedColor: selectedColor ?? AppConstants.primaryGreen,
+      backgroundColor: backgroundColor ?? AppConstants.black,
       onSelected: onSelected,
       padding:
           padding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       labelPadding: EdgeInsets.symmetric(horizontal: labelSpacing ?? 4),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
-        side: BorderSide(width: 2, color: AppTheme.white),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
+        side: BorderSide(width: 2, color: AppConstants.white),
       ),
     );
   }
@@ -67,21 +67,21 @@ class CustomChoiceChip extends StatelessWidget {
         style:
             labelStyle ??
             TextStyle(
-              color: selected ? AppTheme.white : AppTheme.primaryGreen,
+              color: selected ? AppConstants.white : AppConstants.primaryGreen,
               fontSize: 14,
               fontWeight: selected ? FontWeight.bold : FontWeight.normal,
             ),
       ),
       selected: selected,
-      selectedColor: selectedColor ?? AppTheme.primaryGreen,
-      backgroundColor: backgroundColor ?? AppTheme.white,
+      selectedColor: selectedColor ?? AppConstants.primaryGreen,
+      backgroundColor: backgroundColor ?? AppConstants.white,
       onSelected: onSelected,
       padding:
           padding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       labelPadding: EdgeInsets.symmetric(horizontal: labelSpacing ?? 4),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
-        side: BorderSide(width: 2, color: AppTheme.primaryGreen),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
+        side: BorderSide(width: 2, color: AppConstants.primaryGreen),
       ),
     );
   }

@@ -45,7 +45,9 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingXL,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -56,7 +58,7 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
                   fontSize: 32, // Increased from default headlineMedium size
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingS),
+              const SizedBox(height: AppConstants.spacingS),
               Text(
                 OnboardingConstants.triggersSubtitle,
                 style: Theme.of(context).textTheme.bodyLarge,
@@ -64,10 +66,12 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
             ],
           ),
         ),
-        const SizedBox(height: AppTheme.spacingL),
+        const SizedBox(height: AppConstants.spacingL),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXL,
+            ),
             itemCount: OnboardingConstants.triggers.length,
             itemBuilder: (context, index) {
               final trigger = OnboardingConstants.triggers[index];
@@ -82,12 +86,14 @@ class _TriggerChecklistState extends State<TriggerChecklist> {
         ),
         if (widget.showError && _selectedTriggers.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXL,
+            ),
             child: Text(
               OnboardingConstants.selectAtLeastOne,
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall?.copyWith(color: AppTheme.errorRed),
+              ).textTheme.bodySmall?.copyWith(color: AppConstants.errorRed),
             ),
           ),
       ],

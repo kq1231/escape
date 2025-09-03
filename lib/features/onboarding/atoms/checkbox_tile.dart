@@ -30,41 +30,45 @@ class CheckboxTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = value
-        ? (selectedColor ?? AppTheme.primaryGreen.withValues(alpha: 0.1))
-        : (unselectedColor ?? AppTheme.white);
+        ? (selectedColor ?? AppConstants.primaryGreen.withValues(alpha: 0.1))
+        : (unselectedColor ?? AppConstants.white);
 
     final borderColor = value
-        ? (selectedColor ?? AppTheme.primaryGreen)
-        : (showBorder ? AppTheme.mediumGray : Colors.transparent);
+        ? (selectedColor ?? AppConstants.primaryGreen)
+        : (showBorder ? AppConstants.mediumGray : Colors.transparent);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: AppTheme.spacingS),
+      margin: const EdgeInsets.only(bottom: AppConstants.spacingS),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(borderRadius ?? AppTheme.radiusM),
+        borderRadius: BorderRadius.circular(
+          borderRadius ?? AppConstants.radiusM,
+        ),
         border: Border.all(color: borderColor, width: 1),
-        boxShadow: showBorder ? AppTheme.cardShadow : null,
+        boxShadow: showBorder ? AppConstants.cardShadow : null,
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(borderRadius ?? AppTheme.radiusM),
+        borderRadius: BorderRadius.circular(
+          borderRadius ?? AppConstants.radiusM,
+        ),
         onTap: () => onChanged?.call(!value),
         child: Padding(
           padding:
               padding ??
               const EdgeInsets.symmetric(
-                horizontal: AppTheme.spacingM,
-                vertical: AppTheme.spacingM,
+                horizontal: AppConstants.spacingM,
+                vertical: AppConstants.spacingM,
               ),
           child: Row(
             children: [
               Checkbox(
                 value: value,
                 onChanged: onChanged,
-                activeColor: AppTheme.primaryGreen,
-                checkColor: AppTheme.white,
+                activeColor: AppConstants.primaryGreen,
+                checkColor: AppConstants.white,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              const SizedBox(width: AppTheme.spacingS),
+              const SizedBox(width: AppConstants.spacingS),
               Expanded(
                 child: Text(
                   title,

@@ -19,15 +19,15 @@ class MediaTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = backgroundColor ?? AppTheme.primaryGreen;
-    final text = textColor ?? AppTheme.white;
+    final bg = backgroundColor ?? AppConstants.primaryGreen;
+    final text = textColor ?? AppConstants.white;
 
     final tagChild = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
           Icon(icon, size: 16, color: text),
-          SizedBox(width: AppTheme.spacingXS),
+          SizedBox(width: AppConstants.spacingXS),
         ],
         Text(
           label,
@@ -38,12 +38,12 @@ class MediaTag extends StatelessWidget {
 
     final tag = Container(
       padding: EdgeInsets.symmetric(
-        horizontal: AppTheme.spacingM,
-        vertical: AppTheme.spacingS,
+        horizontal: AppConstants.spacingM,
+        vertical: AppConstants.spacingS,
       ),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        borderRadius: BorderRadius.circular(AppConstants.radiusL),
       ),
       child: tagChild,
     );

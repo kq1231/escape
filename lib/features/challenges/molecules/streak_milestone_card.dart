@@ -26,25 +26,25 @@ class StreakMilestoneCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isReached = currentStreak >= streakCount;
     final statusColor = isAchieved
-        ? AppTheme.successGreen
+        ? AppConstants.successGreen
         : isReached
-        ? AppTheme.warningOrange
-        : AppTheme.mediumGray;
+        ? AppConstants.warningOrange
+        : AppConstants.mediumGray;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radiusL),
-          boxShadow: AppTheme.cardShadow,
+          color: AppConstants.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusL),
+          boxShadow: AppConstants.cardShadow,
           border: Border.all(
             color: statusColor.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(AppTheme.spacingM),
+          padding: const EdgeInsets.all(AppConstants.spacingM),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -56,10 +56,10 @@ class StreakMilestoneCard extends StatelessWidget {
                     subtitle: 'Days',
                     icon: Icons.local_fire_department,
                     isCompleted: isAchieved,
-                    iconColor: isAchieved ? AppTheme.white : statusColor,
+                    iconColor: isAchieved ? AppConstants.white : statusColor,
                     size: 50,
                   ),
-                  const SizedBox(width: AppTheme.spacingM),
+                  const SizedBox(width: AppConstants.spacingM),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,12 +69,12 @@ class StreakMilestoneCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.displaySmall
                               ?.copyWith(
                                 color: isAchieved
-                                    ? AppTheme.successGreen
-                                    : AppTheme.darkGray,
+                                    ? AppConstants.successGreen
+                                    : AppConstants.darkGray,
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
-                        const SizedBox(height: AppTheme.spacingXS),
+                        const SizedBox(height: AppConstants.spacingXS),
                         // Streak progress indicator
                         Row(
                           children: [
@@ -83,7 +83,7 @@ class StreakMilestoneCard extends StatelessWidget {
                               size: 16,
                               color: statusColor,
                             ),
-                            const SizedBox(width: AppTheme.spacingXS),
+                            const SizedBox(width: AppConstants.spacingXS),
                             Text(
                               '$currentStreak/$streakCount days',
                               style: Theme.of(context).textTheme.bodyMedium
@@ -100,12 +100,12 @@ class StreakMilestoneCard extends StatelessWidget {
                   if (isAchieved)
                     Icon(
                       Icons.check_circle,
-                      color: AppTheme.successGreen,
+                      color: AppConstants.successGreen,
                       size: 24,
                     ),
                 ],
               ),
-              const SizedBox(height: AppTheme.spacingM),
+              const SizedBox(height: AppConstants.spacingM),
               // Description
               Flexible(
                 child: Text(
@@ -117,31 +117,33 @@ class StreakMilestoneCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingM),
+              const SizedBox(height: AppConstants.spacingM),
               // Rewards section
               if (rewards != null && rewards!.isNotEmpty) ...[
-                Divider(color: AppTheme.lightGray, thickness: 1),
-                const SizedBox(height: AppTheme.spacingS),
+                Divider(color: AppConstants.lightGray, thickness: 1),
+                const SizedBox(height: AppConstants.spacingS),
                 Text(
                   'Rewards',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: AppTheme.darkGray,
+                    color: AppConstants.darkGray,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: AppTheme.spacingXS),
+                const SizedBox(height: AppConstants.spacingXS),
                 Wrap(
-                  spacing: AppTheme.spacingS,
-                  runSpacing: AppTheme.spacingS,
+                  spacing: AppConstants.spacingS,
+                  runSpacing: AppConstants.spacingS,
                   children: rewards!.map((reward) {
                     return Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppTheme.spacingS,
-                        vertical: AppTheme.spacingXS,
+                        horizontal: AppConstants.spacingS,
+                        vertical: AppConstants.spacingXS,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.lightGray,
-                        borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                        color: AppConstants.lightGray,
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusS,
+                        ),
                       ),
                       child: Text(
                         reward,
@@ -155,7 +157,7 @@ class StreakMilestoneCard extends StatelessWidget {
                   }).toList(),
                 ),
               ],
-              const SizedBox(height: AppTheme.spacingM),
+              const SizedBox(height: AppConstants.spacingM),
               // Action button
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -163,18 +165,20 @@ class StreakMilestoneCard extends StatelessWidget {
                   if (isAchieved)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppTheme.spacingM,
-                        vertical: AppTheme.spacingS,
+                        horizontal: AppConstants.spacingM,
+                        vertical: AppConstants.spacingS,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.successGreen.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                        color: AppConstants.successGreen.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusM,
+                        ),
                       ),
                       child: Text(
                         'Achieved',
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(
-                              color: AppTheme.successGreen,
+                              color: AppConstants.successGreen,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -182,18 +186,22 @@ class StreakMilestoneCard extends StatelessWidget {
                   else if (isReached)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppTheme.spacingM,
-                        vertical: AppTheme.spacingS,
+                        horizontal: AppConstants.spacingM,
+                        vertical: AppConstants.spacingS,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.warningOrange.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                        color: AppConstants.warningOrange.withValues(
+                          alpha: 0.1,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusM,
+                        ),
                       ),
                       child: Text(
                         'Claim Reward',
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(
-                              color: AppTheme.warningOrange,
+                              color: AppConstants.warningOrange,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -202,7 +210,7 @@ class StreakMilestoneCard extends StatelessWidget {
                     Text(
                       '${streakCount - currentStreak} days left',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

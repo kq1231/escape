@@ -56,11 +56,11 @@ class _StreakModalState extends ConsumerState<StreakModal> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingL),
+      padding: const EdgeInsets.all(AppConstants.spacingL),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(AppTheme.radiusXXL),
+          top: Radius.circular(AppConstants.radiusXXL),
         ),
       ),
       child: SingleChildScrollView(
@@ -84,14 +84,14 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
 
             // Question
             Text(
               'Did you resist temptations today?',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            const SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppConstants.spacingL),
 
             // Success/Relapse buttons
             Row(
@@ -106,10 +106,10 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                   },
                 ).withXPBadge(
                   xpAmount: 500,
-                  badgeColor: AppTheme.successGreen,
+                  badgeColor: AppConstants.successGreen,
                   expanded: true, // Add this parameter
                 ),
-                const SizedBox(width: AppTheme.spacingM),
+                const SizedBox(width: AppConstants.spacingM),
                 Expanded(
                   child: CustomButton.error(
                     isSelected: isSuccess == false,
@@ -123,14 +123,14 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppConstants.spacingL),
 
             // Mood selection
             Text(
               'How are you feeling today?',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
 
             // Emotion chips
             ChoiceChipGroup(
@@ -141,10 +141,10 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                   selectedEmotion = emotion;
                 });
               },
-              spacing: AppTheme.spacingS,
-              runSpacing: AppTheme.spacingS,
+              spacing: AppConstants.spacingS,
+              runSpacing: AppConstants.spacingS,
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
 
             // Mood intensity slider
             Text(
@@ -163,7 +163,7 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                 });
               },
             ),
-            const SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppConstants.spacingL),
 
             // Save button
             SizedBox(
@@ -273,18 +273,18 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                     ? 'Great job! Your streak has been updated.'
                                     : 'Don\'t worry, you can try again tomorrow.',
                                 style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(color: AppTheme.white),
+                                    ?.copyWith(color: AppConstants.white),
                               ),
                               backgroundColor: isSuccess!
-                                  ? AppTheme.successGreen
-                                  : AppTheme.errorRed,
+                                  ? AppConstants.successGreen
+                                  : AppConstants.errorRed,
                             ),
                           );
                         }
                       },
               ),
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
           ],
         ),
       ),

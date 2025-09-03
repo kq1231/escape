@@ -23,7 +23,7 @@ class PrayerSuccessRateCard extends ConsumerWidget {
           'Error loading prayer stats: $error',
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(color: AppTheme.errorRed),
+          ).textTheme.bodyMedium?.copyWith(color: AppConstants.errorRed),
         ),
       ),
       data: (stats) {
@@ -33,7 +33,7 @@ class PrayerSuccessRateCard extends ConsumerWidget {
           subtitle:
               '${stats.completedPrayers}/${stats.totalPrayers} prayers completed',
           icon: Icons.mosque,
-          iconColor: AppTheme.primaryGreen,
+          iconColor: AppConstants.primaryGreen,
           trend: _getTrend(stats.completionRate),
         );
       },

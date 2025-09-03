@@ -30,9 +30,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.spacingM),
+        padding: const EdgeInsets.all(AppConstants.spacingM),
         child: Column(
-          spacing: AppTheme.spacingL,
+          spacing: AppConstants.spacingL,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -43,7 +43,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 'Analytics Dashboard',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGreen,
+                  color: AppConstants.darkGreen,
                 ),
               ),
             ),
@@ -66,7 +66,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   Widget _buildAnalyticsSection(BuildContext context) {
     return Column(
-      spacing: AppTheme.spacingL,
+      spacing: AppConstants.spacingL,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Streak Analytics - Load first (most important)

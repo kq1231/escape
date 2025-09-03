@@ -80,8 +80,8 @@ class _TipsCarouselState extends State<TipsCarousel> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _current == index
-                    ? AppTheme.primaryGreen
-                    : AppTheme.accentGreen,
+                    ? AppConstants.primaryGreen
+                    : AppConstants.accentGreen,
               ),
             );
           }).toList(),

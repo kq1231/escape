@@ -42,27 +42,28 @@ class ChallengesGrid extends StatelessWidget {
                   child: Text(
                     'View All',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: AppTheme.primaryGreen,
+                      color: AppConstants.primaryGreen,
                     ),
                   ),
                 ),
             ],
           ),
           if (subtitle != null) ...[
-            const SizedBox(height: AppTheme.spacingXS),
+            const SizedBox(height: AppConstants.spacingXS),
             Text(
               subtitle!,
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+              ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
             ),
           ],
-          const SizedBox(height: AppTheme.spacingM),
+          const SizedBox(height: AppConstants.spacingM),
         ],
         // Grid of challenge items
         LayoutBuilder(
           builder: (context, constraints) {
-            final cardWidth = (constraints.maxWidth - AppTheme.spacingM) / 2;
+            final cardWidth =
+                (constraints.maxWidth - AppConstants.spacingM) / 2;
             final cardHeight = cardWidth * 1.2; // Adjust aspect ratio as needed
 
             return GridView.builder(
@@ -70,8 +71,8 @@ class ChallengesGrid extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: AppTheme.spacingM,
-                mainAxisSpacing: AppTheme.spacingM,
+                crossAxisSpacing: AppConstants.spacingM,
+                mainAxisSpacing: AppConstants.spacingM,
                 childAspectRatio: cardWidth / cardHeight,
               ),
               itemCount: challengeItems.length,

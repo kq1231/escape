@@ -87,7 +87,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
               Text(
                 widget.title,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: AppTheme.primaryGreen,
+                  color: AppConstants.primaryGreen,
                   fontWeight: FontWeight.bold,
                   fontSize: 32, // Increased from default headlineMedium size
                 ),
@@ -96,7 +96,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
               Text(
                 widget.subtitle,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.darkGray.withValues(alpha: 0.8),
+                  color: AppConstants.darkGray.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w500,
                   fontSize: 20, // Increased from default bodyLarge size
                 ),
@@ -195,7 +195,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
             child: Text(
               'Please select at least one option or add your own',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.errorRed,
+                color: AppConstants.errorRed,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -239,8 +239,8 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
                   item,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: isSelected
-                        ? AppTheme.primaryGreen
-                        : AppTheme.darkGray,
+                        ? AppConstants.primaryGreen
+                        : AppConstants.darkGray,
                     fontWeight: isSelected
                         ? FontWeight.bold
                         : FontWeight.normal,
@@ -273,7 +273,7 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
               child: Text(
                 item,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.primaryGreen,
+                  color: AppConstants.primaryGreen,
                   fontWeight: FontWeight.bold,
                   fontSize: 18, // Increased from default bodyMedium size
                 ),

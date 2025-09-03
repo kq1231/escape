@@ -35,7 +35,7 @@ class PrayerActivityGrid extends ConsumerWidget {
               timeRange?.label ?? 'Last 30 days',
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+              ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
             ),
             const SizedBox(height: 20),
             _buildActivityGrid(context, gridData),
@@ -72,7 +72,7 @@ class PrayerActivityGrid extends ConsumerWidget {
                   child: Text(
                     label,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.mediumGray,
+                      color: AppConstants.mediumGray,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -114,7 +114,7 @@ class PrayerActivityGrid extends ConsumerWidget {
                 child: Text(
                   'W${weeksNeeded - week}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGray,
+                    color: AppConstants.mediumGray,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -152,7 +152,7 @@ class PrayerActivityGrid extends ConsumerWidget {
     // Calculate color based on prayer completion
     Color cellColor;
     if (data.prayersCompleted == 0) {
-      cellColor = AppTheme.mediumGray;
+      cellColor = AppConstants.mediumGray;
     } else {
       // Green gradient based on completion rate (0-6 prayers)
       cellColor = _getGreenColor(data.intensity);
@@ -171,7 +171,7 @@ class PrayerActivityGrid extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: data.prayersCompleted >= 4
                       ? Colors.white
-                      : AppTheme.darkGreen,
+                      : AppConstants.darkGreen,
                   fontWeight: FontWeight.bold,
                   fontSize: 10,
                 ),
@@ -185,9 +185,9 @@ class PrayerActivityGrid extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
-        color: AppTheme.lightGray,
+        color: AppConstants.lightGray,
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: AppTheme.mediumGray),
+        border: Border.all(color: AppConstants.mediumGray),
       ),
     );
   }
@@ -198,7 +198,7 @@ class PrayerActivityGrid extends ConsumerWidget {
       children: [
         Row(
           children: [
-            _buildLegendItem(context, 'No prayers', AppTheme.mediumGray),
+            _buildLegendItem(context, 'No prayers', AppConstants.mediumGray),
             const SizedBox(width: 16),
             _buildLegendItem(context, '1-2 prayers', _getGreenColor(0.25)),
             const SizedBox(width: 16),
@@ -211,7 +211,7 @@ class PrayerActivityGrid extends ConsumerWidget {
         Text(
           'Each cell shows number of prayers completed (out of 6)',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: AppTheme.mediumGray,
+            color: AppConstants.mediumGray,
             fontStyle: FontStyle.italic,
           ),
         ),
@@ -236,7 +236,7 @@ class PrayerActivityGrid extends ConsumerWidget {
           label,
           style: Theme.of(
             context,
-          ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+          ).textTheme.bodySmall?.copyWith(color: AppConstants.mediumGray),
         ),
       ],
     );
@@ -244,8 +244,8 @@ class PrayerActivityGrid extends ConsumerWidget {
 
   Color _getGreenColor(double intensity) {
     // Create gradient from light green to dark green based on intensity
-    final baseGreen = AppTheme.lightGreen;
-    final darkGreen = AppTheme.primaryGreen;
+    final baseGreen = AppConstants.lightGreen;
+    final darkGreen = AppConstants.primaryGreen;
 
     return Color.lerp(baseGreen, darkGreen, intensity)!;
   }

@@ -86,7 +86,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+        padding: const EdgeInsets.symmetric(horizontal: AppConstants.spacingXL),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -94,12 +94,12 @@ class _PasswordSetupState extends State<PasswordSetup> {
               OnboardingConstants.securityTitle,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            const SizedBox(height: AppTheme.spacingS),
+            const SizedBox(height: AppConstants.spacingS),
             Text(
               OnboardingConstants.securitySubtitle,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
-            const SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppConstants.spacingL),
             InputField(
               controller: _passwordController,
               hintText: OnboardingConstants.passwordHint,
@@ -116,7 +116,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                  color: AppTheme.mediumGray,
+                  color: AppConstants.mediumGray,
                 ),
                 onPressed: () {
                   setState(() {
@@ -125,7 +125,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                 },
               ),
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
             InputField(
               controller: _confirmPasswordController,
               hintText: OnboardingConstants.confirmPasswordHint,
@@ -144,7 +144,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                   _obscureConfirmPassword
                       ? Icons.visibility
                       : Icons.visibility_off,
-                  color: AppTheme.mediumGray,
+                  color: AppConstants.mediumGray,
                 ),
                 onPressed: () {
                   setState(() {
@@ -153,12 +153,12 @@ class _PasswordSetupState extends State<PasswordSetup> {
                 },
               ),
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppConstants.spacingM),
             Text(
               OnboardingConstants.privacyNote,
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+              ).textTheme.bodySmall?.copyWith(color: AppConstants.mediumGray),
               textAlign: TextAlign.center,
             ),
           ],

@@ -36,7 +36,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
               timeRange?.label ?? 'Last 30 days',
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+              ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
             ),
             const SizedBox(height: 20),
             SizedBox(height: 300, child: _buildBarChart(context, barData)),
@@ -81,9 +81,9 @@ class TemptationStackedBarChart extends ConsumerWidget {
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toInt().toString(),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppConstants.mediumGray,
+                  ),
                 );
               },
             ),
@@ -107,7 +107,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
                     child: Text(
                       '${date.day}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGray,
+                        color: AppConstants.mediumGray,
                       ),
                     ),
                   );
@@ -130,7 +130,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
             barRods: [
               BarChartRodData(
                 toY: total,
-                color: AppTheme.errorRed,
+                color: AppConstants.errorRed,
                 width: 20,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(4),
@@ -141,7 +141,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
                         BarChartRodStackItem(
                           0,
                           successfulCount,
-                          AppTheme.successGreen,
+                          AppConstants.successGreen,
                         ),
                       ]
                     : [],
@@ -153,7 +153,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
           show: true,
           drawVerticalLine: false,
           getDrawingHorizontalLine: (value) {
-            return FlLine(color: AppTheme.lightGray, strokeWidth: 1);
+            return FlLine(color: AppConstants.lightGray, strokeWidth: 1);
           },
         ),
         barTouchData: BarTouchData(
@@ -196,9 +196,9 @@ class TemptationStackedBarChart extends ConsumerWidget {
   Widget _buildLegend(BuildContext context) {
     return Row(
       children: [
-        _buildLegendItem(context, 'Successful', AppTheme.successGreen),
+        _buildLegendItem(context, 'Successful', AppConstants.successGreen),
         const SizedBox(width: 24),
-        _buildLegendItem(context, 'Relapsed', AppTheme.errorRed),
+        _buildLegendItem(context, 'Relapsed', AppConstants.errorRed),
       ],
     );
   }
@@ -220,7 +220,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
           label,
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+          ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
         ),
       ],
     );
@@ -244,11 +244,11 @@ class TemptationStackedBarChart extends ConsumerWidget {
     final successRate = total > 0 ? (totalSuccessful / total * 100).round() : 0;
 
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingM),
+      padding: const EdgeInsets.all(AppConstants.spacingM),
       decoration: BoxDecoration(
-        color: AppTheme.lightGreen.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppTheme.radiusM),
-        border: Border.all(color: AppTheme.lightGreen),
+        color: AppConstants.lightGreen.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
+        border: Border.all(color: AppConstants.lightGreen),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,7 +257,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
             'Summary',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppTheme.primaryGreen,
+              color: AppConstants.primaryGreen,
             ),
           ),
           const SizedBox(height: 8),
@@ -278,7 +278,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
                   'Success Rate',
                   '$successRate%',
                   Icons.check_circle,
-                  color: AppTheme.successGreen,
+                  color: AppConstants.successGreen,
                 ),
               ),
             ],
@@ -292,7 +292,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
                   'Successful',
                   totalSuccessful.toString(),
                   Icons.thumb_up,
-                  color: AppTheme.successGreen,
+                  color: AppConstants.successGreen,
                 ),
               ),
               const SizedBox(width: 16),
@@ -302,7 +302,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
                   'Relapsed',
                   totalRelapsed.toString(),
                   Icons.thumb_down,
-                  color: AppTheme.errorRed,
+                  color: AppConstants.errorRed,
                 ),
               ),
             ],
@@ -321,7 +321,7 @@ class TemptationStackedBarChart extends ConsumerWidget {
   }) {
     return Row(
       children: [
-        Icon(icon, color: color ?? AppTheme.primaryGreen, size: 20),
+        Icon(icon, color: color ?? AppConstants.primaryGreen, size: 20),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
@@ -331,13 +331,13 @@ class TemptationStackedBarChart extends ConsumerWidget {
                 label,
                 style: Theme.of(
                   context,
-                ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+                ).textTheme.bodySmall?.copyWith(color: AppConstants.mediumGray),
               ),
               Text(
                 value,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: color ?? AppTheme.primaryGreen,
+                  color: color ?? AppConstants.primaryGreen,
                 ),
               ),
             ],

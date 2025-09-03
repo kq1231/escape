@@ -66,7 +66,7 @@ class EmergencyScreen extends StatelessWidget {
           ),
         ),
         // backgroundColor: AppTheme.primaryGreen,
-        foregroundColor: AppTheme.white,
+        foregroundColor: AppConstants.white,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -117,7 +117,7 @@ class EmergencyScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(contactInfo),
-                    backgroundColor: AppTheme.primaryGreen,
+                    backgroundColor: AppConstants.primaryGreen,
                   ),
                 );
               },

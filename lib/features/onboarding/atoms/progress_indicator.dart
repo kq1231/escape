@@ -28,10 +28,10 @@ class ProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final active = activeColor == Colors.transparent
-        ? AppTheme.primaryGreen
+        ? AppConstants.primaryGreen
         : activeColor;
     final inactive = inactiveColor == Colors.transparent
-        ? AppTheme.mediumGray
+        ? AppConstants.mediumGray
         : inactiveColor;
 
     return Column(
@@ -39,7 +39,9 @@ class ProgressIndicator extends StatelessWidget {
       children: [
         if (showBar)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXL),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXL,
+            ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(2),
               child: LinearProgressIndicator(
@@ -50,7 +52,7 @@ class ProgressIndicator extends StatelessWidget {
               ),
             ),
           ),
-        if (showDots && showBar) const SizedBox(height: AppTheme.spacingM),
+        if (showDots && showBar) const SizedBox(height: AppConstants.spacingM),
         if (showDots)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -95,10 +97,10 @@ class CustomCircularProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final active = progressColor == Colors.transparent
-        ? AppTheme.primaryGreen
+        ? AppConstants.primaryGreen
         : progressColor;
     final inactive = backgroundColor == Colors.transparent
-        ? AppTheme.mediumGray.withValues(alpha: 0.3)
+        ? AppConstants.mediumGray.withValues(alpha: 0.3)
         : backgroundColor;
 
     return SizedBox(

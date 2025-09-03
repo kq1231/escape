@@ -35,7 +35,7 @@ class StreakActivityGrid extends ConsumerWidget {
               timeRange?.label ?? 'Last 30 days',
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGray),
+              ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
             ),
             const SizedBox(height: 20),
             _buildActivityGrid(context, gridData),
@@ -72,7 +72,7 @@ class StreakActivityGrid extends ConsumerWidget {
                   child: Text(
                     label,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.mediumGray,
+                      color: AppConstants.mediumGray,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -114,7 +114,7 @@ class StreakActivityGrid extends ConsumerWidget {
                 child: Text(
                   'W${weeksNeeded - week}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGray,
+                    color: AppConstants.mediumGray,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -151,7 +151,7 @@ class StreakActivityGrid extends ConsumerWidget {
 
     Color cellColor;
     if (data.hasRelapse) {
-      cellColor = AppTheme.errorRed;
+      cellColor = AppConstants.errorRed;
     } else {
       // Calculate intensity based on streak count
       final intensity = _calculateIntensity(data.streakCount);
@@ -171,9 +171,9 @@ class StreakActivityGrid extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
-        color: AppTheme.lightGray,
+        color: AppConstants.lightGray,
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: AppTheme.mediumGray),
+        border: Border.all(color: AppConstants.mediumGray),
       ),
     );
   }
@@ -181,7 +181,7 @@ class StreakActivityGrid extends ConsumerWidget {
   Widget _buildLegend(BuildContext context) {
     return Row(
       children: [
-        _buildLegendItem(context, 'No activity', AppTheme.mediumGray),
+        _buildLegendItem(context, 'No activity', AppConstants.mediumGray),
         const SizedBox(width: 16),
         _buildLegendItem(context, 'Low', _getGreenColor(0.25)),
         const SizedBox(width: 16),
@@ -191,7 +191,7 @@ class StreakActivityGrid extends ConsumerWidget {
         const SizedBox(width: 16),
         _buildLegendItem(context, 'Very High', _getGreenColor(1.0)),
         const SizedBox(width: 16),
-        _buildLegendItem(context, 'Relapse', AppTheme.errorRed),
+        _buildLegendItem(context, 'Relapse', AppConstants.errorRed),
       ],
     );
   }
@@ -213,7 +213,7 @@ class StreakActivityGrid extends ConsumerWidget {
           label,
           style: Theme.of(
             context,
-          ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGray),
+          ).textTheme.bodySmall?.copyWith(color: AppConstants.mediumGray),
         ),
       ],
     );
@@ -227,8 +227,8 @@ class StreakActivityGrid extends ConsumerWidget {
 
   Color _getGreenColor(double intensity) {
     // Create gradient from light green to dark green based on intensity
-    final baseGreen = AppTheme.lightGreen;
-    final darkGreen = AppTheme.primaryGreen;
+    final baseGreen = AppConstants.lightGreen;
+    final darkGreen = AppConstants.primaryGreen;
 
     return Color.lerp(baseGreen, darkGreen, intensity)!;
   }

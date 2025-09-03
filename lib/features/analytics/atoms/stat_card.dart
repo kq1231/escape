@@ -27,27 +27,27 @@ class StatCard extends StatelessWidget {
         backgroundColor ??
         (Theme.of(context).brightness == Brightness.dark
             ? const Color(0xFF1E1E1E)
-            : AppTheme.white);
+            : AppConstants.white);
     final textColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.white70
-        : AppTheme.darkGray;
-    final iconColorValue = iconColor ?? AppTheme.primaryGreen;
+        : AppConstants.darkGray;
+    final iconColorValue = iconColor ?? AppConstants.primaryGreen;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.spacingM),
+        padding: const EdgeInsets.all(AppConstants.spacingM),
         decoration: BoxDecoration(
           color: cardColor,
-          borderRadius: BorderRadius.circular(AppTheme.radiusL),
-          boxShadow: AppTheme.cardShadow,
+          borderRadius: BorderRadius.circular(AppConstants.radiusL),
+          boxShadow: AppConstants.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (icon != null) ...[
               Icon(icon, color: iconColorValue, size: 24),
-              const SizedBox(height: AppTheme.spacingS),
+              const SizedBox(height: AppConstants.spacingS),
             ],
             Text(
               title,
@@ -58,7 +58,7 @@ class StatCard extends StatelessWidget {
                 fontSize: 18, // Increased from default bodyMedium size
               ),
             ),
-            const SizedBox(height: AppTheme.spacingXS),
+            const SizedBox(height: AppConstants.spacingXS),
             Text(
               value,
               style: Theme.of(context).textTheme.displaySmall?.copyWith(
@@ -68,7 +68,7 @@ class StatCard extends StatelessWidget {
               ),
             ),
             if (subtitle != null) ...[
-              const SizedBox(height: AppTheme.spacingXS),
+              const SizedBox(height: AppConstants.spacingXS),
               Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(

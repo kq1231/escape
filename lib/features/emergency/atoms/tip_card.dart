@@ -24,9 +24,9 @@ class TipCard extends StatelessWidget {
     final cardColor =
         backgroundColor ??
         (Theme.of(context).brightness == Brightness.dark
-            ? AppTheme.darkGreen
-            : AppTheme.primaryGreen);
-    final color = iconColor ?? AppTheme.white;
+            ? AppConstants.darkGreen
+            : AppConstants.primaryGreen);
+    final color = iconColor ?? AppConstants.white;
 
     return Card(
       color: cardColor,
@@ -49,7 +49,7 @@ class TipCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: AppTheme.white,
+                  color: AppConstants.white,
                 ),
               ),
               const SizedBox(height: 8),
@@ -57,7 +57,7 @@ class TipCard extends StatelessWidget {
                 content,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 14,
-                  color: AppTheme.white,
+                  color: AppConstants.white,
                 ),
               ),
             ],
