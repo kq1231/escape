@@ -61,114 +61,120 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("BUILD CALLED FROM MEDIA SCREEN");
     final postsAsyncValue = ref.watch(postsProviderProvider());
 
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await ref.read(postsProviderProvider().notifier).refreshPosts();
-        },
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            // Category tags
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 50,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.spacingM,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await ref.read(postsProviderProvider().notifier).refreshPosts();
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              // Category tags
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 50,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppConstants.spacingM,
+                    ),
+                    children: [
+                      MediaTag(
+                        label: 'All',
+                        backgroundColor: _selectedCategory == 'All'
+                            ? AppConstants.primaryGreen
+                            : AppConstants.lightGray,
+                        textColor: _selectedCategory == 'All'
+                            ? AppConstants.white
+                            : AppConstants.darkGray,
+                        onTap: () => _filterContent('All'),
+                      ),
+                      SizedBox(width: AppConstants.spacingS),
+                      MediaTag(
+                        label: 'Articles',
+                        backgroundColor: _selectedCategory == 'Articles'
+                            ? AppConstants.primaryGreen
+                            : AppConstants.lightGray,
+                        textColor: _selectedCategory == 'Articles'
+                            ? AppConstants.white
+                            : AppConstants.darkGray,
+                        onTap: () => _filterContent('Articles'),
+                      ),
+                      SizedBox(width: AppConstants.spacingS),
+                      MediaTag(
+                        label: 'Videos',
+                        backgroundColor: _selectedCategory == 'Videos'
+                            ? AppConstants.primaryGreen
+                            : AppConstants.lightGray,
+                        textColor: _selectedCategory == 'Videos'
+                            ? AppConstants.white
+                            : AppConstants.darkGray,
+                        onTap: () => _filterContent('Videos'),
+                      ),
+                      // Other tags...
+                    ],
                   ),
-                  children: [
-                    MediaTag(
-                      label: 'All',
-                      backgroundColor: _selectedCategory == 'All'
-                          ? AppConstants.primaryGreen
-                          : AppConstants.lightGray,
-                      textColor: _selectedCategory == 'All'
-                          ? AppConstants.white
-                          : AppConstants.darkGray,
-                      onTap: () => _filterContent('All'),
-                    ),
-                    SizedBox(width: AppConstants.spacingS),
-                    MediaTag(
-                      label: 'Articles',
-                      backgroundColor: _selectedCategory == 'Articles'
-                          ? AppConstants.primaryGreen
-                          : AppConstants.lightGray,
-                      textColor: _selectedCategory == 'Articles'
-                          ? AppConstants.white
-                          : AppConstants.darkGray,
-                      onTap: () => _filterContent('Articles'),
-                    ),
-                    SizedBox(width: AppConstants.spacingS),
-                    MediaTag(
-                      label: 'Videos',
-                      backgroundColor: _selectedCategory == 'Videos'
-                          ? AppConstants.primaryGreen
-                          : AppConstants.lightGray,
-                      textColor: _selectedCategory == 'Videos'
-                          ? AppConstants.white
-                          : AppConstants.darkGray,
-                      onTap: () => _filterContent('Videos'),
-                    ),
-                    // Other tags...
-                  ],
                 ),
               ),
-            ),
-            SliverToBoxAdapter(child: SizedBox(height: AppConstants.spacingM)),
-            // Media feed
-            postsAsyncValue.when(
-              loading: () => SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => _buildShimmerCard(),
-                  childCount: 5,
+              SliverToBoxAdapter(
+                child: SizedBox(height: AppConstants.spacingM),
+              ),
+              // Media feed
+              postsAsyncValue.when(
+                loading: () => SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => _buildShimmerCard(),
+                    childCount: 5,
+                  ),
+                ),
+                error: (error, stack) => SliverToBoxAdapter(
+                  child: Center(child: Text('Error loading posts: $error')),
+                ),
+                data: (posts) => SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final post = posts[index];
+                    if (post.postType == PostType.article) {
+                      return ArticleCard(
+                        title: post.title,
+                        imageUrl: post.featuredImageUrl ?? '',
+                        excerpt: post.excerpt ?? '',
+                        tags: post.tags,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PostPage(postId: post.id),
+                            ),
+                          );
+                        },
+                      );
+                    } else if (post.postType == PostType.video) {
+                      return VideoCard(
+                        title: post.title,
+                        thumbnailUrl: post.featuredImageUrl ?? '',
+                        duration: post.duration.toString(),
+                        views: post.viewsCount,
+                        author: post.author?.name,
+                        tags: post.tags,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PostPage(postId: post.id),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  }, childCount: posts.length),
                 ),
               ),
-              error: (error, stack) => SliverToBoxAdapter(
-                child: Center(child: Text('Error loading posts: $error')),
-              ),
-              data: (posts) => SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final post = posts[index];
-                  if (post.postType == PostType.article) {
-                    return ArticleCard(
-                      title: post.title,
-                      imageUrl: post.featuredImageUrl ?? '',
-                      excerpt: post.excerpt ?? '',
-                      tags: post.tags,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => PostPage(postId: post.id),
-                          ),
-                        );
-                      },
-                    );
-                  } else if (post.postType == PostType.video) {
-                    return VideoCard(
-                      title: post.title,
-                      thumbnailUrl: post.featuredImageUrl ?? '',
-                      duration: post.duration.toString(),
-                      views: post.viewsCount,
-                      author: post.author?.name,
-                      tags: post.tags,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => PostPage(postId: post.id),
-                          ),
-                        );
-                      },
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }, childCount: posts.length),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

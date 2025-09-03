@@ -17,7 +17,7 @@ final class PostsRepositoryProvider
         argument: null,
         retry: null,
         name: r'postsRepositoryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -30,7 +30,7 @@ final class PostsRepositoryProvider
   PostsRepository create() => PostsRepository();
 }
 
-String _$postsRepositoryHash() => r'79b48b2ec41c323694ef0290ef637c16d634818e';
+String _$postsRepositoryHash() => r'4e6e5aa0046bab54c67a55f1b3882f2e20759b48';
 
 abstract class _$PostsRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

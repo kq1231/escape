@@ -2,7 +2,6 @@ import 'package:escape/env.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/post_model.dart';
-
 part 'posts_repository.g.dart';
 
 // Keep alive so that we don't reinitialize Supabase client again and again
@@ -12,12 +11,14 @@ class PostsRepository extends _$PostsRepository {
   late SupabaseClient _supabase;
 
   @override
-  FutureOr<void> build() async {
-    await Supabase.initialize(
-      url: Env.supabaseUrl,
-      anonKey: Env.supabaseAnonKey,
-    );
-    _supabase = Supabase.instance.client;
+  Future<void> build() async {
+    await AsyncValue.guard(() async {
+      await Supabase.initialize(
+        url: Env.supabaseUrl,
+        anonKey: Env.supabaseAnonKey,
+      );
+      _supabase = Supabase.instance.client;
+    });
   }
 
   // Get latest posts with pagination and filtering
@@ -48,60 +49,39 @@ class PostsRepository extends _$PostsRepository {
               bio
             )
           ''');
-
       // Apply filters
       if (filter != null) {
         query.eq('post_type', filter.name);
       }
-
       if (searchQuery != null && searchQuery.isNotEmpty) {
         query.or(
           "title.ilike.%$searchQuery%,excerpt.ilike.%$searchQuery%,tags.cs.{$searchQuery}",
         );
       }
-
       // Apply ordering and pagination
-      query.eq('is_published', true);
+      ;
       query.order('created_at', ascending: false);
       query.range(offset, offset + limit - 1);
-
       final response = await query;
-
       if (response.isEmpty) {
         return [];
       }
-
       return response.map((map) => PostPreview.fromMap(map)).toList();
     } catch (e) {
       throw Exception('Failed to fetch posts: $e');
     }
   }
 
-  // Get single post with view increment
+  // Get single post with view increment using PostgreSQL function
   Future<Post> getPostWithViewIncrement(String postId) async {
     try {
-      // First increment the view count
-      await _supabase
-          .from('posts')
-          .update({'views_count': 'views_count + 1'})
-          .eq('id', postId);
-
-      // Then fetch the full post
+      // Call the PostgreSQL function
       final response = await _supabase
-          .from('posts')
-          .select('''
-            *,
-            author! (
-              id,
-              name,
-              avatar_url,
-              bio
-            )
-          ''')
-          .eq('id', postId)
-          .eq('is_published', true)
+          .rpc('get_post_with_view_increment', params: {'post_uuid': postId})
+          .select()
           .single();
 
+      // Convert the response to our Post model
       return Post.fromMap(response);
     } catch (e) {
       throw Exception('Failed to fetch post: $e');
@@ -123,9 +103,7 @@ class PostsRepository extends _$PostsRepository {
             )
           ''')
           .eq('slug', slug)
-          .eq('is_published', true)
           .single();
-
       return Post.fromMap(response);
     } catch (e) {
       throw Exception('Failed to fetch post by slug: $e');
@@ -160,14 +138,11 @@ class PostsRepository extends _$PostsRepository {
             )
           ''')
           .contains('tags', tag)
-          .eq('is_published', true)
           .order('created_at', ascending: false)
           .range(offset, offset + limit - 1);
-
       if (response.isEmpty) {
         return [];
       }
-
       return response.map((map) => PostPreview.fromMap(map)).toList();
     } catch (e) {
       throw Exception('Failed to fetch posts by tag: $e');
@@ -202,14 +177,11 @@ class PostsRepository extends _$PostsRepository {
             )
           ''')
           .eq('author_id', authorId)
-          .eq('is_published', true)
           .order('created_at', ascending: false)
           .range(offset, offset + limit - 1);
-
       if (response.isEmpty) {
         return [];
       }
-
       return response.map((map) => PostPreview.fromMap(map)).toList();
     } catch (e) {
       throw Exception('Failed to fetch posts by author: $e');
@@ -242,20 +214,15 @@ class PostsRepository extends _$PostsRepository {
               avatar_url
             )
           ''')
-          .eq('is_published', true)
           .order('views_count', ascending: false)
           .limit(limit);
-
       if (filter != null) {
         query.appendSearchParams('post_type', filter.name);
       }
-
       final response = await query;
-
       if (response.isEmpty) {
         return [];
       }
-
       return response.map((map) => PostPreview.fromMap(map)).toList();
     } catch (e) {
       throw Exception('Failed to fetch popular posts: $e');
@@ -274,16 +241,13 @@ class PostsRepository extends _$PostsRepository {
           .select('tags')
           .eq('id', postId)
           .single();
-
       if (currentPost.isEmpty || currentPost['tags'] == null) {
         return [];
       }
-
       final tags = List<String>.from(currentPost['tags']);
       if (tags.isEmpty) {
         return [];
       }
-
       // Get posts with similar tags (excluding the current post)
       final response = await _supabase
           .from('posts')
@@ -307,14 +271,11 @@ class PostsRepository extends _$PostsRepository {
           ''')
           .neq('id', postId)
           .contains('tags', tags.first) // Use first tag for simplicity
-          .eq('is_published', true)
           .order('created_at', ascending: false)
           .limit(limit);
-
       if (response.isEmpty) {
         return [];
       }
-
       return response.map((map) => PostPreview.fromMap(map)).toList();
     } catch (e) {
       throw Exception('Failed to fetch related posts: $e');
@@ -329,23 +290,16 @@ class PostsRepository extends _$PostsRepository {
     String? searchQuery,
   }) async {
     try {
-      final query = _supabase
-          .from('posts')
-          .select('id')
-          .eq('is_published', true);
-
+      final query = _supabase.from('posts').select('id');
       if (filter != null) {
         query.eq('post_type', filter.name);
       }
-
       if (searchQuery != null && searchQuery.isNotEmpty) {
         query.or(
           "title.ilike.%$searchQuery%,excerpt.ilike.%$searchQuery%,tags.cs.{$searchQuery}",
         );
       }
-
       query.range(offset, offset + limit);
-
       final response = await query;
       return (response.length < limit);
     } catch (e) {
