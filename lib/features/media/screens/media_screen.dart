@@ -61,7 +61,6 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("BUILD CALLED FROM MEDIA SCREEN");
     final postsAsyncValue = ref.watch(postsProviderProvider());
 
     return Scaffold(

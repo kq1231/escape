@@ -8,3 +8,9 @@
 - Fix issue with calling `_onRelapse` function inside temptation flow
 - Add XP feature
 - Create two or three analytics. Little but professional and useful.
+
+# 4 September, 2025 | Thursday
+
+1. Filters not working
+2. Search posts
+3. Filter by tags (create a `tags` table)

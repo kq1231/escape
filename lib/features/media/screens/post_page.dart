@@ -97,8 +97,9 @@ class _PostPageState extends ConsumerState<PostPage> {
                       .map(
                         (tag) => Chip(
                           label: Text(tag),
-                          backgroundColor: AppConstants.primaryGreen
-                              .withOpacity(0.2),
+                          backgroundColor: AppConstants.primaryGreen.withValues(
+                            alpha: 0.2,
+                          ),
                         ),
                       )
                       .toList(),
