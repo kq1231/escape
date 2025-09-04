@@ -26,7 +26,7 @@ class ChallengesWatcher extends _$ChallengesWatcher {
 
     void checkAndEmitAchievements() async {
       // Get current unmet challenges
-      final allChallenges = await ref.read(challengesProvider.future);
+      final allChallenges = await ref.watch(challengesProvider.future);
       final unmetChallenges = allChallenges
           .where((c) => !c.isCompleted)
           .toList();

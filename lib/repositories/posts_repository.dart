@@ -11,14 +11,14 @@ class PostsRepository extends _$PostsRepository {
   late SupabaseClient _supabase;
 
   @override
-  Future<void> build() async {
-    await AsyncValue.guard(() async {
-      await Supabase.initialize(
-        url: Env.supabaseUrl,
-        anonKey: Env.supabaseAnonKey,
-      );
-      _supabase = Supabase.instance.client;
-    });
+  Future<bool> build() async {
+    await Supabase.initialize(
+      url: Env.supabaseUrl,
+      anonKey: Env.supabaseAnonKey,
+    );
+    _supabase = Supabase.instance.client;
+
+    return true;
   }
 
   // Get latest posts with pagination and filtering
@@ -32,7 +32,6 @@ class PostsRepository extends _$PostsRepository {
       final query = _supabase.from('posts').select('''
             id,
             title,
-            excerpt,
             post_type,
             featured_image_url,
             video_url,
@@ -42,9 +41,9 @@ class PostsRepository extends _$PostsRepository {
             duration,
             views_count,
             created_at,
-            author! (
+            user_profiles (
               id,
-              name,
+              display_name,
               avatar_url,
               bio
             )
@@ -54,12 +53,9 @@ class PostsRepository extends _$PostsRepository {
         query.eq('post_type', filter.name);
       }
       if (searchQuery != null && searchQuery.isNotEmpty) {
-        query.or(
-          "title.ilike.%$searchQuery%,excerpt.ilike.%$searchQuery%,tags.cs.{$searchQuery}",
-        );
+        query.or("title.ilike.%$searchQuery%,tags.cs.{$searchQuery}");
       }
       // Apply ordering and pagination
-      ;
       query.order('created_at', ascending: false);
       query.range(offset, offset + limit - 1);
       final response = await query;
@@ -80,7 +76,6 @@ class PostsRepository extends _$PostsRepository {
           .rpc('get_post_with_view_increment', params: {'post_uuid': postId})
           .select()
           .single();
-
       // Convert the response to our Post model
       return Post.fromMap(response);
     } catch (e) {
@@ -95,9 +90,9 @@ class PostsRepository extends _$PostsRepository {
           .from('posts')
           .select('''
             *,
-            author! (
+            user_profiles (
               id,
-              name,
+              display_name,
               avatar_url,
               bio
             )
@@ -122,7 +117,6 @@ class PostsRepository extends _$PostsRepository {
           .select('''
             id,
             title,
-            excerpt,
             post_type,
             featured_image_url,
             video_url,
@@ -132,8 +126,8 @@ class PostsRepository extends _$PostsRepository {
             duration,
             views_count,
             created_at,
-            author! (
-              name,
+            user_profiles (
+              display_name,
               avatar_url
             )
           ''')
@@ -161,7 +155,6 @@ class PostsRepository extends _$PostsRepository {
           .select('''
             id,
             title,
-            excerpt,
             post_type,
             featured_image_url,
             video_url,
@@ -171,12 +164,12 @@ class PostsRepository extends _$PostsRepository {
             duration,
             views_count,
             created_at,
-            author! (
-              name,
+            user_profiles (
+              display_name,
               avatar_url
             )
           ''')
-          .eq('author_id', authorId)
+          .eq('user_id', authorId)
           .order('created_at', ascending: false)
           .range(offset, offset + limit - 1);
       if (response.isEmpty) {
@@ -199,7 +192,6 @@ class PostsRepository extends _$PostsRepository {
           .select('''
             id,
             title,
-            excerpt,
             post_type,
             featured_image_url,
             video_url,
@@ -209,8 +201,8 @@ class PostsRepository extends _$PostsRepository {
             duration,
             views_count,
             created_at,
-            author! (
-              name,
+            user_profiles (
+              display_name,
               avatar_url
             )
           ''')
@@ -254,7 +246,6 @@ class PostsRepository extends _$PostsRepository {
           .select('''
             id,
             title,
-            excerpt,
             post_type,
             featured_image_url,
             video_url,
@@ -264,8 +255,8 @@ class PostsRepository extends _$PostsRepository {
             duration,
             views_count,
             created_at,
-            author! (
-              name,
+            user_profiles (
+              display_name,
               avatar_url
             )
           ''')
@@ -279,31 +270,6 @@ class PostsRepository extends _$PostsRepository {
       return response.map((map) => PostPreview.fromMap(map)).toList();
     } catch (e) {
       throw Exception('Failed to fetch related posts: $e');
-    }
-  }
-
-  // Check if there are more posts available
-  Future<bool> hasMorePosts({
-    required int offset,
-    required int limit,
-    PostType? filter,
-    String? searchQuery,
-  }) async {
-    try {
-      final query = _supabase.from('posts').select('id');
-      if (filter != null) {
-        query.eq('post_type', filter.name);
-      }
-      if (searchQuery != null && searchQuery.isNotEmpty) {
-        query.or(
-          "title.ilike.%$searchQuery%,excerpt.ilike.%$searchQuery%,tags.cs.{$searchQuery}",
-        );
-      }
-      query.range(offset, offset + limit);
-      final response = await query;
-      return (response.length < limit);
-    } catch (e) {
-      return false;
     }
   }
 }

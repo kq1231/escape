@@ -12,7 +12,7 @@ class MediaTitle extends StatelessWidget {
     super.key,
     required this.title,
     this.maxLines,
-    this.overflow = TextOverflow.ellipsis,
+    this.overflow = TextOverflow.visible,
     this.textAlign = TextAlign.start,
     this.style,
     this.onTap,

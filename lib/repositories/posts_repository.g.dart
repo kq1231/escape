@@ -10,7 +10,7 @@ part of 'posts_repository.dart';
 const postsRepositoryProvider = PostsRepositoryProvider._();
 
 final class PostsRepositoryProvider
-    extends $AsyncNotifierProvider<PostsRepository, void> {
+    extends $AsyncNotifierProvider<PostsRepository, bool> {
   const PostsRepositoryProvider._()
     : super(
         from: null,
@@ -30,24 +30,24 @@ final class PostsRepositoryProvider
   PostsRepository create() => PostsRepository();
 }
 
-String _$postsRepositoryHash() => r'4e6e5aa0046bab54c67a55f1b3882f2e20759b48';
+String _$postsRepositoryHash() => r'13fbbb09d4763f5dafc490dbe012402b9db35a2d';
 
-abstract class _$PostsRepository extends $AsyncNotifier<void> {
-  FutureOr<void> build();
+abstract class _$PostsRepository extends $AsyncNotifier<bool> {
+  FutureOr<bool> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
-    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<bool>, bool>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<void>, void>,
-              AsyncValue<void>,
+              AnyNotifier<AsyncValue<bool>, bool>,
+              AsyncValue<bool>,
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleValue(ref, created);
   }
 }
 

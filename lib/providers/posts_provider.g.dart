@@ -47,7 +47,7 @@ final class PostsProviderProvider
   }
 }
 
-String _$postsProviderHash() => r'fc0c6662d6c543acfb855994a2515c33f926560e';
+String _$postsProviderHash() => r'bc93965e9d998a464771a53171926d160c4538b1';
 
 final class PostsProviderFamily extends $Family
     with

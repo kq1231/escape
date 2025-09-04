@@ -16,42 +16,71 @@ class MainAppScreen extends StatefulWidget {
 
 class _MainAppScreenState extends State<MainAppScreen> {
   int _currentIndex = 0;
-  final List<Widget> _baseScreens = [];
-  final int _analyticsIndex = 3; // Analytics screen index
+
+  // Track which screens have been visited to keep them in the stack
+  final Set<int> _visitedScreens = {0}; // Home screen is visited by default
+
+  final int _analyticsIndex =
+      3; // Analytics screen should be disposed when navigating away
 
   @override
   void initState() {
     super.initState();
-    _initializeScreens();
-  }
-
-  void _initializeScreens() {
-    _baseScreens.addAll([
-      HomeScreen(),
-      PrayerTrackerScreen(),
-      ChallengesScreen(),
-      Container(), // Placeholder for analytics - will be added dynamically, Inshaa Allah
-      MediaScreen(),
-      SettingsScreen(),
-    ]);
+    // Home screen (index 0) is already marked as visited
   }
 
   void _onTabTapped(int index) {
     setState(() {
+      // If navigating away from analytics, mark it as not visited (dispose it)
+      if (_currentIndex == _analyticsIndex && index != _analyticsIndex) {
+        _visitedScreens.remove(_analyticsIndex);
+      }
+
+      // Add new screen to visited set (this will keep it in the stack)
+      _visitedScreens.add(index);
+
       _currentIndex = index;
     });
   }
 
-  List<Widget> _buildScreens() {
-    List<Widget> screens = List.from(_baseScreens);
-
-    // Only add Analytics screen if we're currently on it
-    if (_currentIndex == _analyticsIndex) {
-      screens[_analyticsIndex] = const AnalyticsScreen();
-    } else {
-      // Remove analytics screen when navigating away
-      screens[_analyticsIndex] = Container(); // Empty placeholder
+  /// Creates the appropriate screen widget based on index
+  Widget _createScreen(int index) {
+    switch (index) {
+      case 0:
+        return const HomeScreen();
+      case 1:
+        return const PrayerTrackerScreen();
+      case 2:
+        return const ChallengesScreen();
+      case 3:
+        return const AnalyticsScreen();
+      case 4:
+        return const MediaScreen();
+      case 5:
+        return const SettingsScreen();
+      default:
+        return Container(); // Fallback for invalid indices
     }
+  }
+
+  /// Builds the screens list for IndexedStack
+  /// Only includes screens that have been visited (and should remain in stack)
+  List<Widget> _buildScreens() {
+    List<Widget> screens = [];
+
+    for (int i = 0; i < 6; i++) {
+      if (_visitedScreens.contains(i)) {
+        // Screen has been visited, add actual widget to keep it alive
+        screens.add(_createScreen(i));
+      } else {
+        // Screen not visited yet, add placeholder container
+        screens.add(Container());
+      }
+    }
+
+    // Debug print to see which screens are in the stack
+    // print('Screens in stack: ${_visitedScreens.toList()}');
+    // print('Current index: $_currentIndex');
 
     return screens;
   }
@@ -65,5 +94,12 @@ class _MainAppScreenState extends State<MainAppScreen> {
         onTap: _onTabTapped,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // Clear visited screens set
+    _visitedScreens.clear();
+    super.dispose();
   }
 }
