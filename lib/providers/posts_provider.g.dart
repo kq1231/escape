@@ -7,82 +7,37 @@ part of 'posts_provider.dart';
 // **************************************************************************
 
 @ProviderFor(PostsProvider)
-const postsProviderProvider = PostsProviderFamily._();
+const postsProviderProvider = PostsProviderProvider._();
 
 final class PostsProviderProvider
     extends $AsyncNotifierProvider<PostsProvider, List<PostPreview>> {
-  const PostsProviderProvider._({
-    required PostsProviderFamily super.from,
-    required PostType? super.argument,
-  }) : super(
-         retry: null,
-         name: r'postsProviderProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
+  const PostsProviderProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'postsProviderProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$postsProviderHash();
 
-  @override
-  String toString() {
-    return r'postsProviderProvider'
-        ''
-        '($argument)';
-  }
-
   @$internal
   @override
   PostsProvider create() => PostsProvider();
-
-  @override
-  bool operator ==(Object other) {
-    return other is PostsProviderProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
 }
 
-String _$postsProviderHash() => r'bc93965e9d998a464771a53171926d160c4538b1';
-
-final class PostsProviderFamily extends $Family
-    with
-        $ClassFamilyOverride<
-          PostsProvider,
-          AsyncValue<List<PostPreview>>,
-          List<PostPreview>,
-          FutureOr<List<PostPreview>>,
-          PostType?
-        > {
-  const PostsProviderFamily._()
-    : super(
-        retry: null,
-        name: r'postsProviderProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: true,
-      );
-
-  PostsProviderProvider call({PostType? filter}) =>
-      PostsProviderProvider._(argument: filter, from: this);
-
-  @override
-  String toString() => r'postsProviderProvider';
-}
+String _$postsProviderHash() => r'ae474a0fa4f75ba7dc424faf40d1215003f49d8f';
 
 abstract class _$PostsProvider extends $AsyncNotifier<List<PostPreview>> {
-  late final _$args = ref.$arg as PostType?;
-  PostType? get filter => _$args;
-
-  FutureOr<List<PostPreview>> build({PostType? filter});
+  FutureOr<List<PostPreview>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(filter: _$args);
+    final created = build();
     final ref =
         this.ref as $Ref<AsyncValue<List<PostPreview>>, List<PostPreview>>;
     final element =

@@ -5,13 +5,14 @@ part 'posts_provider.g.dart';
 
 @Riverpod()
 class PostsProvider extends _$PostsProvider {
+  PostType? _currentFilter;
+
   @override
-  Future<List<PostPreview>> build({PostType? filter}) async {
-    // Initialize the posts repository
-    await ref.read(postsRepositoryProvider.future);
+  Future<List<PostPreview>> build() async {
+    // Start with no filter
     return await ref
         .read(postsRepositoryProvider.notifier)
-        .getLatestPosts(filter: filter);
+        .getLatestPosts(filter: null);
   }
 
   // Load more posts
@@ -19,14 +20,13 @@ class PostsProvider extends _$PostsProvider {
     final currentPosts = await future;
     final currentOffset = currentPosts.length;
 
-    // Get new posts
+    // Get new posts with current filter
     final newPosts = await ref
         .read(postsRepositoryProvider.notifier)
-        .getLatestPosts(offset: currentOffset, filter: filter);
+        .getLatestPosts(offset: currentOffset, filter: _currentFilter);
 
     // Check if we have more posts based on the number of results
     final hasMore = newPosts.length >= 10;
-
     if (!hasMore) return;
 
     state = const AsyncValue.loading();
@@ -41,13 +41,15 @@ class PostsProvider extends _$PostsProvider {
     state = await AsyncValue.guard(() async {
       return await ref
           .read(postsRepositoryProvider.notifier)
-          .getLatestPosts(filter: filter);
+          .getLatestPosts(filter: _currentFilter);
     });
   }
 
   // Filter posts by type
   Future<void> filterPosts(PostType? newFilter) async {
-    if (newFilter == filter) return;
+    // Always update, even if same filter (for "All" -> "All" case)
+    _currentFilter = newFilter;
+
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       return await ref
@@ -62,11 +64,12 @@ class PostsProvider extends _$PostsProvider {
       refreshPosts();
       return;
     }
+
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       return await ref
           .read(postsRepositoryProvider.notifier)
-          .getLatestPosts(searchQuery: query, filter: filter);
+          .getLatestPosts(searchQuery: query, filter: _currentFilter);
     });
   }
 
@@ -76,7 +79,7 @@ class PostsProvider extends _$PostsProvider {
     state = await AsyncValue.guard(() async {
       return await ref
           .read(postsRepositoryProvider.notifier)
-          .getPopularPosts(filter: filter);
+          .getPopularPosts(filter: _currentFilter);
     });
   }
 }

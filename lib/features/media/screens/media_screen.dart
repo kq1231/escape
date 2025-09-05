@@ -37,7 +37,7 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       // Load more posts when reaching the bottom
-      ref.read(postsProviderProvider().notifier).loadMorePosts();
+      ref.read(postsProviderProvider.notifier).loadMorePosts();
     }
   }
 
@@ -55,20 +55,21 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
           _currentFilter = null;
       }
     });
-    // Use the provider to filter posts
-    ref.read(postsProviderProvider().notifier).filterPosts(_currentFilter);
+
+    // Always call filterPosts, even for "All"
+    ref.read(postsProviderProvider.notifier).filterPosts(_currentFilter);
   }
 
   @override
   Widget build(BuildContext context) {
-    final postsAsyncValue = ref.watch(postsProviderProvider());
-
+    // Watch the single provider instance
+    final postsAsyncValue = ref.watch(postsProviderProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: RefreshIndicator(
           onRefresh: () async {
-            await ref.read(postsProviderProvider().notifier).refreshPosts();
+            await ref.read(postsProviderProvider.notifier).refreshPosts();
           },
           child: CustomScrollView(
             controller: _scrollController,

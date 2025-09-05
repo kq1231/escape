@@ -30,7 +30,7 @@ final class PostsRepositoryProvider
   PostsRepository create() => PostsRepository();
 }
 
-String _$postsRepositoryHash() => r'13fbbb09d4763f5dafc490dbe012402b9db35a2d';
+String _$postsRepositoryHash() => r'8d09b85eba733375f7bd30197cbded226e0b97d0';
 
 abstract class _$PostsRepository extends $AsyncNotifier<bool> {
   FutureOr<bool> build();

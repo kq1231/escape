@@ -28,41 +28,48 @@ class PostsRepository extends _$PostsRepository {
     PostType? filter,
     String? searchQuery,
   }) async {
+    await future;
     try {
-      final query = _supabase.from('posts').select('''
-            id,
-            title,
-            post_type,
-            featured_image_url,
-            video_url,
-            audio_url,
-            tags,
-            reading_time,
-            duration,
-            views_count,
-            created_at,
-            user_profiles (
-              id,
-              display_name,
-              avatar_url,
-              bio
-            )
-          ''');
-      // Apply filters
+      var query = _supabase.from('posts').select('''
+      id,
+      title,
+      post_type,
+      featured_image_url,
+      video_url,
+      audio_url,
+      tags,
+      reading_time,
+      duration,
+      views_count,
+      created_at,
+      user_profiles (
+        id,
+        display_name,
+        avatar_url,
+        bio
+      )
+    ''');
+
       if (filter != null) {
-        query.eq('post_type', filter.name);
+        query = query.eq('post_type', filter.name);
       }
+
       if (searchQuery != null && searchQuery.isNotEmpty) {
-        query.or("title.ilike.%$searchQuery%,tags.cs.{$searchQuery}");
+        query = query.or("title.ilike.%$searchQuery%,tags.cs.{$searchQuery}");
       }
-      // Apply ordering and pagination
-      query.order('created_at', ascending: false);
-      query.range(offset, offset + limit - 1);
+
+      // Apply ordering and pagination - FIXED: Remove cascade operators
+      query = query..order('created_at', ascending: false);
+      query = query..range(offset, offset + limit - 1);
+
       final response = await query;
+
       if (response.isEmpty) {
         return [];
       }
+
       return response.map((map) => PostPreview.fromMap(map)).toList();
+      // Removed unnecessary .cast<PostPreview>() since map already returns PostPreview
     } catch (e) {
       throw Exception('Failed to fetch posts: $e');
     }
@@ -70,6 +77,8 @@ class PostsRepository extends _$PostsRepository {
 
   // Get single post with view increment using PostgreSQL function
   Future<Post> getPostWithViewIncrement(String postId) async {
+    await future;
+
     try {
       // Call the PostgreSQL function
       final response = await _supabase
@@ -111,6 +120,8 @@ class PostsRepository extends _$PostsRepository {
     int limit = 10,
     int offset = 0,
   }) async {
+    await future;
+
     try {
       final response = await _supabase
           .from('posts')
@@ -149,6 +160,8 @@ class PostsRepository extends _$PostsRepository {
     int limit = 10,
     int offset = 0,
   }) async {
+    await future;
+
     try {
       final response = await _supabase
           .from('posts')
@@ -186,6 +199,8 @@ class PostsRepository extends _$PostsRepository {
     int limit = 10,
     PostType? filter,
   }) async {
+    await future;
+
     try {
       final query = _supabase
           .from('posts')
@@ -226,6 +241,8 @@ class PostsRepository extends _$PostsRepository {
     required String postId,
     int limit = 5,
   }) async {
+    await future;
+
     try {
       // First get the current post's tags
       final currentPost = await _supabase

@@ -9,8 +9,10 @@
 - Add XP feature
 - Create two or three analytics. Little but professional and useful.
 
-# 4 September, 2025 | Thursday
+# 5 September, 2025 | Friday
 
-1. Filters not working
-2. Search posts
-3. Filter by tags (create a `tags` table)
+1. Filters not working ✅
+2. Filter by Latest, Popular, Oldest
+3. Filter by Content Type (Articles, Videos)
+4. Filter by tags (create a `tags` table)
+5. Search bar for searching posts
