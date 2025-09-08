@@ -37,32 +37,28 @@ class AppStartupErrorWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                const SizedBox(height: 16),
-                Text(
-                  'Initialization Error',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(onPressed: onRetry, child: const Text('Retry')),
-              ],
+      home: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(
+              'Initialization Error',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
-          ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(onPressed: onRetry, child: const Text('Retry')),
+          ],
         ),
       ),
     );
@@ -91,7 +87,7 @@ class AppStartupSuccessWidget extends ConsumerWidget {
                   return Stack(
                     children: [
                       child!, // Your main app content
-                      // Global Achievement Overlay
+                      // Global Achievement Overlay - positioned on top
                       Consumer(
                         builder: (context, ref, _) {
                           return ref
@@ -99,9 +95,17 @@ class AppStartupSuccessWidget extends ConsumerWidget {
                               .when(
                                 data: (newAchievements) =>
                                     newAchievements.isNotEmpty
-                                    ? Scaffold(
-                                        body: AchievementOverlay(
-                                          challenges: newAchievements,
+                                    ? Positioned(
+                                        top:
+                                            MediaQuery.of(context).padding.top +
+                                            20,
+                                        left: 16,
+                                        right: 16,
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: AchievementOverlay(
+                                            challenges: newAchievements,
+                                          ),
                                         ),
                                       )
                                     : const SizedBox.shrink(),
@@ -156,6 +160,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
   late Animation<double> _scaleAnimation;
 
   int _currentIndex = 0;
+  bool _isVisible = true; // Track visibility
 
   @override
   void initState() {
@@ -203,6 +208,11 @@ class _AchievementOverlayState extends State<AchievementOverlay>
 
   void _showNextAchievement() async {
     if (_currentIndex < widget.challenges.length) {
+      // Show the current achievement
+      setState(() {
+        _isVisible = true;
+      });
+
       // Slide in
       await _slideController.forward();
 
@@ -215,184 +225,191 @@ class _AchievementOverlayState extends State<AchievementOverlay>
       if (mounted) {
         setState(() {
           _currentIndex++;
+          // Hide if this was the last achievement
+          if (_currentIndex >= widget.challenges.length) {
+            _isVisible = false;
+          }
         });
+
+        // Small delay before showing next achievement
+        await Future.delayed(const Duration(milliseconds: 300));
         _showNextAchievement();
       }
+    } else {
+      // All achievements shown, hide overlay
+      setState(() {
+        _isVisible = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_currentIndex >= widget.challenges.length) {
+    if (!_isVisible || _currentIndex >= widget.challenges.length) {
       return const SizedBox.shrink();
     }
 
     final challenge = widget.challenges[_currentIndex];
 
-    return Positioned(
-      top: MediaQuery.of(context).padding.top + 20,
-      left: 20,
-      right: 20,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: ScaleTransition(
-            scale: _scaleAnimation,
-            child: AnimatedBuilder(
-              animation: _pulseController,
-              builder: (context, child) {
-                return Transform.scale(
-                  scale: 1.0 + (_pulseController.value * 0.02), // Subtle pulse
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: _getGradientColors(challenge.featureName),
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+    return SlideTransition(
+      position: _slideAnimation,
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: ScaleTransition(
+          scale: _scaleAnimation,
+          child: AnimatedBuilder(
+            animation: _pulseController,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: 1.0 + (_pulseController.value * 0.02), // Subtle pulse
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: _getGradientColors(challenge.featureName),
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        blurRadius: 20,
+                        spreadRadius: 3,
+                        offset: const Offset(0, 10),
                       ),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.3),
-                          blurRadius: 20,
-                          spreadRadius: 3,
-                          offset: const Offset(0, 10),
-                        ),
-                        BoxShadow(
-                          color: _getFeatureColor(
-                            challenge.featureName,
-                          ).withValues(alpha: 0.4),
-                          blurRadius: 30,
-                          spreadRadius: -5,
-                          offset: const Offset(0, 15),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Header with icon and celebration
-                        Row(
-                          children: [
-                            Container(
-                              width: 70,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.15),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                              child: Icon(
-                                _getFeatureIcon(challenge.featureName),
-                                color: _getFeatureColor(challenge.featureName),
-                                size: 36,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '🎉 Masha\'Allah!',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Challenge Completed',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Challenge details
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.3),
-                              width: 1,
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                challenge.title,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                challenge.description,
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 15,
-                                  height: 1.3,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Footer with blessing
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Barakallahu feek! 🤲',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              '${_currentIndex + 1}/${widget.challenges.length}',
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      BoxShadow(
+                        color: _getFeatureColor(
+                          challenge.featureName,
+                        ).withValues(alpha: 0.4),
+                        blurRadius: 30,
+                        spreadRadius: -5,
+                        offset: const Offset(0, 15),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Header with icon and celebration
+                      Row(
+                        children: [
+                          Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.15),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              _getFeatureIcon(challenge.featureName),
+                              color: _getFeatureColor(challenge.featureName),
+                              size: 36,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '🎉 Masha\'Allah!',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Challenge Completed',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Challenge details
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              challenge.title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              challenge.description,
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 15,
+                                height: 1.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Footer with blessing
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Barakallahu feek! 🤲',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            '${_currentIndex + 1}/${widget.challenges.length}',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),

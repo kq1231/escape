@@ -97,12 +97,6 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(6, 85010084430651590),
-        name: 'emotion',
-        type: 9,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
         id: const obx_int.IdUid(7, 4931378688834158035),
         name: 'moodIntensity',
         type: 6,
@@ -456,7 +450,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [],
-    retiredPropertyUids: const [6437257444821216180],
+    retiredPropertyUids: const [6437257444821216180, 85010084430651590],
     retiredRelationUids: const [],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
@@ -529,13 +523,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         object.id = id;
       },
       objectToFB: (Streak object, fb.Builder fbb) {
-        final emotionOffset = fbb.writeString(object.emotion);
         fbb.startTable(12);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.count);
         fbb.addInt64(2, object.goal);
         fbb.addInt64(4, object.date.millisecondsSinceEpoch);
-        fbb.addOffset(5, emotionOffset);
         fbb.addInt64(6, object.moodIntensity);
         fbb.addInt64(7, object.createdAt.millisecondsSinceEpoch);
         fbb.addInt64(8, object.lastUpdated.millisecondsSinceEpoch);
@@ -565,9 +557,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
           8,
           0,
         );
-        final emotionParam = const fb.StringReader(
-          asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 14, '');
         final moodIntensityParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -593,7 +582,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
           id: idParam,
           count: countParam,
           goal: goalParam,
-          emotion: emotionParam,
           moodIntensity: moodIntensityParam,
           isSuccess: isSuccessParam,
           date: dateParam,
@@ -1028,34 +1016,29 @@ class Streak_ {
   /// See [Streak.date].
   static final date = obx.QueryDateProperty<Streak>(_entities[1].properties[3]);
 
-  /// See [Streak.emotion].
-  static final emotion = obx.QueryStringProperty<Streak>(
-    _entities[1].properties[4],
-  );
-
   /// See [Streak.moodIntensity].
   static final moodIntensity = obx.QueryIntegerProperty<Streak>(
-    _entities[1].properties[5],
+    _entities[1].properties[4],
   );
 
   /// See [Streak.createdAt].
   static final createdAt = obx.QueryDateProperty<Streak>(
-    _entities[1].properties[6],
+    _entities[1].properties[5],
   );
 
   /// See [Streak.lastUpdated].
   static final lastUpdated = obx.QueryDateProperty<Streak>(
-    _entities[1].properties[7],
+    _entities[1].properties[6],
   );
 
   /// See [Streak.isSuccess].
   static final isSuccess = obx.QueryBooleanProperty<Streak>(
-    _entities[1].properties[8],
+    _entities[1].properties[7],
   );
 
   /// See [Streak.xpHistory].
   static final xpHistory = obx.QueryRelationToOne<Streak, XPHistoryItem>(
-    _entities[1].properties[9],
+    _entities[1].properties[8],
   );
 }
 

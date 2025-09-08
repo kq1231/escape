@@ -14,6 +14,20 @@ class ChallengesWatcher extends _$ChallengesWatcher {
     final repo = ref.read(challengesRepositoryProvider.notifier);
 
     return _watchChallenges(repo);
+
+    // Return demo challenge for testing
+    // return Stream.value([
+    //   Challenge(
+    //     title: 'First Temptation',
+    //     description: 'Record your first temptation in the database',
+    //     featureName: 'temptation',
+    //     conditionJson: '{"field": "count", "operator": ">=", "value": 1"}',
+    //     iconPath: 'assets/icons/temptation.png',
+    //     xp: 1000 * 10,
+    //     isCompleted: true,
+    //     completedAt: DateTime.now(),
+    //   ),
+    // ]);
   }
 
   Stream<List<Challenge>> _watchChallenges(ChallengesRepository repo) async* {

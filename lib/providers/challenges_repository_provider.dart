@@ -75,7 +75,6 @@ class ChallengesRepository extends _$ChallengesRepository {
                   count: entity.count,
                   goal: entity.goal,
                   date: entity.date,
-                  emotion: entity.emotion,
                   moodIntensity: entity.moodIntensity,
                   createdAt: entity.createdAt,
                   lastUpdated: entity.lastUpdated,

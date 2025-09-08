@@ -67,11 +67,6 @@
           "type": 10
         },
         {
-          "id": "6:85010084430651590",
-          "name": "emotion",
-          "type": 9
-        },
-        {
           "id": "7:4931378688834158035",
           "name": "moodIntensity",
           "type": 6
@@ -344,7 +339,8 @@
   "retiredEntityUids": [],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
-    6437257444821216180
+    6437257444821216180,
+    85010084430651590
   ],
   "retiredRelationUids": [],
   "version": 1

@@ -6,7 +6,6 @@ import 'package:escape/theme/app_theme.dart';
 import 'package:escape/providers/streak_provider.dart';
 import 'package:escape/providers/xp_controller.dart';
 import 'package:escape/widgets/custom_button.dart';
-import 'package:escape/widgets/choice_chip_group.dart';
 import 'package:escape/widgets/xp_badge.dart';
 
 class StreakModal extends ConsumerStatefulWidget {
@@ -19,19 +18,6 @@ class StreakModal extends ConsumerStatefulWidget {
 }
 
 class _StreakModalState extends ConsumerState<StreakModal> {
-  // Emotion options
-  final List<String> emotions = [
-    'happy',
-    'sad',
-    'anxious',
-    'grateful',
-    'angry',
-    'neutral',
-  ];
-
-  // Selected emotion
-  late String selectedEmotion;
-
   // Mood intensity (1-10)
   late int moodIntensity;
 
@@ -43,11 +29,9 @@ class _StreakModalState extends ConsumerState<StreakModal> {
     super.initState();
     // Initialize with streak data if provided, otherwise use defaults
     if (widget.streak != null) {
-      selectedEmotion = widget.streak!.emotion;
       moodIntensity = widget.streak!.moodIntensity;
       isSuccess = widget.streak!.isSuccess;
     } else {
-      selectedEmotion = 'neutral';
       moodIntensity = 5;
       isSuccess = null;
     }
@@ -132,20 +116,6 @@ class _StreakModalState extends ConsumerState<StreakModal> {
             ),
             const SizedBox(height: AppConstants.spacingM),
 
-            // Emotion chips
-            ChoiceChipGroup(
-              options: emotions,
-              selectedOption: selectedEmotion,
-              onSelected: (emotion) {
-                setState(() {
-                  selectedEmotion = emotion;
-                });
-              },
-              spacing: AppConstants.spacingS,
-              runSpacing: AppConstants.spacingS,
-            ),
-            const SizedBox(height: AppConstants.spacingM),
-
             // Mood intensity slider
             Text(
               'Mood Intensity: $moodIntensity',
@@ -206,7 +176,6 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                 .read(todaysStreakProvider.notifier)
                                 .markSuccess(
                                   widget.streak!.copyWith(
-                                    emotion: selectedEmotion,
                                     moodIntensity: moodIntensity,
                                     isSuccess: isSuccess,
                                   )..xpHistory.target = xpHistoryItem,
@@ -219,7 +188,6 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                 .read(todaysStreakProvider.notifier)
                                 .markRelapse(
                                   widget.streak!.copyWith(
-                                    emotion: selectedEmotion,
                                     moodIntensity: moodIntensity,
                                     isSuccess: isSuccess,
                                   )..xpHistory.target = xpHistoryItem,
@@ -230,7 +198,6 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                                 .read(todaysStreakProvider.notifier)
                                 .updateStreak(
                                   widget.streak!.copyWith(
-                                    emotion: selectedEmotion,
                                     moodIntensity: moodIntensity,
                                     isSuccess: isSuccess,
                                   )..xpHistory.target = xpHistoryItem,
@@ -242,19 +209,15 @@ class _StreakModalState extends ConsumerState<StreakModal> {
                             ref
                                 .read(todaysStreakProvider.notifier)
                                 .markSuccess(
-                                  Streak(
-                                    emotion: selectedEmotion,
-                                    moodIntensity: moodIntensity,
-                                  )..xpHistory.target = xpHistoryItem,
+                                  Streak(moodIntensity: moodIntensity)
+                                    ..xpHistory.target = xpHistoryItem,
                                 );
                           } else {
                             ref
                                 .read(todaysStreakProvider.notifier)
                                 .markRelapse(
-                                  Streak(
-                                    emotion: selectedEmotion,
-                                    moodIntensity: moodIntensity,
-                                  )..xpHistory.target = xpHistoryItem,
+                                  Streak(moodIntensity: moodIntensity)
+                                    ..xpHistory.target = xpHistoryItem,
                                 );
                           }
                         }

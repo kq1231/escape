@@ -12,9 +12,6 @@ class Streak {
   // Streak goal (default: 1 day for new users)
   int goal;
 
-  // Mood tracking - emotion type (happy, sad, anxious, grateful, angry, neutral)
-  String emotion;
-
   // Mood intensity (1-10 scale)
   int moodIntensity;
 
@@ -41,7 +38,6 @@ class Streak {
     this.id = 0,
     this.count = 0,
     this.goal = 1, // Default goal of 1 day for new users
-    this.emotion = 'neutral', // Default emotion
     this.moodIntensity = 0, // Default zero intensity
     this.isSuccess = true, // Default to success
     DateTime? date,
@@ -67,7 +63,6 @@ class Streak {
       id: id ?? this.id,
       count: count ?? this.count,
       goal: goal ?? this.goal,
-      emotion: emotion ?? this.emotion,
       moodIntensity: moodIntensity ?? this.moodIntensity,
       isSuccess: isSuccess ?? this.isSuccess,
       date: date ?? this.date,
@@ -84,6 +79,6 @@ class Streak {
 
   @override
   String toString() {
-    return 'Streak(id: $id, count: $count, goal: $goal, emotion: $emotion, moodIntensity: $moodIntensity, isSuccess: $isSuccess, date: $date, createdAt: $createdAt, lastUpdated: $lastUpdated)';
+    return 'Streak(id: $id, count: $count, goal: $goal, moodIntensity: $moodIntensity, isSuccess: $isSuccess, date: $date, createdAt: $createdAt, lastUpdated: $lastUpdated)';
   }
 }
