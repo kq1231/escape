@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/temptation/screens/temptation_flow_screen.dart';
 import '../providers/current_active_temptation_provider.dart';
-import '../theme/app_theme.dart';
+import '../theme/app_constants.dart';
 
 class ActiveTemptationWidget extends ConsumerWidget {
   const ActiveTemptationWidget({super.key});

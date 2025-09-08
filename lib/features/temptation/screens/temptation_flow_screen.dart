@@ -5,7 +5,7 @@ import 'package:escape/providers/user_profile_provider.dart';
 import 'package:escape/providers/xp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../services/temptation_storage_service.dart';
 import '../atoms/temptation_page_indicator.dart';
 import '../atoms/countdown_timer.dart';

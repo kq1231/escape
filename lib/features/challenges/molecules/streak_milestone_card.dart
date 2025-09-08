@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../atoms/challenge_badge.dart';
 
 class StreakMilestoneCard extends StatelessWidget {

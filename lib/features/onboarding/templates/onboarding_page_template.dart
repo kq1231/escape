@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../atoms/progress_indicator.dart' as custom;
 import '../atoms/primary_button.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class OnboardingPageTemplate extends StatelessWidget {
   final String title;

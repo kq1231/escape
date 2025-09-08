@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class ChallengeProgressBar extends StatelessWidget {
   final double progress; // Value between 0.0 and 1.0

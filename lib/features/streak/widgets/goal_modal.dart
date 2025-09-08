@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:escape/providers/goal_provider.dart';
 import 'package:escape/widgets/custom_button.dart';
 import 'package:escape/widgets/choice_chip_group.dart';

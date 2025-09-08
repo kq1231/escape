@@ -1,7 +1,7 @@
 import 'package:escape/features/prayer/molecules/daily_prayer_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class PrayerTrackerScreen extends ConsumerWidget {
   const PrayerTrackerScreen({super.key});

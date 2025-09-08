@@ -1,6 +1,6 @@
 import 'package:escape/models/analytics_models.dart';
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../organisms/time_range_filter.dart';
 import '../organisms/streak_success_rate_card.dart';
 import '../organisms/prayer_success_rate_card.dart';

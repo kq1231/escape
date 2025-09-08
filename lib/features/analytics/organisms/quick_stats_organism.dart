@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/features/analytics/molecules/quick_stats_card.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:escape/providers/quick_stats_provider.dart';
 
 class QuickStatsOrganism extends ConsumerWidget {

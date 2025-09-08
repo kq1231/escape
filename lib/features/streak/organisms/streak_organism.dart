@@ -2,7 +2,7 @@ import 'package:escape/features/streak/widgets/streak_modal.dart';
 import 'package:escape/providers/streak_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../theme/app_theme.dart';
+import '../../../theme/app_constants.dart';
 import '../widgets/goal_modal.dart';
 import '../../../providers/goal_provider.dart';
 import '../../../providers/user_profile_provider.dart';

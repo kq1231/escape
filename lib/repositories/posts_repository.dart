@@ -197,40 +197,59 @@ class PostsRepository extends _$PostsRepository {
   // Get popular posts (by view count)
   Future<List<PostPreview>> getPopularPosts({
     int limit = 10,
+    int offset = 0,
     PostType? filter,
   }) async {
     await future;
 
     try {
-      final query = _supabase
-          .from('posts')
+      // Use post_views table to get popular posts
+      var query = _supabase
+          .from('post_views')
           .select('''
-            id,
-            title,
-            post_type,
-            featured_image_url,
-            video_url,
-            audio_url,
-            tags,
-            reading_time,
-            duration,
-            views_count,
-            created_at,
-            user_profiles (
-              display_name,
-              avatar_url
-            )
+            posts!inner(
+              id,
+              title,
+              post_type,
+              featured_image_url,
+              video_url,
+              audio_url,
+              tags,
+              reading_time,
+              duration,
+              created_at,
+              user_profiles (
+                id,
+                display_name,
+                avatar_url,
+                bio
+              )
+            ),
+            views_count
           ''')
           .order('views_count', ascending: false)
-          .limit(limit);
+          .range(offset, offset + limit - 1);
+
+      // Filter by post type if specified
       if (filter != null) {
-        query.appendSearchParams('post_type', filter.name);
+        // This will need to be handled in the UI layer or with a different approach
+        // For now, we'll fetch all popular posts and filter in the app
       }
+
       final response = await query;
+
       if (response.isEmpty) {
         return [];
       }
-      return response.map((map) => PostPreview.fromMap(map)).toList();
+
+      // Transform the response to match PostPreview
+      return response.map((item) {
+        final post = item['posts'] as Map<String, dynamic>;
+        return PostPreview.fromMap({
+          ...post,
+          'views_count': item['views_count'],
+        });
+      }).toList();
     } catch (e) {
       throw Exception('Failed to fetch popular posts: $e');
     }
@@ -287,6 +306,59 @@ class PostsRepository extends _$PostsRepository {
       return response.map((map) => PostPreview.fromMap(map)).toList();
     } catch (e) {
       throw Exception('Failed to fetch related posts: $e');
+    }
+  }
+
+  // Method to get oldest posts
+  Future<List<PostPreview>> getOldestPosts({
+    int limit = 10,
+    int offset = 0,
+    PostType? filter,
+    String? searchQuery,
+  }) async {
+    await future;
+    try {
+      var query = _supabase.from('posts').select('''
+      id,
+      title,
+      post_type,
+      featured_image_url,
+      video_url,
+      audio_url,
+      tags,
+      reading_time,
+      duration,
+      views_count,
+      created_at,
+      user_profiles (
+        id,
+        display_name,
+        avatar_url,
+        bio
+      )
+    ''');
+
+      if (filter != null) {
+        query = query.eq('post_type', filter.name);
+      }
+
+      if (searchQuery != null && searchQuery.isNotEmpty) {
+        query = query.or("title.ilike.%$searchQuery%,tags.cs.{$searchQuery}");
+      }
+
+      // Order by oldest (ascending date)
+      query = query..order('created_at', ascending: true);
+      query = query..range(offset, offset + limit - 1);
+
+      final response = await query;
+
+      if (response.isEmpty) {
+        return [];
+      }
+
+      return response.map((map) => PostPreview.fromMap(map)).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch oldest posts: $e');
     }
   }
 }

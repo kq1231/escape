@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../atoms/triple_state_checkbox.dart';
 import '../atoms/prayer_time_label.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:escape/models/prayer_model.dart';
 import 'package:escape/widgets/xp_badge.dart';
 

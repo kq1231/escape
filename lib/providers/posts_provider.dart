@@ -1,11 +1,13 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../repositories/posts_repository.dart';
 import '../models/post_model.dart';
+import '../../features/media/screens/media_screen.dart';
 part 'posts_provider.g.dart';
 
 @Riverpod()
 class PostsProvider extends _$PostsProvider {
   PostType? _currentFilter;
+  final SortOption _currentSort = SortOption.latest;
 
   @override
   Future<List<PostPreview>> build() async {
@@ -20,12 +22,26 @@ class PostsProvider extends _$PostsProvider {
     final currentPosts = await future;
     final currentOffset = currentPosts.length;
 
-    // Get new posts with current filter
-    final newPosts = await ref
-        .read(postsRepositoryProvider.notifier)
-        .getLatestPosts(offset: currentOffset, filter: _currentFilter);
+    List<PostPreview> newPosts;
 
-    // Check if we have more posts based on the number of results
+    switch (_currentSort) {
+      case SortOption.latest:
+        newPosts = await ref
+            .read(postsRepositoryProvider.notifier)
+            .getLatestPosts(offset: currentOffset, filter: _currentFilter);
+        break;
+      case SortOption.popular:
+        newPosts = await ref
+            .read(postsRepositoryProvider.notifier)
+            .getPopularPosts(offset: currentOffset, filter: _currentFilter);
+        break;
+      case SortOption.oldest:
+        newPosts = await ref
+            .read(postsRepositoryProvider.notifier)
+            .getOldestPosts(offset: currentOffset, filter: _currentFilter);
+        break;
+    }
+
     final hasMore = newPosts.length >= 10;
     if (!hasMore) return;
 
@@ -39,9 +55,20 @@ class PostsProvider extends _$PostsProvider {
   Future<void> refreshPosts() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      return await ref
-          .read(postsRepositoryProvider.notifier)
-          .getLatestPosts(filter: _currentFilter);
+      switch (_currentSort) {
+        case SortOption.latest:
+          return await ref
+              .read(postsRepositoryProvider.notifier)
+              .getLatestPosts(filter: _currentFilter);
+        case SortOption.popular:
+          return await ref
+              .read(postsRepositoryProvider.notifier)
+              .getPopularPosts(filter: _currentFilter);
+        case SortOption.oldest:
+          return await ref
+              .read(postsRepositoryProvider.notifier)
+              .getOldestPosts(filter: _currentFilter);
+      }
     });
   }
 
@@ -80,6 +107,16 @@ class PostsProvider extends _$PostsProvider {
       return await ref
           .read(postsRepositoryProvider.notifier)
           .getPopularPosts(filter: _currentFilter);
+    });
+  }
+
+  // Method to load oldest posts
+  Future<void> loadOldestPosts() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      return await ref
+          .read(postsRepositoryProvider.notifier)
+          .getOldestPosts(filter: _currentFilter);
     });
   }
 }

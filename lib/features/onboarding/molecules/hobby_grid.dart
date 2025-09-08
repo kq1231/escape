@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/onboarding_constants.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class HobbyGrid extends StatefulWidget {
   final List<String> selectedHobbies;

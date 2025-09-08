@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../atoms/emergency_button.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class ContactSelector extends StatelessWidget {
   final List<ContactOption> contacts;

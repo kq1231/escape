@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../atoms/stat_card.dart';
 import '../molecules/progress_chart.dart';
 import '../molecules/streak_graph.dart';

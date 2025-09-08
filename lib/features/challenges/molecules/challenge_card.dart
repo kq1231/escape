@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../../../widgets/xp_badge.dart';
 import '../atoms/challenge_badge.dart';
 import '../atoms/progress_bar.dart';

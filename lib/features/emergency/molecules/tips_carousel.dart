@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../atoms/tip_card.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class TipsCarousel extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import '../models/onboarding_data.dart';
 import '../templates/onboarding_page_template.dart';
 import '../../profile/services/image_service.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class ProfileImageScreen extends StatefulWidget {
   final OnboardingData data;

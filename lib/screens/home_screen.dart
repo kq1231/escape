@@ -5,7 +5,7 @@ import '../features/emergency/atoms/emergency_button.dart';
 import '../features/temptation/screens/temptation_flow_screen.dart';
 import '../features/prayer/molecules/daily_prayer_grid.dart';
 import '../features/analytics/organisms/quick_stats_organism.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../providers/has_active_temptation_provider.dart';
 
 class HomeScreen extends ConsumerWidget {

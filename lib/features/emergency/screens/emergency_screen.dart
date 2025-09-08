@@ -4,7 +4,7 @@ import '../atoms/tip_card.dart';
 import '../molecules/contact_selector.dart';
 import '../molecules/tips_carousel.dart';
 import '../../temptation/screens/temptation_flow_screen.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class EmergencyScreen extends StatelessWidget {
   const EmergencyScreen({super.key});

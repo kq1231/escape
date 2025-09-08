@@ -2,12 +2,14 @@ import 'package:escape/models/post_model.dart';
 import 'package:escape/providers/posts_provider.dart';
 import 'package:escape/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../atoms/media_tag.dart';
 import '../molecules/article_card.dart';
 import '../molecules/video_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'post_page.dart';
+
+enum SortOption { latest, popular, oldest }
 
 class MediaScreen extends ConsumerStatefulWidget {
   const MediaScreen({super.key});
@@ -19,6 +21,7 @@ class MediaScreen extends ConsumerStatefulWidget {
 class _MediaScreenState extends ConsumerState<MediaScreen> {
   String _selectedCategory = 'All';
   PostType? _currentFilter;
+  SortOption _currentSort = SortOption.latest;
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -38,6 +41,25 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
         _scrollController.position.maxScrollExtent) {
       // Load more posts when reaching the bottom
       ref.read(postsProviderProvider.notifier).loadMorePosts();
+    }
+  }
+
+  void _changeSort(SortOption sort) {
+    setState(() {
+      _currentSort = sort;
+    });
+
+    // Fetch posts based on sort option
+    switch (sort) {
+      case SortOption.latest:
+        ref.read(postsProviderProvider.notifier).refreshPosts();
+        break;
+      case SortOption.popular:
+        ref.read(postsProviderProvider.notifier).loadPopularPosts();
+        break;
+      case SortOption.oldest:
+        ref.read(postsProviderProvider.notifier).loadOldestPosts();
+        break;
     }
   }
 
@@ -62,18 +84,47 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch the single provider instance
     final postsAsyncValue = ref.watch(postsProviderProvider);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
+      backgroundColor: isDarkMode
+          ? AppConstants.darkBackground
+          : AppConstants.lightBackground,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: RefreshIndicator(
+          color: AppConstants.primaryGreen,
+          backgroundColor: isDarkMode ? AppConstants.darkCard : Colors.white,
           onRefresh: () async {
             await ref.read(postsProviderProvider.notifier).refreshPosts();
           },
           child: CustomScrollView(
             controller: _scrollController,
             slivers: [
+              // Sorting chips
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 50,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppConstants.spacingM,
+                    ),
+                    children: [
+                      _buildSortChip('Latest', SortOption.latest),
+                      SizedBox(width: AppConstants.spacingS),
+                      _buildSortChip('Popular', SortOption.popular),
+                      SizedBox(width: AppConstants.spacingS),
+                      _buildSortChip('Oldest', SortOption.oldest),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: AppConstants.spacingM),
+              ),
+
               // Category tags
               SliverToBoxAdapter(
                 child: SizedBox(
@@ -88,9 +139,13 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
                         label: 'All',
                         backgroundColor: _selectedCategory == 'All'
                             ? AppConstants.primaryGreen
+                            : isDarkMode
+                            ? AppConstants.darkCard
                             : AppConstants.lightGray,
                         textColor: _selectedCategory == 'All'
                             ? AppConstants.white
+                            : isDarkMode
+                            ? AppConstants.lightGray
                             : AppConstants.darkGray,
                         onTap: () => _filterContent('All'),
                       ),
@@ -99,9 +154,13 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
                         label: 'Articles',
                         backgroundColor: _selectedCategory == 'Articles'
                             ? AppConstants.primaryGreen
+                            : isDarkMode
+                            ? AppConstants.darkCard
                             : AppConstants.lightGray,
                         textColor: _selectedCategory == 'Articles'
                             ? AppConstants.white
+                            : isDarkMode
+                            ? AppConstants.lightGray
                             : AppConstants.darkGray,
                         onTap: () => _filterContent('Articles'),
                       ),
@@ -110,9 +169,13 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
                         label: 'Videos',
                         backgroundColor: _selectedCategory == 'Videos'
                             ? AppConstants.primaryGreen
+                            : isDarkMode
+                            ? AppConstants.darkCard
                             : AppConstants.lightGray,
                         textColor: _selectedCategory == 'Videos'
                             ? AppConstants.white
+                            : isDarkMode
+                            ? AppConstants.lightGray
                             : AppConstants.darkGray,
                         onTap: () => _filterContent('Videos'),
                       ),
@@ -124,16 +187,26 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
               SliverToBoxAdapter(
                 child: SizedBox(height: AppConstants.spacingM),
               ),
+
               // Media feed
               postsAsyncValue.when(
                 loading: () => SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => _buildShimmerCard(),
+                    (context, index) => _buildShimmerCard(isDarkMode),
                     childCount: 5,
                   ),
                 ),
                 error: (error, stack) => SliverToBoxAdapter(
-                  child: Center(child: Text('Error loading posts: $error')),
+                  child: Center(
+                    child: Text(
+                      'Error loading posts: $error',
+                      style: TextStyle(
+                        color: isDarkMode
+                            ? AppConstants.lightGray
+                            : AppConstants.darkGray,
+                      ),
+                    ),
+                  ),
                 ),
                 data: (posts) => SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
@@ -144,6 +217,7 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
                         imageUrl: post.featuredImageUrl ?? '',
                         excerpt: post.excerpt ?? '',
                         tags: post.tags,
+                        isDarkMode: isDarkMode,
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -160,6 +234,7 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
                         views: post.viewsCount,
                         author: post.author?.name,
                         tags: post.tags,
+                        isDarkMode: isDarkMode,
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -180,7 +255,50 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
     );
   }
 
-  Widget _buildShimmerCard() {
+  // Helper method to build sort chips
+  Widget _buildSortChip(String label, SortOption sortOption) {
+    final isSelected = _currentSort == sortOption;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return InkWell(
+      onTap: () => _changeSort(sortOption),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppConstants.primaryGreen
+              : isDarkMode
+              ? AppConstants.darkCard
+              : AppConstants.lightGray,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected
+                ? AppConstants.primaryGreen
+                : isDarkMode
+                ? AppConstants.darkBorder
+                : AppConstants.lightBorder,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isSelected
+                  ? AppConstants.white
+                  : isDarkMode
+                  ? AppConstants.lightGray
+                  : AppConstants.darkGray,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Updated shimmer card builder with dark mode support
+  Widget _buildShimmerCard(bool isDarkMode) {
     return Padding(
       padding: const EdgeInsets.all(AppConstants.spacingM),
       child: Column(
@@ -190,25 +308,38 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
             height: 200,
             width: double.infinity,
             borderRadius: 8,
+            isDarkMode: isDarkMode,
           ),
           const SizedBox(height: 8),
           _buildShimmerContainer(
             height: 20,
             width: double.infinity,
             borderRadius: 4,
+            isDarkMode: isDarkMode,
           ),
           const SizedBox(height: 8),
           _buildShimmerContainer(
             height: 15,
             width: double.infinity,
             borderRadius: 4,
+            isDarkMode: isDarkMode,
           ),
           const SizedBox(height: 8),
           Row(
             children: [
-              _buildShimmerContainer(height: 15, width: 60, borderRadius: 12),
+              _buildShimmerContainer(
+                height: 15,
+                width: 60,
+                borderRadius: 12,
+                isDarkMode: isDarkMode,
+              ),
               const SizedBox(width: 8),
-              _buildShimmerContainer(height: 15, width: 60, borderRadius: 12),
+              _buildShimmerContainer(
+                height: 15,
+                width: 60,
+                borderRadius: 12,
+                isDarkMode: isDarkMode,
+              ),
             ],
           ),
         ],
@@ -216,17 +347,19 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
     );
   }
 
+  // Updated shimmer container with dark mode support
   Widget _buildShimmerContainer({
     required double height,
     required double width,
     double borderRadius = 0,
+    required bool isDarkMode,
   }) {
     return Shimmer(
       child: Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDarkMode ? Colors.grey[800] : Colors.grey[300],
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),

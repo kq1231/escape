@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/providers/xp_controller.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TawbahScreen extends ConsumerStatefulWidget {

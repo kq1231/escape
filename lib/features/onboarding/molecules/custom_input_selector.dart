@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../atoms/input_field.dart';
 import '../atoms/primary_button.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class CustomInputSelector extends StatefulWidget {
   final String title;

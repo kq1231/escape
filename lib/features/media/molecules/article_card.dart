@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../atoms/article_thumbnail.dart';
 import '../atoms/media_title.dart';
 import '../atoms/media_tag.dart';
@@ -11,6 +11,7 @@ class ArticleCard extends StatelessWidget {
   final String? excerpt;
   final VoidCallback? onTap;
   final VoidCallback? onTagTap;
+  final bool isDarkMode;
 
   const ArticleCard({
     super.key,
@@ -20,6 +21,7 @@ class ArticleCard extends StatelessWidget {
     this.excerpt,
     this.onTap,
     this.onTagTap,
+    this.isDarkMode = false,
   });
 
   @override
@@ -29,7 +31,7 @@ class ArticleCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppConstants.spacingM),
         decoration: BoxDecoration(
-          color: AppConstants.white,
+          color: isDarkMode ? AppConstants.darkCard : AppConstants.white,
           borderRadius: BorderRadius.circular(AppConstants.radiusL),
           boxShadow: AppConstants.cardShadow,
         ),
@@ -56,7 +58,9 @@ class ArticleCard extends StatelessWidget {
               Text(
                 excerpt!,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppConstants.mediumGray,
+                  color: isDarkMode
+                      ? AppConstants.lightGray
+                      : AppConstants.mediumGray,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -71,8 +75,12 @@ class ArticleCard extends StatelessWidget {
                 children: tags.map((tag) {
                   return MediaTag(
                     label: tag,
-                    backgroundColor: AppConstants.lightGray,
-                    textColor: AppConstants.darkGray,
+                    backgroundColor: isDarkMode
+                        ? AppConstants.darkCard
+                        : AppConstants.lightGray,
+                    textColor: isDarkMode
+                        ? AppConstants.lightGray
+                        : AppConstants.darkGray,
                     onTap: onTagTap,
                   );
                 }).toList(),

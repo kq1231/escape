@@ -5,7 +5,7 @@ import 'package:escape/providers/xp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../molecules/prayer_row.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:escape/models/prayer_model.dart';
 import '../atoms/triple_state_checkbox.dart';
 

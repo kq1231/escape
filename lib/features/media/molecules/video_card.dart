@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import '../atoms/article_thumbnail.dart';
 import '../atoms/media_title.dart';
 import '../atoms/media_tag.dart';
@@ -13,6 +13,7 @@ class VideoCard extends StatelessWidget {
   final String? author;
   final VoidCallback? onTap;
   final VoidCallback? onTagTap;
+  final bool isDarkMode;
 
   const VideoCard({
     super.key,
@@ -24,6 +25,7 @@ class VideoCard extends StatelessWidget {
     this.author,
     this.onTap,
     this.onTagTap,
+    this.isDarkMode = false,
   });
 
   @override
@@ -33,7 +35,7 @@ class VideoCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppConstants.spacingM),
         decoration: BoxDecoration(
-          color: AppConstants.white,
+          color: isDarkMode ? AppConstants.darkCard : AppConstants.white,
           borderRadius: BorderRadius.circular(AppConstants.radiusL),
           boxShadow: AppConstants.cardShadow,
         ),
@@ -113,7 +115,9 @@ class VideoCard extends StatelessWidget {
                     Text(
                       author!,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppConstants.mediumGray,
+                        color: isDarkMode
+                            ? AppConstants.lightGray
+                            : AppConstants.mediumGray,
                       ),
                     ),
                   ],
@@ -121,7 +125,9 @@ class VideoCard extends StatelessWidget {
                     Text(
                       ' • ',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppConstants.mediumGray,
+                        color: isDarkMode
+                            ? AppConstants.lightGray
+                            : AppConstants.mediumGray,
                       ),
                     ),
                   ],
@@ -129,7 +135,9 @@ class VideoCard extends StatelessWidget {
                     Text(
                       '${views!} views',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppConstants.mediumGray,
+                        color: isDarkMode
+                            ? AppConstants.lightGray
+                            : AppConstants.mediumGray,
                       ),
                     ),
                   ],
@@ -145,8 +153,12 @@ class VideoCard extends StatelessWidget {
                 children: tags.map((tag) {
                   return MediaTag(
                     label: tag,
-                    backgroundColor: AppConstants.lightGray,
-                    textColor: AppConstants.darkGray,
+                    backgroundColor: isDarkMode
+                        ? AppConstants.darkCard
+                        : AppConstants.lightGray,
+                    textColor: isDarkMode
+                        ? AppConstants.lightGray
+                        : AppConstants.darkGray,
                     onTap: onTagTap,
                   );
                 }).toList(),

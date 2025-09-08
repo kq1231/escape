@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../atoms/input_field.dart';
 import '../models/onboarding_data.dart';
 import '../templates/onboarding_page_template.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 
 class NameScreen extends StatefulWidget {
   final OnboardingData data;

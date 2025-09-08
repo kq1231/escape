@@ -15,6 +15,14 @@ class AppConstants {
   static const Color darkGray = Color(0xFF424242);
   static const Color black = Color(0xFF000000);
 
+  // Dark mode colors
+  static const Color darkBackground = Color(0xFF121212);
+  static const Color darkCard = Color(0xFF1E1E1E);
+  static const Color darkBorder = Color(0xFF2C2C2C);
+  static const Color lightBackground = Color(0xFFF5F5F5);
+  static const Color lightCard = Colors.white;
+  static const Color lightBorder = Color(0xFFE0E0E0);
+
   // Semantic Colors
   static const Color errorRed = Color(0xFFD32F2F);
   static const Color warningOrange = Color(0xFFFF9800);

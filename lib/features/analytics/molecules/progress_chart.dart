@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../atoms/chart_container.dart';
 

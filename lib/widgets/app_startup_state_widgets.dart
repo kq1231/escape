@@ -3,7 +3,7 @@ import 'package:escape/models/user_profile_model.dart' as user_profile;
 import 'package:escape/providers/user_profile_provider.dart';
 import 'package:escape/providers/challenges_watcher_provider.dart';
 import 'package:escape/screens/main_app_screen.dart';
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:escape/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

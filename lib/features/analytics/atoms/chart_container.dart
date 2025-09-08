@@ -1,4 +1,4 @@
-import 'package:escape/theme/app_theme.dart';
+import 'package:escape/theme/app_constants.dart';
 import 'package:flutter/material.dart';
 
 class ChartContainer extends StatelessWidget {
