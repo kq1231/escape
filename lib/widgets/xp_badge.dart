@@ -27,31 +27,37 @@ class XPBadge extends StatelessWidget {
     if (isTotal) {
       displayText = '${_formatXPWithK(xpAmount)} XP';
     } else {
-      displayText = '+ ${_formatXPWithK(xpAmount)} ';
+      displayText = ' + ${_formatXPWithK(xpAmount)} ';
     }
 
-    return Badge(
-      label: Text(
-        displayText,
-        style: TextStyle(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppConstants.white, width: 1.5),
+      ),
+      child: Badge(
+        label: Text(
+          displayText,
+          style: TextStyle(
+            color: textColor ?? AppConstants.white,
+            fontSize: fontSize ?? 12, // Increased default size
+            fontWeight: FontWeight.bold,
+            fontFamily: 'monospace',
+          ),
+        ),
+        backgroundColor: backgroundColor ?? AppConstants.primaryGreen,
+        padding:
+            padding ??
+            const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 4,
+            ), // Increased padding
+        largeSize: badgeSize ?? 20, // Increased default size
+        textStyle: TextStyle(
           color: textColor ?? AppConstants.white,
           fontSize: fontSize ?? 12, // Increased default size
           fontWeight: FontWeight.bold,
-          fontFamily: 'monospace',
         ),
-      ),
-      backgroundColor: backgroundColor ?? AppConstants.primaryGreen,
-      padding:
-          padding ??
-          const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 4,
-          ), // Increased padding
-      largeSize: badgeSize ?? 20, // Increased default size
-      textStyle: TextStyle(
-        color: textColor ?? AppConstants.white,
-        fontSize: fontSize ?? 12, // Increased default size
-        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -87,7 +93,7 @@ extension XPBadgeExtension on Widget {
     if (isTotal) {
       displayText = '${formatXPWithK(xpAmount)} XP ';
     } else {
-      displayText = '+ ${formatXPWithK(xpAmount)} ';
+      displayText = ' + ${formatXPWithK(xpAmount)} ';
     }
 
     final badgedWidget = Stack(
@@ -97,21 +103,24 @@ extension XPBadgeExtension on Widget {
         Positioned(
           top: -8,
           right: -8,
-          child: Badge(
-            label: Text(
-              displayText,
-              style: TextStyle(
-                color: badgeTextColor ?? AppConstants.white,
-                fontSize: badgeFontSize ?? 12,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'monospace',
-              ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(99),
+              border: Border.all(color: AppConstants.white, width: 1.5),
             ),
-            backgroundColor: badgeColor ?? AppConstants.primaryGreen,
-            padding:
-                badgePadding ??
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            largeSize: badgeSize ?? 20,
+            child: Badge(
+              label: Text(
+                displayText,
+                style: TextStyle(
+                  color: badgeTextColor ?? AppConstants.white,
+                  fontSize: badgeFontSize ?? 12,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'monospace',
+                ),
+              ),
+              backgroundColor: badgeColor ?? AppConstants.primaryGreen,
+              largeSize: badgeSize ?? 20,
+            ),
           ),
         ),
       ],
