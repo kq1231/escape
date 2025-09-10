@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:escape/models/user_profile_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:escape/objectbox.g.dart';
 import '../models/challenge_model.dart';
@@ -17,6 +18,7 @@ class ChallengesRepository extends _$ChallengesRepository {
   late Box<Streak> _streakBox;
   late Box<Prayer> _prayerBox;
   late Box<Temptation> _temptationBox;
+  late Box<UserProfile> _userProfileBox;
 
   @override
   Future<void> build() async {
@@ -34,6 +36,7 @@ class ChallengesRepository extends _$ChallengesRepository {
     _streakBox = store.box<Streak>();
     _prayerBox = store.box<Prayer>();
     _temptationBox = store.box<Temptation>();
+    _userProfileBox = store.box<UserProfile>(); // Add this
   }
 
   /// Stream of all challenges (for challenges screen)
@@ -167,7 +170,32 @@ class ChallengesRepository extends _$ChallengesRepository {
         jsonDecode(challenge.conditionJson),
         _getTemptationQueryBuilder(),
       ),
+      'xp' => _evaluateXpCondition(jsonDecode(challenge.conditionJson)),
       _ => false, // Unknown feature name
+    };
+  }
+
+  /// Evaluate XP-based conditions
+  bool _evaluateXpCondition(Map<String, dynamic> condition) {
+    final field = condition['field'] as String;
+    final operator = condition['operator'] as String;
+    final value = condition['value'];
+
+    if (field != 'xp') return false;
+
+    // Get the user profile
+    final userProfile = _userProfileBox.get(1); // Assuming ID 1 for single user
+    if (userProfile == null) return false;
+
+    final currentXp = userProfile.xp;
+
+    return switch (operator) {
+      '>=' => currentXp >= (value as int),
+      '>' => currentXp > (value as int),
+      '==' || '=' => currentXp == (value as int),
+      '<' => currentXp < (value as int),
+      '<=' => currentXp <= (value as int),
+      _ => false,
     };
   }
 

@@ -40,12 +40,20 @@ class ChallengeCard extends StatelessWidget {
         ? AppConstants.warningOrange
         : AppConstants.mediumGray;
 
+    // Determine if we should show XP badge (only if XP > 0)
+    final bool showXpBadge = xp != null && xp! > 0;
+
+    // Determine if we should show difficulty badge (only if difficulty is not empty)
+    final bool showDifficultyBadge =
+        difficulty != null && difficulty!.isNotEmpty;
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: AppConstants.white,
+          // Use theme-aware color instead of white
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(AppConstants.radiusL),
           boxShadow: [
             BoxShadow(
@@ -62,11 +70,11 @@ class ChallengeCard extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            // XP Badge at top-right corner
-            if (xp != null)
+            // XP Badge at top-right corner (only if XP > 0)
+            if (showXpBadge)
               Positioned(
-                top: 5,
-                right: 5,
+                top: -5,
+                right: -5,
                 child: XPBadge(
                   backgroundColor: isCompleted
                       ? AppConstants.successGreen
@@ -75,7 +83,6 @@ class ChallengeCard extends StatelessWidget {
                   xpAmount: xp!,
                 ),
               ),
-
             // Main card content
             Padding(
               padding: const EdgeInsets.all(AppConstants.spacingM),
@@ -94,10 +101,8 @@ class ChallengeCard extends StatelessWidget {
                           isCompleted: isCompleted,
                           size: 40,
                         ),
-                      if (trailingWidgets != null) ...[
-                        const SizedBox(width: AppConstants.spacingS),
-                        ...trailingWidgets!,
-                      ] else if (difficulty != null) ...[
+                      // Show difficulty badge only if it's not empty
+                      if (showDifficultyBadge) ...[
                         const SizedBox(width: AppConstants.spacingS),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -117,6 +122,11 @@ class ChallengeCard extends StatelessWidget {
                           ),
                         ),
                       ],
+                      // Show trailing widgets if provided
+                      if (trailingWidgets != null) ...[
+                        const SizedBox(width: AppConstants.spacingS),
+                        ...trailingWidgets!,
+                      ],
                     ],
                   ),
                   const SizedBox(height: AppConstants.spacingS),
@@ -126,7 +136,7 @@ class ChallengeCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: isCompleted
                           ? AppConstants.successGreen
-                          : AppConstants.darkGray,
+                          : Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                     ),
                     maxLines: 2,
@@ -139,6 +149,9 @@ class ChallengeCard extends StatelessWidget {
                       description,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,

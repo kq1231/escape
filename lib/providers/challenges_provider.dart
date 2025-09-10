@@ -29,6 +29,72 @@ class Challenges extends _$Challenges {
   /// Get hardcoded challenges (these serve as defaults)
   List<Challenge> _getHardcodedChallenges() {
     return [
+      // XP Challenges (based on 1400 XP per day average)
+      Challenge(
+        title: 'Novice',
+        description: 'Earn 1400 XP',
+        featureName: 'xp',
+        conditionJson: '{"field": "xp", "operator": ">=", "value": 1400}',
+        iconPath: 'assets/icons/xp_novice.png',
+        xp: 0, // No additional XP for completing XP challenges
+      ),
+      Challenge(
+        title: 'Warrior',
+        description: 'Earn 4200 XP',
+        featureName: 'xp',
+        conditionJson: '{"field": "xp", "operator": ">=", "value": 4200}',
+        iconPath: 'assets/icons/xp_warrior.png',
+        xp: 0,
+      ),
+      Challenge(
+        title: 'Champion',
+        description: 'Earn 7000 XP',
+        featureName: 'xp',
+        conditionJson: '{"field": "xp", "operator": ">=", "value": 7000}',
+        iconPath: 'assets/icons/xp_champion.png',
+        xp: 0,
+      ),
+      Challenge(
+        title: 'Master',
+        description: 'Earn 9800 XP',
+        featureName: 'xp',
+        conditionJson: '{"field": "xp", "operator": ">=", "value": 9800}',
+        iconPath: 'assets/icons/xp_master.png',
+        xp: 0,
+      ),
+      Challenge(
+        title: 'Legend',
+        description: 'Earn 42000 XP',
+        featureName: 'xp',
+        conditionJson: '{"field": "xp", "operator": ">=", "value": 42000}',
+        iconPath: 'assets/icons/xp_legend.png',
+        xp: 0,
+      ),
+      Challenge(
+        title: 'Hero',
+        description: 'Earn 126000 X',
+        featureName: 'xp',
+        conditionJson: '{"field": "xp", "operator": ">=", "value": 126000}',
+        iconPath: 'assets/icons/xp_hero.png',
+        xp: 0,
+      ),
+      Challenge(
+        title: 'Grandmaster',
+        description: 'Earn 365000 XP',
+        featureName: 'xp',
+        conditionJson: '{"field": "xp", "operator": ">=", "value": 365000}',
+        iconPath: 'assets/icons/xp_grandmaster.png',
+        xp: 0,
+      ),
+      Challenge(
+        title: 'Awesome',
+        description: 'Earn 1000000 XP',
+        featureName: 'xp',
+        conditionJson: '{"field": "xp", "operator": ">=", "value": 1000000}',
+        iconPath: 'assets/icons/xp_Awesome.png',
+        xp: 0,
+      ),
+
       // Beginner Challenges (Easy, 10-50 XP)
       Challenge(
         title: 'First Temptation',
