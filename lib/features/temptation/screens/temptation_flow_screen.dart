@@ -586,6 +586,9 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
   }
 
   Widget _buildActivityPage(Temptation? currentTemptation) {
+    // Get user profile to access hobbies
+    final userProfile = ref.read(userProfileProvider).requireValue;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppConstants.spacingXL),
       child: Column(
@@ -601,6 +604,84 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppConstants.spacingXL),
+
+          // Show user's hobbies as activity suggestions
+          if (userProfile!.hobbies.isNotEmpty) ...[
+            Container(
+              padding: const EdgeInsets.all(AppConstants.spacingM),
+              decoration: BoxDecoration(
+                color: AppConstants.lightGreen.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(AppConstants.radiusL),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Your Hobbies',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppConstants.primaryGreen,
+                    ),
+                  ),
+                  const SizedBox(height: AppConstants.spacingM),
+                  Wrap(
+                    spacing: AppConstants.spacingS,
+                    runSpacing: AppConstants.spacingS,
+                    alignment: WrapAlignment.center,
+                    children: userProfile.hobbies
+                        .map(
+                          (hobby) => InkWell(
+                            onTap: () {
+                              _onActivitySelected(hobby);
+                            },
+                            borderRadius: BorderRadius.circular(
+                              AppConstants.radiusM,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppConstants.spacingM,
+                                vertical: AppConstants.spacingS,
+                              ),
+                              decoration: BoxDecoration(
+                                color: _selectedActivity == hobby
+                                    ? AppConstants.primaryGreen
+                                    : AppConstants.lightGreen.withValues(
+                                        alpha: 0.3,
+                                      ),
+                                borderRadius: BorderRadius.circular(
+                                  AppConstants.radiusM,
+                                ),
+                                border: Border.all(
+                                  color: _selectedActivity == hobby
+                                      ? AppConstants.primaryGreen
+                                      : AppConstants.primaryGreen.withValues(
+                                          alpha: 0.5,
+                                        ),
+                                ),
+                              ),
+                              child: Text(
+                                hobby,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: _selectedActivity == hobby
+                                          ? AppConstants.white
+                                          : _getTextColor(
+                                              AppConstants.darkGreen,
+                                            ),
+                                      fontWeight: _selectedActivity == hobby
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppConstants.spacingXL),
+          ],
 
           ActivitySelector(
             predefinedActivities: [

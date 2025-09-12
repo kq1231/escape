@@ -25,9 +25,9 @@ class XPBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     String displayText;
     if (isTotal) {
-      displayText = '${_formatXPWithK(xpAmount)} XP';
+      displayText = '${_formatXP(xpAmount)} XP';
     } else {
-      displayText = ' + ${_formatXPWithK(xpAmount)} ';
+      displayText = ' + ${_formatXP(xpAmount)} ';
     }
 
     return Container(
@@ -62,8 +62,10 @@ class XPBadge extends StatelessWidget {
     );
   }
 
-  String _formatXPWithK(int xp) {
-    if (xp >= 1000) {
+  String _formatXP(int xp) {
+    if (xp >= 1000000) {
+      return '${(xp / 1000000).toStringAsFixed(1)}M';
+    } else if (xp >= 1000) {
       return '${(xp / 1000).toStringAsFixed(1)}K';
     }
     return xp.toString();
@@ -82,8 +84,10 @@ extension XPBadgeExtension on Widget {
     double? badgeSize,
     bool isTotal = false,
   }) {
-    String formatXPWithK(int xp) {
-      if (xp >= 1000) {
+    String formatXP(int xp) {
+      if (xp >= 1000000) {
+        return '${(xp / 1000000).toStringAsFixed(1)}M';
+      } else if (xp >= 1000) {
         return '${(xp / 1000).toStringAsFixed(1)}K';
       }
       return xp.toString();
@@ -91,9 +95,9 @@ extension XPBadgeExtension on Widget {
 
     String displayText;
     if (isTotal) {
-      displayText = '${formatXPWithK(xpAmount)} XP ';
+      displayText = '${formatXP(xpAmount)} XP ';
     } else {
-      displayText = ' + ${formatXPWithK(xpAmount)} ';
+      displayText = ' + ${formatXP(xpAmount)} ';
     }
 
     final badgedWidget = Stack(

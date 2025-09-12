@@ -36,7 +36,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             Center(
               child: Text(
                 textAlign: TextAlign.center,
-                'Analytics Dashboard',
+                'Analytics',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppConstants.darkGreen,

@@ -34,13 +34,6 @@ class SettingsScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               _buildThemeSelector(context, ref, themeMode),
-              const SizedBox(height: 32),
-              Text(
-                'Other Settings',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 16),
-              _buildDummySettings(context),
             ],
           ),
         ),
@@ -130,49 +123,6 @@ class SettingsScreen extends ConsumerWidget {
                     .read(themeModeNotifierProvider.notifier)
                     .saveThemeMode(ThemeMode.system);
               },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDummySettings(BuildContext ctx) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.radiusM),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SwitchListTile(
-              title: Text(
-                'Notifications',
-                style: Theme.of(ctx).textTheme.labelMedium,
-              ),
-              value: true,
-              onChanged: (value) {},
-            ),
-            Divider(thickness: 0.1, color: Theme.of(ctx).colorScheme.outline),
-            SwitchListTile(
-              title: Text('Sound', style: Theme.of(ctx).textTheme.labelMedium),
-              value: true,
-              onChanged: (value) {},
-            ),
-            Divider(thickness: 0.1, color: Theme.of(ctx).colorScheme.outline),
-            ListTile(
-              title: Text(
-                'Language',
-                style: Theme.of(ctx).textTheme.labelMedium,
-              ),
-              trailing: Text(
-                'English',
-                style: Theme.of(ctx).textTheme.labelMedium,
-              ),
-              onTap: () {},
             ),
           ],
         ),
