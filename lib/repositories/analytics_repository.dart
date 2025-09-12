@@ -30,7 +30,7 @@ class AnalyticsRepository extends _$AnalyticsRepository {
 
   /// Helper method to get date range for analytics
   AnalyticsTimeRange _getTimeRange(AnalyticsTimeRange? range) {
-    return range ?? AnalyticsTimeRange.lastDays(30);
+    return range ?? AnalyticsTimeRange.lastDays(7);
   }
 
   /// Streak Analytics Methods
@@ -40,7 +40,6 @@ class AnalyticsRepository extends _$AnalyticsRepository {
     AnalyticsTimeRange? range,
   }) async {
     final timeRange = _getTimeRange(range);
-
     // Get data from database (keep this on main thread)
     final query = _streakBox
         .query(Streak_.date.betweenDate(timeRange.start, timeRange.end))
@@ -48,6 +47,7 @@ class AnalyticsRepository extends _$AnalyticsRepository {
     final streaks = await query.findAsync();
     query.close();
 
+    // Get max streak count for intensity calculation
     final maxStreakQuery = _streakBox
         .query(Streak_.date.betweenDate(timeRange.start, timeRange.end))
         .build();
@@ -65,11 +65,8 @@ class AnalyticsRepository extends _$AnalyticsRepository {
             },
           )
           .toList(),
-      'timeRangeStart': timeRange.start.millisecondsSinceEpoch,
-      'timeRangeEnd': timeRange.end.millisecondsSinceEpoch,
       'maxStreak': maxStreak,
     };
-
     return await compute(_processStreakDataInIsolate, processingData);
   }
 
@@ -86,49 +83,28 @@ class AnalyticsRepository extends _$AnalyticsRepository {
           },
         )
         .toList();
+    final maxStreak = data['maxStreak'] as int;
 
-    final timeRangeStart = DateTime.fromMillisecondsSinceEpoch(
-      data['timeRangeStart'],
-    );
-    final timeRangeEnd = DateTime.fromMillisecondsSinceEpoch(
-      data['timeRangeEnd'],
-    );
-    final maxStreak = data['maxStreak'];
-
-    // Create streak map
-    final streakMap = <DateTime, Map<String, dynamic>>{};
+    // Generate grid data only for dates that have streak objects
+    final gridData = <StreakGridData>[];
     for (final streak in streaks) {
       final date = DateTime(
         streak['date'].year,
         streak['date'].month,
         streak['date'].day,
       );
-      streakMap[date] = streak;
-    }
-
-    // Generate grid data
-    final gridData = <StreakGridData>[];
-    final totalDays = timeRangeEnd.difference(timeRangeStart).inDays + 1;
-
-    for (int i = 0; i < totalDays; i++) {
-      final date = timeRangeStart.add(Duration(days: i));
-      final normalizedDate = DateTime(date.year, date.month, date.day);
-      final streak = streakMap[normalizedDate];
-
-      final hasRelapse = streak != null && !(streak['isSuccess'] as bool);
-      final streakCount = streak?['count'] as int? ?? 0;
+      final hasRelapse = !(streak['isSuccess'] as bool);
+      final streakCount = streak['count'] as int;
       final intensity = maxStreak > 0 ? streakCount / maxStreak : 0.0;
-
       gridData.add(
         StreakGridData(
-          date: normalizedDate,
+          date: date,
           streakCount: streakCount,
           hasRelapse: hasRelapse,
           intensity: intensity,
         ),
       );
     }
-
     return gridData;
   }
 
@@ -137,7 +113,6 @@ class AnalyticsRepository extends _$AnalyticsRepository {
     AnalyticsTimeRange? range,
   }) async {
     final timeRange = _getTimeRange(range);
-
     // Get data from database
     final query = _prayerBox
         .query(Prayer_.date.betweenDate(timeRange.start, timeRange.end))
@@ -155,10 +130,7 @@ class AnalyticsRepository extends _$AnalyticsRepository {
             },
           )
           .toList(),
-      'timeRangeStart': timeRange.start.millisecondsSinceEpoch,
-      'timeRangeEnd': timeRange.end.millisecondsSinceEpoch,
     };
-
     return await compute(_processPrayerDataInIsolate, processingData);
   }
 
@@ -175,14 +147,7 @@ class AnalyticsRepository extends _$AnalyticsRepository {
         )
         .toList();
 
-    final timeRangeStart = DateTime.fromMillisecondsSinceEpoch(
-      data['timeRangeStart'],
-    );
-    final timeRangeEnd = DateTime.fromMillisecondsSinceEpoch(
-      data['timeRangeEnd'],
-    );
-
-    // Create prayer map
+    // Group prayers by date
     final prayerMap = <DateTime, List<Map<String, dynamic>>>{};
     for (final prayer in prayers) {
       final date = DateTime(
@@ -193,16 +158,13 @@ class AnalyticsRepository extends _$AnalyticsRepository {
       prayerMap.putIfAbsent(date, () => []).add(prayer);
     }
 
-    // Generate grid data
+    // Generate grid data only for dates that have prayer records
     final gridData = <PrayerGridData>[];
     const maxPrayers = 6;
-    final totalDays = timeRangeEnd.difference(timeRangeStart).inDays + 1;
 
-    for (int i = 0; i < totalDays; i++) {
-      final date = timeRangeStart.add(Duration(days: i));
-      final normalizedDate = DateTime(date.year, date.month, date.day);
-
-      final dayPrayers = prayerMap[normalizedDate] ?? [];
+    for (final entry in prayerMap.entries) {
+      final date = entry.key;
+      final dayPrayers = entry.value;
       final prayersCompleted = dayPrayers
           .where((p) => p['isCompleted'] as bool)
           .length;
@@ -210,7 +172,7 @@ class AnalyticsRepository extends _$AnalyticsRepository {
 
       gridData.add(
         PrayerGridData(
-          date: normalizedDate,
+          date: date,
           prayersCompleted: prayersCompleted,
           intensity: intensity,
         ),

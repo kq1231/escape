@@ -29,7 +29,7 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Filter button
         Container(
@@ -132,7 +132,7 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
                   ),
                 ),
 
-                const Divider(height: 1, color: AppConstants.lightGray),
+                const Divider(height: 20, color: AppConstants.lightGray),
 
                 // Custom range option
                 ListTile(
@@ -186,6 +186,7 @@ class _TimeRangeFilterState extends State<TimeRangeFilter> {
     final isSelected = _selectedRange?.label == range.label;
 
     return FilterChip(
+      side: BorderSide.none,
       label: Text(
         label,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(

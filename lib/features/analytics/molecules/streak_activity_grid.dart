@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:escape/theme/app_constants.dart';
 import 'package:escape/models/analytics_models.dart';
 import 'package:escape/providers/analytics_providers.dart';
+import 'package:intl/intl.dart';
 
 class StreakActivityGrid extends ConsumerWidget {
   final AnalyticsTimeRange? timeRange;
-
   const StreakActivityGrid({super.key, this.timeRange});
 
   @override
@@ -37,9 +37,9 @@ class StreakActivityGrid extends ConsumerWidget {
                 context,
               ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             _buildActivityGrid(context, gridData),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             _buildLegend(context),
           ],
         );
@@ -58,138 +58,67 @@ class StreakActivityGrid extends ConsumerWidget {
       dataMap[key] = data;
     }
 
-    final dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-    return Column(
-      children: [
-        // Day labels
-        Row(
-          children: [
-            const SizedBox(width: 40), // Space for week numbers
-            ...dayLabels.map(
-              (label) => Expanded(
-                child: Center(
-                  child: Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppConstants.mediumGray,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        // Week rows
-        ..._generateWeekRows(dataMap, context),
-      ],
-    );
-  }
-
-  List<Widget> _generateWeekRows(
-    Map<String, StreakGridData> dataMap,
-    BuildContext context,
-  ) {
+    // Determine date range
     final now = DateTime.now();
-    final startDate = now.subtract(const Duration(days: 29)); // 30 days ago
+    final startDate =
+        timeRange?.start ?? now.subtract(const Duration(days: 29));
+    final endDate = timeRange?.end ?? now;
 
-    List<Widget> rows = [];
+    // Calculate total days in range
+    final totalDays = endDate.difference(startDate).inDays + 1;
 
-    // Calculate number of weeks needed
-    final totalDays = 30;
-    final weeksNeeded = (totalDays / 7).ceil();
-
-    for (int week = 0; week < weeksNeeded; week++) {
-      final weekStart = startDate.add(Duration(days: week * 7));
-
-      rows.add(
-        Row(
-          children: [
-            // Week number
-            SizedBox(
-              width: 40,
-              child: Center(
-                child: Text(
-                  'W${weeksNeeded - week}',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppConstants.mediumGray,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-            // Day cells for this week
-            ...List.generate(7, (dayIndex) {
-              final date = weekStart.add(Duration(days: dayIndex));
-
-              // Skip if date is in the future
-              if (date.isAfter(now)) {
-                return const Expanded(child: SizedBox.shrink());
-              }
-
-              // Efficient O(1) lookup
-              final key = '${date.year}-${date.month}-${date.day}';
-              final dayData = dataMap[key];
-
-              return Expanded(child: _buildDayCell(context, dayData));
-            }),
-          ],
+    return SizedBox(
+      height: 100, // Approximate height based on weeks
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: totalDays <= 7 ? 7 : 10,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          childAspectRatio: 1.0,
         ),
-      );
-      rows.add(const SizedBox(height: 4));
-    }
-
-    return rows;
-  }
-
-  Widget _buildDayCell(BuildContext context, StreakGridData? data) {
-    if (data == null) {
-      return _buildEmptyCell();
-    }
-
-    Color cellColor;
-    if (data.hasRelapse) {
-      cellColor = AppConstants.errorRed;
-    } else {
-      // Calculate intensity based on streak count
-      final intensity = _calculateIntensity(data.streakCount);
-      cellColor = _getGreenColor(intensity);
-    }
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2),
-      decoration: BoxDecoration(
-        color: cellColor,
-        borderRadius: BorderRadius.circular(4),
+        itemCount: totalDays,
+        itemBuilder: (context, index) {
+          final date = startDate.add(Duration(days: index));
+          final key = '${date.year}-${date.month}-${date.day}';
+          final dayData = dataMap[key];
+          return _buildDayCell(dayData, date);
+        },
       ),
     );
   }
 
-  Widget _buildEmptyCell() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2),
-      decoration: BoxDecoration(
-        color: AppConstants.lightGray,
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: AppConstants.mediumGray),
+  Widget _buildDayCell(StreakGridData? data, DateTime date) {
+    Color cellColor;
+
+    if (data == null) {
+      // No data for this day
+      cellColor = AppConstants.lightGray;
+    } else if (data.hasRelapse) {
+      // Relapse occurred
+      cellColor = AppConstants.errorRed;
+    } else {
+      // Successful day
+      cellColor = AppConstants.primaryGreen;
+    }
+
+    return Tooltip(
+      message:
+          "${DateFormat('EEE, MMM d, yyyy').format(date)}"
+          "\n${data != null ? (data.hasRelapse ? "Relapse" : "Success") : "No data"}",
+
+      child: Container(
+        decoration: BoxDecoration(
+          color: cellColor,
+          borderRadius: BorderRadius.circular(4),
+        ),
       ),
     );
   }
 
   Widget _buildLegend(BuildContext context) {
-    return Row(
+    return Wrap(
       children: [
-        _buildLegendItem(context, 'No activity', AppConstants.mediumGray),
-        const SizedBox(width: 16),
-        _buildLegendItem(context, 'Low', _getGreenColor(0.25)),
-        const SizedBox(width: 16),
-        _buildLegendItem(context, 'Medium', _getGreenColor(0.5)),
-        const SizedBox(width: 16),
-        _buildLegendItem(context, 'High', _getGreenColor(0.75)),
-        const SizedBox(width: 16),
-        _buildLegendItem(context, 'Very High', _getGreenColor(1.0)),
+        _buildLegendItem(context, 'Successful', AppConstants.primaryGreen),
         const SizedBox(width: 16),
         _buildLegendItem(context, 'Relapse', AppConstants.errorRed),
       ],
@@ -217,19 +146,5 @@ class StreakActivityGrid extends ConsumerWidget {
         ),
       ],
     );
-  }
-
-  double _calculateIntensity(int streakCount) {
-    // Normalize streak count to 0-1 range
-    // Assuming max streak of 30 days for full intensity
-    return (streakCount / 30).clamp(0.0, 1.0);
-  }
-
-  Color _getGreenColor(double intensity) {
-    // Create gradient from light green to dark green based on intensity
-    final baseGreen = AppConstants.lightGreen;
-    final darkGreen = AppConstants.primaryGreen;
-
-    return Color.lerp(baseGreen, darkGreen, intensity)!;
   }
 }

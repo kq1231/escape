@@ -2,11 +2,7 @@ import 'package:escape/models/analytics_models.dart';
 import 'package:flutter/material.dart';
 import 'package:escape/theme/app_constants.dart';
 import '../organisms/time_range_filter.dart';
-import '../organisms/streak_success_rate_card.dart';
-import '../organisms/prayer_success_rate_card.dart';
-import '../organisms/temptation_success_rate_card.dart';
-import '../molecules/temptation_stacked_bar_chart.dart';
-import '../molecules/xp_growth_chart.dart';
+import '../molecules/temptation_activity_grid.dart';
 import '../molecules/streak_activity_grid.dart';
 import '../molecules/prayer_activity_grid.dart';
 
@@ -18,11 +14,11 @@ class AnalyticsScreen extends StatefulWidget {
 }
 
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
-  AnalyticsTimeRange? _selectedTimeRange;
+  AnalyticsTimeRange _selectedTimeRange = AnalyticsTimeRange.lastDays(7);
 
   void _onTimeRangeChanged(AnalyticsTimeRange? range) {
     setState(() {
-      _selectedTimeRange = range;
+      _selectedTimeRange = range ?? AnalyticsTimeRange.lastDays(7);
     });
   }
 
@@ -74,32 +70,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           () => StreakActivityGrid(timeRange: _selectedTimeRange),
         ),
 
-        // Streak Success Rate Card
-        _buildLazySection(
-          () => StreakSuccessRateCard(timeRange: _selectedTimeRange),
-        ),
-
         // Prayer Analytics - Load second
         _buildLazySection(
           () => PrayerActivityGrid(timeRange: _selectedTimeRange),
         ),
 
-        // Prayer Success Rate Card
         _buildLazySection(
-          () => PrayerSuccessRateCard(timeRange: _selectedTimeRange),
+          () => TemptationActivityGrid(timeRange: _selectedTimeRange),
         ),
-
-        _buildLazySection(
-          () => TemptationStackedBarChart(timeRange: _selectedTimeRange),
-        ),
-
-        // Temptation Success Rate Card
-        _buildLazySection(
-          () => TemptationSuccessRateCard(timeRange: _selectedTimeRange),
-        ),
-
-        // XP Analytics - Load last (least critical for immediate viewing)
-        _buildLazySection(() => XPGrowthChart(timeRange: _selectedTimeRange)),
       ],
     );
   }
