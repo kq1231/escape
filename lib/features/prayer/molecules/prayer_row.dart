@@ -9,6 +9,7 @@ class PrayerRow extends StatelessWidget {
   final String? prayerName;
   final Prayer? prayer;
   final int? xp;
+  final String? time;
   final ValueChanged<CheckboxState>? onStateChanged;
   final VoidCallback? onTap;
 
@@ -17,6 +18,7 @@ class PrayerRow extends StatelessWidget {
     this.prayerName,
     this.xp,
     this.prayer,
+    this.time,
     this.onStateChanged,
     this.onTap,
   });
@@ -79,6 +81,15 @@ class PrayerRow extends StatelessWidget {
               child: Row(
                 children: [
                   PrayerTimeLabel(prayerName: prayer?.name ?? prayerName ?? ''),
+                  if (time != null) ...[
+                    const SizedBox(width: 8),
+                    Text(
+                      time!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppConstants.darkGray,
+                      ),
+                    ),
+                  ],
                   if (prayer?.isCompleted == true) ...[
                     const SizedBox(width: 8),
                     XPBadge(

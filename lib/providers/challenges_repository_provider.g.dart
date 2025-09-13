@@ -37,7 +37,7 @@ final class ChallengesRepositoryProvider
 }
 
 String _$challengesRepositoryHash() =>
-    r'fec4ee684abef5631644b00abf363a70a80f177c';
+    r'cedcd7faaf949831d8dc87c9b0f9bafbcb727baf';
 
 abstract class _$ChallengesRepository extends $AsyncNotifier<void> {
   FutureOr<void> build();

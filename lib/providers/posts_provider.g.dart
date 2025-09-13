@@ -30,7 +30,7 @@ final class PostsProviderProvider
   PostsProvider create() => PostsProvider();
 }
 
-String _$postsProviderHash() => r'ae474a0fa4f75ba7dc424faf40d1215003f49d8f';
+String _$postsProviderHash() => r'7303439e3e510ca857077c601d43a42dc5fbd45d';
 
 abstract class _$PostsProvider extends $AsyncNotifier<List<PostPreview>> {
   FutureOr<List<PostPreview>> build();
