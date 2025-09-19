@@ -10,6 +10,7 @@ import '../molecules/prayer_row.dart';
 import 'package:escape/theme/app_constants.dart';
 import 'package:escape/models/prayer_model.dart';
 import '../atoms/triple_state_checkbox.dart';
+import '../../history/screens/prayer_history_screen.dart';
 
 class DailyPrayerGrid extends ConsumerWidget {
   final Function(Prayer, CheckboxState)? onPrayerStateChanged;
@@ -115,12 +116,30 @@ class DailyPrayerGrid extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    '$completedCount/${prayerNames.length}',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppConstants.primaryGreen,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        '$completedCount/${prayerNames.length}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppConstants.primaryGreen,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(width: AppConstants.spacingS),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PrayerHistoryScreen(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.history),
+                        tooltip: 'View Prayer History',
+                        iconSize: 20,
+                      ),
+                    ],
                   ),
                 ],
               ),

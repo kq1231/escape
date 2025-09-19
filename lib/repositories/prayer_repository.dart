@@ -151,4 +151,187 @@ class PrayerRepository extends _$PrayerRepository {
         // Map it to a list of objects to be used by a StreamBuilder.
         .asyncMap((query) async => await query.findAsync());
   }
+
+  // History-specific methods
+
+  // Get prayers with pagination
+  Future<List<Prayer>> getPrayersWithPagination({
+    int offset = 0,
+    int limit = 20,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isCompleted,
+    String? prayerName,
+  }) async {
+    Condition<Prayer>? condition;
+
+    // Build date range condition
+    if (startDate != null && endDate != null) {
+      condition = Prayer_.date.betweenDate(startDate, endDate);
+    } else if (startDate != null) {
+      condition = Prayer_.date.greaterOrEqualDate(startDate);
+    } else if (endDate != null) {
+      condition = Prayer_.date.lessOrEqualDate(endDate);
+    }
+
+    // Add completion filter
+    if (isCompleted != null) {
+      final completedCondition = Prayer_.isCompleted.equals(isCompleted);
+      condition = condition != null
+          ? condition.and(completedCondition)
+          : completedCondition;
+    }
+
+    // Add prayer name filter
+    if (prayerName != null) {
+      final nameCondition = Prayer_.name.equals(prayerName);
+      condition = condition != null
+          ? condition.and(nameCondition)
+          : nameCondition;
+    }
+
+    final query = condition != null
+        ? _prayerBox.query(condition)
+        : _prayerBox.query();
+
+    final queryBuilt = query
+        .order(Prayer_.date, flags: Order.descending)
+        .build();
+
+    final allResults = await queryBuilt.findAsync();
+    queryBuilt.close();
+
+    // Manual pagination
+    final startIndex = offset.clamp(0, allResults.length);
+    final endIndex = (offset + limit).clamp(0, allResults.length);
+
+    return allResults.sublist(startIndex, endIndex);
+  }
+
+  // Search prayers by criteria
+  Future<List<Prayer>> searchPrayers({
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isCompleted,
+    String? prayerName,
+    List<String>? prayerNames,
+  }) async {
+    Condition<Prayer>? condition;
+
+    // Build date range condition
+    if (startDate != null && endDate != null) {
+      condition = Prayer_.date.betweenDate(startDate, endDate);
+    }
+
+    // Add completion filter
+    if (isCompleted != null) {
+      final completedCondition = Prayer_.isCompleted.equals(isCompleted);
+      condition = condition != null
+          ? condition.and(completedCondition)
+          : completedCondition;
+    }
+
+    // Add prayer name filter
+    if (prayerName != null) {
+      final nameCondition = Prayer_.name.equals(prayerName);
+      condition = condition != null
+          ? condition.and(nameCondition)
+          : nameCondition;
+    }
+
+    // Add multiple prayer names filter
+    if (prayerNames != null && prayerNames.isNotEmpty) {
+      Condition<Prayer>? namesCondition;
+      for (final name in prayerNames) {
+        final nameCondition = Prayer_.name.equals(name);
+        namesCondition = namesCondition != null
+            ? namesCondition.or(nameCondition)
+            : nameCondition;
+      }
+      if (namesCondition != null) {
+        condition = condition != null
+            ? condition.and(namesCondition)
+            : namesCondition;
+      }
+    }
+
+    final query = condition != null
+        ? _prayerBox.query(condition)
+        : _prayerBox.query();
+
+    final queryBuilt = query
+        .order(Prayer_.date, flags: Order.descending)
+        .build();
+
+    final result = await queryBuilt.findAsync();
+    queryBuilt.close();
+    return result;
+  }
+
+  // Get prayer statistics for a date range
+  Future<Map<String, dynamic>> getPrayerStatistics({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final prayers = await searchPrayers(startDate: startDate, endDate: endDate);
+
+    if (prayers.isEmpty) {
+      return {
+        'totalPrayers': 0,
+        'completedPrayers': 0,
+        'missedPrayers': 0,
+        'completionRate': 0.0,
+        'prayerBreakdown': <String, Map<String, int>>{},
+      };
+    }
+
+    final completedPrayers = prayers.where((p) => p.isCompleted).length;
+    final missedPrayers = prayers.where((p) => !p.isCompleted).length;
+
+    // Prayer breakdown by name
+    final Map<String, Map<String, int>> prayerBreakdown = {};
+    for (final prayer in prayers) {
+      if (!prayerBreakdown.containsKey(prayer.name)) {
+        prayerBreakdown[prayer.name] = {'completed': 0, 'missed': 0};
+      }
+      if (prayer.isCompleted) {
+        prayerBreakdown[prayer.name]!['completed'] =
+            (prayerBreakdown[prayer.name]!['completed'] ?? 0) + 1;
+      } else {
+        prayerBreakdown[prayer.name]!['missed'] =
+            (prayerBreakdown[prayer.name]!['missed'] ?? 0) + 1;
+      }
+    }
+
+    return {
+      'totalPrayers': prayers.length,
+      'completedPrayers': completedPrayers,
+      'missedPrayers': missedPrayers,
+      'completionRate': prayers.isNotEmpty
+          ? (completedPrayers / prayers.length) * 100
+          : 0.0,
+      'prayerBreakdown': prayerBreakdown,
+    };
+  }
+
+  // Get prayers grouped by date
+  Future<Map<String, List<Prayer>>> getPrayersGroupedByDate({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final prayers = await searchPrayers(startDate: startDate, endDate: endDate);
+
+    final Map<String, List<Prayer>> groupedPrayers = {};
+
+    for (final prayer in prayers) {
+      final dateKey =
+          '${prayer.date.year}-${prayer.date.month.toString().padLeft(2, '0')}-${prayer.date.day.toString().padLeft(2, '0')}';
+      if (!groupedPrayers.containsKey(dateKey)) {
+        groupedPrayers[dateKey] = [];
+      }
+      groupedPrayers[dateKey]!.add(prayer);
+    }
+
+    return groupedPrayers;
+  }
 }

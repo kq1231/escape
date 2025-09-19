@@ -228,4 +228,193 @@ class StreakRepository extends _$StreakRepository {
       return await createStreak(streak);
     }
   }
+
+  // History-specific methods
+
+  // Get streaks with pagination
+  Future<List<Streak>> getStreaksWithPagination({
+    int offset = 0,
+    int limit = 20,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isSuccess,
+  }) async {
+    Condition<Streak>? condition;
+
+    // Build date range condition
+    if (startDate != null && endDate != null) {
+      condition = Streak_.date.betweenDate(startDate, endDate);
+    } else if (startDate != null) {
+      condition = Streak_.date.greaterOrEqualDate(startDate);
+    } else if (endDate != null) {
+      condition = Streak_.date.lessOrEqualDate(endDate);
+    }
+
+    // Add success filter
+    if (isSuccess != null) {
+      final successCondition = Streak_.isSuccess.equals(isSuccess);
+      condition = condition != null
+          ? condition.and(successCondition)
+          : successCondition;
+    }
+
+    final query = condition != null
+        ? _streakBox.query(condition)
+        : _streakBox.query();
+
+    final queryBuilt = query
+        .order(Streak_.date, flags: Order.descending)
+        .build();
+
+    final allResults = await queryBuilt.findAsync();
+    queryBuilt.close();
+
+    // Manual pagination since ObjectBox doesn't support offset/limit in findAsync
+    final startIndex = offset.clamp(0, allResults.length);
+    final endIndex = (offset + limit).clamp(0, allResults.length);
+
+    return allResults.sublist(startIndex, endIndex);
+  }
+
+  // Search streaks by date range and success status
+  Future<List<Streak>> searchStreaks({
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isSuccess,
+    int? minCount,
+    int? maxCount,
+  }) async {
+    Condition<Streak>? condition;
+
+    // Build date range condition
+    if (startDate != null && endDate != null) {
+      condition = Streak_.date.betweenDate(startDate, endDate);
+    }
+
+    // Add success filter
+    if (isSuccess != null) {
+      final successCondition = Streak_.isSuccess.equals(isSuccess);
+      condition = condition != null
+          ? condition.and(successCondition)
+          : successCondition;
+    }
+
+    // Add count range filter
+    if (minCount != null) {
+      final minCountCondition = Streak_.count.greaterOrEqual(minCount);
+      condition = condition != null
+          ? condition.and(minCountCondition)
+          : minCountCondition;
+    }
+    if (maxCount != null) {
+      final maxCountCondition = Streak_.count.lessOrEqual(maxCount);
+      condition = condition != null
+          ? condition.and(maxCountCondition)
+          : maxCountCondition;
+    }
+
+    final query = condition != null
+        ? _streakBox.query(condition)
+        : _streakBox.query();
+
+    final queryBuilt = query
+        .order(Streak_.date, flags: Order.descending)
+        .build();
+
+    final result = await queryBuilt.findAsync();
+    queryBuilt.close();
+    return result;
+  }
+
+  // Get streak statistics for a date range
+  Future<Map<String, dynamic>> getStreakStatistics({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    Condition<Streak>? condition;
+
+    if (startDate != null && endDate != null) {
+      condition = Streak_.date.betweenDate(startDate, endDate);
+    }
+
+    final query = condition != null
+        ? _streakBox.query(condition)
+        : _streakBox.query();
+
+    final queryBuilt = query.build();
+    final streaks = await queryBuilt.findAsync();
+    queryBuilt.close();
+
+    if (streaks.isEmpty) {
+      return {
+        'totalEntries': 0,
+        'successfulDays': 0,
+        'relapses': 0,
+        'successRate': 0.0,
+        'averageCount': 0.0,
+        'maxCount': 0,
+        'longestStreak': 0,
+      };
+    }
+
+    final successfulDays = streaks.where((s) => s.isSuccess).length;
+    final relapses = streaks.where((s) => !s.isSuccess).length;
+    final totalCount = streaks.fold<int>(0, (sum, s) => sum + s.count);
+    final maxCount = streaks.fold<int>(
+      0,
+      (max, s) => s.count > max ? s.count : max,
+    );
+
+    // Calculate longest streak
+    int longestStreak = 0;
+    int currentStreak = 0;
+
+    // Sort by date ascending for streak calculation
+    final sortedStreaks = List<Streak>.from(streaks)
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    for (final streak in sortedStreaks) {
+      if (streak.isSuccess) {
+        currentStreak = streak.count;
+        if (currentStreak > longestStreak) {
+          longestStreak = currentStreak;
+        }
+      } else {
+        currentStreak = 0;
+      }
+    }
+
+    return {
+      'totalEntries': streaks.length,
+      'successfulDays': successfulDays,
+      'relapses': relapses,
+      'successRate': streaks.isNotEmpty
+          ? (successfulDays / streaks.length) * 100
+          : 0.0,
+      'averageCount': streaks.isNotEmpty ? totalCount / streaks.length : 0.0,
+      'maxCount': maxCount,
+      'longestStreak': longestStreak,
+    };
+  }
+
+  // Get streaks grouped by month
+  Future<Map<String, List<Streak>>> getStreaksGroupedByMonth({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final streaks = await searchStreaks(startDate: startDate, endDate: endDate);
+
+    final Map<String, List<Streak>> groupedStreaks = {};
+
+    for (final streak in streaks) {
+      final monthKey =
+          '${streak.date.year}-${streak.date.month.toString().padLeft(2, '0')}';
+      if (!groupedStreaks.containsKey(monthKey)) {
+        groupedStreaks[monthKey] = [];
+      }
+      groupedStreaks[monthKey]!.add(streak);
+    }
+
+    return groupedStreaks;
+  }
 }

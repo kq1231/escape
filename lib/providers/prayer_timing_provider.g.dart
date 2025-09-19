@@ -39,7 +39,7 @@ final class PrayerTimingProvider
   PrayerTiming create() => PrayerTiming();
 }
 
-String _$prayerTimingHash() => r'5d5ddaa158b46472d932f8b4108c8684020cbcff';
+String _$prayerTimingHash() => r'e92f41b8b7638547fb5336dffc94c636f7cc5fea';
 
 abstract class _$PrayerTiming extends $AsyncNotifier<PrayerTimes?> {
   FutureOr<PrayerTimes?> build();

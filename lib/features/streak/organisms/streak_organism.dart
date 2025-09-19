@@ -7,6 +7,7 @@ import '../widgets/goal_modal.dart';
 import '../../../providers/goal_provider.dart';
 import '../../../providers/user_profile_provider.dart';
 import '../../profile/screens/profile_screen.dart';
+import '../../history/screens/streak_history_screen.dart';
 import '../../../widgets/xp_badge.dart';
 import 'dart:io';
 
@@ -69,6 +70,28 @@ class StreakOrganism extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildHistoryButton(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: AppConstants.white.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
+      ),
+      child: IconButton(
+        icon: const Icon(Icons.history, color: AppConstants.white, size: 20),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const StreakHistoryScreen(),
+            ),
+          );
+        },
+        tooltip: 'View History',
+      ),
     );
   }
 
@@ -365,8 +388,19 @@ class StreakOrganism extends ConsumerWidget {
                             const SizedBox(height: 56), // Space for goal button
                             // Profile button below goal button
                             _buildProfileButton(context, ref),
+                            const SizedBox(height: 8), // Space between buttons
+                            // History button below profile button
+                            _buildHistoryButton(context),
                           ],
                         ),
+                      ),
+
+                    // History button for smaller widths
+                    if (constraints.maxWidth < 300)
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        child: _buildHistoryButton(context),
                       ),
 
                     // Main content

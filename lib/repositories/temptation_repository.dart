@@ -282,4 +282,225 @@ class TemptationRepository extends _$TemptationRepository {
       ..sort((a, b) => b.value.compareTo(a.value))
       ..take(limit).toList();
   }
+
+  // History-specific methods
+
+  // Get temptations with pagination
+  Future<List<Temptation>> getTemptationsWithPagination({
+    int offset = 0,
+    int limit = 20,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? wasSuccessful,
+    bool? isResolved,
+  }) async {
+    Condition<Temptation>? condition;
+
+    // Build date range condition
+    if (startDate != null && endDate != null) {
+      condition = Temptation_.createdAt.betweenDate(startDate, endDate);
+    } else if (startDate != null) {
+      condition = Temptation_.createdAt.greaterOrEqualDate(startDate);
+    } else if (endDate != null) {
+      condition = Temptation_.createdAt.lessOrEqualDate(endDate);
+    }
+
+    // Add success filter
+    if (wasSuccessful != null) {
+      final successCondition = Temptation_.wasSuccessful.equals(wasSuccessful);
+      condition = condition != null
+          ? condition.and(successCondition)
+          : successCondition;
+    }
+
+    // Add resolved filter
+    if (isResolved != null) {
+      final resolvedCondition = isResolved
+          ? Temptation_.resolvedAt.notNull()
+          : Temptation_.resolvedAt.isNull();
+      condition = condition != null
+          ? condition.and(resolvedCondition)
+          : resolvedCondition;
+    }
+
+    final query = condition != null
+        ? _temptationBox.query(condition)
+        : _temptationBox.query();
+
+    final queryBuilt = query
+        .order(Temptation_.createdAt, flags: Order.descending)
+        .build();
+
+    final allResults = await queryBuilt.findAsync();
+    queryBuilt.close();
+
+    // Manual pagination
+    final startIndex = offset.clamp(0, allResults.length);
+    final endIndex = (offset + limit).clamp(0, allResults.length);
+
+    return allResults.sublist(startIndex, endIndex);
+  }
+
+  // Search temptations by criteria
+  Future<List<Temptation>> searchTemptations({
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? wasSuccessful,
+    bool? isResolved,
+    String? selectedActivity,
+    List<String>? triggers,
+  }) async {
+    Condition<Temptation>? condition;
+
+    // Build date range condition
+    if (startDate != null && endDate != null) {
+      condition = Temptation_.createdAt.betweenDate(startDate, endDate);
+    }
+
+    // Add success filter
+    if (wasSuccessful != null) {
+      final successCondition = Temptation_.wasSuccessful.equals(wasSuccessful);
+      condition = condition != null
+          ? condition.and(successCondition)
+          : successCondition;
+    }
+
+    // Add resolved filter
+    if (isResolved != null) {
+      final resolvedCondition = isResolved
+          ? Temptation_.resolvedAt.notNull()
+          : Temptation_.resolvedAt.isNull();
+      condition = condition != null
+          ? condition.and(resolvedCondition)
+          : resolvedCondition;
+    }
+
+    // Add activity filter
+    if (selectedActivity != null) {
+      final activityCondition = Temptation_.selectedActivity.equals(
+        selectedActivity,
+      );
+      condition = condition != null
+          ? condition.and(activityCondition)
+          : activityCondition;
+    }
+
+    final query = condition != null
+        ? _temptationBox.query(condition)
+        : _temptationBox.query();
+
+    final queryBuilt = query
+        .order(Temptation_.createdAt, flags: Order.descending)
+        .build();
+
+    final result = await queryBuilt.findAsync();
+    queryBuilt.close();
+
+    // Filter by triggers if provided (since ObjectBox doesn't support list contains queries easily)
+    if (triggers != null && triggers.isNotEmpty) {
+      return result.where((temptation) {
+        return triggers.any((trigger) => temptation.triggers.contains(trigger));
+      }).toList();
+    }
+
+    return result;
+  }
+
+  // Get temptation statistics for a date range
+  Future<Map<String, dynamic>> getTemptationStatistics({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final temptations = await searchTemptations(
+      startDate: startDate,
+      endDate: endDate,
+      isResolved: true, // Only count resolved temptations for statistics
+    );
+
+    if (temptations.isEmpty) {
+      return {
+        'totalTemptations': 0,
+        'successfulTemptations': 0,
+        'relapses': 0,
+        'successRate': 0.0,
+        'averageDuration': 0.0,
+        'commonTriggers': <String>[],
+        'effectiveActivities': <String>[],
+      };
+    }
+
+    final successfulTemptations = temptations
+        .where((t) => t.wasSuccessful)
+        .length;
+    final relapses = temptations.where((t) => !t.wasSuccessful).length;
+
+    // Calculate average duration
+    final durationsInMinutes = temptations
+        .where((t) => t.duration != null)
+        .map((t) => t.duration!.inMinutes)
+        .toList();
+    final averageDuration = durationsInMinutes.isNotEmpty
+        ? durationsInMinutes.reduce((a, b) => a + b) / durationsInMinutes.length
+        : 0.0;
+
+    // Get common triggers
+    final Map<String, int> triggerCounts = {};
+    for (final temptation in temptations) {
+      for (final trigger in temptation.triggers) {
+        triggerCounts[trigger] = (triggerCounts[trigger] ?? 0) + 1;
+      }
+    }
+    final commonTriggers = triggerCounts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    // Get effective activities (from successful temptations)
+    final Map<String, int> activityCounts = {};
+    for (final temptation in temptations.where((t) => t.wasSuccessful)) {
+      if (temptation.selectedActivity != null) {
+        activityCounts[temptation.selectedActivity!] =
+            (activityCounts[temptation.selectedActivity!] ?? 0) + 1;
+      }
+    }
+    final effectiveActivities = activityCounts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    return {
+      'totalTemptations': temptations.length,
+      'successfulTemptations': successfulTemptations,
+      'relapses': relapses,
+      'successRate': temptations.isNotEmpty
+          ? (successfulTemptations / temptations.length) * 100
+          : 0.0,
+      'averageDuration': averageDuration,
+      'commonTriggers': commonTriggers.take(5).map((e) => e.key).toList(),
+      'effectiveActivities': effectiveActivities
+          .take(5)
+          .map((e) => e.key)
+          .toList(),
+    };
+  }
+
+  // Get temptations grouped by date
+  Future<Map<String, List<Temptation>>> getTemptationsGroupedByDate({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final temptations = await searchTemptations(
+      startDate: startDate,
+      endDate: endDate,
+    );
+
+    final Map<String, List<Temptation>> groupedTemptations = {};
+
+    for (final temptation in temptations) {
+      final dateKey =
+          '${temptation.createdAt.year}-${temptation.createdAt.month.toString().padLeft(2, '0')}-${temptation.createdAt.day.toString().padLeft(2, '0')}';
+      if (!groupedTemptations.containsKey(dateKey)) {
+        groupedTemptations[dateKey] = [];
+      }
+      groupedTemptations[dateKey]!.add(temptation);
+    }
+
+    return groupedTemptations;
+  }
 }

@@ -1,10 +1,12 @@
 // prayer_timing_provider.dart
 import 'dart:convert';
 import 'package:escape/models/timings_model.dart';
+import 'package:escape/services/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/foundation.dart';
 
 part 'prayer_timing_provider.g.dart';
 
@@ -50,7 +52,12 @@ class PrayerTiming extends _$PrayerTiming {
         if (json['status'] == 'OK') {
           // Ensure the data is properly structured
           final data = json['data'] as Map<String, dynamic>;
-          return PrayerTimes.fromJson(data);
+          final prayerTimes = PrayerTimes.fromJson(data);
+
+          // Schedule prayer notifications
+          await _schedulePrayerNotifications(prayerTimes);
+
+          return prayerTimes;
         } else {
           throw Exception(
             'API returned an error: ${json['data']['status'] ?? 'Unknown'}',
@@ -64,6 +71,20 @@ class PrayerTiming extends _$PrayerTiming {
     } catch (e) {
       // Catch any other exceptions (e.g., network errors)
       throw Exception('An error occurred while fetching prayer times: $e');
+    }
+  }
+
+  /// Schedule prayer notifications for today's timings
+  Future<void> _schedulePrayerNotifications(PrayerTimes prayerTimes) async {
+    try {
+      final notificationService = NotificationService();
+      await notificationService.schedulePrayerNotifications(
+        prayerTimes.timings,
+      );
+    } catch (e) {
+      // Don't throw error for notification scheduling failure
+      // Just log it and continue
+      debugPrint('Failed to schedule prayer notifications: $e');
     }
   }
 }

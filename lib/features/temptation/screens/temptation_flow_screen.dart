@@ -15,6 +15,7 @@ import '../molecules/activity_selector.dart';
 import '../atoms/xp_confirmation_dialog.dart';
 import '../screens/success_screen.dart';
 import '../screens/tawbah_screen.dart';
+import '../../history/screens/temptation_history_screen.dart';
 import 'package:escape/widgets/xp_badge.dart';
 
 class TemptationFlowScreen extends ConsumerStatefulWidget {
@@ -461,6 +462,20 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             ),
           ),
           automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.history),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TemptationHistoryScreen(),
+                  ),
+                );
+              },
+              tooltip: 'View History',
+            ),
+          ],
         ),
         body: Column(
           children: [
