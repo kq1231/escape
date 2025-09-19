@@ -181,20 +181,9 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
       ),
     );
 
-    // Watch the prayer statistics provider
-    final prayerStatsAsync = ref.watch(
-      prayerStatisticsProvider(
-        startDate:
-            _selectedDate ?? DateTime.now().subtract(const Duration(days: 30)),
-        endDate: _selectedDate ?? DateTime.now(),
-      ),
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Prayer History'),
-        backgroundColor: AppConstants.primaryGreen,
-        foregroundColor: Colors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.calendar_today),
@@ -242,6 +231,10 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
                   ),
                   items: const [
                     DropdownMenuItem(value: 'all', child: Text('All Prayers')),
+                    DropdownMenuItem(
+                      value: 'Tahajjud',
+                      child: Text('Tahajjud'),
+                    ),
                     DropdownMenuItem(value: 'Fajr', child: Text('Fajr')),
                     DropdownMenuItem(value: 'Dhuhr', child: Text('Dhuhr')),
                     DropdownMenuItem(value: 'Asr', child: Text('Asr')),
@@ -257,40 +250,6 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
               ],
             ),
           ),
-
-          // Statistics section
-          prayerStatsAsync.when(
-            loading: () => const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: CircularProgressIndicator(),
-            ),
-            error: (error, stack) => Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text('Error loading statistics: $error'),
-            ),
-            data: (stats) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: AppConstants.primaryGreen.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _StatCard('Total', stats['totalPrayers'].toString()),
-                  _StatCard('Completed', stats['completedPrayers'].toString()),
-                  _StatCard(
-                    'Rate',
-                    '${(stats['completionRate'] * 100).toStringAsFixed(1)}%',
-                  ),
-                  _StatCard('Streak', stats['currentStreak'].toString()),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
 
           // History list
           Expanded(
@@ -362,30 +321,6 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _StatCard(this.label, this.value);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppConstants.primaryGreen,
-          ),
-        ),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-      ],
     );
   }
 }

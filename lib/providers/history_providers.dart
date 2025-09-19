@@ -45,27 +45,6 @@ class StreakHistory extends _$StreakHistory {
   }
 }
 
-// Streak Statistics Provider
-@riverpod
-class StreakStatistics extends _$StreakStatistics {
-  @override
-  Future<Map<String, dynamic>> build({
-    DateTime? startDate,
-    DateTime? endDate,
-  }) async {
-    final repository = ref.read(streakRepositoryProvider.notifier);
-    return await repository.getStreakStatistics(
-      startDate: startDate ?? DateTime.now().subtract(const Duration(days: 30)),
-      endDate: endDate ?? DateTime.now(),
-    );
-  }
-
-  /// Refresh the statistics
-  Future<void> refresh() async {
-    ref.invalidateSelf();
-  }
-}
-
 // Prayer History Provider
 @riverpod
 class PrayerHistory extends _$PrayerHistory {
@@ -115,27 +94,6 @@ class PrayerHistory extends _$PrayerHistory {
   }
 }
 
-// Prayer Statistics Provider
-@riverpod
-class PrayerStatistics extends _$PrayerStatistics {
-  @override
-  Future<Map<String, dynamic>> build({
-    DateTime? startDate,
-    DateTime? endDate,
-  }) async {
-    final repository = ref.read(prayerRepositoryProvider.notifier);
-    return await repository.getPrayerStatistics(
-      startDate: startDate ?? DateTime.now().subtract(const Duration(days: 30)),
-      endDate: endDate ?? DateTime.now(),
-    );
-  }
-
-  /// Refresh the statistics
-  Future<void> refresh() async {
-    ref.invalidateSelf();
-  }
-}
-
 // Temptation History Provider
 @riverpod
 class TemptationHistory extends _$TemptationHistory {
@@ -182,62 +140,5 @@ class TemptationHistory extends _$TemptationHistory {
 
     final repository = ref.read(temptationRepositoryProvider.notifier);
     return await repository.searchTemptations();
-  }
-}
-
-// Temptation Statistics Provider
-@riverpod
-class TemptationStatistics extends _$TemptationStatistics {
-  @override
-  Future<Map<String, dynamic>> build({
-    DateTime? startDate,
-    DateTime? endDate,
-  }) async {
-    final repository = ref.read(temptationRepositoryProvider.notifier);
-    return await repository.getTemptationStatistics(
-      startDate: startDate ?? DateTime.now().subtract(const Duration(days: 30)),
-      endDate: endDate ?? DateTime.now(),
-    );
-  }
-
-  /// Refresh the statistics
-  Future<void> refresh() async {
-    ref.invalidateSelf();
-  }
-}
-
-// Combined History Data Provider (for dashboard/overview screens)
-@riverpod
-class CombinedHistoryData extends _$CombinedHistoryData {
-  @override
-  Future<Map<String, dynamic>> build({
-    DateTime? startDate,
-    DateTime? endDate,
-  }) async {
-    final streakStats = await ref.read(
-      streakStatisticsProvider(startDate: startDate, endDate: endDate).future,
-    );
-
-    final prayerStats = await ref.read(
-      prayerStatisticsProvider(startDate: startDate, endDate: endDate).future,
-    );
-
-    final temptationStats = await ref.read(
-      temptationStatisticsProvider(
-        startDate: startDate,
-        endDate: endDate,
-      ).future,
-    );
-
-    return {
-      'streakStats': streakStats,
-      'prayerStats': prayerStats,
-      'temptationStats': temptationStats,
-    };
-  }
-
-  /// Refresh all combined data
-  Future<void> refresh() async {
-    ref.invalidateSelf();
   }
 }

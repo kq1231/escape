@@ -388,9 +388,6 @@ class StreakOrganism extends ConsumerWidget {
                             const SizedBox(height: 56), // Space for goal button
                             // Profile button below goal button
                             _buildProfileButton(context, ref),
-                            const SizedBox(height: 8), // Space between buttons
-                            // History button below profile button
-                            _buildHistoryButton(context),
                           ],
                         ),
                       ),
@@ -398,7 +395,7 @@ class StreakOrganism extends ConsumerWidget {
                     // History button for smaller widths
                     if (constraints.maxWidth < 300)
                       Positioned(
-                        top: 0,
+                        top: 70,
                         left: 0,
                         child: _buildHistoryButton(context),
                       ),

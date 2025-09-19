@@ -185,20 +185,9 @@ class _TemptationHistoryScreenState
       ),
     );
 
-    // Watch the temptation statistics provider
-    final temptationStatsAsync = ref.watch(
-      temptationStatisticsProvider(
-        startDate:
-            _selectedDate ?? DateTime.now().subtract(const Duration(days: 30)),
-        endDate: _selectedDate ?? DateTime.now(),
-      ),
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Temptation History'),
-        backgroundColor: AppConstants.primaryGreen,
-        foregroundColor: Colors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.calendar_today),
@@ -243,43 +232,6 @@ class _TemptationHistoryScreenState
               ],
             ),
           ),
-
-          // Statistics section
-          temptationStatsAsync.when(
-            loading: () => const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: CircularProgressIndicator(),
-            ),
-            error: (error, stack) => Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text('Error loading statistics: $error'),
-            ),
-            data: (stats) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: AppConstants.primaryGreen.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _StatCard('Total', stats['totalTemptations'].toString()),
-                  _StatCard(
-                    'Successful',
-                    stats['successfulResistances'].toString(),
-                  ),
-                  _StatCard(
-                    'Rate',
-                    '${(stats['successRate'] * 100).toStringAsFixed(1)}%',
-                  ),
-                  _StatCard('Streak', stats['currentStreak'].toString()),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
 
           // History list
           Expanded(
@@ -366,30 +318,6 @@ class _TemptationHistoryScreenState
           ),
         ],
       ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _StatCard(this.label, this.value);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppConstants.primaryGreen,
-          ),
-        ),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-      ],
     );
   }
 }

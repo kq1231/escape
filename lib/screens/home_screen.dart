@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/streak/organisms/streak_organism.dart';
 import '../features/emergency/atoms/emergency_button.dart';
 import '../features/temptation/screens/temptation_flow_screen.dart';
+import '../features/history/screens/temptation_history_screen.dart';
 import '../features/prayer/molecules/daily_prayer_grid.dart';
 import '../features/analytics/organisms/quick_stats_organism.dart';
 import 'package:escape/theme/app_constants.dart';
@@ -28,6 +29,13 @@ class HomeScreen extends ConsumerWidget {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text('Navigate to $statType details')));
+  }
+
+  void _onHistoryButtonPressed(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TemptationHistoryScreen()),
+    );
   }
 
   @override
@@ -119,15 +127,43 @@ class HomeScreen extends ConsumerWidget {
 
             const SizedBox(height: AppConstants.spacingXL),
 
-            // Emergency Button
-            Center(
-              child: EmergencyButton(
-                text: 'I Need Help',
-                onPressed: () => _onEmergencyButtonPressed(context),
-                icon: Icons.favorite,
-                width: double.infinity,
-                height: 60,
-              ),
+            // Emergency Button and History Button Row
+            Row(
+              children: [
+                // Emergency Button - takes most of the space
+                Expanded(
+                  flex: 3,
+                  child: EmergencyButton(
+                    text: 'I Need Help',
+                    onPressed: () => _onEmergencyButtonPressed(context),
+                    icon: Icons.favorite,
+                    height: 60,
+                  ),
+                ),
+
+                const SizedBox(width: AppConstants.spacingS),
+
+                // History Button - smaller, to the right
+                Container(
+                  height: 40,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(AppConstants.radiusL),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => _onHistoryButtonPressed(context),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusL),
+                      child: const Icon(
+                        Icons.history,
+                        color: Colors.grey,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
 
             const SizedBox(height: AppConstants.spacingXL),

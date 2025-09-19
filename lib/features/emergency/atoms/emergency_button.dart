@@ -102,15 +102,17 @@ class _EmergencyButtonState extends State<EmergencyButton>
             margin: const EdgeInsets.all(3), // Border thickness
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppConstants.radiusL - 3),
-              // Animated inner gradient
+              // Animated inner gradient - much softer and more blended
               gradient: LinearGradient(
                 colors: [
-                  Colors.orange.withValues(alpha: 0.9),
-                  Colors.red.withValues(alpha: 0.8),
-                  Colors.yellow.withValues(alpha: 0.9),
-                  Colors.orange.withValues(alpha: 0.9),
+                  Colors.orange.withValues(alpha: 0.3),
+                  Colors.red.withValues(alpha: 0.25),
+                  Colors.yellow.withValues(alpha: 0.2),
+                  Colors.orange.withValues(alpha: 0.3),
+                  Colors.red.withValues(alpha: 0.25),
                 ],
                 stops: [
+                  (_gradientAnimation.value - 0.4).clamp(0.0, 1.0),
                   (_gradientAnimation.value - 0.2).clamp(0.0, 1.0),
                   _gradientAnimation.value.clamp(0.0, 1.0),
                   (_gradientAnimation.value + 0.2).clamp(0.0, 1.0),
@@ -121,14 +123,14 @@ class _EmergencyButtonState extends State<EmergencyButton>
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.orange.withValues(alpha: 0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
+                  color: Colors.orange.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 3),
                 ),
                 BoxShadow(
-                  color: Colors.red.withValues(alpha: 0.2),
-                  blurRadius: 25,
-                  offset: const Offset(0, 10),
+                  color: Colors.red.withValues(alpha: 0.08),
+                  blurRadius: 30,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),
