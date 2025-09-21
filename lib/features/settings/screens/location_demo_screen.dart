@@ -57,10 +57,10 @@ class LocationDemoScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Colors.blue.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: Colors.blue.withOpacity(0.3),
+                          color: Colors.blue.withValues(alpha: 0.3),
                         ),
                       ),
                       child: const Row(
@@ -87,14 +87,14 @@ class LocationDemoScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Location Settings Widget
             const LocationSettingsWidget(),
-            
+
             const SizedBox(height: 16),
-            
+
             // Prayer Times Display
             Card(
               child: Padding(
@@ -111,16 +111,15 @@ class LocationDemoScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     prayerTimes.when(
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
                       error: (error, stack) => Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppConstants.errorRed.withOpacity(0.1),
+                          color: AppConstants.errorRed.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: AppConstants.errorRed.withOpacity(0.3),
+                            color: AppConstants.errorRed.withValues(alpha: 0.3),
                           ),
                         ),
                         child: Column(
@@ -171,10 +170,10 @@ class LocationDemoScreen extends ConsumerWidget {
                           return Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.orange.withOpacity(0.1),
+                              color: Colors.orange.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: Colors.orange.withOpacity(0.3),
+                                color: Colors.orange.withValues(alpha: 0.3),
                               ),
                             ),
                             child: Column(
@@ -210,10 +209,12 @@ class LocationDemoScreen extends ConsumerWidget {
                                     final granted = await ref
                                         .read(locationManagerProvider.notifier)
                                         .requestLocationPermission();
-                                    
+
                                     if (granted) {
                                       await ref
-                                          .read(locationManagerProvider.notifier)
+                                          .read(
+                                            locationManagerProvider.notifier,
+                                          )
                                           .setAutoLocationEnabled(true);
                                     }
                                   },
@@ -232,10 +233,16 @@ class LocationDemoScreen extends ConsumerWidget {
                         return Column(
                           children: [
                             _buildPrayerTimeRow('Fajr', times.timings.fajr),
-                            _buildPrayerTimeRow('Sunrise', times.timings.sunrise),
+                            _buildPrayerTimeRow(
+                              'Sunrise',
+                              times.timings.sunrise,
+                            ),
                             _buildPrayerTimeRow('Dhuhr', times.timings.dhuhr),
                             _buildPrayerTimeRow('Asr', times.timings.asr),
-                            _buildPrayerTimeRow('Maghrib', times.timings.maghrib),
+                            _buildPrayerTimeRow(
+                              'Maghrib',
+                              times.timings.maghrib,
+                            ),
                             _buildPrayerTimeRow('Isha', times.timings.isha),
                           ],
                         );
@@ -259,18 +266,15 @@ class LocationDemoScreen extends ConsumerWidget {
         children: [
           Text(
             prayerName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppConstants.primaryGreen.withOpacity(0.1),
+              color: AppConstants.primaryGreen.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: AppConstants.primaryGreen.withOpacity(0.3),
+                color: AppConstants.primaryGreen.withValues(alpha: 0.3),
               ),
             ),
             child: Text(

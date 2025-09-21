@@ -15,7 +15,7 @@ class StreakHistoryScreen extends ConsumerStatefulWidget {
 }
 
 class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
-  String _searchQuery = '';
+  final String _searchQuery = '';
   DateTime? _selectedDate;
   String? _filterType; // 'all', 'success', 'relapse'
   final TextEditingController _searchController = TextEditingController();

@@ -94,10 +94,10 @@ class LocationSettingsWidget extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppConstants.primaryGreen.withOpacity(0.1),
+                    color: AppConstants.primaryGreen.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: AppConstants.primaryGreen.withOpacity(0.3),
+                      color: AppConstants.primaryGreen.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Column(
@@ -195,10 +195,10 @@ class LocationSettingsWidget extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppConstants.errorRed.withOpacity(0.1),
+                    color: AppConstants.errorRed.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: AppConstants.errorRed.withOpacity(0.3),
+                      color: AppConstants.errorRed.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Row(

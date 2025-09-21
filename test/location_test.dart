@@ -3,11 +3,7 @@ import 'package:escape/services/location_service.dart';
 
 void main() {
   group('LocationService Tests', () {
-    late LocationService locationService;
-
-    setUp(() {
-      locationService = LocationService();
-    });
+    setUp(() {});
 
     test('LocationService should be a singleton', () {
       final instance1 = LocationService();
