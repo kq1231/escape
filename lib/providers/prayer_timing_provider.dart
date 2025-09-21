@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:escape/models/timings_model.dart';
 import 'package:escape/services/notification_service.dart';
+import 'package:escape/services/location_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,9 +19,35 @@ class PrayerTiming extends _$PrayerTiming {
   @override
   Future<PrayerTimes?> build() async {
     final prefs = await SharedPreferences.getInstance();
-    // Get location preferences
-    final country = prefs.getString('country');
-    final city = prefs.getString('city');
+
+    // Check if auto location is enabled
+    final autoLocationEnabled = prefs.getBool('auto_location_enabled') ?? false;
+
+    String? country;
+    String? city;
+
+    if (autoLocationEnabled) {
+      // Try to get location automatically
+      final locationService = LocationService();
+      final locationInfo = await locationService.getCurrentLocationInfo();
+
+      if (locationInfo != null) {
+        country = locationInfo.country;
+        city = locationInfo.city;
+
+        // Store the fetched location for future use
+        await prefs.setString('country', country);
+        await prefs.setString('city', city);
+      } else {
+        // Fall back to stored location if auto location fails
+        country = prefs.getString('country');
+        city = prefs.getString('city');
+      }
+    } else {
+      // Use manually set location
+      country = prefs.getString('country');
+      city = prefs.getString('city');
+    }
 
     // Return null if country or city is empty
     if (country == null || country.isEmpty || city == null || city.isEmpty) {
@@ -86,5 +113,35 @@ class PrayerTiming extends _$PrayerTiming {
       // Just log it and continue
       debugPrint('Failed to schedule prayer notifications: $e');
     }
+  }
+
+  /// Refresh prayer times with current location
+  Future<void> refreshWithCurrentLocation() async {
+    final prefs = await SharedPreferences.getInstance();
+    final locationService = LocationService();
+
+    try {
+      final locationInfo = await locationService.getCurrentLocationInfo();
+
+      if (locationInfo != null) {
+        // Update stored location
+        await prefs.setString('country', locationInfo.country);
+        await prefs.setString('city', locationInfo.city);
+
+        // Invalidate current state to trigger rebuild
+        ref.invalidateSelf();
+      }
+    } catch (e) {
+      debugPrint('Failed to refresh with current location: $e');
+    }
+  }
+
+  /// Enable/disable automatic location detection
+  Future<void> setAutoLocationEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('auto_location_enabled', enabled);
+
+    // Invalidate current state to trigger rebuild
+    ref.invalidateSelf();
   }
 }

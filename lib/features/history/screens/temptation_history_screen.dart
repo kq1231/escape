@@ -77,7 +77,7 @@ class _TemptationHistoryScreenState
         _selectedDate = date;
       });
       // Invalidate the provider to refresh data
-      ref.invalidate(temptationHistoryProvider);
+      ref.invalidate(paginatedTemptationHistoryProvider);
     }
   }
 
@@ -146,7 +146,7 @@ class _TemptationHistoryScreenState
         );
         await temptationRepository.deleteTemptation(temptation.id);
         // Invalidate the provider to refresh data
-        ref.invalidate(temptationHistoryProvider);
+        ref.invalidate(paginatedTemptationHistoryProvider);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -171,10 +171,9 @@ class _TemptationHistoryScreenState
 
   @override
   Widget build(BuildContext context) {
-    // Watch the temptation history provider
+    // Watch the paginated temptation history provider
     final temptationHistoryAsync = ref.watch(
-      temptationHistoryProvider(
-        limit: 100,
+      paginatedTemptationHistoryProvider(
         startDate: _selectedDate,
         endDate: _selectedDate,
         wasSuccessful: _filterType == 'successful'
@@ -251,16 +250,18 @@ class _TemptationHistoryScreenState
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () =>
-                          ref.invalidate(temptationHistoryProvider),
+                          ref.invalidate(paginatedTemptationHistoryProvider),
                       child: const Text('Retry'),
                     ),
                   ],
                 ),
               ),
-              data: (temptations) {
-                final filteredTemptations = _filterTemptations(temptations);
+              data: (paginationState) {
+                final filteredTemptations = _filterTemptations(
+                  paginationState.items,
+                );
 
-                if (filteredTemptations.isEmpty) {
+                if (filteredTemptations.isEmpty && !paginationState.isLoading) {
                   return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -278,40 +279,75 @@ class _TemptationHistoryScreenState
                   );
                 }
 
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  itemCount: filteredTemptations.length,
-                  itemBuilder: (context, index) {
-                    final temptation = filteredTemptations[index];
-                    return HistoryItemCard(
-                      title: temptation.selectedActivity ?? 'Unknown Activity',
-                      subtitle: temptation.wasSuccessful
-                          ? 'Resisted Successfully'
-                          : 'Relapsed',
-                      date: temptation.createdAt,
-                      icon: temptation.wasSuccessful
-                          ? Icons.check_circle
-                          : Icons.cancel,
-                      iconColor: temptation.wasSuccessful
-                          ? AppConstants.primaryGreen
-                          : AppConstants.errorRed,
-                      isSuccess: temptation.wasSuccessful,
-                      additionalInfo: [
-                        if (temptation.triggers.isNotEmpty)
-                          Text(
-                            'Triggers: ${temptation.triggers.join(', ')}',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        if (temptation.helpfulActivities.isNotEmpty)
-                          Text(
-                            'Helpful: ${temptation.helpfulActivities.join(', ')}',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                      ],
-                      onEdit: () => _editTemptation(temptation),
-                      onDelete: () => _deleteTemptation(temptation),
-                    );
+                return NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    // Load more when user scrolls to bottom
+                    if (scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent &&
+                        paginationState.hasMore &&
+                        !paginationState.isLoading) {
+                      ref
+                          .read(
+                            paginatedTemptationHistoryProvider(
+                              startDate: _selectedDate,
+                              endDate: _selectedDate,
+                              wasSuccessful: _filterType == 'successful'
+                                  ? true
+                                  : _filterType == 'relapsed'
+                                  ? false
+                                  : null,
+                            ).notifier,
+                          )
+                          .loadMore();
+                    }
+                    return false;
                   },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount:
+                        filteredTemptations.length +
+                        (paginationState.hasMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      // Show loading indicator at the bottom
+                      if (index == filteredTemptations.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      final temptation = filteredTemptations[index];
+                      return HistoryItemCard(
+                        title:
+                            temptation.selectedActivity ?? 'Unknown Activity',
+                        subtitle: temptation.wasSuccessful
+                            ? 'Resisted Successfully'
+                            : 'Relapsed',
+                        date: temptation.createdAt,
+                        icon: temptation.wasSuccessful
+                            ? Icons.check_circle
+                            : Icons.cancel,
+                        iconColor: temptation.wasSuccessful
+                            ? AppConstants.primaryGreen
+                            : AppConstants.errorRed,
+                        isSuccess: temptation.wasSuccessful,
+                        additionalInfo: [
+                          if (temptation.triggers.isNotEmpty)
+                            Text(
+                              'Triggers: ${temptation.triggers.join(', ')}',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          if (temptation.helpfulActivities.isNotEmpty)
+                            Text(
+                              'Helpful: ${temptation.helpfulActivities.join(', ')}',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                        ],
+                        onEdit: () => _editTemptation(temptation),
+                        onDelete: () => _deleteTemptation(temptation),
+                      );
+                    },
+                  ),
                 );
               },
             ),

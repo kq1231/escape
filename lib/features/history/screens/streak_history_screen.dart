@@ -62,7 +62,7 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
         _selectedDate = date;
       });
       // Invalidate the provider to refresh data
-      ref.invalidate(streakHistoryProvider);
+      ref.invalidate(paginatedStreakHistoryProvider);
     }
   }
 
@@ -77,7 +77,7 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
         final streakRepository = ref.read(streakRepositoryProvider.notifier);
         await streakRepository.updateStreak(result);
         // Invalidate the provider to refresh data
-        ref.invalidate(streakHistoryProvider);
+        ref.invalidate(paginatedStreakHistoryProvider);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -127,7 +127,7 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
         final streakRepository = ref.read(streakRepositoryProvider.notifier);
         await streakRepository.deleteStreak(streak.id);
         // Invalidate the provider to refresh data
-        ref.invalidate(streakHistoryProvider);
+        ref.invalidate(paginatedStreakHistoryProvider);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -152,10 +152,9 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch the streak history provider
+    // Watch the paginated streak history provider
     final streakHistoryAsync = ref.watch(
-      streakHistoryProvider(
-        limit: 100,
+      paginatedStreakHistoryProvider(
         startDate: _selectedDate,
         endDate: _selectedDate,
       ),
@@ -208,16 +207,17 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
                     Text('Error loading streak history: $error'),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () => ref.invalidate(streakHistoryProvider),
+                      onPressed: () =>
+                          ref.invalidate(paginatedStreakHistoryProvider),
                       child: const Text('Retry'),
                     ),
                   ],
                 ),
               ),
-              data: (streaks) {
-                final filteredStreaks = _filterStreaks(streaks);
+              data: (paginationState) {
+                final filteredStreaks = _filterStreaks(paginationState.items);
 
-                if (filteredStreaks.isEmpty) {
+                if (filteredStreaks.isEmpty && !paginationState.isLoading) {
                   return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -235,26 +235,55 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
                   );
                 }
 
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  itemCount: filteredStreaks.length,
-                  itemBuilder: (context, index) {
-                    final streak = filteredStreaks[index];
-                    return HistoryItemCard(
-                      title: 'Day ${streak.count}',
-                      subtitle: streak.isSuccess ? 'Successful' : 'Relapse',
-                      date: streak.date,
-                      icon: streak.isSuccess
-                          ? Icons.check_circle
-                          : Icons.cancel,
-                      iconColor: streak.isSuccess
-                          ? AppConstants.primaryGreen
-                          : AppConstants.errorRed,
-                      isSuccess: streak.isSuccess,
-                      onEdit: () => _editStreak(streak),
-                      onDelete: () => _deleteStreak(streak),
-                    );
+                return NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    // Load more when user scrolls to bottom
+                    if (scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent &&
+                        paginationState.hasMore &&
+                        !paginationState.isLoading) {
+                      ref
+                          .read(
+                            paginatedStreakHistoryProvider(
+                              startDate: _selectedDate,
+                              endDate: _selectedDate,
+                            ).notifier,
+                          )
+                          .loadMore();
+                    }
+                    return false;
                   },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount:
+                        filteredStreaks.length +
+                        (paginationState.hasMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      // Show loading indicator at the bottom
+                      if (index == filteredStreaks.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      final streak = filteredStreaks[index];
+                      return HistoryItemCard(
+                        title: 'Day ${streak.count}',
+                        subtitle: streak.isSuccess ? 'Successful' : 'Relapse',
+                        date: streak.date,
+                        icon: streak.isSuccess
+                            ? Icons.check_circle
+                            : Icons.cancel,
+                        iconColor: streak.isSuccess
+                            ? AppConstants.primaryGreen
+                            : AppConstants.errorRed,
+                        isSuccess: streak.isSuccess,
+                        onEdit: () => _editStreak(streak),
+                        onDelete: () => _deleteStreak(streak),
+                      );
+                    },
+                  ),
                 );
               },
             ),

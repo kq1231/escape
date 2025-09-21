@@ -331,14 +331,14 @@ class TemptationRepository extends _$TemptationRepository {
         .order(Temptation_.createdAt, flags: Order.descending)
         .build();
 
-    final allResults = await queryBuilt.findAsync();
+    // Use ObjectBox native pagination for better memory efficiency
+    queryBuilt.offset = offset;
+    queryBuilt.limit = limit;
+
+    final results = await queryBuilt.findAsync();
     queryBuilt.close();
 
-    // Manual pagination
-    final startIndex = offset.clamp(0, allResults.length);
-    final endIndex = (offset + limit).clamp(0, allResults.length);
-
-    return allResults.sublist(startIndex, endIndex);
+    return results;
   }
 
   // Search temptations by criteria

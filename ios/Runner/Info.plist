@@ -45,5 +45,10 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Location permissions for automatic prayer time location detection -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs location access to automatically determine your location for accurate prayer times.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs location access to automatically determine your location for accurate prayer times.</string>
 </dict>
 </plist>

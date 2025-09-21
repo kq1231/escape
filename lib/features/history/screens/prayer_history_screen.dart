@@ -76,7 +76,7 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
         _selectedDate = date;
       });
       // Invalidate the provider to refresh data
-      ref.invalidate(prayerHistoryProvider);
+      ref.invalidate(paginatedPrayerHistoryProvider);
     }
   }
 
@@ -91,7 +91,7 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
         final prayerRepository = ref.read(prayerRepositoryProvider.notifier);
         await prayerRepository.updatePrayer(result);
         // Invalidate the provider to refresh data
-        ref.invalidate(prayerHistoryProvider);
+        ref.invalidate(paginatedPrayerHistoryProvider);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -166,10 +166,9 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch the prayer history provider
+    // Watch the paginated prayer history provider
     final prayerHistoryAsync = ref.watch(
-      prayerHistoryProvider(
-        limit: 100,
+      paginatedPrayerHistoryProvider(
         startDate: _selectedDate,
         endDate: _selectedDate,
         prayerName: _prayerNameFilter != 'all' ? _prayerNameFilter : null,
@@ -268,16 +267,17 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
                     Text('Error loading prayer history: $error'),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () => ref.invalidate(prayerHistoryProvider),
+                      onPressed: () =>
+                          ref.invalidate(paginatedPrayerHistoryProvider),
                       child: const Text('Retry'),
                     ),
                   ],
                 ),
               ),
-              data: (prayers) {
-                final filteredPrayers = _filterPrayers(prayers);
+              data: (paginationState) {
+                final filteredPrayers = _filterPrayers(paginationState.items);
 
-                if (filteredPrayers.isEmpty) {
+                if (filteredPrayers.isEmpty && !paginationState.isLoading) {
                   return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -295,26 +295,63 @@ class _PrayerHistoryScreenState extends ConsumerState<PrayerHistoryScreen> {
                   );
                 }
 
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  itemCount: filteredPrayers.length,
-                  itemBuilder: (context, index) {
-                    final prayer = filteredPrayers[index];
-                    return HistoryItemCard(
-                      title: prayer.name,
-                      subtitle: prayer.isCompleted ? 'Completed' : 'Missed',
-                      date: prayer.date,
-                      icon: prayer.isCompleted
-                          ? Icons.check_circle
-                          : Icons.cancel,
-                      iconColor: prayer.isCompleted
-                          ? AppConstants.primaryGreen
-                          : AppConstants.errorRed,
-                      isSuccess: prayer.isCompleted,
-                      onEdit: () => _editPrayer(prayer),
-                      onDelete: () => _deletePrayer(prayer),
-                    );
+                return NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    // Load more when user scrolls to bottom
+                    if (scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent &&
+                        paginationState.hasMore &&
+                        !paginationState.isLoading) {
+                      ref
+                          .read(
+                            paginatedPrayerHistoryProvider(
+                              startDate: _selectedDate,
+                              endDate: _selectedDate,
+                              prayerName: _prayerNameFilter != 'all'
+                                  ? _prayerNameFilter
+                                  : null,
+                              isCompleted: _filterType == 'completed'
+                                  ? true
+                                  : _filterType == 'missed'
+                                  ? false
+                                  : null,
+                            ).notifier,
+                          )
+                          .loadMore();
+                    }
+                    return false;
                   },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount:
+                        filteredPrayers.length +
+                        (paginationState.hasMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      // Show loading indicator at the bottom
+                      if (index == filteredPrayers.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      final prayer = filteredPrayers[index];
+                      return HistoryItemCard(
+                        title: prayer.name,
+                        subtitle: prayer.isCompleted ? 'Completed' : 'Missed',
+                        date: prayer.date,
+                        icon: prayer.isCompleted
+                            ? Icons.check_circle
+                            : Icons.cancel,
+                        iconColor: prayer.isCompleted
+                            ? AppConstants.primaryGreen
+                            : AppConstants.errorRed,
+                        isSuccess: prayer.isCompleted,
+                        onEdit: () => _editPrayer(prayer),
+                        onDelete: () => _deletePrayer(prayer),
+                      );
+                    },
+                  ),
                 );
               },
             ),

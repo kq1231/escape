@@ -114,6 +114,129 @@ abstract class _$StreakHistory extends $AsyncNotifier<List<Streak>> {
   }
 }
 
+@ProviderFor(PaginatedStreakHistory)
+const paginatedStreakHistoryProvider = PaginatedStreakHistoryFamily._();
+
+final class PaginatedStreakHistoryProvider
+    extends
+        $AsyncNotifierProvider<
+          PaginatedStreakHistory,
+          PaginationState<Streak>
+        > {
+  const PaginatedStreakHistoryProvider._({
+    required PaginatedStreakHistoryFamily super.from,
+    required ({DateTime? startDate, DateTime? endDate, bool? isSuccess})
+    super.argument,
+  }) : super(
+         retry: null,
+         name: r'paginatedStreakHistoryProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$paginatedStreakHistoryHash();
+
+  @override
+  String toString() {
+    return r'paginatedStreakHistoryProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  PaginatedStreakHistory create() => PaginatedStreakHistory();
+
+  @override
+  bool operator ==(Object other) {
+    return other is PaginatedStreakHistoryProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$paginatedStreakHistoryHash() =>
+    r'fcb4c337ba0f5e491929ebc3b5f87b0b781c83f5';
+
+final class PaginatedStreakHistoryFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          PaginatedStreakHistory,
+          AsyncValue<PaginationState<Streak>>,
+          PaginationState<Streak>,
+          FutureOr<PaginationState<Streak>>,
+          ({DateTime? startDate, DateTime? endDate, bool? isSuccess})
+        > {
+  const PaginatedStreakHistoryFamily._()
+    : super(
+        retry: null,
+        name: r'paginatedStreakHistoryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  PaginatedStreakHistoryProvider call({
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isSuccess,
+  }) => PaginatedStreakHistoryProvider._(
+    argument: (startDate: startDate, endDate: endDate, isSuccess: isSuccess),
+    from: this,
+  );
+
+  @override
+  String toString() => r'paginatedStreakHistoryProvider';
+}
+
+abstract class _$PaginatedStreakHistory
+    extends $AsyncNotifier<PaginationState<Streak>> {
+  late final _$args =
+      ref.$arg as ({DateTime? startDate, DateTime? endDate, bool? isSuccess});
+  DateTime? get startDate => _$args.startDate;
+  DateTime? get endDate => _$args.endDate;
+  bool? get isSuccess => _$args.isSuccess;
+
+  FutureOr<PaginationState<Streak>> build({
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isSuccess,
+  });
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      startDate: _$args.startDate,
+      endDate: _$args.endDate,
+      isSuccess: _$args.isSuccess,
+    );
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<PaginationState<Streak>>,
+              PaginationState<Streak>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<PaginationState<Streak>>,
+                PaginationState<Streak>
+              >,
+              AsyncValue<PaginationState<Streak>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(PrayerHistory)
 const prayerHistoryProvider = PrayerHistoryFamily._();
 
@@ -248,6 +371,154 @@ abstract class _$PrayerHistory extends $AsyncNotifier<List<Prayer>> {
             as $ClassProviderElement<
               AnyNotifier<AsyncValue<List<Prayer>>, List<Prayer>>,
               AsyncValue<List<Prayer>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(PaginatedPrayerHistory)
+const paginatedPrayerHistoryProvider = PaginatedPrayerHistoryFamily._();
+
+final class PaginatedPrayerHistoryProvider
+    extends
+        $AsyncNotifierProvider<
+          PaginatedPrayerHistory,
+          PaginationState<Prayer>
+        > {
+  const PaginatedPrayerHistoryProvider._({
+    required PaginatedPrayerHistoryFamily super.from,
+    required ({
+      DateTime? startDate,
+      DateTime? endDate,
+      String? prayerName,
+      bool? isCompleted,
+    })
+    super.argument,
+  }) : super(
+         retry: null,
+         name: r'paginatedPrayerHistoryProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$paginatedPrayerHistoryHash();
+
+  @override
+  String toString() {
+    return r'paginatedPrayerHistoryProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  PaginatedPrayerHistory create() => PaginatedPrayerHistory();
+
+  @override
+  bool operator ==(Object other) {
+    return other is PaginatedPrayerHistoryProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$paginatedPrayerHistoryHash() =>
+    r'ae0d98a58066fdf55c7093dc6ca14fa0ead7f646';
+
+final class PaginatedPrayerHistoryFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          PaginatedPrayerHistory,
+          AsyncValue<PaginationState<Prayer>>,
+          PaginationState<Prayer>,
+          FutureOr<PaginationState<Prayer>>,
+          ({
+            DateTime? startDate,
+            DateTime? endDate,
+            String? prayerName,
+            bool? isCompleted,
+          })
+        > {
+  const PaginatedPrayerHistoryFamily._()
+    : super(
+        retry: null,
+        name: r'paginatedPrayerHistoryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  PaginatedPrayerHistoryProvider call({
+    DateTime? startDate,
+    DateTime? endDate,
+    String? prayerName,
+    bool? isCompleted,
+  }) => PaginatedPrayerHistoryProvider._(
+    argument: (
+      startDate: startDate,
+      endDate: endDate,
+      prayerName: prayerName,
+      isCompleted: isCompleted,
+    ),
+    from: this,
+  );
+
+  @override
+  String toString() => r'paginatedPrayerHistoryProvider';
+}
+
+abstract class _$PaginatedPrayerHistory
+    extends $AsyncNotifier<PaginationState<Prayer>> {
+  late final _$args =
+      ref.$arg
+          as ({
+            DateTime? startDate,
+            DateTime? endDate,
+            String? prayerName,
+            bool? isCompleted,
+          });
+  DateTime? get startDate => _$args.startDate;
+  DateTime? get endDate => _$args.endDate;
+  String? get prayerName => _$args.prayerName;
+  bool? get isCompleted => _$args.isCompleted;
+
+  FutureOr<PaginationState<Prayer>> build({
+    DateTime? startDate,
+    DateTime? endDate,
+    String? prayerName,
+    bool? isCompleted,
+  });
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      startDate: _$args.startDate,
+      endDate: _$args.endDate,
+      prayerName: _$args.prayerName,
+      isCompleted: _$args.isCompleted,
+    );
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<PaginationState<Prayer>>,
+              PaginationState<Prayer>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<PaginationState<Prayer>>,
+                PaginationState<Prayer>
+              >,
+              AsyncValue<PaginationState<Prayer>>,
               Object?,
               Object?
             >;
@@ -390,6 +661,154 @@ abstract class _$TemptationHistory extends $AsyncNotifier<List<Temptation>> {
             as $ClassProviderElement<
               AnyNotifier<AsyncValue<List<Temptation>>, List<Temptation>>,
               AsyncValue<List<Temptation>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(PaginatedTemptationHistory)
+const paginatedTemptationHistoryProvider = PaginatedTemptationHistoryFamily._();
+
+final class PaginatedTemptationHistoryProvider
+    extends
+        $AsyncNotifierProvider<
+          PaginatedTemptationHistory,
+          PaginationState<Temptation>
+        > {
+  const PaginatedTemptationHistoryProvider._({
+    required PaginatedTemptationHistoryFamily super.from,
+    required ({
+      DateTime? startDate,
+      DateTime? endDate,
+      bool? wasSuccessful,
+      bool? isResolved,
+    })
+    super.argument,
+  }) : super(
+         retry: null,
+         name: r'paginatedTemptationHistoryProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$paginatedTemptationHistoryHash();
+
+  @override
+  String toString() {
+    return r'paginatedTemptationHistoryProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  PaginatedTemptationHistory create() => PaginatedTemptationHistory();
+
+  @override
+  bool operator ==(Object other) {
+    return other is PaginatedTemptationHistoryProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$paginatedTemptationHistoryHash() =>
+    r'cb3baa5602439419d2387db3c438c0041cb402c3';
+
+final class PaginatedTemptationHistoryFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          PaginatedTemptationHistory,
+          AsyncValue<PaginationState<Temptation>>,
+          PaginationState<Temptation>,
+          FutureOr<PaginationState<Temptation>>,
+          ({
+            DateTime? startDate,
+            DateTime? endDate,
+            bool? wasSuccessful,
+            bool? isResolved,
+          })
+        > {
+  const PaginatedTemptationHistoryFamily._()
+    : super(
+        retry: null,
+        name: r'paginatedTemptationHistoryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  PaginatedTemptationHistoryProvider call({
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? wasSuccessful,
+    bool? isResolved,
+  }) => PaginatedTemptationHistoryProvider._(
+    argument: (
+      startDate: startDate,
+      endDate: endDate,
+      wasSuccessful: wasSuccessful,
+      isResolved: isResolved,
+    ),
+    from: this,
+  );
+
+  @override
+  String toString() => r'paginatedTemptationHistoryProvider';
+}
+
+abstract class _$PaginatedTemptationHistory
+    extends $AsyncNotifier<PaginationState<Temptation>> {
+  late final _$args =
+      ref.$arg
+          as ({
+            DateTime? startDate,
+            DateTime? endDate,
+            bool? wasSuccessful,
+            bool? isResolved,
+          });
+  DateTime? get startDate => _$args.startDate;
+  DateTime? get endDate => _$args.endDate;
+  bool? get wasSuccessful => _$args.wasSuccessful;
+  bool? get isResolved => _$args.isResolved;
+
+  FutureOr<PaginationState<Temptation>> build({
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? wasSuccessful,
+    bool? isResolved,
+  });
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      startDate: _$args.startDate,
+      endDate: _$args.endDate,
+      wasSuccessful: _$args.wasSuccessful,
+      isResolved: _$args.isResolved,
+    );
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<PaginationState<Temptation>>,
+              PaginationState<Temptation>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<PaginationState<Temptation>>,
+                PaginationState<Temptation>
+              >,
+              AsyncValue<PaginationState<Temptation>>,
               Object?,
               Object?
             >;
