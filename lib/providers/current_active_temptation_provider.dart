@@ -74,11 +74,21 @@ class CurrentActiveTemptation extends _$CurrentActiveTemptation {
     }
   }
 
-  /// Cancel temptation (remove data from shared prefs without saving to ObjectBox)
+  /// Cancel temptation (remove data from shared prefs and delete from ObjectBox)
   Future<void> cancelTemptation() async {
     try {
+      // Get current temptation to get its ID for deletion
+      final currentTemptation = state.value;
+
       // Clear active temptation from SharedPreferences
       await _storageService.clearActiveTemptation();
+
+      // Delete the temptation record from ObjectBox if it exists
+      if (currentTemptation != null && currentTemptation.id > 0) {
+        await ref
+            .read(temptationRepositoryProvider.notifier)
+            .deleteTemptation(currentTemptation.id);
+      }
 
       // Invalidate hasActiveTemptation provider
       if (ref.mounted) {

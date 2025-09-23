@@ -2,12 +2,14 @@ import 'package:escape/features/challenges/widgets/achievement_overlay.dart';
 import 'package:escape/models/user_profile_model.dart' as user_profile;
 import 'package:escape/providers/user_profile_provider.dart';
 import 'package:escape/providers/challenges_watcher_provider.dart';
+import 'package:escape/providers/auth_provider.dart';
 import 'package:escape/screens/main_app_screen.dart';
 import 'package:escape/theme/app_constants.dart';
 import 'package:escape/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/onboarding/onboarding_flow.dart';
+import '../features/auth/screens/login_screen.dart';
 
 /// A widget that displays a loading state with a MaterialApp
 class AppStartupLoadingWidget extends StatelessWidget {
@@ -75,69 +77,136 @@ class AppStartupSuccessWidget extends ConsumerWidget {
         .requireValue;
     final themeModeAsync = ref.watch(themeModeNotifierProvider);
 
-    return userProfile != null
-        ? themeModeAsync.when(
-            data: (data) {
-              return MaterialApp(
-                theme: AppConstants.lightTheme,
-                darkTheme: AppConstants.darkTheme,
-                themeMode: data,
-                home: const MainAppScreen(),
-                builder: (context, child) {
-                  return Stack(
-                    children: [
-                      child!, // Your main app content
-                      // Global Achievement Overlay - positioned on top
-                      Consumer(
-                        builder: (context, ref, _) {
-                          return ref
-                              .watch(challengesWatcherProvider)
-                              .when(
-                                data: (newAchievements) =>
-                                    newAchievements.isNotEmpty
-                                    ? Positioned(
-                                        top:
-                                            MediaQuery.of(context).padding.top +
-                                            20,
-                                        left: 16,
-                                        right: 16,
-                                        child: Material(
-                                          color: Colors.transparent,
-                                          child: AchievementOverlay(
-                                            challenges: newAchievements,
-                                          ),
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                                loading: () => const SizedBox.shrink(),
-                                error: (_, _) => const SizedBox.shrink(),
-                              );
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
+    // If user profile exists, check authentication
+    if (userProfile != null) {
+      final authAsync = ref.watch(authProvider);
+
+      return authAsync.when(
+        loading: () => const AppStartupLoadingWidget(),
+        error: (error, stack) => AppStartupErrorWidget(
+          message: 'Authentication error: $error',
+          onRetry: () => ref.refresh(authProvider),
+        ),
+        data: (isAuthenticated) {
+          if (!isAuthenticated) {
+            // Show login screen
+            return _buildLoginApp(context, ref, themeModeAsync);
+          }
+
+          // User is authenticated, show main app
+          return _buildAuthenticatedApp(context, ref, themeModeAsync);
+        },
+      );
+    }
+
+    // No user profile, show onboarding
+    return _buildOnboardingApp(context, themeModeAsync);
+  }
+
+  Widget _buildLoginApp(
+    BuildContext context,
+    WidgetRef ref,
+    AsyncValue<ThemeMode> themeModeAsync,
+  ) {
+    return themeModeAsync.when(
+      data: (themeMode) {
+        return MaterialApp(
+          theme: AppConstants.lightTheme,
+          darkTheme: AppConstants.darkTheme,
+          themeMode: themeMode,
+          home: LoginScreen(
+            onAuthenticated: () {
+              // Refresh auth state to trigger rebuild
+              ref.read(authProvider.notifier).refreshAuthState();
             },
-            loading: () => const MaterialApp(
-              home: Scaffold(body: Center(child: CircularProgressIndicator())),
-            ),
-            error: (error, stack) => MaterialApp(
-              home: Scaffold(
-                body: Center(child: Text('Error loading theme: $error')),
-              ),
-            ),
-          )
-        : MaterialApp(
-            theme: AppConstants.lightTheme,
-            darkTheme: AppConstants.darkTheme,
-            themeMode: ThemeMode.light,
-            home: OnboardingFlow(
-              onComplete: (ctx) => Navigator.of(ctx).pushReplacement(
-                MaterialPageRoute(builder: (context) => MainAppScreen()),
-              ),
-            ),
-          );
+          ),
+        );
+      },
+      loading: () => const MaterialApp(
+        home: Scaffold(
+          body: SafeArea(child: Center(child: CircularProgressIndicator())),
+        ),
+      ),
+      error: (error, stack) => MaterialApp(
+        home: Scaffold(
+          body: SafeArea(
+            child: Center(child: Text('Error loading theme: $error')),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAuthenticatedApp(
+    BuildContext context,
+    WidgetRef ref,
+    AsyncValue<ThemeMode> themeModeAsync,
+  ) {
+    return themeModeAsync.when(
+      data: (data) {
+        return MaterialApp(
+          theme: AppConstants.lightTheme,
+          darkTheme: AppConstants.darkTheme,
+          themeMode: data,
+          home: const MainAppScreen(),
+          builder: (context, child) {
+            return Stack(
+              children: [
+                child!, // Your main app content
+                // Global Achievement Overlay - positioned on top
+                Consumer(
+                  builder: (context, ref, _) {
+                    return ref
+                        .watch(challengesWatcherProvider)
+                        .when(
+                          data: (newAchievements) => newAchievements.isNotEmpty
+                              ? Positioned(
+                                  top: MediaQuery.of(context).padding.top + 20,
+                                  left: 16,
+                                  right: 16,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: AchievementOverlay(
+                                      challenges: newAchievements,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          loading: () => const SizedBox.shrink(),
+                          error: (_, _) => const SizedBox.shrink(),
+                        );
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      loading: () => const MaterialApp(
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      ),
+      error: (error, stack) => MaterialApp(
+        home: Scaffold(
+          body: Center(child: Text('Error loading theme: $error')),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOnboardingApp(
+    BuildContext context,
+    AsyncValue<ThemeMode> themeModeAsync,
+  ) {
+    return MaterialApp(
+      theme: AppConstants.lightTheme,
+      darkTheme: AppConstants.darkTheme,
+      themeMode: ThemeMode.light,
+      home: OnboardingFlow(
+        onComplete: (ctx) => Navigator.of(ctx).pushReplacement(
+          MaterialPageRoute(builder: (context) => MainAppScreen()),
+        ),
+      ),
+    );
   }
 }
 

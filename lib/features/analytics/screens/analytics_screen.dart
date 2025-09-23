@@ -25,36 +25,38 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppConstants.spacingM),
-        child: Column(
-          spacing: AppConstants.spacingL,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header with title
-            Center(
-              child: Text(
-                textAlign: TextAlign.center,
-                'Analytics',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppConstants.darkGreen,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppConstants.spacingM),
+          child: Column(
+            spacing: AppConstants.spacingL,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with title
+              Center(
+                child: Text(
+                  textAlign: TextAlign.center,
+                  'Analytics',
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppConstants.darkGreen,
+                  ),
                 ),
               ),
-            ),
 
-            // Time range filter
-            Center(
-              child: TimeRangeFilter(
-                initialRange: _selectedTimeRange,
-                onRangeChanged: _onTimeRangeChanged,
+              // Time range filter
+              Center(
+                child: TimeRangeFilter(
+                  initialRange: _selectedTimeRange,
+                  onRangeChanged: _onTimeRangeChanged,
+                ),
               ),
-            ),
 
-            // Analytics sections
-            _buildAnalyticsSection(context),
-          ],
+              // Analytics sections
+              _buildAnalyticsSection(context),
+            ],
+          ),
         ),
       ),
     );

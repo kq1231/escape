@@ -65,25 +65,27 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             centerTitle: true,
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Appearance',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 16),
-                _buildThemeSelector(context, ref, themeMode),
-                const SizedBox(height: 32),
-                Text(
-                  'Prayer Time',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 16),
-                _buildPrayerTimeSettings(context, locationState),
-              ],
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Appearance',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 16),
+                  _buildThemeSelector(context, ref, themeMode),
+                  const SizedBox(height: 32),
+                  Text(
+                    'Prayer Time',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 16),
+                  _buildPrayerTimeSettings(context, locationState),
+                ],
+              ),
             ),
           ),
         );

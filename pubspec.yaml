@@ -81,9 +81,12 @@ dependencies:
   shared_preferences: ^2.5.3
 
   # Location services
-  geolocator: ^13.0.2
-  permission_handler: ^11.3.1
-  geocoding: ^3.0.0
+  geolocator: ^14.0.2
+  permission_handler: ^12.0.1
+  geocoding: ^4.0.0
+
+  # Biometric authentication
+  local_auth: ^2.3.0
   
   flutter_localizations:
     sdk: flutter

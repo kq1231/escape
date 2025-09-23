@@ -25,12 +25,6 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
-  void _onStatCardTap(BuildContext context, String statType) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Navigate to $statType details')));
-  }
-
   void _onHistoryButtonPressed(BuildContext context) {
     Navigator.push(
       context,
@@ -43,139 +37,139 @@ class HomeScreen extends ConsumerWidget {
     final hasActiveTemptation = ref.watch(hasActiveTemptationProvider);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppConstants.spacingL),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Show active temptation warning if exists
-            if (hasActiveTemptation) ...[
-              Container(
-                padding: const EdgeInsets.all(AppConstants.spacingL),
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 0,
-                  vertical: AppConstants.spacingM,
-                ),
-                decoration: BoxDecoration(
-                  color: AppConstants.errorRed.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppConstants.radiusXL),
-                  border: Border.all(
-                    color: AppConstants.errorRed.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.warning_amber,
-                          color: AppConstants.errorRed,
-                          size: 24,
-                        ),
-                        const SizedBox(width: AppConstants.spacingS),
-                        Text(
-                          'Active Temptation Session',
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                color: AppConstants.errorRed,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppConstants.spacingM),
-                    Text(
-                      'You have an ongoing temptation session. '
-                      'Tap below to continue your journey.',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).brightness == Brightness.light
-                            ? AppConstants.darkGray
-                            : AppConstants.white,
-                      ),
-                    ),
-                    const SizedBox(height: AppConstants.spacingL),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const TemptationFlowScreen(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppConstants.errorRed,
-                          foregroundColor: AppConstants.white,
-                        ),
-                        child: const Text('Continue Session'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: AppConstants.spacingXL),
-            ],
-            StreakOrganism(labelText: 'Days Clean', isActive: true),
-
-            const SizedBox(height: AppConstants.spacingXL),
-
-            DailyPrayerGrid(),
-
-            const SizedBox(height: AppConstants.spacingXL),
-
-            // Emergency Button and History Button Row
-            Row(
-              children: [
-                // Emergency Button - takes most of the space
-                Expanded(
-                  flex: 3,
-                  child: EmergencyButton(
-                    text: 'I Need Help',
-                    onPressed: () => _onEmergencyButtonPressed(context),
-                    icon: Icons.favorite,
-                    height: 60,
-                  ),
-                ),
-
-                const SizedBox(width: AppConstants.spacingS),
-
-                // History Button - smaller, to the right
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppConstants.spacingL),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Show active temptation warning if exists
+              if (hasActiveTemptation) ...[
                 Container(
-                  height: 40,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppConstants.radiusL),
+                  padding: const EdgeInsets.all(AppConstants.spacingL),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: AppConstants.spacingM,
                   ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => _onHistoryButtonPressed(context),
+                  decoration: BoxDecoration(
+                    color: AppConstants.errorRed.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXL),
+                    border: Border.all(
+                      color: AppConstants.errorRed.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.warning_amber,
+                            color: AppConstants.errorRed,
+                            size: 24,
+                          ),
+                          const SizedBox(width: AppConstants.spacingS),
+                          Text(
+                            'Active Temptation Session',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  color: AppConstants.errorRed,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppConstants.spacingM),
+                      Text(
+                        'You have an ongoing temptation session. '
+                        'Tap below to continue your journey.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                              ? AppConstants.darkGray
+                              : AppConstants.white,
+                        ),
+                      ),
+                      const SizedBox(height: AppConstants.spacingL),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const TemptationFlowScreen(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppConstants.errorRed,
+                            foregroundColor: AppConstants.white,
+                          ),
+                          child: const Text('Continue Session'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppConstants.spacingXL),
+              ],
+              StreakOrganism(labelText: 'Days Clean', isActive: true),
+
+              const SizedBox(height: AppConstants.spacingXL),
+
+              DailyPrayerGrid(),
+
+              const SizedBox(height: AppConstants.spacingXL),
+
+              // Emergency Button and History Button Row
+              Row(
+                children: [
+                  // Emergency Button - takes most of the space
+                  Expanded(
+                    flex: 3,
+                    child: EmergencyButton(
+                      text: 'I Need Help',
+                      onPressed: () => _onEmergencyButtonPressed(context),
+                      icon: Icons.favorite,
+                      height: 60,
+                    ),
+                  ),
+
+                  const SizedBox(width: AppConstants.spacingS),
+
+                  // History Button - smaller, to the right
+                  Container(
+                    height: 40,
+                    width: 30,
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(AppConstants.radiusL),
-                      child: const Icon(
-                        Icons.history,
-                        color: Colors.grey,
-                        size: 20,
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () => _onHistoryButtonPressed(context),
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusL,
+                        ),
+                        child: const Icon(
+                          Icons.history,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-            const SizedBox(height: AppConstants.spacingXL),
+              const SizedBox(height: AppConstants.spacingXL),
 
-            // Quick Stats Mini Analytics Preview
-            QuickStatsOrganism(
-              onPrayersTap: () => _onStatCardTap(context, 'Prayers'),
-              onBestStreakTap: () => _onStatCardTap(context, 'Best Streak'),
-              onMoodTap: () => _onStatCardTap(context, 'Mood'),
-              onProgressTap: () => _onStatCardTap(context, 'Progress'),
-            ),
-          ],
+              // Quick Stats Mini Analytics Preview
+              QuickStatsOrganism(),
+            ],
+          ),
         ),
       ),
     );

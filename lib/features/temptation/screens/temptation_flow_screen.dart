@@ -426,24 +426,27 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
     final currentTemptationAsync = ref.watch(currentActiveTemptationProvider);
 
     return currentTemptationAsync.when(
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => const Scaffold(
+        body: SafeArea(child: Center(child: CircularProgressIndicator())),
+      ),
       error: (error, stack) => Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error, size: 64, color: AppConstants.errorRed),
-              const SizedBox(height: 16),
-              Text('Error: $error'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  ref.invalidate(currentActiveTemptationProvider);
-                },
-                child: const Text('Retry'),
-              ),
-            ],
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error, size: 64, color: AppConstants.errorRed),
+                const SizedBox(height: 16),
+                Text('Error: $error'),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.invalidate(currentActiveTemptationProvider);
+                  },
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -477,60 +480,62 @@ class _TemptationFlowScreenState extends ConsumerState<TemptationFlowScreen> {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            // Progress indicator
-            Padding(
-              padding: const EdgeInsets.all(AppConstants.spacingM),
-              child: Row(
-                children: [
-                  Text(
-                    'Step ${_currentPage + 1} of 6',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppConstants.mediumGray,
-                      fontSize: 14,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Progress indicator
+              Padding(
+                padding: const EdgeInsets.all(AppConstants.spacingM),
+                child: Row(
+                  children: [
+                    Text(
+                      'Step ${_currentPage + 1} of 6',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppConstants.mediumGray,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  TemptationPageIndicator(
-                    currentPage: _currentPage,
-                    pageCount: 6,
-                    activeColor: AppConstants.primaryGreen,
-                    inactiveColor: AppConstants.mediumGray,
-                  ),
-                ],
+                    const Spacer(),
+                    TemptationPageIndicator(
+                      currentPage: _currentPage,
+                      pageCount: 6,
+                      activeColor: AppConstants.primaryGreen,
+                      inactiveColor: AppConstants.mediumGray,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            // Page content
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: _onPageChanged,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  switch (index) {
-                    case 0:
-                      return _buildCalmPage();
-                    case 1:
-                      return _buildEducationPage();
-                    case 2:
-                      return _buildMotivationPage();
-                    case 3:
-                      return _buildActivityPage(currentTemptation);
-                    case 4:
-                      return _buildActionPage(currentTemptation);
-                    case 5:
-                      return _buildResolutionPage();
-                    default:
-                      return const SizedBox.shrink();
-                  }
-                },
+              // Page content
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: _onPageChanged,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    switch (index) {
+                      case 0:
+                        return _buildCalmPage();
+                      case 1:
+                        return _buildEducationPage();
+                      case 2:
+                        return _buildMotivationPage();
+                      case 3:
+                        return _buildActivityPage(currentTemptation);
+                      case 4:
+                        return _buildActionPage(currentTemptation);
+                      case 5:
+                        return _buildResolutionPage();
+                      default:
+                        return const SizedBox.shrink();
+                    }
+                  },
+                ),
               ),
-            ),
-            // Navigation buttons
-            _buildNavigationButtons(),
-          ],
+              // Navigation buttons
+              _buildNavigationButtons(),
+            ],
+          ),
         ),
       ),
     );

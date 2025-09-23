@@ -69,15 +69,15 @@ abstract class BaseHistoryScreenState<T extends BaseHistoryScreen>
           children: [
             Text(
               widget.title,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             Text(
               widget.subtitle,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppConstants.mediumGray,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppConstants.mediumGray),
             ),
           ],
         ),
@@ -86,101 +86,102 @@ abstract class BaseHistoryScreenState<T extends BaseHistoryScreen>
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          IconButton(
-            icon: Icon(widget.icon),
-            onPressed: () {},
-          ),
+          IconButton(icon: Icon(widget.icon), onPressed: () {}),
           ...buildFilterActions(),
         ],
       ),
-      body: Column(
-        children: [
-          // Search and filter section
-          Container(
-            padding: const EdgeInsets.all(AppConstants.spacingM),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                // Search bar
-                TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search history...',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              _searchController.clear();
-                              _onSearchChanged('');
-                            },
-                          )
-                        : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppConstants.radiusM),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: AppConstants.spacingM,
-                      vertical: AppConstants.spacingS,
-                    ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Search and filter section
+            Container(
+              padding: const EdgeInsets.all(AppConstants.spacingM),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
                   ),
-                  onChanged: _onSearchChanged,
-                ),
-                const SizedBox(height: AppConstants.spacingM),
-                // Date filter
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () async {
-                          final date = await showDatePicker(
-                            context: context,
-                            initialDate: _selectedDate ?? DateTime.now(),
-                            firstDate: DateTime(2020),
-                            lastDate: DateTime.now(),
-                          );
-                          _onDateSelected(date);
-                        },
-                        icon: const Icon(Icons.calendar_today),
-                        label: Text(
-                          _selectedDate != null
-                              ? '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'
-                              : 'Select Date',
+                ],
+              ),
+              child: Column(
+                children: [
+                  // Search bar
+                  TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search history...',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                _searchController.clear();
+                                _onSearchChanged('');
+                              },
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.radiusM,
                         ),
                       ),
-                    ),
-                    if (_selectedDate != null) ...[
-                      const SizedBox(width: AppConstants.spacingS),
-                      IconButton(
-                        onPressed: () => _onDateSelected(null),
-                        icon: const Icon(Icons.clear),
-                        tooltip: 'Clear date filter',
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: AppConstants.spacingM,
+                        vertical: AppConstants.spacingS,
                       ),
-                    ],
-                  ],
-                ),
-              ],
-            ),
-          ),
-          // Content area
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : RefreshIndicator(
-                    onRefresh: () async => onRefresh(),
-                    child: buildHistoryList(),
+                    ),
+                    onChanged: _onSearchChanged,
                   ),
-          ),
-        ],
+                  const SizedBox(height: AppConstants.spacingM),
+                  // Date filter
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            final date = await showDatePicker(
+                              context: context,
+                              initialDate: _selectedDate ?? DateTime.now(),
+                              firstDate: DateTime(2020),
+                              lastDate: DateTime.now(),
+                            );
+                            _onDateSelected(date);
+                          },
+                          icon: const Icon(Icons.calendar_today),
+                          label: Text(
+                            _selectedDate != null
+                                ? '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'
+                                : 'Select Date',
+                          ),
+                        ),
+                      ),
+                      if (_selectedDate != null) ...[
+                        const SizedBox(width: AppConstants.spacingS),
+                        IconButton(
+                          onPressed: () => _onDateSelected(null),
+                          icon: const Icon(Icons.clear),
+                          tooltip: 'Clear date filter',
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            // Content area
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : RefreshIndicator(
+                      onRefresh: () async => onRefresh(),
+                      child: buildHistoryList(),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

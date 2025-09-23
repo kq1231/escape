@@ -5,18 +5,7 @@ import 'package:escape/theme/app_constants.dart';
 import 'package:escape/providers/quick_stats_provider.dart';
 
 class QuickStatsOrganism extends ConsumerWidget {
-  final VoidCallback? onPrayersTap;
-  final VoidCallback? onBestStreakTap;
-  final VoidCallback? onMoodTap;
-  final VoidCallback? onProgressTap;
-
-  const QuickStatsOrganism({
-    super.key,
-    this.onPrayersTap,
-    this.onBestStreakTap,
-    this.onMoodTap,
-    this.onProgressTap,
-  });
+  const QuickStatsOrganism({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,7 +34,6 @@ class QuickStatsOrganism extends ConsumerWidget {
                         value: '${stats.totalPrayers}',
                         subtitle: 'All time',
                         icon: Icons.mosque,
-                        onTap: onPrayersTap,
                       ),
                     ),
                     const SizedBox(width: AppConstants.spacingM),
@@ -56,7 +44,6 @@ class QuickStatsOrganism extends ConsumerWidget {
                         subtitle: 'All time',
                         icon: Icons.local_fire_department,
                         iconColor: AppConstants.primaryGreen,
-                        onTap: onBestStreakTap,
                       ),
                     ),
                   ],
@@ -71,7 +58,6 @@ class QuickStatsOrganism extends ConsumerWidget {
                         subtitle: 'Today',
                         icon: Icons.mood,
                         iconColor: Colors.orange,
-                        onTap: onMoodTap,
                       ),
                     ),
                     const SizedBox(width: AppConstants.spacingM),
@@ -82,7 +68,6 @@ class QuickStatsOrganism extends ConsumerWidget {
                         subtitle: 'To goal',
                         icon: Icons.trending_up,
                         iconColor: Colors.blue,
-                        onTap: onProgressTap,
                       ),
                     ),
                   ],

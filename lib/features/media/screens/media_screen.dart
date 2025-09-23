@@ -91,164 +91,166 @@ class _MediaScreenState extends ConsumerState<MediaScreen> {
       backgroundColor: isDarkMode
           ? AppConstants.darkBackground
           : AppConstants.lightBackground,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: RefreshIndicator(
-          color: AppConstants.primaryGreen,
-          backgroundColor: isDarkMode ? AppConstants.darkCard : Colors.white,
-          onRefresh: () async {
-            await ref.read(postsProviderProvider.notifier).refreshPosts();
-          },
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              // Sorting chips
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 50,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppConstants.spacingM,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: RefreshIndicator(
+            color: AppConstants.primaryGreen,
+            backgroundColor: isDarkMode ? AppConstants.darkCard : Colors.white,
+            onRefresh: () async {
+              await ref.read(postsProviderProvider.notifier).refreshPosts();
+            },
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                // Sorting chips
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 50,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppConstants.spacingM,
+                      ),
+                      children: [
+                        _buildSortChip('Latest', SortOption.latest),
+                        SizedBox(width: AppConstants.spacingS),
+                        _buildSortChip('Popular', SortOption.popular),
+                        SizedBox(width: AppConstants.spacingS),
+                        _buildSortChip('Oldest', SortOption.oldest),
+                      ],
                     ),
-                    children: [
-                      _buildSortChip('Latest', SortOption.latest),
-                      SizedBox(width: AppConstants.spacingS),
-                      _buildSortChip('Popular', SortOption.popular),
-                      SizedBox(width: AppConstants.spacingS),
-                      _buildSortChip('Oldest', SortOption.oldest),
-                    ],
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: AppConstants.spacingM),
-              ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: AppConstants.spacingM),
+                ),
 
-              // Category tags
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 50,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppConstants.spacingM,
+                // Category tags
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 50,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppConstants.spacingM,
+                      ),
+                      children: [
+                        MediaTag(
+                          label: 'All',
+                          backgroundColor: _selectedCategory == 'All'
+                              ? AppConstants.primaryGreen
+                              : isDarkMode
+                              ? AppConstants.darkCard
+                              : AppConstants.lightGray,
+                          textColor: _selectedCategory == 'All'
+                              ? AppConstants.white
+                              : isDarkMode
+                              ? AppConstants.lightGray
+                              : AppConstants.darkGray,
+                          onTap: () => _filterContent('All'),
+                        ),
+                        SizedBox(width: AppConstants.spacingS),
+                        MediaTag(
+                          label: 'Articles',
+                          backgroundColor: _selectedCategory == 'Articles'
+                              ? AppConstants.primaryGreen
+                              : isDarkMode
+                              ? AppConstants.darkCard
+                              : AppConstants.lightGray,
+                          textColor: _selectedCategory == 'Articles'
+                              ? AppConstants.white
+                              : isDarkMode
+                              ? AppConstants.lightGray
+                              : AppConstants.darkGray,
+                          onTap: () => _filterContent('Articles'),
+                        ),
+                        SizedBox(width: AppConstants.spacingS),
+                        MediaTag(
+                          label: 'Videos',
+                          backgroundColor: _selectedCategory == 'Videos'
+                              ? AppConstants.primaryGreen
+                              : isDarkMode
+                              ? AppConstants.darkCard
+                              : AppConstants.lightGray,
+                          textColor: _selectedCategory == 'Videos'
+                              ? AppConstants.white
+                              : isDarkMode
+                              ? AppConstants.lightGray
+                              : AppConstants.darkGray,
+                          onTap: () => _filterContent('Videos'),
+                        ),
+                        // Other tags...
+                      ],
                     ),
-                    children: [
-                      MediaTag(
-                        label: 'All',
-                        backgroundColor: _selectedCategory == 'All'
-                            ? AppConstants.primaryGreen
-                            : isDarkMode
-                            ? AppConstants.darkCard
-                            : AppConstants.lightGray,
-                        textColor: _selectedCategory == 'All'
-                            ? AppConstants.white
-                            : isDarkMode
-                            ? AppConstants.lightGray
-                            : AppConstants.darkGray,
-                        onTap: () => _filterContent('All'),
-                      ),
-                      SizedBox(width: AppConstants.spacingS),
-                      MediaTag(
-                        label: 'Articles',
-                        backgroundColor: _selectedCategory == 'Articles'
-                            ? AppConstants.primaryGreen
-                            : isDarkMode
-                            ? AppConstants.darkCard
-                            : AppConstants.lightGray,
-                        textColor: _selectedCategory == 'Articles'
-                            ? AppConstants.white
-                            : isDarkMode
-                            ? AppConstants.lightGray
-                            : AppConstants.darkGray,
-                        onTap: () => _filterContent('Articles'),
-                      ),
-                      SizedBox(width: AppConstants.spacingS),
-                      MediaTag(
-                        label: 'Videos',
-                        backgroundColor: _selectedCategory == 'Videos'
-                            ? AppConstants.primaryGreen
-                            : isDarkMode
-                            ? AppConstants.darkCard
-                            : AppConstants.lightGray,
-                        textColor: _selectedCategory == 'Videos'
-                            ? AppConstants.white
-                            : isDarkMode
-                            ? AppConstants.lightGray
-                            : AppConstants.darkGray,
-                        onTap: () => _filterContent('Videos'),
-                      ),
-                      // Other tags...
-                    ],
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: AppConstants.spacingM),
-              ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: AppConstants.spacingM),
+                ),
 
-              // Media feed
-              postsAsyncValue.when(
-                loading: () => SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _buildShimmerCard(isDarkMode),
-                    childCount: 5,
+                // Media feed
+                postsAsyncValue.when(
+                  loading: () => SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => _buildShimmerCard(isDarkMode),
+                      childCount: 5,
+                    ),
                   ),
-                ),
-                error: (error, stack) => SliverToBoxAdapter(
-                  child: Center(
-                    child: Text(
-                      'Error loading posts: $error',
-                      style: TextStyle(
-                        color: isDarkMode
-                            ? AppConstants.lightGray
-                            : AppConstants.darkGray,
+                  error: (error, stack) => SliverToBoxAdapter(
+                    child: Center(
+                      child: Text(
+                        'Error loading posts: $error',
+                        style: TextStyle(
+                          color: isDarkMode
+                              ? AppConstants.lightGray
+                              : AppConstants.darkGray,
+                        ),
                       ),
                     ),
                   ),
+                  data: (posts) => SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final post = posts[index];
+                      if (post.postType == PostType.article) {
+                        return ArticleCard(
+                          title: post.title,
+                          imageUrl: post.featuredImageUrl ?? '',
+                          excerpt: post.excerpt ?? '',
+                          tags: post.tags,
+                          isDarkMode: isDarkMode,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => PostPage(postId: post.id),
+                              ),
+                            );
+                          },
+                        );
+                      } else if (post.postType == PostType.video) {
+                        return VideoCard(
+                          title: post.title,
+                          thumbnailUrl: post.featuredImageUrl ?? '',
+                          duration: post.duration.toString(),
+                          views: post.viewsCount,
+                          author: post.author?.name,
+                          tags: post.tags,
+                          isDarkMode: isDarkMode,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => PostPage(postId: post.id),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    }, childCount: posts.length),
+                  ),
                 ),
-                data: (posts) => SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final post = posts[index];
-                    if (post.postType == PostType.article) {
-                      return ArticleCard(
-                        title: post.title,
-                        imageUrl: post.featuredImageUrl ?? '',
-                        excerpt: post.excerpt ?? '',
-                        tags: post.tags,
-                        isDarkMode: isDarkMode,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => PostPage(postId: post.id),
-                            ),
-                          );
-                        },
-                      );
-                    } else if (post.postType == PostType.video) {
-                      return VideoCard(
-                        title: post.title,
-                        thumbnailUrl: post.featuredImageUrl ?? '',
-                        duration: post.duration.toString(),
-                        views: post.viewsCount,
-                        author: post.author?.name,
-                        tags: post.tags,
-                        isDarkMode: isDarkMode,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => PostPage(postId: post.id),
-                            ),
-                          );
-                        },
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  }, childCount: posts.length),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -8,8 +8,6 @@ class QuickStatsCard extends StatelessWidget {
   final IconData? icon;
   final Color? iconColor;
   final Color? backgroundColor;
-  final VoidCallback? onTap;
-
   const QuickStatsCard({
     super.key,
     required this.title,
@@ -18,7 +16,6 @@ class QuickStatsCard extends StatelessWidget {
     this.icon,
     this.iconColor,
     this.backgroundColor,
-    this.onTap,
   });
 
   @override
@@ -33,51 +30,48 @@ class QuickStatsCard extends StatelessWidget {
         : AppConstants.darkGray;
     final iconColorValue = iconColor ?? AppConstants.primaryGreen;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(AppConstants.spacingM),
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(AppConstants.radiusL),
-          boxShadow: AppConstants.cardShadow,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, color: iconColorValue, size: 24),
-              const SizedBox(height: AppConstants.spacingS),
-            ],
-            Text(
-              title,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: textColor.withValues(alpha: 0.8),
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              ),
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.spacingM),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(AppConstants.radiusL),
+        boxShadow: AppConstants.cardShadow,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, color: iconColorValue, size: 24),
+            const SizedBox(height: AppConstants.spacingS),
+          ],
+          Text(
+            title,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: textColor.withValues(alpha: 0.8),
+              fontWeight: FontWeight.w500,
+              fontSize: 18,
             ),
+          ),
+          const SizedBox(height: AppConstants.spacingXS),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: textColor,
+              fontSize: 26,
+            ),
+          ),
+          if (subtitle != null) ...[
             const SizedBox(height: AppConstants.spacingXS),
             Text(
-              value,
-              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: textColor,
-                fontSize: 26,
+              subtitle!,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: textColor.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w500,
               ),
             ),
-            if (subtitle != null) ...[
-              const SizedBox(height: AppConstants.spacingXS),
-              Text(
-                subtitle!,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: textColor.withValues(alpha: 0.6),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
           ],
-        ),
+        ],
       ),
     );
   }
