@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:escape/theme/app_constants.dart';
 
 enum CheckboxState {
-  checked, // Prayer completed
+  checked,   // Prayer completed
   unchecked, // Prayer not completed
-  empty, // Prayer not recorded/deleted
+  empty,     // Prayer not recorded/deleted
 }
 
 class TripleStateCheckbox extends StatefulWidget {
@@ -23,11 +23,14 @@ class TripleStateCheckbox extends StatefulWidget {
   State<TripleStateCheckbox> createState() => _TripleStateCheckboxState();
 }
 
-class _TripleStateCheckboxState extends State<TripleStateCheckbox> {
+class _TripleStateCheckboxState extends State<TripleStateCheckbox>
+    with SingleTickerProviderStateMixin {
+  double scale = 1.0;
+
   void _handleTap() {
     if (widget.onChanged == null) return;
 
-    // Cycle through states based on current state
+    // Cycle through states
     switch (widget.state) {
       case CheckboxState.empty:
         widget.onChanged!(CheckboxState.checked);
@@ -44,17 +47,35 @@ class _TripleStateCheckboxState extends State<TripleStateCheckbox> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTapDown: (_) => setState(() => scale = 0.85),
+      onTapUp: (_) => setState(() => scale = 1.0),
+      onTapCancel: () => setState(() => scale = 1.0),
       onTap: _handleTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: widget.size,
-        height: widget.size,
-        decoration: BoxDecoration(
-          color: _getBackgroundColor(),
-          borderRadius: BorderRadius.circular(AppConstants.radiusS),
-          border: Border.all(color: _getBorderColor(), width: 3.0),
-        ),
-        child: _getIcon(),
+      child: AnimatedScale(
+        scale: scale,
+        duration: const Duration(milliseconds: 120),
+        child: widget.state == CheckboxState.checked
+            ? Image.asset(
+                'assets/checked.png',
+                width: widget.size,
+                height: widget.size,
+                fit: BoxFit.contain,
+                color: AppConstants.primaryGreen,
+              )
+            : AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: widget.size,
+                height: widget.size,
+                decoration: BoxDecoration(
+                  color: _getBackgroundColor(),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusS),
+                  border: Border.all(
+                    color: _getBorderColor(),
+                    width: 3.0,
+                  ),
+                ),
+                child: _getIcon(),
+              ),
       ),
     );
   }
@@ -62,46 +83,38 @@ class _TripleStateCheckboxState extends State<TripleStateCheckbox> {
   Color _getBackgroundColor() {
     switch (widget.state) {
       case CheckboxState.checked:
-        return AppConstants.primaryGreen;
+        return Colors.transparent; // Not used
       case CheckboxState.unchecked:
-        return AppConstants.errorRed; // Red background for unchecked state
+        return AppConstants.errorRed;
       case CheckboxState.empty:
         return Theme.of(context).brightness == Brightness.dark
             ? const Color(0xFF2A2A2A)
-            : AppConstants.white.withValues(
-                alpha: 0.5,
-              ); // More subtle for empty state
+            : AppConstants.white.withOpacity(0.5);
     }
   }
 
   Color _getBorderColor() {
     switch (widget.state) {
       case CheckboxState.checked:
-        return AppConstants.primaryGreen;
+        return Colors.transparent;
       case CheckboxState.unchecked:
-        return AppConstants.errorRed; // Red border for unchecked state
+        return AppConstants.errorRed;
       case CheckboxState.empty:
         return Theme.of(context).brightness == Brightness.dark
-            ? AppConstants.mediumGray.withValues(alpha: 0.5)
-            : AppConstants.mediumGray.withValues(
-                alpha: 0.5,
-              ); // More subtle for empty state
+            ? AppConstants.mediumGray.withOpacity(0.5)
+            : AppConstants.mediumGray.withOpacity(0.5);
     }
   }
 
   Widget? _getIcon() {
     switch (widget.state) {
       case CheckboxState.checked:
-        return Icon(
-          Icons.check,
-          size: widget.size * 0.7,
-          color: AppConstants.white,
-        );
+        return null;
       case CheckboxState.unchecked:
         return Icon(
           Icons.close,
           size: widget.size * 0.7,
-          color: AppConstants.white, // White "X" for unchecked state
+          color: AppConstants.white,
         );
       case CheckboxState.empty:
         return null;

@@ -52,7 +52,7 @@ dependencies:
   # UI & Design
   mix: ^1.7.0
   adaptive_dialog: ^2.4.2
-  flutter_svg: ^2.2.0
+  flutter_svg: ^2.2.2
 
   # Image picker for profile pictures
   image_picker: ^1.1.2
@@ -84,6 +84,8 @@ dependencies:
   geolocator: ^14.0.2
   permission_handler: ^12.0.1
   geocoding: ^4.0.0
+  percent_indicator: ^4.2.5
+
 
   # Biometric authentication
   local_auth: ^2.3.0
@@ -94,6 +96,12 @@ dependencies:
   envied: ^1.2.1
   http: ^1.5.0
   flutter_local_notifications: ^19.4.2
+  flashy_tab_bar2: ^0.0.10
+  motion_tab_bar: ^2.0.4
+  flutter_staggered_animations: ^1.1.1
+  
+  
+  
 
 dev_dependencies:
   flutter_test:
@@ -125,9 +133,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - assets/images/
-  #   - assets/icons/
+  assets:
+    - assets/
+    - assets/icons/
   #   - assets/videos/
   #   - assets/fonts/
 
@@ -144,10 +152,10 @@ flutter:
   # example:
   # fonts:
   #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Exo
+      fonts:
+        - asset: assets/fonts/Exo.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppConstants {
   // Primary Colors - Islamic Green palette
-  static const Color primaryGreen = Color(0xFF2E7D32);
+  static const Color primaryGreen = Color.fromARGB(255, 30, 106, 58);
   static const Color lightGreen = Color(0xFF4CAF50);
   static const Color darkGreen = Color(0xFF1B5E20);
   static const Color accentGreen = Color(0xFF8BC34A);

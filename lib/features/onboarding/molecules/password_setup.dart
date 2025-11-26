@@ -37,13 +37,13 @@ class _PasswordSetupState extends State<PasswordSetup> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
     _passwordController = TextEditingController(text: widget.password);
-    _confirmPasswordController = TextEditingController(
-      text: widget.confirmPassword,
-    );
+    _confirmPasswordController = TextEditingController(text: widget.confirmPassword);
   }
 
   @override
@@ -79,7 +79,9 @@ class _PasswordSetupState extends State<PasswordSetup> {
     return null;
   }
 
-  final _formKey = GlobalKey<FormState>();
+  TextStyle _exo(BuildContext context, TextStyle? style) {
+    return (style ?? const TextStyle()).copyWith(fontFamily: 'Exo');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,16 +92,34 @@ class _PasswordSetupState extends State<PasswordSetup> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 🟢 Header
             Text(
               OnboardingConstants.securityTitle,
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: _exo(
+                context,
+                Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppConstants.primaryGreen,
+                      fontSize: 28,
+                    ),
+              ),
             ),
             const SizedBox(height: AppConstants.spacingS),
             Text(
               OnboardingConstants.securitySubtitle,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: _exo(
+                context,
+                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: AppConstants.darkGray.withOpacity(0.8),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
             ),
-            const SizedBox(height: AppConstants.spacingL),
+
+            const SizedBox(height: AppConstants.spacingXL),
+
+            // 🧷 Password field
             InputField(
               controller: _passwordController,
               hintText: OnboardingConstants.passwordHint,
@@ -113,19 +133,18 @@ class _PasswordSetupState extends State<PasswordSetup> {
               errorText: widget.showErrors
                   ? _validatePassword(_passwordController.text)
                   : null,
-              suffixIcon: IconButton(
-                icon: Icon(
+              suffixIcon: GestureDetector(
+                onTap: () => setState(() => _obscurePassword = !_obscurePassword),
+                child: Icon(
                   _obscurePassword ? Icons.visibility : Icons.visibility_off,
                   color: AppConstants.mediumGray,
                 ),
-                onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
               ),
             ),
+
             const SizedBox(height: AppConstants.spacingM),
+
+            // 🔒 Confirm password field
             InputField(
               controller: _confirmPasswordController,
               hintText: OnboardingConstants.confirmPasswordHint,
@@ -139,28 +158,32 @@ class _PasswordSetupState extends State<PasswordSetup> {
               errorText: widget.showErrors
                   ? _validateConfirmPassword(_confirmPasswordController.text)
                   : null,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureConfirmPassword
-                      ? Icons.visibility
-                      : Icons.visibility_off,
+              suffixIcon: GestureDetector(
+                onTap: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                child: Icon(
+                  _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
                   color: AppConstants.mediumGray,
                 ),
-                onPressed: () {
-                  setState(() {
-                    _obscureConfirmPassword = !_obscureConfirmPassword;
-                  });
-                },
+              ),
+            ),
+
+            const SizedBox(height: AppConstants.spacingL),
+
+            // 📝 Privacy note
+            Center(
+              child: Text(
+                OnboardingConstants.privacyNote,
+                style: _exo(
+                  context,
+                  Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppConstants.mediumGray,
+                        fontSize: 13,
+                      ),
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: AppConstants.spacingM),
-            Text(
-              OnboardingConstants.privacyNote,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: AppConstants.mediumGray),
-              textAlign: TextAlign.center,
-            ),
           ],
         ),
       ),

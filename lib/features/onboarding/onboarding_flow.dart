@@ -38,40 +38,10 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
         _currentPage++;
       });
     } else {
-      // Save the user profile instead of using shared preferences
       await _saveUserProfile();
-
       if (!mounted) return;
       widget.onComplete?.call(context);
     }
-  }
-
-  Future<void> _saveUserProfile() async {
-    // Create a user profile from the onboarding data
-    final profile = user_profile.UserProfile(
-      name: _data.name,
-      goals: _data.allGoals,
-      hobbies: _data.allHobbies,
-      triggers: _data.allTriggers,
-      streakGoal: 1, // Default streak goal
-      passwordHash: _hashPassword(_data.password), // Hash the password
-      biometricEnabled: _data.biometricEnabled,
-      notificationsEnabled: _data.notificationsEnabled,
-      profilePicture: _data.profilePicture,
-    );
-
-    // Save the user profile
-    await ref.read(userProfileProvider.notifier).saveProfile(profile);
-  }
-
-  String _hashPassword(String password) {
-    // Simple hash function for demonstration purposes only
-    // In a real application, you would use a proper cryptographic hash function
-    final salt = 'escape_app_salt';
-    final combined = '$password$salt';
-    final bytes = utf8.encode(combined);
-    final hash = bytes.fold<int>(0, (prev, element) => prev + element);
-    return hash.toString();
   }
 
   void _handleBack() {
@@ -82,75 +52,109 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
     }
   }
 
+  Future<void> _saveUserProfile() async {
+    final profile = user_profile.UserProfile(
+      name: _data.name,
+      goals: _data.allGoals,
+      hobbies: _data.allHobbies,
+      triggers: _data.allTriggers,
+      streakGoal: 1,
+      passwordHash: _hashPassword(_data.password),
+      biometricEnabled: _data.biometricEnabled,
+      notificationsEnabled: _data.notificationsEnabled,
+      profilePicture: _data.profilePicture,
+    );
+
+    await ref.read(userProfileProvider.notifier).saveProfile(profile);
+  }
+
+  String _hashPassword(String password) {
+    final salt = 'escape_app_salt';
+    final combined = '$password$salt';
+    final bytes = utf8.encode(combined);
+    final hash = bytes.fold<int>(0, (prev, element) => prev + element);
+    return hash.toString();
+  }
+
+  Widget _buildPage(int index) {
+    switch (index) {
+      case 0:
+        return WelcomeScreen(onNext: _handleNext);
+      case 1:
+        return NameScreen(
+          data: _data,
+          onNext: (updatedData) {
+            setState(() => _data = updatedData);
+            _handleNext();
+          },
+          onBack: _handleBack,
+        );
+      case 2:
+        return ProfileImageScreen(
+          data: _data,
+          onNext: (updatedData) {
+            setState(() => _data = updatedData);
+            _handleNext();
+          },
+          onBack: _handleBack,
+        );
+      case 3:
+        return GoalsScreen(
+          data: _data,
+          onNext: (updatedData) {
+            setState(() => _data = updatedData);
+            _handleNext();
+          },
+          onBack: _handleBack,
+        );
+      case 4:
+        return HobbiesScreen(
+          data: _data,
+          onNext: (updatedData) {
+            setState(() => _data = updatedData);
+            _handleNext();
+          },
+          onBack: _handleBack,
+        );
+      case 5:
+        return TriggersScreen(
+          data: _data,
+          onNext: (updatedData) {
+            setState(() => _data = updatedData);
+            _handleNext();
+          },
+          onBack: _handleBack,
+        );
+      case 6:
+        return SecurityScreen(
+          data: _data,
+          onNext: (updatedData) {
+            setState(() => _data = updatedData);
+            _handleNext();
+          },
+          onBack: _handleBack,
+        );
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: IndexedStack(
-        index: _currentPage,
-        children: [
-          WelcomeScreen(onNext: _handleNext),
-          NameScreen(
-            data: _data,
-            onNext: (updatedData) {
-              setState(() {
-                _data = updatedData;
-              });
-              _handleNext();
-            },
-            onBack: _handleBack,
-          ),
-          ProfileImageScreen(
-            data: _data,
-            onNext: (updatedData) {
-              setState(() {
-                _data = updatedData;
-              });
-              _handleNext();
-            },
-            onBack: _handleBack,
-          ),
-          GoalsScreen(
-            data: _data,
-            onNext: (updatedData) {
-              setState(() {
-                _data = updatedData;
-              });
-              _handleNext();
-            },
-            onBack: _handleBack,
-          ),
-          HobbiesScreen(
-            data: _data,
-            onNext: (updatedData) {
-              setState(() {
-                _data = updatedData;
-              });
-              _handleNext();
-            },
-            onBack: _handleBack,
-          ),
-          TriggersScreen(
-            data: _data,
-            onNext: (updatedData) {
-              setState(() {
-                _data = updatedData;
-              });
-              _handleNext();
-            },
-            onBack: _handleBack,
-          ),
-          SecurityScreen(
-            data: _data,
-            onNext: (updatedData) {
-              setState(() {
-                _data = updatedData;
-              });
-              _handleNext();
-            },
-            onBack: _handleBack,
-          ),
-        ],
+      // ✨ FadeTransition between pages
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 600),
+        switchInCurve: Curves.easeInOut,
+        switchOutCurve: Curves.easeInOut,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        child: _buildPage(_currentPage),
       ),
     );
   }

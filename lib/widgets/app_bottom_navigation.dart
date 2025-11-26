@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:escape/theme/app_constants.dart';
+
+class AppBottomNavigationItem {
+  static const List<IconData> icons = [
+    Icons.home,
+    Icons.access_time,
+    Icons.flag,
+    Icons.analytics,
+    Icons.play_circle_outline,
+    Icons.settings,
+  ];
+
+  static const List<String> labels = [
+    'Home',
+    'Prayer',
+    'Challenges',
+    'Analytics',
+    'Media',
+    'Settings',
+  ];
+}
 
 class AppBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -13,44 +34,25 @@ class AppBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: currentIndex,
-      onTap: onTap,
-      selectedItemColor: AppConstants.primaryGreen,
-      unselectedItemColor: AppConstants.mediumGray,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.access_time_outlined),
-          activeIcon: Icon(Icons.access_time),
-          label: 'Prayer',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.flag_outlined),
-          activeIcon: Icon(Icons.flag),
-          label: 'Challenges',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.analytics_outlined),
-          activeIcon: Icon(Icons.analytics),
-          label: 'Analytics',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.play_circle_outline),
-          activeIcon: Icon(Icons.play_circle),
-          label: 'Media',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings_outlined),
-          activeIcon: Icon(Icons.settings),
-          label: 'Settings',
-        ),
-      ],
+    return MotionTabBar(
+      initialSelectedTab: AppBottomNavigationItem.labels[currentIndex],
+      useSafeArea: true,
+      labels: AppBottomNavigationItem.labels,
+      icons: AppBottomNavigationItem.icons,
+      tabSize: 40,
+
+      // 🔥 COLORS YOU ASKED FOR
+      tabBarColor: AppConstants.white,                        // Background white
+      tabSelectedColor: AppConstants.primaryGreen,            // Selected circle = primary
+      tabIconSelectedColor: Colors.white,                     // Selected icon = white
+      tabIconColor: AppConstants.primaryGreen,                // Unselected icons = primary
+
+      textStyle: const TextStyle(
+        fontWeight: FontWeight.bold,fontSize: 11,
+        color: AppConstants.primaryGreen,                      // Label color
+      ),
+
+      onTabItemSelected: (index) => onTap(index),
     );
   }
 }

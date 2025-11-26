@@ -88,9 +88,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: IndexedStack(index: _currentIndex, children: _buildScreens()),
-      ),
+      body: IndexedStack(index: _currentIndex, children: _buildScreens()),
       bottomNavigationBar: AppBottomNavigation(
         currentIndex: _currentIndex,
         onTap: _onTabTapped,

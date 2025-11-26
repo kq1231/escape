@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import '../molecules/custom_input_selector.dart';
-import '../models/onboarding_data.dart';
-import '../templates/onboarding_page_template.dart';
+
 import '../constants/onboarding_constants.dart';
+import '../models/onboarding_data.dart';
+import '../molecules/custom_input_selector.dart';
+import '../templates/onboarding_page_template.dart';
 
 class GoalsScreen extends StatefulWidget {
   final OnboardingData data;
   final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
-  const GoalsScreen({
-    super.key,
-    required this.data,
-    required this.onNext,
-    required this.onBack,
-  });
+  const GoalsScreen({super.key, required this.data, required this.onNext, required this.onBack});
 
   @override
   State<GoalsScreen> createState() => _GoalsScreenState();
@@ -55,10 +51,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
     }
 
     // Update the parent with the selected goals
-    final updatedData = widget.data.copyWith(
-      selectedGoals: _selectedGoals,
-      customGoals: _customGoals,
-    );
+    final updatedData = widget.data.copyWith(selectedGoals: _selectedGoals, customGoals: _customGoals);
     widget.onNext(updatedData);
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:escape/models/challenge_model.dart';
 
-/// Beautiful Achievement Overlay Widget with Swipe Dismiss
 class AchievementOverlay extends StatefulWidget {
   final List<Challenge> challenges;
   const AchievementOverlay({super.key, required this.challenges});
@@ -10,8 +9,7 @@ class AchievementOverlay extends StatefulWidget {
   State<AchievementOverlay> createState() => _AchievementOverlayState();
 }
 
-class _AchievementOverlayState extends State<AchievementOverlay>
-    with TickerProviderStateMixin {
+class _AchievementOverlayState extends State<AchievementOverlay> with TickerProviderStateMixin {
   late AnimationController _slideController;
   late AnimationController _pulseController;
   late AnimationController _dismissController;
@@ -22,6 +20,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
   int _currentIndex = 0;
   bool _isVisible = true;
   bool _isDismissing = false;
+  bool _isDisposed = false;
 
   @override
   void initState() {
@@ -31,26 +30,16 @@ class _AchievementOverlayState extends State<AchievementOverlay>
   }
 
   void _setupAnimations() {
-    _slideController = AnimationController(
-      duration: const Duration(milliseconds: 3000),
-      vsync: this,
-    );
-    _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-    _dismissController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
+    _slideController = AnimationController(duration: const Duration(milliseconds: 3000), vsync: this);
+    _pulseController = AnimationController(duration: const Duration(milliseconds: 800), vsync: this);
+    _dismissController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
 
-    _slideAnimation =
-        Tween<Offset>(begin: const Offset(0, -1.5), end: Offset.zero).animate(
-          CurvedAnimation(
-            parent: _slideController,
-            curve: const Interval(0.0, 0.4, curve: Curves.elasticOut),
-          ),
-        );
+    _slideAnimation = Tween<Offset>(begin: const Offset(0, -1.5), end: Offset.zero).animate(
+      CurvedAnimation(
+        parent: _slideController,
+        curve: const Interval(0.0, 0.4, curve: Curves.elasticOut),
+      ),
+    );
 
     _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
@@ -66,52 +55,61 @@ class _AchievementOverlayState extends State<AchievementOverlay>
       ),
     );
 
-    _dismissAnimation =
-        Tween<Offset>(begin: Offset.zero, end: const Offset(0, -1.2)).animate(
-          CurvedAnimation(parent: _dismissController, curve: Curves.easeInBack),
-        );
+    _dismissAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(0, -1.2),
+    ).animate(CurvedAnimation(parent: _dismissController, curve: Curves.easeInBack));
 
-    // Gentle pulse effect
     _pulseController.repeat(reverse: true);
   }
 
+  Future<void> _safeAnimate(AnimationController controller, {bool forward = true}) async {
+    if (!mounted || _isDisposed) return;
+
+    try {
+      if (forward) {
+        await controller.forward().orCancel;
+      } else {
+        await controller.reverse().orCancel;
+      }
+    } catch (e) {
+      if (e is! TickerCanceled) {
+        rethrow;
+      }
+    }
+  }
+
   void _showNextAchievement() async {
-    if (_currentIndex < widget.challenges.length && !_isDismissing) {
-      // Show the current achievement
-      setState(() {
-        _isVisible = true;
-      });
+    if (_currentIndex >= widget.challenges.length || _isDismissing || !mounted) {
+      return;
+    }
 
-      // Slide in
-      await _slideController.forward().orCancel;
+    setState(() {
+      _isVisible = true;
+    });
 
-      // Show for 5 seconds (unless dismissed)
-      await Future.delayed(const Duration(seconds: 5));
+    await _safeAnimate(_slideController, forward: true);
 
-      // Only proceed if not dismissed
-      if (!_isDismissing && mounted) {
-        // Slide out
-        await _slideController.reverse().orCancel;
+    await Future.delayed(const Duration(seconds: 5));
+
+    if (!_isDismissing && mounted) {
+      await _safeAnimate(_slideController, forward: false);
+
+      if (mounted) {
+        setState(() {
+          _currentIndex++;
+          if (_currentIndex >= widget.challenges.length) {
+            _isVisible = false;
+          }
+        });
+
+        await Future.delayed(const Duration(milliseconds: 300));
 
         if (mounted) {
-          setState(() {
-            _currentIndex++;
-            // Hide if this was the last achievement
-            if (_currentIndex >= widget.challenges.length) {
-              _isVisible = false;
-            }
-          });
-
-          // Small delay before showing next achievement
-          await Future.delayed(const Duration(milliseconds: 300));
-
-          if (mounted) {
-            _showNextAchievement();
-          }
+          _showNextAchievement();
         }
       }
-    } else {
-      // All achievements shown, hide overlay
+    } else if (!mounted) {
       setState(() {
         _isVisible = false;
       });
@@ -119,14 +117,14 @@ class _AchievementOverlayState extends State<AchievementOverlay>
   }
 
   void _dismissCurrent() async {
-    if (_isDismissing) return;
+    if (_isDismissing || !mounted) return;
 
     setState(() {
       _isDismissing = true;
     });
 
     // Animate dismiss
-    await _dismissController.forward().orCancel;
+    await _safeAnimate(_dismissController, forward: true);
 
     if (mounted) {
       _dismissController.reset();
@@ -153,6 +151,8 @@ class _AchievementOverlayState extends State<AchievementOverlay>
   }
 
   void _dismissAll() {
+    if (!mounted) return;
+
     setState(() {
       _isDismissing = true;
       _isVisible = false;
@@ -192,6 +192,9 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                       DismissDirection.up: 0.3, // Easier to dismiss
                     },
                     onDismissed: (direction) {
+                      // Check if still mounted before setting state
+                      if (!mounted) return;
+
                       // Immediately mark as dismissing to prevent rebuilds
                       setState(() {
                         _isDismissing = true;
@@ -211,15 +214,13 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
+                            color: Colors.black.withOpacity(0.3),
                             blurRadius: 20,
                             spreadRadius: 3,
                             offset: const Offset(0, 10),
                           ),
                           BoxShadow(
-                            color: _getFeatureColor(
-                              challenge.featureName,
-                            ).withValues(alpha: 0.4),
+                            color: _getFeatureColor(challenge.featureName).withOpacity(0.4),
                             blurRadius: 30,
                             spreadRadius: -5,
                             offset: const Offset(0, 15),
@@ -235,7 +236,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                             height: 4,
                             margin: const EdgeInsets.only(bottom: 12),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.3),
+                              color: Colors.white.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(2),
                             ),
                           ),
@@ -250,9 +251,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withValues(
-                                        alpha: 0.15,
-                                      ),
+                                      color: Colors.black.withOpacity(0.15),
                                       blurRadius: 10,
                                       offset: const Offset(0, 5),
                                     ),
@@ -260,9 +259,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                                 ),
                                 child: Icon(
                                   _getFeatureIcon(challenge.featureName),
-                                  color: _getFeatureColor(
-                                    challenge.featureName,
-                                  ),
+                                  color: _getFeatureColor(challenge.featureName),
                                   size: 36,
                                 ),
                               ),
@@ -297,14 +294,10 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.2),
+                                    color: Colors.white.withOpacity(0.2),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
+                                  child: const Icon(Icons.close, color: Colors.white, size: 18),
                                 ),
                               ),
                             ],
@@ -315,12 +308,9 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.15),
+                              color: Colors.white.withOpacity(0.15),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.3),
-                                width: 1,
-                              ),
+                              border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,11 +326,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                                 const SizedBox(height: 6),
                                 Text(
                                   challenge.description,
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 15,
-                                    height: 1.3,
-                                  ),
+                                  style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
                                 ),
                               ],
                             ),
@@ -364,18 +350,15 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                                 children: [
                                   Text(
                                     '${_currentIndex + 1}/${widget.challenges.length}',
-                                    style: const TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 12,
-                                    ),
+                                    style: const TextStyle(color: Colors.white70, fontSize: 12),
                                   ),
                                   if (widget.challenges.length > 1) ...[
                                     const SizedBox(width: 8),
                                     GestureDetector(
                                       onTap: _dismissAll,
-                                      child: Text(
+                                      child: const Text(
                                         'Skip all',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: Colors.white70,
                                           fontSize: 12,
                                           decoration: TextDecoration.underline,
@@ -389,27 +372,17 @@ class _AchievementOverlayState extends State<AchievementOverlay>
                             ],
                           ),
                           // Swipe hint (only show for first achievement)
-                          if (_currentIndex == 0 &&
-                              widget.challenges.length > 1)
+                          if (_currentIndex == 0 && widget.challenges.length > 1)
                             Container(
                               margin: const EdgeInsets.only(top: 12),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                    Icons.keyboard_arrow_up,
-                                    color: Colors.white.withValues(alpha: 0.6),
-                                    size: 16,
-                                  ),
+                                  Icon(Icons.keyboard_arrow_up, color: Colors.white.withOpacity(0.6), size: 16),
                                   const SizedBox(width: 4),
                                   Text(
                                     'Swipe up to dismiss',
-                                    style: TextStyle(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.6,
-                                      ),
-                                      fontSize: 11,
-                                    ),
+                                    style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 11),
                                   ),
                                 ],
                               ),
@@ -429,26 +402,10 @@ class _AchievementOverlayState extends State<AchievementOverlay>
 
   List<Color> _getGradientColors(String feature) {
     return switch (feature) {
-      'streak' => [
-        Colors.orange.shade600,
-        Colors.orange.shade700,
-        Colors.red.shade600,
-      ],
-      'prayer' => [
-        Colors.blue.shade600,
-        Colors.blue.shade700,
-        Colors.indigo.shade600,
-      ],
-      'temptation' => [
-        Colors.purple.shade600,
-        Colors.purple.shade700,
-        Colors.pink.shade600,
-      ],
-      'xp' => [
-        Colors.amber.shade600,
-        Colors.amber.shade700,
-        Colors.yellow.shade700,
-      ],
+      'streak' => [Colors.orange.shade600, Colors.orange.shade700, Colors.red.shade600],
+      'prayer' => [Colors.blue.shade600, Colors.blue.shade700, Colors.indigo.shade600],
+      'temptation' => [Colors.purple.shade600, Colors.purple.shade700, Colors.pink.shade600],
+      'xp' => [Colors.amber.shade600, Colors.amber.shade700, Colors.yellow.shade700],
       _ => [Colors.grey.shade600, Colors.grey.shade700, Colors.grey.shade800],
     };
   }
@@ -475,6 +432,7 @@ class _AchievementOverlayState extends State<AchievementOverlay>
 
   @override
   void dispose() {
+    _isDisposed = true;
     _slideController.dispose();
     _pulseController.dispose();
     _dismissController.dispose();

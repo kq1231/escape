@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import '../molecules/custom_input_selector.dart';
-import '../models/onboarding_data.dart';
-import '../templates/onboarding_page_template.dart';
+
 import '../constants/onboarding_constants.dart';
+import '../models/onboarding_data.dart';
+import '../molecules/custom_input_selector.dart';
+import '../templates/onboarding_page_template.dart';
 
 class HobbiesScreen extends StatefulWidget {
   final OnboardingData data;
   final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
-  const HobbiesScreen({
-    super.key,
-    required this.data,
-    required this.onNext,
-    required this.onBack,
-  });
+  const HobbiesScreen({super.key, required this.data, required this.onNext, required this.onBack});
 
   @override
   State<HobbiesScreen> createState() => _HobbiesScreenState();
@@ -55,10 +51,7 @@ class _HobbiesScreenState extends State<HobbiesScreen> {
     }
 
     // Update the parent with the selected hobbies
-    final updatedData = widget.data.copyWith(
-      selectedHobbies: _selectedHobbies,
-      customHobbies: _customHobbies,
-    );
+    final updatedData = widget.data.copyWith(selectedHobbies: _selectedHobbies, customHobbies: _customHobbies);
     widget.onNext(updatedData);
   }
 
