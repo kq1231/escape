@@ -76,175 +76,205 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.title,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: AppConstants.primaryGreen,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32, // Increased from default headlineMedium size
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                widget.subtitle,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppConstants.darkGray.withValues(alpha: 0.8),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20, // Increased from default bodyLarge size
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 24),
+    final exoText = (TextStyle style) => style.copyWith(fontFamily: 'Exo');
 
-        // Single scrollable container for all content
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // 🟢 Title & Subtitle Centered
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Predefined items section
                 Text(
-                  'Choose from common options:',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18, // Increased from default bodyMedium size
+                  widget.title,
+                  textAlign: TextAlign.center,
+                  style: exoText(
+                    Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          color: AppConstants.primaryGreen,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                        ),
                   ),
                 ),
                 const SizedBox(height: 8),
-                ...widget.predefinedItems.map(
-                  (item) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: _buildCheckboxItem(item),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Custom items section
                 Text(
-                  'Add your own:',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18, // Increased from default bodyMedium size
+                  widget.subtitle,
+                  textAlign: TextAlign.center,
+                  style: exoText(
+                    Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: AppConstants.darkGray.withValues(alpha: 0.8),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                        ),
                   ),
                 ),
-                const SizedBox(height: 8),
-
-                // Input field for custom items
-                Row(
-                  children: [
-                    Expanded(
-                      child: InputField(
-                        controller: _customInputController,
-                        hintText: widget.hintText,
-                        onSubmitted: (_) => _addCustomItem(),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    PrimaryButton(
-                      text: widget.addButtonText,
-                      onPressed: _addCustomItem,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                // Display custom items
-                if (_customItems.isNotEmpty) ...[
-                  Text(
-                    'Your custom items:',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16, // Increased from default bodySmall size
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  ..._customItems.map(
-                    (item) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: _buildCustomItemChip(item),
-                    ),
-                  ),
-                ],
-
-                const SizedBox(height: 16),
               ],
             ),
           ),
-        ),
+          const SizedBox(height: 24),
 
-        if (widget.showError && _selectedItems.isEmpty && _customItems.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
-            child: Text(
-              'Please select at least one option or add your own',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppConstants.errorRed,
-                fontWeight: FontWeight.w500,
+          // 🟡 Content
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 🟢 Predefined options
+                  Text(
+                    'Choose from common options:',
+                    style: exoText(
+                      Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ...widget.predefinedItems.map(
+                    (item) => Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _buildCheckboxItem(item),
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+
+                  // ✨ Custom items section
+                  Text(
+                    'Add your own:',
+                    style: exoText(
+                      Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InputField(
+                          controller: _customInputController,
+                          hintText: widget.hintText,
+                          onSubmitted: (_) => _addCustomItem(),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      PrimaryButton(
+                        text: widget.addButtonText,
+                        onPressed: _addCustomItem,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 🧩 Custom items display
+                  if (_customItems.isNotEmpty) ...[
+                    Text(
+                      'Your custom items:',
+                      style: exoText(
+                        Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _customItems
+                          .map((item) => _buildCustomItemChip(item))
+                          .toList(),
+                    ),
+                  ],
+                ],
               ),
             ),
           ),
-      ],
+
+          // 🔴 Error
+          if (widget.showError && _selectedItems.isEmpty && _customItems.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+              child: Text(
+                'Please select at least one option or add your own',
+                textAlign: TextAlign.center,
+                style: exoText(
+                  Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: AppConstants.errorRed,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
   Widget _buildCheckboxItem(String item) {
     final isSelected = _selectedItems.contains(item);
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
         color: isSelected
-            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
-            : Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+            ? AppConstants.primaryGreen.withOpacity(0.05)
+            : Colors.white,
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isSelected
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.outline,
-          width: 1,
+              ? AppConstants.primaryGreen
+              : AppConstants.mediumGray.withOpacity(0.5),
+          width: 1.5,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         onTap: () => _toggleItem(item),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
-              Icon(
-                isSelected ? Icons.check_circle : Icons.circle_outlined,
-                color: isSelected
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.outline,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
+              if (isSelected)
+                Image.asset(
+                  'assets/checked.png',
+                  width: 28,
+                  height: 28,
+                  color: AppConstants.primaryGreen,
+                )
+              else
+                Icon(
+                  Icons.circle_outlined,
+                  color: AppConstants.darkGray,
+                  size: 28,
+                ),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   item,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: TextStyle(
+                    fontFamily: 'Exo',
+                    fontSize: 18,
                     color: isSelected
                         ? AppConstants.primaryGreen
                         : AppConstants.darkGray,
-                    fontWeight: isSelected
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                    fontSize: 18, // Increased from default bodyMedium size
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
@@ -258,36 +288,43 @@ class _CustomInputSelectorState extends State<CustomInputSelector> {
   Widget _buildCustomItemChip(String item) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
+        color: AppConstants.primaryGreen.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
-          width: 1,
+          color: AppConstants.primaryGreen.withOpacity(0.4),
+          width: 1.2,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                item,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppConstants.primaryGreen,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18, // Increased from default bodyMedium size
-                ),
-              ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            item,
+            style: TextStyle(
+              fontFamily: 'Exo',
+              color: AppConstants.primaryGreen,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
             ),
-            IconButton(
-              icon: const Icon(Icons.close, size: 16),
-              color: Theme.of(context).colorScheme.primary,
-              onPressed: () => _removeCustomItem(item),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
+          ),
+          const SizedBox(width: 6),
+          GestureDetector(
+            onTap: () => _removeCustomItem(item),
+            child: const Icon(
+              Icons.close,
+              size: 16,
+              color: Colors.black54,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

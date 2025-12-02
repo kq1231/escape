@@ -5,7 +5,6 @@ class HistoryItemCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final DateTime date;
-  final IconData icon;
   final Color iconColor;
   final Widget? trailing;
   final VoidCallback? onTap;
@@ -19,7 +18,6 @@ class HistoryItemCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.date,
-    required this.icon,
     required this.iconColor,
     this.trailing,
     this.onTap,
@@ -44,8 +42,48 @@ class HistoryItemCard extends StatelessWidget {
     }
   }
 
+  IconData _getIconForPrayer(String prayerName) {
+    switch (prayerName) {
+      case "Fajr":
+        return Icons.wb_twighlight;
+      case "Dhuhr":
+        return Icons.wb_sunny;
+      case "Asr":
+        return Icons.sunny_snowing;
+      case "Maghrib":
+        return Icons.sunny_snowing;
+      case "Isha":
+        return Icons.nightlight;
+      case "Tahajjud":
+        return Icons.brightness_3;
+      default:
+        return Icons.access_time;
+    }
+  }
+
+  Color _getPrayerColor(String name) {
+    switch (name) {
+      case "Fajr":
+        return const Color(0xFF6B5CE5);
+      case "Dhuhr":
+        return const Color(0xFFFFC107);
+      case "Asr":
+        return const Color(0xFFFF9800);
+      case "Maghrib":
+        return const Color(0xFFF44336);
+      case "Isha":
+        return const Color(0xFF7B1FA2);
+      case "Tahajjud":
+        return const Color(0xFF4A148C);
+      default:
+        return AppConstants.primaryGreen;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final prayerColor = _getPrayerColor(title);
+    
     return Card(
       margin: const EdgeInsets.symmetric(
         horizontal: AppConstants.spacingM,
@@ -53,39 +91,55 @@ class HistoryItemCard extends StatelessWidget {
       ),
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.radiusM),
+        borderRadius: BorderRadius.circular(20),
         side: BorderSide(
-          color: isSuccess
-              ? AppConstants.primaryGreen.withValues(alpha: 0.2)
-              : AppConstants.errorRed.withValues(alpha: 0.2),
-          width: 1,
+          color: AppConstants.primaryGreen.withOpacity(0.3),
+          width: 1.5,
         ),
       ),
+      color: Colors.white,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppConstants.radiusM),
+        borderRadius: BorderRadius.circular(20),
         child: Padding(
-          padding: const EdgeInsets.all(AppConstants.spacingM),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header row
               Row(
                 children: [
-                  // Icon
+                  // Prayer icon with different color background for each prayer
                   Container(
-                    padding: const EdgeInsets.all(AppConstants.spacingS),
+                    width: 60,
+                    height: 60,
                     decoration: BoxDecoration(
-                      color: iconColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(AppConstants.radiusS),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          prayerColor.withOpacity(0.9),
+                          prayerColor.withOpacity(0.7),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: prayerColor.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
-                    child: Icon(
-                      icon,
-                      color: iconColor,
-                      size: 20,
+                    child: Center(
+                      child: Icon(
+                        _getIconForPrayer(title),
+                        color: Colors.white,
+                        size: 28,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: AppConstants.spacingM),
+                  const SizedBox(width: 16),
                   // Title and subtitle
                   Expanded(
                     child: Column(
@@ -93,74 +147,156 @@ class HistoryItemCard extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: const TextStyle(
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                            fontFamily: 'Exo',
                           ),
                         ),
-                        Text(
-                          subtitle,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppConstants.mediumGray,
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: isSuccess 
+                                ? AppConstants.primaryGreen.withOpacity(0.1)
+                                : AppConstants.errorRed.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isSuccess 
+                                  ? AppConstants.primaryGreen.withOpacity(0.3)
+                                  : AppConstants.errorRed.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                isSuccess 
+                                    ? 'assets/checked.png'
+                                    : 'assets/missed.png',
+                                width: 14,
+                                height: 14,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                subtitle,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: isSuccess 
+                                      ? AppConstants.primaryGreen
+                                      : AppConstants.errorRed,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  // Trailing widget or actions
-                  if (trailing != null)
-                    trailing!
-                  else
-                    PopupMenuButton<String>(
-                      onSelected: (value) {
-                        switch (value) {
-                          case 'edit':
-                            onEdit?.call();
-                            break;
-                          case 'delete':
-                            onDelete?.call();
-                            break;
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        if (onEdit != null)
-                          const PopupMenuItem(
-                            value: 'edit',
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit, size: 18),
-                                SizedBox(width: 8),
-                                Text('Edit'),
-                              ],
-                            ),
-                          ),
-                        if (onDelete != null)
-                          const PopupMenuItem(
-                            value: 'delete',
-                            child: Row(
-                              children: [
-                                Icon(Icons.delete, size: 18, color: AppConstants.errorRed),
-                                SizedBox(width: 8),
-                                Text('Delete', style: TextStyle(color: AppConstants.errorRed)),
-                              ],
-                            ),
-                          ),
-                      ],
+                  // Status badge with completion icon
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isSuccess 
+                          ? AppConstants.primaryGreen.withOpacity(0.1)
+                          : AppConstants.errorRed.withOpacity(0.1),
+                      border: Border.all(
+                        color: isSuccess 
+                            ? AppConstants.primaryGreen.withOpacity(0.3)
+                            : AppConstants.errorRed.withOpacity(0.3),
+                      ),
                     ),
+                    child: Image.asset(
+                      isSuccess 
+                          ? 'assets/checked.png'
+                          : 'assets/missed.png',
+                      width: 16,
+                      height: 16,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Actions menu
+                  PopupMenuButton<String>(
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: AppConstants.primaryGreen,
+                    ),
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'edit':
+                          onEdit?.call();
+                          break;
+                        case 'delete':
+                          onDelete?.call();
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      if (onEdit != null)
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              Icon(Icons.edit, size: 18, color: AppConstants.primaryGreen),
+                              const SizedBox(width: 8),
+                              const Text('Edit'),
+                            ],
+                          ),
+                        ),
+                      if (onDelete != null)
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete, size: 18, color: AppConstants.errorRed),
+                              const SizedBox(width: 8),
+                              const Text('Delete', style: TextStyle(color: AppConstants.errorRed)),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
               ),
-              const SizedBox(height: AppConstants.spacingS),
-              // Date
-              Text(
-                _formatDate(date),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppConstants.mediumGray,
-                  fontStyle: FontStyle.italic,
+              const SizedBox(height: 12),
+              // Date and time
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      size: 14,
+                      color: Colors.grey.shade600,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      _formatDate(date),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade700,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               // Additional info
               if (additionalInfo != null && additionalInfo!.isNotEmpty) ...[
-                const SizedBox(height: AppConstants.spacingM),
-                ...additionalInfo!,
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: additionalInfo!,
+                ),
               ],
             ],
           ),
@@ -186,17 +322,23 @@ class HistoryInfoChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chipColor = color ?? AppConstants.primaryGreen;
+    
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.spacingS,
-        vertical: AppConstants.spacingXS,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: (color ?? AppConstants.primaryGreen).withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppConstants.radiusS),
+        color: chipColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: (color ?? AppConstants.primaryGreen).withValues(alpha: 0.3),
+          color: chipColor.withOpacity(0.3),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: chipColor.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -205,21 +347,24 @@ class HistoryInfoChip extends StatelessWidget {
             Icon(
               icon,
               size: 14,
-              color: color ?? AppConstants.primaryGreen,
+              color: chipColor,
             ),
-            const SizedBox(width: AppConstants.spacingXS),
+            const SizedBox(width: 6),
           ],
           Text(
             '$label: ',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.w500,
-              color: color ?? AppConstants.primaryGreen,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: chipColor,
             ),
           ),
           Text(
             value,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: color ?? AppConstants.primaryGreen,
+            style: TextStyle(
+              fontSize: 12,
+              color: chipColor,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],

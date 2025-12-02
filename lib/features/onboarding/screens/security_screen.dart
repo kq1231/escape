@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../molecules/password_setup.dart';
+
 import '../models/onboarding_data.dart';
+import '../molecules/password_setup.dart';
 import '../templates/onboarding_page_template.dart';
 
 class SecurityScreen extends StatefulWidget {
@@ -8,12 +9,7 @@ class SecurityScreen extends StatefulWidget {
   final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
-  const SecurityScreen({
-    super.key,
-    required this.data,
-    required this.onNext,
-    required this.onBack,
-  });
+  const SecurityScreen({super.key, required this.data, required this.onNext, required this.onBack});
 
   @override
   State<SecurityScreen> createState() => _SecurityScreenState();

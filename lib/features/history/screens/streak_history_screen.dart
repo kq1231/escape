@@ -17,7 +17,7 @@ class StreakHistoryScreen extends ConsumerStatefulWidget {
 class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
   final String _searchQuery = '';
   DateTime? _selectedDate;
-  String? _filterType; // 'all', 'success', 'relapse'
+  String? _filterType; 
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -29,7 +29,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
   List<Streak> _filterStreaks(List<Streak> streaks) {
     var filtered = streaks;
 
-    // Apply search filter
     if (_searchQuery.isNotEmpty) {
       final query = _searchQuery.toLowerCase();
       filtered = filtered.where((streak) {
@@ -38,7 +37,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
       }).toList();
     }
 
-    // Apply type filter
     if (_filterType != null && _filterType != 'all') {
       if (_filterType == 'success') {
         filtered = filtered.where((streak) => streak.isSuccess).toList();
@@ -61,7 +59,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
       setState(() {
         _selectedDate = date;
       });
-      // Invalidate the provider to refresh data
       ref.invalidate(paginatedStreakHistoryProvider);
     }
   }
@@ -76,7 +73,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
       try {
         final streakRepository = ref.read(streakRepositoryProvider.notifier);
         await streakRepository.updateStreak(result);
-        // Invalidate the provider to refresh data
         ref.invalidate(paginatedStreakHistoryProvider);
 
         if (mounted) {
@@ -126,7 +122,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
       try {
         final streakRepository = ref.read(streakRepositoryProvider.notifier);
         await streakRepository.deleteStreak(streak.id);
-        // Invalidate the provider to refresh data
         ref.invalidate(paginatedStreakHistoryProvider);
 
         if (mounted) {
@@ -152,7 +147,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch the paginated streak history provider
     final streakHistoryAsync = ref.watch(
       paginatedStreakHistoryProvider(
         startDate: _selectedDate,
@@ -190,7 +184,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
       ),
       body: Column(
         children: [
-          // History list
           Expanded(
             child: streakHistoryAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -237,7 +230,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
 
                 return NotificationListener<ScrollNotification>(
                   onNotification: (ScrollNotification scrollInfo) {
-                    // Load more when user scrolls to bottom
                     if (scrollInfo.metrics.pixels ==
                             scrollInfo.metrics.maxScrollExtent &&
                         paginationState.hasMore &&
@@ -259,7 +251,6 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
                         filteredStreaks.length +
                         (paginationState.hasMore ? 1 : 0),
                     itemBuilder: (context, index) {
-                      // Show loading indicator at the bottom
                       if (index == filteredStreaks.length) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),
@@ -272,9 +263,7 @@ class _StreakHistoryScreenState extends ConsumerState<StreakHistoryScreen> {
                         title: 'Day ${streak.count}',
                         subtitle: streak.isSuccess ? 'Successful' : 'Relapse',
                         date: streak.date,
-                        icon: streak.isSuccess
-                            ? Icons.check_circle
-                            : Icons.cancel,
+                  
                         iconColor: streak.isSuccess
                             ? AppConstants.primaryGreen
                             : AppConstants.errorRed,

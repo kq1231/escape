@@ -30,7 +30,7 @@ class PrimaryButton extends StatelessWidget {
             foregroundColor: AppConstants.primaryGreen,
             side: const BorderSide(color: AppConstants.primaryGreen),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppConstants.radiusL),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXXL),
             ),
             padding:
                 padding ??
@@ -45,7 +45,7 @@ class PrimaryButton extends StatelessWidget {
             foregroundColor: AppConstants.white,
             elevation: 2,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppConstants.radiusL),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXXL),
             ),
             padding:
                 padding ??

@@ -49,69 +49,95 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      onChanged: onChanged,
-      onFieldSubmitted: onSubmitted,
-      validator: validator,
-      maxLines: maxLines,
-      maxLength: maxLength,
-      enabled: enabled,
-      focusNode: focusNode,
-      autofocus: autofocus,
-      style: Theme.of(context).textTheme.bodyLarge,
-      decoration: InputDecoration(
-        hintText: hintText,
-        labelText: labelText,
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        errorText: showError ? errorText : null,
-        errorMaxLines: 5,
-        filled: true,
-        fillColor: fillColor ?? AppConstants.lightGray,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radiusM),
-          borderSide: BorderSide(
-            color: borderColor ?? Colors.transparent,
-            width: 1,
+    final isFocused = focusNode?.hasFocus ?? false;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppConstants.radiusXXL),
+        boxShadow: isFocused
+            ? [
+                // Bottom right shadow (darker)
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: const Offset(3, 3),
+                  blurRadius: 6,
+                ),
+                // Top left highlight (lighter)
+                BoxShadow(
+                  color: Colors.white.withOpacity(0.7),
+                  offset: const Offset(-3, -3),
+                  blurRadius: 6,
+                ),
+              ]
+            : [],
+      ),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        onChanged: onChanged,
+        onFieldSubmitted: onSubmitted,
+        validator: validator,
+        maxLines: maxLines,
+        maxLength: maxLength,
+        enabled: enabled,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        style: Theme.of(context).textTheme.bodyLarge,
+        decoration: InputDecoration(
+          hintText: hintText,
+          labelText: labelText,
+          prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
+          errorText: showError ? errorText : null,
+          errorMaxLines: 5,
+          filled: true,
+          fillColor: fillColor ?? AppConstants.lightGray,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.radiusXXL),
+            borderSide: BorderSide(
+              color: borderColor ?? Colors.transparent,
+              width: 1,
+            ),
           ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radiusM),
-          borderSide: BorderSide(
-            color: borderColor ?? Colors.transparent,
-            width: 1,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.radiusL),
+            borderSide: BorderSide(
+              color: borderColor ?? Colors.grey,
+              width: 1,
+            ),
           ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radiusM),
-          borderSide: const BorderSide(
-            color: AppConstants.primaryGreen,
-            width: 2,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.radiusL),
+            borderSide: const BorderSide(
+              color: AppConstants.primaryGreen,
+              width: 3,
+            ),
           ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.radiusL),
+            borderSide:
+                const BorderSide(color: AppConstants.errorRed, width: 1),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.radiusL),
+            borderSide:
+                const BorderSide(color: AppConstants.errorRed, width: 2),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingM,
+            vertical: AppConstants.spacingM,
+          ),
+          hintStyle: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
+          labelStyle: Theme.of(context).textTheme.bodyMedium,
+          errorStyle: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: AppConstants.errorRed),
         ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radiusM),
-          borderSide: const BorderSide(color: AppConstants.errorRed, width: 1),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radiusM),
-          borderSide: const BorderSide(color: AppConstants.errorRed, width: 2),
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.spacingM,
-          vertical: AppConstants.spacingM,
-        ),
-        hintStyle: Theme.of(
-          context,
-        ).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray),
-        labelStyle: Theme.of(context).textTheme.bodyMedium,
-        errorStyle: Theme.of(
-          context,
-        ).textTheme.bodySmall?.copyWith(color: AppConstants.errorRed),
       ),
     );
   }

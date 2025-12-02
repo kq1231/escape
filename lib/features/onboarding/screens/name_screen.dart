@@ -1,20 +1,16 @@
+import 'package:escape/theme/app_constants.dart';
 import 'package:flutter/material.dart';
+
 import '../atoms/input_field.dart';
 import '../models/onboarding_data.dart';
 import '../templates/onboarding_page_template.dart';
-import 'package:escape/theme/app_constants.dart';
 
 class NameScreen extends StatefulWidget {
   final OnboardingData data;
   final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
-  const NameScreen({
-    super.key,
-    required this.data,
-    required this.onNext,
-    required this.onBack,
-  });
+  const NameScreen({super.key, required this.data, required this.onNext, required this.onBack});
 
   @override
   State<NameScreen> createState() => _NameScreenState();
@@ -54,7 +50,7 @@ class _NameScreenState extends State<NameScreen> {
   Widget build(BuildContext context) {
     return OnboardingPageTemplate(
       title: 'What Should We Call You?',
-      currentStep: 2,
+      currentStep: 1,
       totalSteps: 7,
       onBack: widget.onBack,
       onNext: _handleNext,
@@ -65,10 +61,7 @@ class _NameScreenState extends State<NameScreen> {
         children: [
           Text(
             'Please enter your name so we can personalize your experience',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppConstants.mediumGray,
-              height: 1.5,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray, height: 1.5),
           ),
           const SizedBox(height: AppConstants.spacingXXL),
           InputField(

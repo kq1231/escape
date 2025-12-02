@@ -17,7 +17,7 @@ class AppStartupLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(debugShowCheckedModeBanner: false, 
       theme: AppConstants.lightTheme,
       darkTheme: AppConstants.darkTheme,
       home: SplashScreen(),
@@ -38,7 +38,7 @@ class AppStartupErrorWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    return MaterialApp(debugShowCheckedModeBanner: false, 
       home: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -110,7 +110,7 @@ class AppStartupSuccessWidget extends ConsumerWidget {
   ) {
     return themeModeAsync.when(
       data: (themeMode) {
-        return MaterialApp(
+        return MaterialApp(debugShowCheckedModeBanner: false, 
           theme: AppConstants.lightTheme,
           darkTheme: AppConstants.darkTheme,
           themeMode: themeMode,
@@ -122,12 +122,12 @@ class AppStartupSuccessWidget extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const MaterialApp(
+      loading: () => const MaterialApp(debugShowCheckedModeBanner: false, 
         home: Scaffold(
           body: SafeArea(child: Center(child: CircularProgressIndicator())),
         ),
       ),
-      error: (error, stack) => MaterialApp(
+      error: (error, stack) => MaterialApp(debugShowCheckedModeBanner: false, 
         home: Scaffold(
           body: SafeArea(
             child: Center(child: Text('Error loading theme: $error')),
@@ -144,7 +144,7 @@ class AppStartupSuccessWidget extends ConsumerWidget {
   ) {
     return themeModeAsync.when(
       data: (data) {
-        return MaterialApp(
+        return MaterialApp(debugShowCheckedModeBanner: false, 
           theme: AppConstants.lightTheme,
           darkTheme: AppConstants.darkTheme,
           themeMode: data,
@@ -182,10 +182,10 @@ class AppStartupSuccessWidget extends ConsumerWidget {
           },
         );
       },
-      loading: () => const MaterialApp(
+      loading: () => const MaterialApp(debugShowCheckedModeBanner: false, 
         home: Scaffold(body: Center(child: CircularProgressIndicator())),
       ),
-      error: (error, stack) => MaterialApp(
+      error: (error, stack) => MaterialApp(debugShowCheckedModeBanner: false, 
         home: Scaffold(
           body: Center(child: Text('Error loading theme: $error')),
         ),
@@ -197,7 +197,7 @@ class AppStartupSuccessWidget extends ConsumerWidget {
     BuildContext context,
     AsyncValue<ThemeMode> themeModeAsync,
   ) {
-    return MaterialApp(
+    return MaterialApp(debugShowCheckedModeBanner: false, 
       theme: AppConstants.lightTheme,
       darkTheme: AppConstants.darkTheme,
       themeMode: ThemeMode.light,

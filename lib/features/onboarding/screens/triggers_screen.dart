@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import '../molecules/custom_input_selector.dart';
-import '../models/onboarding_data.dart';
-import '../templates/onboarding_page_template.dart';
+
 import '../constants/onboarding_constants.dart';
+import '../models/onboarding_data.dart';
+import '../molecules/custom_input_selector.dart';
+import '../templates/onboarding_page_template.dart';
 
 class TriggersScreen extends StatefulWidget {
   final OnboardingData data;
   final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
-  const TriggersScreen({
-    super.key,
-    required this.data,
-    required this.onNext,
-    required this.onBack,
-  });
+  const TriggersScreen({super.key, required this.data, required this.onNext, required this.onBack});
 
   @override
   State<TriggersScreen> createState() => _TriggersScreenState();
@@ -55,10 +51,7 @@ class _TriggersScreenState extends State<TriggersScreen> {
     }
 
     // Update the parent with the selected triggers
-    final updatedData = widget.data.copyWith(
-      selectedTriggers: _selectedTriggers,
-      customTriggers: _customTriggers,
-    );
+    final updatedData = widget.data.copyWith(selectedTriggers: _selectedTriggers, customTriggers: _customTriggers);
     widget.onNext(updatedData);
   }
 

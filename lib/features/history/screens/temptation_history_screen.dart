@@ -324,9 +324,7 @@ class _TemptationHistoryScreenState
                             ? 'Resisted Successfully'
                             : 'Relapsed',
                         date: temptation.createdAt,
-                        icon: temptation.wasSuccessful
-                            ? Icons.check_circle
-                            : Icons.cancel,
+                          
                         iconColor: temptation.wasSuccessful
                             ? AppConstants.primaryGreen
                             : AppConstants.errorRed,
@@ -403,7 +401,6 @@ class _EditTemptationDialogState extends State<_EditTemptationDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             DropdownButtonFormField<String>(
-              initialValue: _selectedActivity,
               decoration: const InputDecoration(
                 labelText: 'Activity',
                 border: OutlineInputBorder(),

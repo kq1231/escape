@@ -1,22 +1,19 @@
 import 'dart:io';
+
+import 'package:escape/theme/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../profile/services/image_service.dart';
 import '../models/onboarding_data.dart';
 import '../templates/onboarding_page_template.dart';
-import '../../profile/services/image_service.dart';
-import 'package:escape/theme/app_constants.dart';
 
 class ProfileImageScreen extends StatefulWidget {
   final OnboardingData data;
   final Function(OnboardingData) onNext;
   final VoidCallback onBack;
 
-  const ProfileImageScreen({
-    super.key,
-    required this.data,
-    required this.onNext,
-    required this.onBack,
-  });
+  const ProfileImageScreen({super.key, required this.data, required this.onNext, required this.onBack});
 
   @override
   State<ProfileImageScreen> createState() => _ProfileImageScreenState();
@@ -47,7 +44,6 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
             }
           })
           .catchError((error) {
-            // If there's an error loading the image, just don't show it
             debugPrint('Failed to load profile image: $error');
           });
     }
@@ -63,15 +59,10 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
       });
 
       try {
-        // Process and save the image using the image service
-        final relativePath = await _imageService.processAndSaveImage(
-          File(pickedFile.path),
-        );
+        final relativePath = await _imageService.processAndSaveImage(File(pickedFile.path));
 
-        // Clean up old images to ensure only the current one exists
         await _imageService.cleanupOldImages(relativePath);
 
-        // Update state with the new image
         final fullPath = await _imageService.getFullImagePath(relativePath);
         if (mounted) {
           setState(() {
@@ -93,11 +84,8 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
             debugPrint('Unexpected error in _pickImage: $e');
           }
 
-          // Show error message
           if (mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(errorMessage)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
           }
         }
       }
@@ -112,13 +100,11 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   }
 
   void _handleNext() {
-    // Update the data with the profile picture path
     final updatedData = widget.data.copyWith(profilePicture: _profileImagePath);
     widget.onNext(updatedData);
   }
 
   void _handleSkip() {
-    // Skip without setting a profile picture
     widget.onNext(widget.data);
   }
 
@@ -127,7 +113,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
     return OnboardingPageTemplate(
       title: 'Profile Picture',
       subtitle: 'Add a profile picture (optional)',
-      currentStep: 3,
+      currentStep: 2,
       totalSteps: 7,
       onBack: widget.onBack,
       onNext: _handleNext,
@@ -138,61 +124,79 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
         children: [
           Text(
             'Make your profile more personal by adding a profile picture. This step is completely optional.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppConstants.mediumGray,
-              height: 1.5,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppConstants.mediumGray, height: 1.5),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppConstants.spacingXXL),
+
+          // 👇 Avatar with green border & + button
           Center(
-            child: GestureDetector(
-              onTap: _pickImage,
-              child: Stack(
-                children: [
-                  CircleAvatar(
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppConstants.primaryGreen, width: 3),
+                  ),
+                  child: CircleAvatar(
                     radius: 80,
                     backgroundColor: AppConstants.lightGray,
                     backgroundImage: _profileImage != null
                         ? FileImage(_profileImage!)
-                        : null,
-                    child: _profileImage == null
-                        ? Icon(
-                            Icons.person,
-                            size: 80,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurface.withValues(alpha: 0.5),
-                          )
-                        : null,
+                        : const AssetImage('assets/muslim_icon.png') as ImageProvider,
+                    child: _isLoading ? const CircularProgressIndicator() : null,
                   ),
-                  if (_isLoading)
-                    const Positioned.fill(
-                      child: Center(child: CircularProgressIndicator()),
+                ),
+
+                // ✨ Add image button at bottom-right
+                Positioned(
+                  bottom: 4,
+                  right: 10,
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: AppConstants.primaryGreen,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppConstants.primaryGreen.withOpacity(0.4),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white, size: 24),
                     ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: AppConstants.spacingL),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: _pickImage,
-                child: const Text('Choose Photo'),
-              ),
-              if (_profileImage != null) ...[
-                const SizedBox(width: AppConstants.spacingM),
-                TextButton(
-                  onPressed: _removeImage,
-                  child: const Text('Remove'),
+                  ),
                 ),
               ],
-            ],
+            ),
           ),
+
           const SizedBox(height: AppConstants.spacingM),
-          TextButton(onPressed: _handleSkip, child: const Text('Skip for now')),
+
+          // 🧽 Remove image (optional)
+          if (_profileImage != null) TextButton(onPressed: _removeImage, child: const Text('Remove')),
+
+          TextButton(
+            onPressed: _handleSkip,
+            style: TextButton.styleFrom(
+              foregroundColor: AppConstants.darkGreen,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              textStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Exo', // 👈 Exo font family
+                decoration: TextDecoration.none, // 👈 removes underline
+              ),
+            ),
+            child: const Text('SKIP FOR NOW'),
+          ),
         ],
       ),
     );
