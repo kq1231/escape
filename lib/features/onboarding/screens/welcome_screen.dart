@@ -120,8 +120,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                 ),
               ),
 
-              const SizedBox(height: AppConstants.spacingXL),
-
               // 👇 Description fades in same time as image
               FadeTransition(
                 opacity: _fadeAnimation,
@@ -152,8 +150,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                   ),
                 ),
               ),
-
-              const SizedBox(height: AppConstants.spacingL),
             ],
           ),
         ),

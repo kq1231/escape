@@ -71,8 +71,8 @@ class StreakOrganism extends ConsumerWidget {
 
     return profileAsync.when(
       data: (user) {
-        final hasXP = user!.xp > 0;
-        final hasPicture = user.profilePicture.isNotEmpty;
+        final hasXP = user?.xp != null ? user!.xp > 0 : false;
+        final hasPicture = user?.profilePicture.isNotEmpty ?? false;
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +87,7 @@ class StreakOrganism extends ConsumerWidget {
                 clipBehavior: Clip.none,
                 children: [
                   hasPicture
-                      ? CircleAvatar(radius: 32, backgroundImage: FileImage(File(user.profilePicture)))
+                      ? CircleAvatar(radius: 32, backgroundImage: FileImage(File(user!.profilePicture)))
                       : const CircleAvatar(
                           radius: 32,
                           backgroundColor: Colors.black12,
@@ -202,83 +202,83 @@ class StreakOrganism extends ConsumerWidget {
   // ------------------------------
   // Left Card Widget
   // ------------------------------
-  Widget _buildLeftCard(BuildContext context) {
-    return Container(
-      width: 180,
-      height: 140,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppConstants.primaryGreen, AppConstants.primaryGreen.withOpacity(0.8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(color: AppConstants.primaryGreen.withOpacity(0.25), blurRadius: 16, offset: const Offset(0, 6)),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  "Next",
-                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
-                ),
+  // Widget _buildLeftCard(BuildContext context) {
+  //   return Container(
+  //     width: 180,
+  //     height: 140,
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       gradient: LinearGradient(
+  //         colors: [AppConstants.primaryGreen, AppConstants.primaryGreen.withOpacity(0.8)],
+  //         begin: Alignment.topLeft,
+  //         end: Alignment.bottomRight,
+  //       ),
+  //       borderRadius: BorderRadius.circular(22),
+  //       boxShadow: [
+  //         BoxShadow(color: AppConstants.primaryGreen.withOpacity(0.25), blurRadius: 16, offset: const Offset(0, 6)),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         Row(
+  //           children: [
+  //             Container(
+  //               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //               decoration: BoxDecoration(
+  //                 color: Colors.white.withOpacity(0.2),
+  //                 borderRadius: BorderRadius.circular(12),
+  //               ),
+  //               child: const Text(
+  //                 "Next",
+  //                 style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+  //               ),
                 
-              ),
-                                 SizedBox(width: 15),
+  //             ),
+  //                                SizedBox(width: 15),
 
-              Text(
-                "Dohr ☀️ ",
-                style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700, fontFamily: 'Exo'),
-              ),
-            ],
-          ),
+  //             Text(
+  //               "Dohr ☀️ ",
+  //               style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700, fontFamily: 'Exo'),
+  //             ),
+  //           ],
+  //         ),
 
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "See",
-                    style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w700, fontFamily: 'Exo'),
-                  ),
-                  const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 20),
-                ],
-              ),
-  Text(
-                    "🇩🇿 Annaba",
-                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700, fontFamily: 'Exo'),
-                  ),
-              Row(
-                children: [
-                  Icon(Icons.access_time, color: Colors.white70, size: 10),
-                  SizedBox(width: 4),
-                  Text(
-                    "in 3h 45m",
-                    style: TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-            ],
-          ),
+  //         const Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Row(
+  //               children: [
+  //                 Text(
+  //                   "See",
+  //                   style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w700, fontFamily: 'Exo'),
+  //                 ),
+  //                 const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 20),
+  //               ],
+  //             ),
+  // Text(
+  //                   "🇩🇿 Annaba",
+  //                   style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700, fontFamily: 'Exo'),
+  //                 ),
+  //             Row(
+  //               children: [
+  //                 Icon(Icons.access_time, color: Colors.white70, size: 10),
+  //                 SizedBox(width: 4),
+  //                 Text(
+  //                   "in 3h 45m",
+  //                   style: TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w500),
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
 
       
-        ],
-      ),
-    );
-  }
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // ------------------------------
   // BUILD
@@ -294,16 +294,16 @@ class StreakOrganism extends ConsumerWidget {
 
         streakAsync.when(
           loading: () => const Center(child: CircularProgressIndicator(color: Colors.green)),
-          error: (_, __) => const Text("Error"),
+          error: (_, _) => const Text("Error"),
           data: (streak) {
             final count = streak?.count ?? 0;
 
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildLeftCard(context),
+                // _buildLeftCard(context),
                 Container(
-                  width: 190,
+                  width: 300,
                   height: 140,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(

@@ -90,14 +90,17 @@ class PrayerTrackerScreen extends ConsumerWidget {
                     ),
               ),
 
-              const SizedBox(height: AppConstants.spacingXL),
 
               // ---------------- NEXT PRAYER ----------------
               prayerTimingAsync.when(
                 data: (prayerTimes) {
+                  if (prayerTimes == null) {
+                    return Container();
+                  }
+
                   return NextPrayerCard(
                     todayPrayerTimes: {
-                      'Fajr': prayerTimes!.timings.fajr,
+                      'Fajr': prayerTimes.timings.fajr,
                       'Dhuhr': prayerTimes.timings.dhuhr,
                       'Asr': prayerTimes.timings.asr,
                       'Maghrib': prayerTimes.timings.maghrib,

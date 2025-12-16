@@ -67,7 +67,7 @@ class OnboardingConstants {
       'Keep your progress private and secure';
   static const String passwordHint = 'Create a secure password';
   static const String confirmPasswordHint = 'Confirm your password';
-  static const String privacyNote = 'Your data is encrypted and never shared';
+  static const String privacyNote = 'Your data is local and never leaves your device.';
 
   // Progress indicators
   static const String step1 = 'Welcome';
